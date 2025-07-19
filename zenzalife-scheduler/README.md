@@ -59,6 +59,7 @@ export default tseslint.config({
    - **Publish directory**: `dist`
 4. Click **Deploy site** and wait for the build to complete.
 5. After deployment, Netlify provides a public URL which can be customized in the site settings.
+6. Netlify reads the `netlify.toml` in the repo root which sets the same build options and includes a redirect rule for single-page app routing.
 
 ### Environment variables
 
@@ -73,4 +74,6 @@ For local development, copy `.env.example` to `.env` inside
 `zenzalife-scheduler` and add your credentials. Netlify automatically exposes
 variables prefixed with `VITE_` to the build. The variables without the prefix
 are read by Supabase Edge Functions.
+You can also define the same variables under `[build.environment]` in
+`netlify.toml` for convenience when setting up new sites.
 

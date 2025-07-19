@@ -4,13 +4,12 @@ This file tracks project progress and upcoming tasks.
 
 ## Completed
 - Documented Netlify deployment instructions and required environment variables.
-- _None yet_
-
+- Added `netlify.toml` to configure build settings and SPA redirects.
 
 ## Latest Updates
 - Added `.env.example` for local development credentials.
 - Clarified Netlify environment variables in the README.
-- _None yet_
+- Introduced Netlify configuration file for easier setup.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
