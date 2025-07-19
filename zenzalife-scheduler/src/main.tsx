@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
+import { registerSW } from 'virtual:pwa-register'
 import { ConfirmPage } from '@/components/auth/ConfirmPage'
 import { UnsubscribePage } from '@/components/auth/UnsubscribePage'
 import './globals.css'

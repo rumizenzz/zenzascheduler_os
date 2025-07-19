@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { ZenzaCalendar } from '@/components/calendar/ZenzaCalendar'
 import { GrowthTracker } from './GrowthTracker'
@@ -38,6 +38,12 @@ export function Dashboard() {
   const [activeTab, setActiveTab] = useState<DashboardTab>('calendar')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setSidebarCollapsed(true)
+    }
+  }, [])
+
   const handleSignOut = async () => {
     try {
       await signOut()
@@ -71,9 +77,11 @@ export function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
       {/* Sidebar */}
-      <div className={`fixed left-0 top-0 h-full bg-white/80 backdrop-blur-lg border-r border-white/50 z-40 transition-all duration-300 ${
-        sidebarCollapsed ? 'w-16' : 'w-64'
-      }`}>
+      <div
+        className={`fixed left-0 top-0 h-full bg-white/80 backdrop-blur-lg border-r border-white/50 z-40 transition-all duration-300 ${
+          sidebarCollapsed ? 'w-0 sm:w-16' : 'w-64'
+        }`}
+      >
         {/* Logo */}
         <div className="p-6 border-b border-white/30">
           <div className="flex items-center gap-3">
@@ -168,9 +176,11 @@ export function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className={`transition-all duration-300 ${
-        sidebarCollapsed ? 'ml-16' : 'ml-64'
-      }`}>
+      <div
+        className={`transition-all duration-300 ${
+          sidebarCollapsed ? 'ml-0 sm:ml-16' : 'ml-0 sm:ml-64'
+        }`}
+      >
         <div className="p-6">
           {renderContent()}
         </div>

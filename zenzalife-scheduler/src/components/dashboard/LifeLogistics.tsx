@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
-import { MapPin, Plus, Home, Car, Briefcase, Building, DollarSign, Calendar, Edit, Trash2 } from 'lucide-react'
+import { MapPin, Plus, Home, Car, Briefcase, Building, DollarSign, Edit, Trash2 } from 'lucide-react'
+import { IncomeTracker } from './IncomeTracker'
 import dayjs from 'dayjs'
 
 type LogisticsTab = 'addresses' | 'vehicles' | 'jobs' | 'businesses' | 'income'
@@ -17,7 +18,7 @@ interface Address {
   state: string
   zip_code: string
   country: string
-  is_primary: boolean
+  is_primary?: boolean
   created_at: string
   updated_at: string
 }
@@ -59,7 +60,7 @@ interface Business {
   business_type: string
   start_date: string
   description?: string
-  is_active: boolean
+  status: string
   created_at: string
   updated_at: string
 }
@@ -100,7 +101,6 @@ export function LifeLogistics() {
             .from('addresses')
             .select('*')
             .eq('user_id', user.id)
-            .order('is_primary', { ascending: false })
 
           if (addressError) throw addressError
           setAddresses(addressData || [])
@@ -136,7 +136,7 @@ export function LifeLogistics() {
             .from('businesses')
             .select('*')
             .eq('user_id', user.id)
-            .order('is_active', { ascending: false })
+            .order('start_date', { ascending: false })
 
           if (businessError) throw businessError
           setBusinesses(businessData || [])
@@ -188,9 +188,6 @@ export function LifeLogistics() {
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-gray-800 capitalize">{address.type}</span>
-                    {address.is_primary && (
-                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Primary</span>
-                    )}
                   </div>
                   <div className="flex gap-2">
                     <button onClick={() => handleEdit(address)} className="p-1 text-gray-500 hover:text-blue-500">
@@ -296,7 +293,7 @@ export function LifeLogistics() {
                     <p className="text-sm text-gray-600">{business.business_type}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    {business.is_active && (
+                    {business.status === 'active' && (
                       <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Active</span>
                     )}
                     <button onClick={() => handleEdit(business)} className="p-1 text-gray-500 hover:text-blue-500">
@@ -320,16 +317,7 @@ export function LifeLogistics() {
         )
         
       case 'income':
-        return (
-          <div className="text-center py-12">
-            <DollarSign className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-gray-800 mb-2">Income Tracking</h3>
-            <p className="text-gray-600 mb-6">Track your income from jobs and businesses</p>
-            <button className="btn-dreamy-primary">
-              Coming Soon
-            </button>
-          </div>
-        )
+        return <IncomeTracker />
         
       default:
         return null

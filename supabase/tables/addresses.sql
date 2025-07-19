@@ -7,6 +7,8 @@ CREATE TABLE addresses (
     state VARCHAR(50) NOT NULL,
     zip VARCHAR(20) NOT NULL,
     country VARCHAR(100) DEFAULT 'USA',
+    provider VARCHAR(50),
+    ics_url TEXT,
     start_date DATE,
     end_date DATE,
     status VARCHAR(50) DEFAULT 'current',
