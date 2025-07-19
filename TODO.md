@@ -8,11 +8,14 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Added `.env.example` for local development credentials.
+- Implemented income tracking module to log job and business earnings.
 - Clarified Netlify environment variables in the README.
 - Introduced Netlify configuration file for easier setup.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.
+- Fixed Supabase queries for garbage schedules and addresses to match table schema.
+- Fixed additional Life Logistics queries for addresses and businesses.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
@@ -21,6 +24,14 @@ This file tracks project progress and upcoming tasks.
 - Confirmation email edge function now stores new sign ups in the mailing list table.
 - Unsubscribe page includes instructions for re-subscribing.
 - Added login prompt asking users to join the mailing list if they aren't subscribed.
+- Fixed Supabase queries for garbage schedules and addresses to match table schema.
+- Ensured entrance sound plays reliably by resuming the AudioContext on user interaction and tab focus.
+- Improved form field accessibility with proper ids and labels.
+- Improved entrance sound logic to start automatically after the first user gesture, preventing autoplay warnings.
+- Added a mandatory "Click to Enter ZenzaLife OS Scheduler" button before the entrance animation to satisfy autoplay restrictions.
+- Added custom-coded Vanilla Sky inspired favicon.
+- Enhanced UI with premium fonts and luxury gradients.
+- Added missing `next_collection` field to `garbage_schedule` table so the Garbage Module loads correctly.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.

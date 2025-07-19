@@ -10,10 +10,13 @@ interface DreamlikeEntranceProps {
 export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntranceProps) {
   const [isVisible, setIsVisible] = useState(true)
   const [canSkip, setCanSkip] = useState(false)
+  const [started, setStarted] = useState(false)
   const { playEntranceSound } = useAudio()
   const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, delay: number}>>([])
 
   useEffect(() => {
+    if (!started) return
+
     // Generate floating particles
     const particleArray = Array.from({ length: 12 }, (_, i) => ({
       id: i,
@@ -40,13 +43,27 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
       clearTimeout(skipTimer)
       clearTimeout(autoCompleteTimer)
     }
-  }, [])
+  }, [started, playEntranceSound])
 
   const handleComplete = () => {
     setIsVisible(false)
     setTimeout(() => {
       onComplete()
     }, 800) // Allow fade out animation to complete
+  }
+
+  if (!started) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
+        <button
+          onClick={() => setStarted(true)}
+          className="px-6 py-4 text-lg font-semibold bg-white/70 backdrop-blur-md rounded-lg shadow-lg hover:bg-white transition"
+        >
+          Click to Enter ZenzaLife <span className="font-bold">OS</span> Scheduler
+          <span className="block text-sm font-light">(Operating System of Life)</span>
+        </button>
+      </div>
+    )
   }
 
   if (!isVisible) {

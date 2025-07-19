@@ -55,6 +55,14 @@ Deno.serve(async (req) => {
       throw error
     }
 
+    if (!data || data.length === 0) {
+      const { error: insertError } = await supabase
+        .from(table)
+        .insert({ email, unsubscribed: true })
+
+      if (insertError) throw insertError
+    }
+
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     })
