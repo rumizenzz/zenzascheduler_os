@@ -17,6 +17,12 @@ This file tracks project progress and upcoming tasks.
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
 - Created unsubscribe edge function and page with mailing list table documentation.
+- Fixed Supabase queries for garbage schedules and addresses to match table schema.
+- Ensured entrance sound plays reliably by resuming the AudioContext on user interaction and tab focus.
+- Improved form field accessibility with proper ids and labels.
+- Improved entrance sound logic to start automatically after the first user gesture, preventing autoplay warnings.
+- Added a mandatory "Click to Enter ZenzaLife OS Scheduler" button before the entrance animation to satisfy autoplay restrictions.
+- Added custom-coded Vanilla Sky inspired favicon.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
