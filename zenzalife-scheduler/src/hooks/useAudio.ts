@@ -1,10 +1,39 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useEffect } from 'react'
 
 export function useAudio() {
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const audioContextRef = useRef<AudioContext | null>(null)
+
+  const getContext = () => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+    }
+    return audioContextRef.current
+  }
+
+  const resumeContext = useCallback(() => {
+    const ctx = getContext()
+    if (ctx.state === 'suspended') {
+      ctx.resume()
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleUserGesture = () => resumeContext()
+
+    window.addEventListener('click', handleUserGesture)
+    window.addEventListener('touchstart', handleUserGesture)
+    document.addEventListener('visibilitychange', handleUserGesture)
+    return () => {
+      window.removeEventListener('click', handleUserGesture)
+      window.removeEventListener('touchstart', handleUserGesture)
+      document.removeEventListener('visibilitychange', handleUserGesture)
+    }
+  }, [resumeContext])
 
   const playAudio = useCallback((audioUrl: string, volume: number = 0.3) => {
     try {
+      resumeContext()
       // Stop any currently playing audio
       if (audioRef.current) {
         audioRef.current.pause()
@@ -31,7 +60,7 @@ export function useAudio() {
     } catch (error) {
       console.error('Error playing audio:', error)
     }
-  }, [])
+  }, [resumeContext])
 
   const stopAudio = useCallback(() => {
     if (audioRef.current) {
@@ -41,9 +70,9 @@ export function useAudio() {
   }, [])
 
   const playEntranceSound = useCallback(() => {
-    // Create a gentle chime sound using Web Audio API
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const audioContext = getContext()
+      resumeContext()
       
       // Create oscillator for soft chime
       const oscillator = audioContext.createOscillator()
@@ -85,7 +114,7 @@ export function useAudio() {
       console.log('Web Audio API not available, using fallback')
       // Fallback - you could use a simple beep or silence
     }
-  }, [])
+  }, [resumeContext])
 
   return {
     playAudio,
