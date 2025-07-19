@@ -3,10 +3,12 @@
 This file tracks project progress and upcoming tasks.
 
 ## Completed
+
 - Documented Netlify deployment instructions and required environment variables.
 - Added `netlify.toml` to configure build settings and SPA redirects.
 
 ## Latest Updates
+
 - Added `.env.example` for local development credentials.
 - Implemented income tracking module to log job and business earnings.
 - Clarified Netlify environment variables in the README.
@@ -14,7 +16,7 @@ This file tracks project progress and upcoming tasks.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.
- - Added custom confirmation email Netlify function using IONOS and confirmation
+- Added custom confirmation email Netlify function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
 - Created unsubscribe edge function and page with mailing list table documentation.
@@ -49,8 +51,12 @@ This file tracks project progress and upcoming tasks.
 - Resolved Netlify build failure by externalizing `workbox-window` and adding it as a dependency for PWA support.
 - Verified the PWA build succeeds with the new configuration.
 - Configured Netlify functions directory to prevent service worker from being bundled.
+- Implemented slide-out sidebar with overlay and menu button for mobile devices.
+- Fixed Netlify build error by installing `@semantic-ui-react/event-stack`.
+- Resolved Netlify config parse error by removing duplicate `[functions]` section.
 
 ## Next Steps
+
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
 - [ ] STEP 2: Design database schema and create initial tables.
 - [ ] STEP 3: Configure Supabase storage bucket for uploads.
@@ -59,13 +65,14 @@ This file tracks project progress and upcoming tasks.
 - [ ] STEP 6: Deploy the app publicly and verify all features.
 
 ### Feature Breakdown
+
 - Multi-user roles with family groups
 - Detailed schedule templates with customization
 - Habit, affirmation, and logistics tracking modules
 - 1% growth dashboard and analytics
 
 ## Improvement Ideas
+
 - Ensure entrance animations and audio meet the design philosophy.
 - Expand tests and lint rules for higher code quality.
 - Document additional deployment steps as they are discovered.
-
