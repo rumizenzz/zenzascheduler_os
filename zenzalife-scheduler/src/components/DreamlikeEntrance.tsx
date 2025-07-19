@@ -57,7 +57,7 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
         <button
           onClick={() => setStarted(true)}
-          className="px-6 py-4 text-lg font-semibold bg-white/70 backdrop-blur-md rounded-lg shadow-lg hover:bg-white transition"
+          className="px-4 py-3 sm:px-6 sm:py-4 text-base sm:text-lg font-semibold bg-white/70 backdrop-blur-md rounded-lg shadow-lg hover:bg-white transition"
         >
           Click to Enter ZenzaLife <span className="font-bold">OS</span> Scheduler
           <span className="block text-sm font-light">(Operating System of Life)</span>
@@ -117,10 +117,10 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
         <div className="text-center space-y-8 animate-fade-in-up">
           {/* Logo/Title */}
           <div className="space-y-4">
-            <h1 className="text-6xl font-light text-gray-800/80 tracking-wide animate-text-shimmer">
+            <h1 className="text-4xl sm:text-6xl font-light text-gray-800/80 tracking-wide animate-text-shimmer">
               ZenzaLife
             </h1>
-            <p className="text-xl text-gray-600/70 font-light tracking-wider">
+            <p className="text-lg sm:text-xl text-gray-600/70 font-light tracking-wider">
               Scheduler
             </p>
           </div>

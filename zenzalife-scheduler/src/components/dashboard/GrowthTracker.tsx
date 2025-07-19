@@ -186,7 +186,7 @@ export function GrowthTracker() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
             <TrendingUp className="w-8 h-8 text-green-400" />
@@ -207,7 +207,7 @@ export function GrowthTracker() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         <div className="card-floating p-6 text-center">
           <div className="text-3xl font-light text-green-500 mb-2">
             {stats.averageScore}

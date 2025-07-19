@@ -26,6 +26,7 @@ This file tracks project progress and upcoming tasks.
 - Improved entrance sound logic to start automatically after the first user gesture, preventing autoplay warnings.
 - Added a mandatory "Click to Enter ZenzaLife OS Scheduler" button before the entrance animation to satisfy autoplay restrictions.
 - Added custom-coded Vanilla Sky inspired favicon.
+- Enhanced UI with premium fonts and luxury gradients.
 - Added missing `next_collection` field to `garbage_schedule` table so the Garbage Module loads correctly.
 - Integrated task analytics edge function for progress stats.
 - Added automated garbage schedule updater edge function for Whitehouse Station.
@@ -33,6 +34,12 @@ This file tracks project progress and upcoming tasks.
 - Added garbage_update_logs table and edge logging for schedule refreshes.
 - Implemented modular garbage provider system with Republic Services integration.
 - Fixed "AuthSessionMissingError" by checking session before loading user data.
+- Introduced PWA support with offline caching and automatic sidebar collapse on mobile.
+- Fixed type reference for `virtual:pwa-register` to satisfy the build.
+- Enhanced mobile layout across dashboard modules for better small screen usability.
+- Resolved Netlify build failure by externalizing `workbox-window` and adding it as a dependency for PWA support.
+- Verified the PWA build succeeds with the new configuration.
+- Configured Netlify functions directory to prevent service worker from being bundled.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
