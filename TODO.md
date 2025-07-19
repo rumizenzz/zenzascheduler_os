@@ -27,6 +27,9 @@ This file tracks project progress and upcoming tasks.
 - Added a mandatory "Click to Enter ZenzaLife OS Scheduler" button before the entrance animation to satisfy autoplay restrictions.
 - Added custom-coded Vanilla Sky inspired favicon.
 - Added missing `next_collection` field to `garbage_schedule` table so the Garbage Module loads correctly.
+- Introduced PWA support with offline caching and automatic sidebar collapse on mobile.
+- Fixed type reference for `virtual:pwa-register` to satisfy the build.
+- Enhanced mobile layout across dashboard modules for better small screen usability.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
