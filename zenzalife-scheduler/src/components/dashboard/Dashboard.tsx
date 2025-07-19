@@ -19,6 +19,7 @@ import {
   Sparkles
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { MailingListPrompt } from '../auth/MailingListPrompt'
 
 type DashboardTab = 'calendar' | 'growth' | 'affirmations' | 'family' | 'logistics' | 'garbage' | 'settings'
 
@@ -174,6 +175,7 @@ export function Dashboard() {
           {renderContent()}
         </div>
       </div>
+      <MailingListPrompt />
     </div>
   )
 }
