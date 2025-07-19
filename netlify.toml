@@ -1,14 +1,10 @@
 [build]
   base = "zenzalife-scheduler"
   command = "pnpm run build"
-publish = "dist"
+  publish = "dist"
 
 [functions]
   directory = "netlify/functions"
-
-[functions]
-  directory = "netlify/functions"
-
 
 [[redirects]]
   from = "/*"
