@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase, Task } from '@/lib/supabase'
@@ -36,6 +37,7 @@ export function ZenzaCalendar() {
   const [showDefaultSchedule, setShowDefaultSchedule] = useState(false)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [calendarView, setCalendarView] = useState('timeGridWeek')
+  const [calendarHeight, setCalendarHeight] = useState<string | number>('auto')
   const calendarRef = useRef<FullCalendar>(null)
 
   useEffect(() => {
@@ -43,6 +45,21 @@ export function ZenzaCalendar() {
       loadTasks()
     }
   }, [user])
+
+  useEffect(() => {
+    const updateLayout = () => {
+      if (window.innerWidth < 768) {
+        setCalendarView('listWeek')
+        setCalendarHeight('auto')
+      } else {
+        setCalendarView('timeGridWeek')
+        setCalendarHeight(650)
+      }
+    }
+    updateLayout()
+    window.addEventListener('resize', updateLayout)
+    return () => window.removeEventListener('resize', updateLayout)
+  }, [])
 
   const loadTasks = async () => {
     if (!user) return
@@ -118,13 +135,24 @@ export function ZenzaCalendar() {
 
   const handleTaskSave = async (taskData: any) => {
     if (!user) return
-    
+
+    const convertTimes = (data: any) => ({
+      ...data,
+      start_time: data.start_time
+        ? new Date(data.start_time).toISOString()
+        : null,
+      end_time: data.end_time ? new Date(data.end_time).toISOString() : null
+    })
+
     try {
       if (selectedTask) {
         // Update existing task
         const { error } = await supabase
           .from('tasks')
-          .update({ ...taskData, updated_at: new Date().toISOString() })
+          .update({
+            ...convertTimes(taskData),
+            updated_at: new Date().toISOString()
+          })
           .eq('id', selectedTask.id)
         
         if (error) throw error
@@ -134,7 +162,7 @@ export function ZenzaCalendar() {
         const { error } = await supabase
           .from('tasks')
           .insert({
-            ...taskData,
+            ...convertTimes(taskData),
             user_id: user.id,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
@@ -254,6 +282,8 @@ export function ZenzaCalendar() {
     try {
       const tasksToInsert = defaultTasks.map(task => ({
         ...task,
+        start_time: new Date(task.start_time).toISOString(),
+        end_time: task.end_time ? new Date(task.end_time).toISOString() : null,
         user_id: user.id,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -323,11 +353,11 @@ export function ZenzaCalendar() {
       <div className="card-floating p-6">
         <FullCalendar
           ref={calendarRef}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
           headerToolbar={{
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
           }}
           initialView={calendarView}
           editable={true}
@@ -338,7 +368,7 @@ export function ZenzaCalendar() {
           events={events}
           select={handleDateSelect}
           eventClick={handleEventClick}
-          height="600px"
+          height={calendarHeight}
           slotMinTime="06:00:00"
           slotMaxTime="23:00:00"
           slotDuration="00:30:00"
