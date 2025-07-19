@@ -94,7 +94,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.protocol}//${window.location.host}/auth/callback`
+        emailRedirectTo: `${window.location.protocol}//${window.location.host}/confirmed`
       }
     })
 
@@ -117,6 +117,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
       
       if (profileError) {
         console.error('Error creating user profile:', profileError)
+      }
+
+      // Send custom confirmation email via Netlify function
+      try {
+        await fetch('/.netlify/functions/send-confirmation-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, displayName })
+        })
+      } catch (e) {
+        console.error('Custom email error', e)
       }
     }
 
