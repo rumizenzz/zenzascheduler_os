@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
-import { MapPin, Plus, Home, Car, Briefcase, Building, DollarSign, Calendar, Edit, Trash2 } from 'lucide-react'
+import { MapPin, Plus, Home, Car, Briefcase, Building, DollarSign, Edit, Trash2 } from 'lucide-react'
+import { IncomeTracker } from './IncomeTracker'
 import dayjs from 'dayjs'
 
 type LogisticsTab = 'addresses' | 'vehicles' | 'jobs' | 'businesses' | 'income'
@@ -316,16 +317,7 @@ export function LifeLogistics() {
         )
         
       case 'income':
-        return (
-          <div className="text-center py-12">
-            <DollarSign className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-gray-800 mb-2">Income Tracking</h3>
-            <p className="text-gray-600 mb-6">Track your income from jobs and businesses</p>
-            <button className="btn-dreamy-primary">
-              Coming Soon
-            </button>
-          </div>
-        )
+        return <IncomeTracker />
         
       default:
         return null

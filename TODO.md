@@ -8,6 +8,7 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Added `.env.example` for local development credentials.
+- Implemented income tracking module to log job and business earnings.
 - Clarified Netlify environment variables in the README.
 - Introduced Netlify configuration file for easier setup.
 - Added runtime check for missing Supabase environment variables.
@@ -26,6 +27,7 @@ This file tracks project progress and upcoming tasks.
 - Added a mandatory "Click to Enter ZenzaLife OS Scheduler" button before the entrance animation to satisfy autoplay restrictions.
 - Added custom-coded Vanilla Sky inspired favicon.
 - Enhanced UI with premium fonts and luxury gradients.
+- Added missing `next_collection` field to `garbage_schedule` table so the Garbage Module loads correctly.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
