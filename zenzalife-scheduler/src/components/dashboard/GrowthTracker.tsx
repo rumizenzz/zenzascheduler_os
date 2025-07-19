@@ -377,8 +377,10 @@ function ProgressModal({ isOpen, onClose, onSave, existingLog }: ProgressModalPr
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Score */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">1% Better Score (0-2)</label>
+              <label htmlFor="growthScore" className="text-sm font-medium text-gray-700">1% Better Score (0-2)</label>
               <input
+                id="growthScore"
+                name="growthScore"
                 type="number"
                 step="0.1"
                 min="0"
@@ -395,7 +397,7 @@ function ProgressModal({ isOpen, onClose, onSave, existingLog }: ProgressModalPr
 
             {/* Identity Categories */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Identity Focus (Select all that apply)</label>
+              <p className="text-sm font-medium text-gray-700">Identity Focus (Select all that apply)</p>
               <div className="grid grid-cols-2 gap-2">
                 {identityCategories.map((identity) => (
                   <button
@@ -416,8 +418,10 @@ function ProgressModal({ isOpen, onClose, onSave, existingLog }: ProgressModalPr
 
             {/* Notes */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Notes (Optional)</label>
+              <label htmlFor="growthNotes" className="text-sm font-medium text-gray-700">Notes (Optional)</label>
               <textarea
+                id="growthNotes"
+                name="growthNotes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 className="input-dreamy w-full h-24 resize-none"
