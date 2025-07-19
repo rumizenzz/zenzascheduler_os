@@ -217,6 +217,27 @@ export function GarbageModule() {
     }
   }
 
+  const autoUpdate = async () => {
+    if (!user) return
+    try {
+      const res = await fetch('/functions/v1/auto-garbage-schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          addressId: addresses[0]?.id,
+          location: 'Whitehouse Station'
+        })
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Update failed')
+      toast.success('Schedules updated from location')
+      await loadData()
+    } catch (err: any) {
+      toast.error('Auto update failed: ' + err.message)
+    }
+  }
+
   const getWasteTypeInfo = (type: string) => {
     return wasteTypes.find(wt => wt.value === type) || wasteTypes[0]
   }
@@ -243,16 +264,25 @@ export function GarbageModule() {
           </p>
         </div>
         
-        <button
-          onClick={() => {
-            setEditingSchedule(null)
-            setShowModal(true)
-          }}
-          className="btn-dreamy-primary flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          Add Schedule
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => {
+              setEditingSchedule(null)
+              setShowModal(true)
+            }}
+            className="btn-dreamy-primary flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            Add Schedule
+          </button>
+          <button
+            onClick={autoUpdate}
+            className="btn-dreamy flex items-center gap-2"
+          >
+            <span className="w-4 h-4">↻</span>
+            Auto Update
+          </button>
+        </div>
       </div>
 
       {/* Upcoming Collections */}
