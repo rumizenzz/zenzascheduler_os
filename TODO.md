@@ -15,6 +15,8 @@ This file tracks project progress and upcoming tasks.
   site credentials to pass through.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
+- Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
+- Created unsubscribe edge function and page with mailing list table documentation.
 - Fixed Supabase queries for garbage schedules and addresses to match table schema.
 - Ensured entrance sound plays reliably by resuming the AudioContext on user interaction and tab focus.
 - Improved form field accessibility with proper ids and labels.

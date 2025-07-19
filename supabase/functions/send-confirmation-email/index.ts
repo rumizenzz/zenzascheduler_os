@@ -50,18 +50,26 @@ Deno.serve(async (req) => {
 
     const actionLink = (linkData as any).action_link || (linkData as any).properties?.action_link
 
-    const host = Deno.env.get('IONOS_HOST')!
-    const port = Number(Deno.env.get('IONOS_PORT') || 465)
-    const username = Deno.env.get('IONOS_USERNAME')!
-    const password = Deno.env.get('IONOS_PASSWORD')!
-    const from = Deno.env.get('EMAIL_FROM')!
+    const host = Deno.env.get('SMTP_HOST') || Deno.env.get('IONOS_HOST')!
+    const port = Number(Deno.env.get('SMTP_PORT') || Deno.env.get('IONOS_PORT') || 465)
+    const username = Deno.env.get('SMTP_USER') || Deno.env.get('IONOS_USER') || Deno.env.get('IONOS_USERNAME')!
+    const password = Deno.env.get('SMTP_PASS') || Deno.env.get('IONOS_PASS') || Deno.env.get('IONOS_PASSWORD')!
+    const fromEmail = Deno.env.get('MAIL_FROM_EMAIL') || Deno.env.get('EMAIL_FROM')!
+    const fromName = Deno.env.get('MAIL_FROM_NAME') || ''
+    const replyTo = Deno.env.get('MAIL_REPLY_TO') || fromEmail
+    const listUnsubEmail = Deno.env.get('LIST_UNSUBSCRIBE_EMAIL')
+    const listUnsubUrl = Deno.env.get('LIST_UNSUBSCRIBE_URL')
 
     await sendMail({
       hostname: host,
       port,
       username,
       password,
-      from,
+      from: fromName ? `${fromName} <${fromEmail}>` : fromEmail,
+      replyTo,
+      headers: listUnsubEmail || listUnsubUrl ? {
+        'List-Unsubscribe': [listUnsubEmail, listUnsubUrl].filter(Boolean).join(', ')
+      } : undefined,
       to: email,
       subject: 'Confirm your ZenzaLife account',
       content: `Hello ${displayName || ''},\n\nPlease confirm your email by visiting: ${actionLink}\n\nThank you!`
