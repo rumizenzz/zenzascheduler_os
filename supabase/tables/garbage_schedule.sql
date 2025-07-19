@@ -1,9 +1,14 @@
 CREATE TABLE garbage_schedule (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    date DATE NOT NULL,
-    type VARCHAR(50) NOT NULL,
-    location_address TEXT,
-    updated_by UUID,
+    user_id UUID,
+    address_id UUID,
+    waste_type VARCHAR(50) NOT NULL,
+    collection_day VARCHAR(20) NOT NULL,
+    collection_time VARCHAR(20),
+    frequency VARCHAR(20) NOT NULL,
+    next_collection DATE,
+    auto_reminder BOOLEAN DEFAULT false,
+    notes TEXT,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

@@ -25,6 +25,7 @@ This file tracks project progress and upcoming tasks.
 - Improved entrance sound logic to start automatically after the first user gesture, preventing autoplay warnings.
 - Added a mandatory "Click to Enter ZenzaLife OS Scheduler" button before the entrance animation to satisfy autoplay restrictions.
 - Added custom-coded Vanilla Sky inspired favicon.
+- Added missing `next_collection` field to `garbage_schedule` table so the Garbage Module loads correctly.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
