@@ -13,6 +13,10 @@ This file tracks project progress and upcoming tasks.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.
+- Added custom confirmation email edge function using IONOS and confirmation
+  page for verified users.
+- Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
+- Created unsubscribe edge function and page with mailing list table documentation.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
