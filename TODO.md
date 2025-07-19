@@ -16,6 +16,7 @@ This file tracks project progress and upcoming tasks.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Fixed Supabase queries for garbage schedules and addresses to match table schema.
+- Ensured entrance sound plays reliably by resuming the AudioContext on user interaction and tab focus.
 - Improved form field accessibility with proper ids and labels.
 
 ## Next Steps
