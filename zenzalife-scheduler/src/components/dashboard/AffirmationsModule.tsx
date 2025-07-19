@@ -153,7 +153,7 @@ export function AffirmationsModule() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
             <Heart className="w-8 h-8 text-pink-400" />
@@ -187,7 +187,7 @@ export function AffirmationsModule() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <div className="card-floating p-6 text-center">
           <div className="text-3xl font-light text-pink-500 mb-2">
             {streak}
@@ -340,7 +340,7 @@ function AffirmationModal({ isOpen, onClose, onSave, existingAffirmation }: Affi
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-2xl mx-4">
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <h2 className="text-2xl font-light text-gray-800">
               {existingAffirmation ? 'Update' : 'Create'} Today's Affirmation
             </h2>
