@@ -15,6 +15,7 @@ This file tracks project progress and upcoming tasks.
   site credentials to pass through.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
+- Fixed Supabase queries for garbage schedules and addresses to match table schema.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
