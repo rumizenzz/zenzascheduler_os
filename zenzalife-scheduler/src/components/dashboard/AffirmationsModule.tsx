@@ -351,8 +351,10 @@ function AffirmationModal({ isOpen, onClose, onSave, existingAffirmation }: Affi
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Your Affirmation</label>
+              <label htmlFor="affirmationContent" className="text-sm font-medium text-gray-700">Your Affirmation</label>
               <textarea
+                id="affirmationContent"
+                name="affirmationContent"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 className="input-dreamy w-full h-32 resize-none"
@@ -362,8 +364,10 @@ function AffirmationModal({ isOpen, onClose, onSave, existingAffirmation }: Affi
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Category</label>
+              <label htmlFor="affirmationCategory" className="text-sm font-medium text-gray-700">Category</label>
               <select
+                id="affirmationCategory"
+                name="affirmationCategory"
                 value={type}
                 onChange={(e) => setType(e.target.value as AffirmationType)}
                 className="input-dreamy w-full"

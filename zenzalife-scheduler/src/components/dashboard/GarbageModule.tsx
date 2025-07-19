@@ -441,8 +441,10 @@ function ScheduleModal({ isOpen, onClose, onSave, schedule, addresses }: Schedul
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Waste Type</label>
+                <label htmlFor="wasteType" className="text-sm font-medium text-gray-700">Waste Type</label>
                 <select
+                  id="wasteType"
+                  name="wasteType"
                   value={formData.waste_type}
                   onChange={(e) => setFormData(prev => ({ ...prev, waste_type: e.target.value }))}
                   className="input-dreamy w-full"
@@ -456,8 +458,10 @@ function ScheduleModal({ isOpen, onClose, onSave, schedule, addresses }: Schedul
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Collection Day</label>
+                <label htmlFor="collectionDay" className="text-sm font-medium text-gray-700">Collection Day</label>
                 <select
+                  id="collectionDay"
+                  name="collectionDay"
                   value={formData.collection_day}
                   onChange={(e) => setFormData(prev => ({ ...prev, collection_day: e.target.value }))}
                   className="input-dreamy w-full"
@@ -473,8 +477,10 @@ function ScheduleModal({ isOpen, onClose, onSave, schedule, addresses }: Schedul
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Frequency</label>
+                <label htmlFor="frequency" className="text-sm font-medium text-gray-700">Frequency</label>
                 <select
+                  id="frequency"
+                  name="frequency"
                   value={formData.frequency}
                   onChange={(e) => setFormData(prev => ({ ...prev, frequency: e.target.value }))}
                   className="input-dreamy w-full"
@@ -488,8 +494,10 @@ function ScheduleModal({ isOpen, onClose, onSave, schedule, addresses }: Schedul
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Collection Time (Optional)</label>
+                <label htmlFor="collectionTime" className="text-sm font-medium text-gray-700">Collection Time (Optional)</label>
                 <input
+                  id="collectionTime"
+                  name="collectionTime"
                   type="time"
                   value={formData.collection_time}
                   onChange={(e) => setFormData(prev => ({ ...prev, collection_time: e.target.value }))}
@@ -499,8 +507,10 @@ function ScheduleModal({ isOpen, onClose, onSave, schedule, addresses }: Schedul
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Notes (Optional)</label>
+              <label htmlFor="garbageNotes" className="text-sm font-medium text-gray-700">Notes (Optional)</label>
               <textarea
+                id="garbageNotes"
+                name="garbageNotes"
                 value={formData.notes}
                 onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
                 className="input-dreamy w-full h-20 resize-none"

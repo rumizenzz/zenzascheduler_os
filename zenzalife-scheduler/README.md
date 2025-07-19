@@ -63,12 +63,46 @@ export default tseslint.config({
 
 ### Environment variables
 
-Configure these variables in **Site settings → Environment variables** so the app can connect to Supabase and run edge functions:
+Configure these variables in **Site settings → Environment variables** so the app can connect to Supabase, send confirmation emails and manage the mailing list:
 
 - `VITE_SUPABASE_URL` – your Supabase project URL
 - `VITE_SUPABASE_ANON_KEY` – Supabase anon public key
 - `SUPABASE_URL` – same as `VITE_SUPABASE_URL` for edge functions
 - `SUPABASE_SERVICE_ROLE_KEY` – service role key for edge functions
+- `SUPABASE_TABLE` – table storing mailing list emails (e.g. `mailing_list`)
+- `COMPANY_ADDRESS` – physical business address for CAN-SPAM compliance
+- `COMPANY_CONTACT_EMAIL` – contact email shown in footers
+- `SMTP_HOST` – SMTP host (e.g. `smtp.ionos.com`)
+- `SMTP_PORT` – SMTP port, typically `465`
+- `SMTP_USER` – SMTP username
+- `SMTP_PASS` – SMTP password
+- `MAIL_FROM_EMAIL` – from address for outgoing mail
+- `MAIL_FROM_NAME` – name shown on outgoing mail
+- `MAIL_REPLY_TO` – reply-to address
+- `LIST_UNSUBSCRIBE_EMAIL` – email used in `List-Unsubscribe` header
+- `LIST_UNSUBSCRIBE_URL` – URL used in `List-Unsubscribe` header
+- `IMAP_HOST` – IMAP host for monitoring bounces (optional)
+- `IMAP_PORT` – IMAP port, typically `993`
+- `IMAP_USER` – IMAP username
+- `IMAP_PASS` – IMAP password
+- `UNSUBSCRIBE_WARNING_TEXT` – text displayed on the unsubscribe page
+
+Legacy variables `IONOS_HOST`, `IONOS_PORT`, `IONOS_USER`, and `IONOS_PASS` are supported for compatibility but `SMTP_*` variables are preferred.
+
+### Mailing list table
+
+Create the table referenced by `SUPABASE_TABLE` inside your Supabase project:
+
+```sql
+create table if not exists mailing_list (
+  id uuid default uuid_generate_v4() primary key,
+  email text unique not null,
+  unsubscribed boolean default false,
+  created_at timestamp with time zone default now()
+);
+```
+
+After running the SQL above in the Supabase SQL editor, add `SUPABASE_TABLE=mailing_list` to your Netlify environment variables.
 
 For local development, copy `.env.example` to `.env` inside
 `zenzalife-scheduler` and add your credentials. Netlify automatically exposes
