@@ -60,3 +60,11 @@ export default tseslint.config({
 4. Click **Deploy site** and wait for the build to complete.
 5. After deployment, Netlify provides a public URL which can be customized in the site settings.
 
+### Environment variables
+
+Configure these variables in **Site settings → Environment variables** so the app can connect to Supabase and run edge functions:
+
+- `VITE_SUPABASE_URL` – your Supabase project URL
+- `VITE_SUPABASE_ANON_KEY` – Supabase anon public key
+- `SUPABASE_URL` – same as `VITE_SUPABASE_URL` for edge functions
+- `SUPABASE_SERVICE_ROLE_KEY` – service role key for edge functions
