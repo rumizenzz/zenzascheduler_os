@@ -68,4 +68,3 @@ Configure these variables in **Site settings → Environment variables** so the 
 - `VITE_SUPABASE_ANON_KEY` – Supabase anon public key
 - `SUPABASE_URL` – same as `VITE_SUPABASE_URL` for edge functions
 - `SUPABASE_SERVICE_ROLE_KEY` – service role key for edge functions
-
