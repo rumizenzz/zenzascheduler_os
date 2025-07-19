@@ -27,6 +27,9 @@ This file tracks project progress and upcoming tasks.
 - Added a mandatory "Click to Enter ZenzaLife OS Scheduler" button before the entrance animation to satisfy autoplay restrictions.
 - Added custom-coded Vanilla Sky inspired favicon.
 - Added missing `next_collection` field to `garbage_schedule` table so the Garbage Module loads correctly.
+- Integrated task analytics edge function for progress stats.
+- Added automated garbage schedule updater edge function for Whitehouse Station.
+- Updated auto-garbage-schedule function to fetch and parse iCal feeds.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
