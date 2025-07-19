@@ -439,7 +439,7 @@ function ScheduleModal({ isOpen, onClose, onSave, schedule, addresses }: Schedul
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label htmlFor="wasteType" className="text-sm font-medium text-gray-700">Waste Type</label>
                 <select
@@ -475,7 +475,7 @@ function ScheduleModal({ isOpen, onClose, onSave, schedule, addresses }: Schedul
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label htmlFor="frequency" className="text-sm font-medium text-gray-700">Frequency</label>
                 <select
