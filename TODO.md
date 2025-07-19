@@ -28,6 +28,8 @@ This file tracks project progress and upcoming tasks.
 - Added custom-coded Vanilla Sky inspired favicon.
 - Enhanced UI with premium fonts and luxury gradients.
 - Added missing `next_collection` field to `garbage_schedule` table so the Garbage Module loads correctly.
+- Integrated task analytics edge function for progress stats.
+- Added automated garbage schedule updater edge function for Whitehouse Station.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
