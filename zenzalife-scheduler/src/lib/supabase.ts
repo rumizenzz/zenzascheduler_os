@@ -86,11 +86,30 @@ export type GrowthLog = {
 
 // Helper functions
 export async function getCurrentUser() {
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const {
+    data: { session },
+    error: sessionError
+  } = await supabase.auth.getSession()
+
+  if (sessionError) {
+    console.error('Error getting session:', sessionError)
+    return null
+  }
+
+  if (!session) {
+    return null
+  }
+
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser()
+
   if (error) {
     console.error('Error getting user:', error)
     return null
   }
+
   return user
 }
 
