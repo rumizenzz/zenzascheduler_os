@@ -48,3 +48,32 @@ export default tseslint.config({
   },
 })
 ```
+
+## Deploying to Netlify
+
+1. Push this repository to GitHub or another Git provider.
+2. Sign in to [Netlify](https://www.netlify.com/) and choose **New site from Git**.
+3. Select this repository and configure the following build settings:
+   - **Base directory**: `zenzalife-scheduler`
+   - **Build command**: `pnpm run build`
+   - **Publish directory**: `dist`
+4. Click **Deploy site** and wait for the build to complete.
+5. After deployment, Netlify provides a public URL which can be customized in the site settings.
+6. Netlify reads the `netlify.toml` in the repo root which sets the same build options and includes a redirect rule for single-page app routing.
+
+### Environment variables
+
+Configure these variables in **Site settings → Environment variables** so the app can connect to Supabase and run edge functions:
+
+- `VITE_SUPABASE_URL` – your Supabase project URL
+- `VITE_SUPABASE_ANON_KEY` – Supabase anon public key
+- `SUPABASE_URL` – same as `VITE_SUPABASE_URL` for edge functions
+- `SUPABASE_SERVICE_ROLE_KEY` – service role key for edge functions
+
+For local development, copy `.env.example` to `.env` inside
+`zenzalife-scheduler` and add your credentials. Netlify automatically exposes
+variables prefixed with `VITE_` to the build. The variables without the prefix
+are read by Supabase Edge Functions.
+You can also define the same variables under `[build.environment]` in
+`netlify.toml` for convenience when setting up new sites.
+

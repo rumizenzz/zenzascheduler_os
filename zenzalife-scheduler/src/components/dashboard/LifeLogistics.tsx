@@ -95,49 +95,53 @@ export function LifeLogistics() {
     setLoading(true)
     try {
       switch (activeTab) {
-        case 'addresses':
+        case 'addresses': {
           const { data: addressData, error: addressError } = await supabase
             .from('addresses')
             .select('*')
             .eq('user_id', user.id)
             .order('is_primary', { ascending: false })
-          
+
           if (addressError) throw addressError
           setAddresses(addressData || [])
           break
-          
-        case 'vehicles':
+        }
+
+        case 'vehicles': {
           const { data: vehicleData, error: vehicleError } = await supabase
             .from('vehicles')
             .select('*')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
-          
+
           if (vehicleError) throw vehicleError
           setVehicles(vehicleData || [])
           break
-          
-        case 'jobs':
+        }
+
+        case 'jobs': {
           const { data: jobData, error: jobError } = await supabase
             .from('jobs')
             .select('*')
             .eq('user_id', user.id)
             .order('is_current', { ascending: false })
-          
+
           if (jobError) throw jobError
           setJobs(jobData || [])
           break
-          
-        case 'businesses':
+        }
+
+        case 'businesses': {
           const { data: businessData, error: businessError } = await supabase
             .from('businesses')
             .select('*')
             .eq('user_id', user.id)
             .order('is_active', { ascending: false })
-          
+
           if (businessError) throw businessError
           setBusinesses(businessData || [])
           break
+        }
       }
     } catch (error: any) {
       toast.error('Failed to load data: ' + error.message)
