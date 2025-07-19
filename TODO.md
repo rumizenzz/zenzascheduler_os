@@ -18,6 +18,7 @@ This file tracks project progress and upcoming tasks.
 - Fixed Supabase queries for garbage schedules and addresses to match table schema.
 - Ensured entrance sound plays reliably by resuming the AudioContext on user interaction and tab focus.
 - Improved form field accessibility with proper ids and labels.
+- Added custom-coded Vanilla Sky inspired favicon.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
