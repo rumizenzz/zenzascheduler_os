@@ -178,6 +178,42 @@ export function LifeLogistics() {
     }
   }
 
+  const saveItem = async (formData: any) => {
+    if (!user) return
+
+    const table = activeTab
+
+    try {
+      if (editingItem) {
+        const { error } = await supabase
+          .from(table)
+          .update({ ...formData, updated_at: new Date().toISOString() })
+          .eq('id', editingItem.id)
+
+        if (error) throw error
+        toast.success('Item updated successfully!')
+      } else {
+        const { error } = await supabase
+          .from(table)
+          .insert({
+            ...formData,
+            user_id: user.id,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+
+        if (error) throw error
+        toast.success('Item added successfully!')
+      }
+
+      await loadData()
+      setShowModal(false)
+      setEditingItem(null)
+    } catch (error: any) {
+      toast.error('Failed to save item: ' + error.message)
+    }
+  }
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'addresses':
@@ -389,27 +425,380 @@ export function LifeLogistics() {
         )}
       </div>
 
-      {/* Modal would go here - simplified for brevity */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md mx-4">
-            <div className="p-6">
-              <h2 className="text-xl font-medium text-gray-800 mb-4">
-                {editingItem ? 'Edit' : 'Add'} {tabConfig.find(t => t.id === activeTab)?.label.slice(0, -1)}
-              </h2>
-              <p className="text-gray-600 mb-6">Modal content would go here...</p>
-              <div className="flex justify-end gap-3">
-                <button onClick={() => setShowModal(false)} className="btn-dreamy">
-                  Cancel
-                </button>
-                <button className="btn-dreamy-primary">
-                  Save
-                </button>
+        <LogisticsModal
+          isOpen={showModal}
+          onClose={() => {
+            setShowModal(false)
+            setEditingItem(null)
+          }}
+          onSave={saveItem}
+          tab={activeTab}
+          item={editingItem}
+        />
+      )}
+    </div>
+  )
+}
+
+interface LogisticsModalProps {
+  isOpen: boolean
+  onClose: () => void
+  onSave: (data: any) => void
+  tab: LogisticsTab
+  item: any
+}
+
+function LogisticsModal({ isOpen, onClose, onSave, tab, item }: LogisticsModalProps) {
+  const [form, setForm] = useState<any>({})
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    switch (tab) {
+      case 'addresses':
+        setForm({
+          type: '',
+          address_line_1: '',
+          address_line_2: '',
+          city: '',
+          state: '',
+          zip_code: '',
+          country: '',
+          is_primary: false,
+          ...(item || {})
+        })
+        break
+      case 'vehicles':
+        setForm({
+          make: '',
+          model: '',
+          year: new Date().getFullYear(),
+          ...(item || {})
+        })
+        break
+      case 'jobs':
+        setForm({
+          company_name: '',
+          position: '',
+          employment_type: '',
+          start_date: '',
+          end_date: '',
+          salary: '',
+          is_current: true,
+          ...(item || {})
+        })
+        break
+      case 'businesses':
+        setForm({
+          business_name: '',
+          business_type: '',
+          start_date: '',
+          description: '',
+          status: 'active',
+          ...(item || {})
+        })
+        break
+    }
+  }, [isOpen, tab, item])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type, checked } = e.target
+    setForm((prev: any) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }))
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSave(form)
+  }
+
+  if (!isOpen) return null
+
+  const renderFields = () => {
+    switch (tab) {
+      case 'addresses':
+        return (
+          <>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Type</label>
+              <input
+                name="type"
+                value={form.type || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+                placeholder="Home"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Address Line 1</label>
+              <input
+                name="address_line_1"
+                value={form.address_line_1 || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Address Line 2</label>
+              <input
+                name="address_line_2"
+                value={form.address_line_2 || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">City</label>
+                <input
+                  name="city"
+                  value={form.city || ''}
+                  onChange={handleChange}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">State</label>
+                <input
+                  name="state"
+                  value={form.state || ''}
+                  onChange={handleChange}
+                  className="input-dreamy w-full"
+                  required
+                />
               </div>
             </div>
-          </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Zip</label>
+                <input
+                  name="zip_code"
+                  value={form.zip_code || ''}
+                  onChange={handleChange}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Country</label>
+                <input
+                  name="country"
+                  value={form.country || ''}
+                  onChange={handleChange}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-2 pt-2">
+              <input
+                id="is_primary"
+                name="is_primary"
+                type="checkbox"
+                checked={form.is_primary || false}
+                onChange={handleChange}
+              />
+              <label htmlFor="is_primary" className="text-sm text-gray-700">Primary Address</label>
+            </div>
+          </>
+        )
+      case 'vehicles':
+        return (
+          <>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Make</label>
+                <input
+                  name="make"
+                  value={form.make || ''}
+                  onChange={handleChange}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Model</label>
+                <input
+                  name="model"
+                  value={form.model || ''}
+                  onChange={handleChange}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Year</label>
+              <input
+                name="year"
+                type="number"
+                value={form.year || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+              />
+            </div>
+          </>
+        )
+      case 'jobs':
+        return (
+          <>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Company</label>
+              <input
+                name="company_name"
+                value={form.company_name || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Position</label>
+              <input
+                name="position"
+                value={form.position || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Employment Type</label>
+              <input
+                name="employment_type"
+                value={form.employment_type || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Start Date</label>
+                <input
+                  name="start_date"
+                  type="date"
+                  value={form.start_date || ''}
+                  onChange={handleChange}
+                  className="input-dreamy w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">End Date</label>
+                <input
+                  name="end_date"
+                  type="date"
+                  value={form.end_date || ''}
+                  onChange={handleChange}
+                  className="input-dreamy w-full"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Salary</label>
+              <input
+                name="salary"
+                type="number"
+                value={form.salary || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                id="is_current"
+                name="is_current"
+                type="checkbox"
+                checked={form.is_current}
+                onChange={handleChange}
+              />
+              <label htmlFor="is_current" className="text-sm text-gray-700">Current Job</label>
+            </div>
+          </>
+        )
+      case 'businesses':
+        return (
+          <>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Business Name</label>
+              <input
+                name="business_name"
+                value={form.business_name || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Business Type</label>
+              <input
+                name="business_type"
+                value={form.business_type || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Start Date</label>
+              <input
+                name="start_date"
+                type="date"
+                value={form.start_date || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Description</label>
+              <textarea
+                name="description"
+                value={form.description || ''}
+                onChange={handleChange}
+                className="input-dreamy w-full h-24 resize-none"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Status</label>
+              <select
+                name="status"
+                value={form.status || 'active'}
+                onChange={handleChange}
+                className="input-dreamy w-full"
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </>
+        )
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-y-auto max-h-[90vh]">
+        <div className="p-6">
+          <h2 className="text-xl font-medium text-gray-800 mb-4">
+            {item ? 'Edit' : 'Add'} {tab.slice(0, -1)}
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {renderFields()}
+            <div className="flex justify-end gap-3 pt-2">
+              <button type="button" onClick={onClose} className="btn-dreamy">
+                Cancel
+              </button>
+              <button type="submit" className="btn-dreamy-primary">
+                Save
+              </button>
+            </div>
+          </form>
         </div>
-      )}
+      </div>
     </div>
   )
 }

@@ -7,6 +7,8 @@ This file tracks project progress and upcoming tasks.
 - Added `netlify.toml` to configure build settings and SPA redirects.
 
 ## Latest Updates
+- Added functional modal forms in the Life Logistics module so addresses,
+  vehicles, jobs and businesses can be added or edited.
 - Added `.env.example` for local development credentials.
 - Implemented income tracking module to log job and business earnings.
 - Clarified Netlify environment variables in the README.
