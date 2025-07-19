@@ -16,6 +16,7 @@ This file tracks project progress and upcoming tasks.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Fixed Supabase queries for garbage schedules and addresses to match table schema.
+- Documented IONOS mail environment variables for anti-spam configuration.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.

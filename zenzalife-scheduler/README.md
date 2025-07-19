@@ -70,6 +70,31 @@ Configure these variables in **Site settings → Environment variables** so the 
 - `SUPABASE_URL` – same as `VITE_SUPABASE_URL` for edge functions
 - `SUPABASE_SERVICE_ROLE_KEY` – service role key for edge functions
 
+Additional variables for IONOS mail configuration:
+
+- `COMPANY_ADDRESS` – physical company address for email footers
+- `COMPANY_CONTACT_EMAIL` – contact address for subscribers
+- `IMAP_HOST` – IMAP server hostname
+- `IMAP_PASS` – IMAP account password
+- `IMAP_PORT` – IMAP server port
+- `IMAP_USER` – IMAP account username
+- `IONOS_PASS` – SMTP account password
+- `IONOS_USER` – SMTP account username
+- `LIST_UNSUBSCRIBE_EMAIL` – email for `List-Unsubscribe` header
+- `LIST_UNSUBSCRIBE_URL` – URL for unsubscribe link
+- `MAIL_FROM_EMAIL` – default from email address
+- `MAIL_FROM_NAME` – from display name
+- `MAIL_REPLY_TO` – reply-to address
+- `SMTP_HOST` – SMTP server hostname
+- `SMTP_PASS` – SMTP server password
+- `SMTP_PORT` – SMTP server port
+- `SMTP_USER` – SMTP server username
+- `SUPABASE_ANON_KEY` – Supabase anon key for server code
+- `SUPABASE_SERVICE_KEY` – service key for database access
+- `SUPABASE_TABLE` – table storing subscribers, set to `mailing_list`
+- `UNSUBSCRIBE_WARNING_TEXT` – message shown near unsubscribe options
+
+
 For local development, copy `.env.example` to `.env` inside
 `zenzalife-scheduler` and add your credentials. Netlify automatically exposes
 variables prefixed with `VITE_` to the build. The variables without the prefix
