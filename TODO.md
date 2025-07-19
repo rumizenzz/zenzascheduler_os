@@ -10,6 +10,9 @@ This file tracks project progress and upcoming tasks.
 - Added `.env.example` for local development credentials.
 - Clarified Netlify environment variables in the README.
 - Introduced Netlify configuration file for easier setup.
+- Added runtime check for missing Supabase environment variables.
+- Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
+  site credentials to pass through.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
