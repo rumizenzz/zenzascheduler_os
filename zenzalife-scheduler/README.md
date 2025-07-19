@@ -48,3 +48,15 @@ export default tseslint.config({
   },
 })
 ```
+
+## Deploying to Netlify
+
+1. Push this repository to GitHub or another Git provider.
+2. Sign in to [Netlify](https://www.netlify.com/) and choose **New site from Git**.
+3. Select this repository and configure the following build settings:
+   - **Base directory**: `zenzalife-scheduler`
+   - **Build command**: `pnpm run build`
+   - **Publish directory**: `dist`
+4. Click **Deploy site** and wait for the build to complete.
+5. After deployment, Netlify provides a public URL which can be customized in the site settings.
+
