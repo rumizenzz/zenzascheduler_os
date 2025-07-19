@@ -13,6 +13,8 @@ This file tracks project progress and upcoming tasks.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.
+- Fixed Supabase queries for garbage schedules and addresses to match table schema.
+- Fixed additional Life Logistics queries for addresses and businesses.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
