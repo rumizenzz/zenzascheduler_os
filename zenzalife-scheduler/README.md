@@ -63,12 +63,21 @@ export default tseslint.config({
 
 ### Environment variables
 
-Configure these variables in **Site settings → Environment variables** so the app can connect to Supabase and run edge functions:
+Configure these variables in **Site settings → Environment variables** so the app can connect to Supabase, run edge functions and send confirmation emails:
 
 - `VITE_SUPABASE_URL` – your Supabase project URL
 - `VITE_SUPABASE_ANON_KEY` – Supabase anon public key
 - `SUPABASE_URL` – same as `VITE_SUPABASE_URL` for edge functions
 - `SUPABASE_SERVICE_ROLE_KEY` – service role key for edge functions
+- `IONOS_HOST` – SMTP host for IONOS Mail (e.g. `smtp.ionos.com`)
+- `IONOS_PORT` – SMTP port, typically `465`
+- `IONOS_USERNAME` – your full IONOS mailbox address
+- `IONOS_PASSWORD` – password for the mailbox
+- `EMAIL_FROM` – "from" address users see in confirmation emails
+- `IONOS_IMAP_HOST` – IMAP host for IONOS Mail
+- `IONOS_IMAP_PORT` – IMAP port, e.g. `993`
+- `IONOS_IMAP_USERNAME` – IMAP login, usually same as SMTP username
+- `IONOS_IMAP_PASSWORD` – IMAP password
 
 For local development, copy `.env.example` to `.env` inside
 `zenzalife-scheduler` and add your credentials. Netlify automatically exposes
