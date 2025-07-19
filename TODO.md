@@ -13,6 +13,8 @@ This file tracks project progress and upcoming tasks.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.
+- Fixed Supabase queries for garbage schedules and addresses to match table schema.
+- Fixed additional Life Logistics queries for addresses and businesses.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
