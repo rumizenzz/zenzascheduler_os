@@ -70,11 +70,13 @@ export function AuthForm({ mode, onModeChange }: AuthFormProps) {
           {mode === 'signup' && (
             <>
               <div className="space-y-2">
-                <label className="text-sm font-light text-gray-700 flex items-center gap-2">
+                <label htmlFor="displayName" className="text-sm font-light text-gray-700 flex items-center gap-2">
                   <User className="w-4 h-4" />
                   Display Name
                 </label>
                 <input
+                  id="displayName"
+                  name="displayName"
                   type="text"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
@@ -85,11 +87,13 @@ export function AuthForm({ mode, onModeChange }: AuthFormProps) {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-light text-gray-700 flex items-center gap-2">
+                <label htmlFor="relationshipRole" className="text-sm font-light text-gray-700 flex items-center gap-2">
                   <Heart className="w-4 h-4" />
                   Role in Family
                 </label>
                 <select
+                  id="relationshipRole"
+                  name="relationshipRole"
                   value={relationshipRole}
                   onChange={(e) => setRelationshipRole(e.target.value)}
                   className="input-dreamy w-full"
@@ -105,11 +109,13 @@ export function AuthForm({ mode, onModeChange }: AuthFormProps) {
           )}
 
           <div className="space-y-2">
-            <label className="text-sm font-light text-gray-700 flex items-center gap-2">
+            <label htmlFor="email" className="text-sm font-light text-gray-700 flex items-center gap-2">
               <Mail className="w-4 h-4" />
               Email
             </label>
             <input
+              id="email"
+              name="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -120,12 +126,14 @@ export function AuthForm({ mode, onModeChange }: AuthFormProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-light text-gray-700 flex items-center gap-2">
+            <label htmlFor="password" className="text-sm font-light text-gray-700 flex items-center gap-2">
               <Lock className="w-4 h-4" />
               Password
             </label>
             <div className="relative">
               <input
+                id="password"
+                name="password"
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

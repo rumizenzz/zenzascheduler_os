@@ -159,8 +159,10 @@ export function SettingsModule() {
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Display Name</label>
+                <label htmlFor="displayName" className="text-sm font-medium text-gray-700">Display Name</label>
                 <input
+                  id="displayName"
+                  name="displayName"
                   type="text"
                   value={profileData.display_name}
                   onChange={(e) => setProfileData(prev => ({ ...prev, display_name: e.target.value }))}
@@ -170,8 +172,10 @@ export function SettingsModule() {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Role in Family</label>
+                <label htmlFor="relationshipRoleSettings" className="text-sm font-medium text-gray-700">Role in Family</label>
                 <select
+                  id="relationshipRoleSettings"
+                  name="relationshipRoleSettings"
                   value={profileData.relationship_role}
                   onChange={(e) => setProfileData(prev => ({ ...prev, relationship_role: e.target.value }))}
                   className="input-dreamy w-full"
@@ -186,8 +190,10 @@ export function SettingsModule() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Age (Optional)</label>
+              <label htmlFor="age" className="text-sm font-medium text-gray-700">Age (Optional)</label>
               <input
+                id="age"
+                name="age"
                 type="number"
                 value={profileData.age}
                 onChange={(e) => setProfileData(prev => ({ ...prev, age: e.target.value }))}
@@ -199,8 +205,10 @@ export function SettingsModule() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Growth Identity</label>
+              <label htmlFor="growthIdentity" className="text-sm font-medium text-gray-700">Growth Identity</label>
               <input
+                id="growthIdentity"
+                name="growthIdentity"
                 type="text"
                 value={profileData.growth_identity}
                 onChange={(e) => setProfileData(prev => ({ ...prev, growth_identity: e.target.value }))}
@@ -210,8 +218,10 @@ export function SettingsModule() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Bio</label>
+              <label htmlFor="bio" className="text-sm font-medium text-gray-700">Bio</label>
               <textarea
+                id="bio"
+                name="bio"
                 value={profileData.bio}
                 onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
                 className="input-dreamy w-full h-24 resize-none"
@@ -238,6 +248,7 @@ export function SettingsModule() {
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="entranceSound"
                     type="checkbox"
                     checked={audioSettings.entrance_sound}
                     onChange={(e) => setAudioSettings(prev => ({ ...prev, entrance_sound: e.target.checked }))}
@@ -254,6 +265,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="taskAlarms"
                     type="checkbox"
                     checked={audioSettings.task_alarms}
                     onChange={(e) => setAudioSettings(prev => ({ ...prev, task_alarms: e.target.checked }))}
@@ -264,6 +276,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="reminderSounds"
                     type="checkbox"
                     checked={audioSettings.reminder_sounds}
                     onChange={(e) => setAudioSettings(prev => ({ ...prev, reminder_sounds: e.target.checked }))}
@@ -319,6 +332,7 @@ export function SettingsModule() {
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="notifyTasks"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
@@ -328,6 +342,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="notifyAffirmations"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-green-500 focus:ring-green-500"
@@ -337,6 +352,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="notifyProgress"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-purple-500 focus:ring-purple-500"
@@ -367,6 +383,7 @@ export function SettingsModule() {
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="showEntranceAnimation"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
@@ -376,6 +393,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="smoothTransitions"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-purple-500 focus:ring-purple-500"
@@ -409,6 +427,7 @@ export function SettingsModule() {
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="shareProgress"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
@@ -418,6 +437,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="shareAffirmations"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-purple-500 focus:ring-purple-500"
