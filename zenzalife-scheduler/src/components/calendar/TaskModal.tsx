@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Task } from '@/lib/supabase'
 import { X, Clock, Tag, Bell, Users, Target, Trash2 } from 'lucide-react'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 interface TaskModalProps {
   isOpen: boolean
@@ -56,8 +59,12 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
       setFormData({
         title: task.title || '',
         category: task.category || 'other',
-        start_time: task.start_time ? dayjs(task.start_time).format('YYYY-MM-DDTHH:mm') : '',
-        end_time: task.end_time ? dayjs(task.end_time).format('YYYY-MM-DDTHH:mm') : '',
+        start_time: task.start_time
+          ? dayjs.utc(task.start_time).local().format('YYYY-MM-DDTHH:mm')
+          : '',
+        end_time: task.end_time
+          ? dayjs.utc(task.end_time).local().format('YYYY-MM-DDTHH:mm')
+          : '',
         repeat_pattern: task.repeat_pattern || 'none',
         alarm: task.alarm || false,
         visibility: task.visibility || 'private',
