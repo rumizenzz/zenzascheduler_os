@@ -119,9 +119,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         console.error('Error creating user profile:', profileError)
       }
 
-      // Send custom confirmation email via edge function
+      // Send custom confirmation email via Netlify function
       try {
-        await fetch('/functions/v1/send-confirmation-email', {
+        await fetch('/.netlify/functions/send-confirmation-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, displayName })

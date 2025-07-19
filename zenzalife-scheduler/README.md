@@ -67,8 +67,8 @@ Configure these variables in **Site settings → Environment variables** so the 
 
 - `VITE_SUPABASE_URL` – your Supabase project URL
 - `VITE_SUPABASE_ANON_KEY` – Supabase anon public key
-- `SUPABASE_URL` – same as `VITE_SUPABASE_URL` for edge functions
-- `SUPABASE_SERVICE_ROLE_KEY` – service role key for edge functions
+- `SUPABASE_URL` – same as `VITE_SUPABASE_URL` for Netlify functions
+- `SUPABASE_SERVICE_ROLE_KEY` – service role key for Netlify functions
 - `SUPABASE_TABLE` – table storing mailing list emails (e.g. `mailing_list`)
 - `COMPANY_ADDRESS` – physical business address for CAN-SPAM compliance
 - `COMPANY_CONTACT_EMAIL` – contact email shown in footers
@@ -104,10 +104,12 @@ create table if not exists mailing_list (
 
 After running the SQL above in the Supabase SQL editor, add `SUPABASE_TABLE=mailing_list` to your Netlify environment variables.
 
+Whenever a user signs up, the confirmation email Netlify function automatically adds their address to this table so you can manage subscriptions centrally.
+
 For local development, copy `.env.example` to `.env` inside
 `zenzalife-scheduler` and add your credentials. Netlify automatically exposes
 variables prefixed with `VITE_` to the build. The variables without the prefix
-are read by Supabase Edge Functions.
+are read by Netlify Functions.
 Define these variables in the Netlify site settings so they are available during
 the build. Avoid setting them in `netlify.toml` because empty placeholder values
 would override the real credentials.

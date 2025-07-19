@@ -28,11 +28,28 @@ Deno.serve(async (req) => {
     const table = Deno.env.get('SUPABASE_TABLE') || 'mailing_list'
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    const { data, error } = await supabase
+    // Check if the email exists before updating
+    const { data: existing, error: selectError } = await supabase
+      .from(table)
+      .select('id')
+      .eq('email', email)
+      .maybeSingle()
+
+    if (selectError) {
+      throw selectError
+    }
+
+    if (!existing) {
+      return new Response(JSON.stringify({ error: 'not-found' }), {
+        status: 404,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    const { error } = await supabase
       .from(table)
       .update({ unsubscribed: true })
       .eq('email', email)
-      .select()
 
     if (error) {
       throw error

@@ -6,6 +6,9 @@ publish = "dist"
 [functions]
   directory = "netlify/functions"
 
+[functions]
+  directory = "netlify/functions"
+
 
 [[redirects]]
   from = "/*"
