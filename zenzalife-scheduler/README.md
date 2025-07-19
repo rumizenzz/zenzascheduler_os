@@ -68,3 +68,9 @@ Configure these variables in **Site settings → Environment variables** so the 
 - `VITE_SUPABASE_ANON_KEY` – Supabase anon public key
 - `SUPABASE_URL` – same as `VITE_SUPABASE_URL` for edge functions
 - `SUPABASE_SERVICE_ROLE_KEY` – service role key for edge functions
+
+For local development, copy `.env.example` to `.env` inside
+`zenzalife-scheduler` and add your credentials. Netlify automatically exposes
+variables prefixed with `VITE_` to the build. The variables without the prefix
+are read by Supabase Edge Functions.
+

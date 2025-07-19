@@ -3,7 +3,7 @@
 These guidelines apply to the entire repository.
 
 ## Contribution workflow
-- Keep `TODO.md` up to date with tasks that are finished and tasks that remain.
+- Keep `TODO.md` up to date with tasks that are finished and tasks that remain. This file summarizes the large feature list in `todo.md`.
 - Run `pnpm run lint` inside `zenzalife-scheduler` before committing changes.
 - Commit with clear messages.
 
@@ -14,4 +14,14 @@ These guidelines apply to the entire repository.
 
 ## Style
 - Prefer TypeScript and keep formatting consistent (use Prettier or an equivalent formatter).
+
+## Project tasks
+`todo.md` lists the complete feature roadmap. Keep `TODO.md` updated as work
+progresses. High level milestones:
+- Supabase authentication setup
+- Database schema design
+- Storage bucket configuration
+- Dreamlike React front end
+- Edge Functions for automation
+- Final deployment and testing
 
