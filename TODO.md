@@ -20,6 +20,10 @@ This file tracks project progress and upcoming tasks.
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
 - Created unsubscribe edge function and page with mailing list table documentation.
+- Added warning message when an email is not found during unsubscribe.
+- Confirmation email edge function now stores new sign ups in the mailing list table.
+- Unsubscribe page includes instructions for re-subscribing.
+- Added login prompt asking users to join the mailing list if they aren't subscribed.
 - Fixed Supabase queries for garbage schedules and addresses to match table schema.
 - Ensured entrance sound plays reliably by resuming the AudioContext on user interaction and tab focus.
 - Improved form field accessibility with proper ids and labels.

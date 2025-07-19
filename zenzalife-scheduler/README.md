@@ -104,6 +104,8 @@ create table if not exists mailing_list (
 
 After running the SQL above in the Supabase SQL editor, add `SUPABASE_TABLE=mailing_list` to your Netlify environment variables.
 
+Whenever a user signs up, the confirmation email edge function automatically adds their address to this table so you can manage subscriptions centrally.
+
 For local development, copy `.env.example` to `.env` inside
 `zenzalife-scheduler` and add your credentials. Netlify automatically exposes
 variables prefixed with `VITE_` to the build. The variables without the prefix

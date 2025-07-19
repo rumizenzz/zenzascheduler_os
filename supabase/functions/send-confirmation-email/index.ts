@@ -37,6 +37,7 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseKey)
+    const mailingTable = Deno.env.get('SUPABASE_TABLE') || 'mailing_list'
 
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
       type: 'signup',
@@ -49,6 +50,11 @@ Deno.serve(async (req) => {
     }
 
     const actionLink = (linkData as any).action_link || (linkData as any).properties?.action_link
+
+    // Ensure the user is on the mailing list
+    await supabase
+      .from(mailingTable)
+      .upsert({ email, unsubscribed: false }, { onConflict: 'email' })
 
     const host = Deno.env.get('SMTP_HOST') || Deno.env.get('IONOS_HOST')!
     const port = Number(Deno.env.get('SMTP_PORT') || Deno.env.get('IONOS_PORT') || 465)
