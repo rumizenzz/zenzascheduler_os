@@ -28,6 +28,11 @@ This file tracks project progress and upcoming tasks.
 - Added custom-coded Vanilla Sky inspired favicon.
 - Enhanced UI with premium fonts and luxury gradients.
 - Added missing `next_collection` field to `garbage_schedule` table so the Garbage Module loads correctly.
+- Integrated task analytics edge function for progress stats.
+- Added automated garbage schedule updater edge function for Whitehouse Station.
+- Updated auto-garbage-schedule function to fetch and parse iCal feeds.
+- Added garbage_update_logs table and edge logging for schedule refreshes.
+- Implemented modular garbage provider system with Republic Services integration.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
