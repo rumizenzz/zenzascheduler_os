@@ -61,12 +61,30 @@ export function GrowthTracker() {
       const todaysLog = data?.find(log => log.date === today)
       setTodayLog(todaysLog || null)
       
-      // Calculate stats
-      calculateStats(data || [])
+      // Calculate stats via edge function
+      await fetchAnalytics()
     } catch (error: any) {
       toast.error('Failed to load growth logs: ' + error.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchAnalytics = async () => {
+    if (!user) return
+    try {
+      const res = await fetch('/functions/v1/task-analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id })
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error?.message || 'Failed')
+      setStats(json.data)
+    } catch (e: any) {
+      console.error('Analytics error', e)
+      // fallback to client calculation
+      calculateStats(growthLogs)
     }
   }
 
@@ -150,6 +168,7 @@ export function GrowthTracker() {
       }
       
       await loadGrowthLogs()
+      await fetchAnalytics()
       setShowAddModal(false)
     } catch (error: any) {
       toast.error('Failed to save progress: ' + error.message)

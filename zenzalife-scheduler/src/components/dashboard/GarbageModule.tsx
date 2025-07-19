@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
-import { Trash2, Plus, Calendar, MapPin, Clock, Bell, Edit, Trash } from 'lucide-react'
+import { Trash2, Plus, Calendar, MapPin, Clock, Bell, Edit, Trash, History } from 'lucide-react'
 import dayjs from 'dayjs'
 
 interface GarbageSchedule {
@@ -18,6 +18,16 @@ interface GarbageSchedule {
   notes?: string
   created_at: string
   updated_at: string
+}
+
+interface GarbageUpdateLog {
+  id: string
+  user_id?: string
+  address_id?: string
+  ics_url?: string
+  total_events: number
+  upserted_events: number
+  created_at: string
 }
 
 const wasteTypes = [
@@ -46,6 +56,9 @@ const daysOfWeek = [
   { value: 'sunday', label: 'Sunday' }
 ]
 
+// Default ICS feed for Whitehouse Station via Republic Services
+const DEFAULT_ICS_URL = 'https://www.republicservices.com/schedule/ics/08889'
+
 export function GarbageModule() {
   const { user } = useAuth()
   const [schedules, setSchedules] = useState<GarbageSchedule[]>([])
@@ -54,6 +67,7 @@ export function GarbageModule() {
   const [showModal, setShowModal] = useState(false)
   const [editingSchedule, setEditingSchedule] = useState<GarbageSchedule | null>(null)
   const [upcomingCollections, setUpcomingCollections] = useState<GarbageSchedule[]>([])
+  const [updateLogs, setUpdateLogs] = useState<GarbageUpdateLog[]>([])
 
   useEffect(() => {
     if (user) {
@@ -63,7 +77,7 @@ export function GarbageModule() {
 
   const loadData = async () => {
     if (!user) return
-    
+
     setLoading(true)
     try {
       // Load garbage schedules
@@ -90,6 +104,16 @@ export function GarbageModule() {
       
       if (addressError) throw addressError
       setAddresses(addressData || [])
+
+      // Load update logs
+      const { data: logData, error: logError } = await supabase
+        .from('garbage_update_logs')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(5)
+      if (logError) throw logError
+      setUpdateLogs(logData || [])
     } catch (error: any) {
       toast.error('Failed to load garbage schedules: ' + error.message)
     } finally {
@@ -217,6 +241,28 @@ export function GarbageModule() {
     }
   }
 
+  const autoUpdate = async () => {
+    if (!user) return
+    try {
+      const res = await fetch('/functions/v1/auto-garbage-schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          addressId: addresses[0]?.id,
+          provider: 'republic',
+          icsUrl: DEFAULT_ICS_URL
+        })
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Update failed')
+      toast.success('Schedules updated from location')
+      await loadData()
+    } catch (err: any) {
+      toast.error('Auto update failed: ' + err.message)
+    }
+  }
+
   const getWasteTypeInfo = (type: string) => {
     return wasteTypes.find(wt => wt.value === type) || wasteTypes[0]
   }
@@ -243,16 +289,25 @@ export function GarbageModule() {
           </p>
         </div>
         
-        <button
-          onClick={() => {
-            setEditingSchedule(null)
-            setShowModal(true)
-          }}
-          className="btn-dreamy-primary flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          Add Schedule
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => {
+              setEditingSchedule(null)
+              setShowModal(true)
+            }}
+            className="btn-dreamy-primary flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            Add Schedule
+          </button>
+          <button
+            onClick={autoUpdate}
+            className="btn-dreamy flex items-center gap-2"
+          >
+            <span className="w-4 h-4">↻</span>
+            Auto Update
+          </button>
+        </div>
       </div>
 
       {/* Upcoming Collections */}
@@ -385,6 +440,23 @@ export function GarbageModule() {
           </div>
         )}
       </div>
+
+      {updateLogs.length > 0 && (
+        <div className="card-floating p-6">
+          <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
+            <History className="w-5 h-5 text-gray-500" />
+            Auto Update History
+          </h3>
+          <ul className="space-y-1">
+            {updateLogs.map((log) => (
+              <li key={log.id} className="flex justify-between text-sm text-gray-600">
+                <span>{dayjs(log.created_at).format('MMM D, YYYY')}</span>
+                <span>{log.upserted_events} events</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Schedule Modal */}
       {showModal && (

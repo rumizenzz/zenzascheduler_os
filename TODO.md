@@ -28,6 +28,12 @@ This file tracks project progress and upcoming tasks.
 - Added custom-coded Vanilla Sky inspired favicon.
 - Enhanced UI with premium fonts and luxury gradients.
 - Added missing `next_collection` field to `garbage_schedule` table so the Garbage Module loads correctly.
+- Integrated task analytics edge function for progress stats.
+- Added automated garbage schedule updater edge function for Whitehouse Station.
+- Updated auto-garbage-schedule function to fetch and parse iCal feeds.
+- Added garbage_update_logs table and edge logging for schedule refreshes.
+- Implemented modular garbage provider system with Republic Services integration.
+- Fixed "AuthSessionMissingError" by checking session before loading user data.
 - Introduced PWA support with offline caching and automatic sidebar collapse on mobile.
 - Fixed type reference for `virtual:pwa-register` to satisfy the build.
 - Enhanced mobile layout across dashboard modules for better small screen usability.
