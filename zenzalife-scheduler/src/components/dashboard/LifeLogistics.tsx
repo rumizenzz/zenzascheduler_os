@@ -17,7 +17,7 @@ interface Address {
   state: string
   zip_code: string
   country: string
-  is_primary: boolean
+  is_primary?: boolean
   created_at: string
   updated_at: string
 }
@@ -100,7 +100,6 @@ export function LifeLogistics() {
             .from('addresses')
             .select('*')
             .eq('user_id', user.id)
-            .order('is_primary', { ascending: false })
 
           if (addressError) throw addressError
           setAddresses(addressData || [])

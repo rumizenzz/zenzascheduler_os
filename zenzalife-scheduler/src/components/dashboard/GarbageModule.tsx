@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 
 interface GarbageSchedule {
   id: string
-  user_id: string
+  user_id?: string
   address_id?: string
   waste_type: string
   collection_day: string
@@ -70,7 +70,6 @@ export function GarbageModule() {
       const { data: scheduleData, error: scheduleError } = await supabase
         .from('garbage_schedule')
         .select('*')
-        .eq('user_id', user.id)
         .order('next_collection', { ascending: true })
       
       if (scheduleError) throw scheduleError
@@ -144,7 +143,6 @@ export function GarbageModule() {
       
       const data = {
         ...scheduleData,
-        user_id: user.id,
         next_collection: nextCollection,
         updated_at: new Date().toISOString()
       }
