@@ -74,6 +74,7 @@ For local development, copy `.env.example` to `.env` inside
 `zenzalife-scheduler` and add your credentials. Netlify automatically exposes
 variables prefixed with `VITE_` to the build. The variables without the prefix
 are read by Supabase Edge Functions.
-You can also define the same variables under `[build.environment]` in
-`netlify.toml` for convenience when setting up new sites.
+Define these variables in the Netlify site settings so they are available during
+the build. Avoid setting them in `netlify.toml` because empty placeholder values
+would override the real credentials.
 
