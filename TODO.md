@@ -75,6 +75,10 @@ This file tracks project progress and upcoming tasks.
 - Introduced Vitest with a basic utility test and stricter ESLint rules.
 - Documented Netlify deployment steps to run lint and tests before building.
 - Fixed build failure by including `custom_sound_path` in calendar event types.
+- Fixed CalendarEvent typing for custom alarm paths to resolve TypeScript build error.
+- Added swirling entrance animation with richer chime chord for dreamlike appeal.
+- Introduced Vitest with a basic utility test and stricter ESLint rules.
+- Documented Netlify deployment steps to run lint and tests before building.
 
 ## Next Steps
 
