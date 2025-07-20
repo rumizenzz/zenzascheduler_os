@@ -91,6 +91,14 @@ export function ZenzaCalendar() {
   const isOwnCalendar = !viewUser || viewUser.id === user?.id;
   const [activeAlarm, setActiveAlarm] = useState<CalendarEvent | null>(null);
   const triggeredRef = useRef<Set<string>>(new Set());
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -462,14 +470,16 @@ export function ZenzaCalendar() {
       </div>
 
       {/* Calendar */}
-      <div className="card-floating p-6">
+      <div className="card-floating p-2 sm:p-6">
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
+            right: isMobile
+              ? "dayGridMonth,timeGridDay"
+              : "dayGridMonth,timeGridWeek,timeGridDay",
           }}
           timeZone="local"
           initialView={calendarView}
@@ -500,7 +510,7 @@ export function ZenzaCalendar() {
               <div>{arg.event.title}</div>
             </div>
           )}
-          height="600px"
+          height={isMobile ? 'auto' : '650px'}
           slotMinTime="05:00:00"
           slotMaxTime="23:00:00"
           slotDuration="00:30:00"
