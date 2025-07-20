@@ -194,7 +194,7 @@ export function ZenzaCalendar() {
     );
   };
 
-  // Only DoorDash and Uber Eats use icons in the calendar
+  // Only DoorDash, Uber Eats, and Olive Garden use icons in the calendar
   const getCategoryColor = (category?: string, border = false) => {
     const colors: Record<string, { bg: string; border: string }> = {
       exercise: { bg: "#fef3c7", border: "#f59e0b" },
@@ -207,6 +207,7 @@ export function ZenzaCalendar() {
       meal: { bg: "#f7fee7", border: "#65a30d" },
       doordash: { bg: "#fee2e2", border: "#ee2723" },
       ubereats: { bg: "#dcfce7", border: "#06c167" },
+      olivegarden: { bg: "#f0f9e0", border: "#6c9321" },
       default: { bg: "#f3f4f6", border: "#6b7280" },
     };
 
@@ -522,6 +523,13 @@ export function ZenzaCalendar() {
                   <img
                     src="/icons/ubereats.svg"
                     alt="Uber Eats"
+                    className="w-4 h-4"
+                  />
+                )}
+                {arg.event.extendedProps?.category === 'olivegarden' && (
+                  <img
+                    src="/icons/olivegarden.svg"
+                    alt="Olive Garden"
                     className="w-4 h-4"
                   />
                 )}
