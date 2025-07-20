@@ -36,6 +36,7 @@ This file tracks project progress and upcoming tasks.
 - Added modal forms to Life Logistics so addresses, vehicles, jobs, and businesses can be added and edited.
 - Fixed Life Logistics forms to use column names from the database schema.
 - Removed obsolete `is_primary` field from Life Logistics address forms.
+- Added missing `type` column to the `addresses` table so Logistics entries save.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
