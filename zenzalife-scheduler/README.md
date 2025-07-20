@@ -114,3 +114,20 @@ Define these variables in the Netlify site settings so they are available during
 the build. Avoid setting them in `netlify.toml` because empty placeholder values
 would override the real credentials.
 
+## Alarm Sounds Setup
+
+Loud alarm sounds are loaded from `zenzalife-scheduler/public/alarms`. The repository
+does not include these files. Download the following free sounds from
+[Mixkit](https://mixkit.co/) and save them with the listed filenames:
+
+- **Lucid Skybell** → `lucid-skybell.mp3` – <https://assets.mixkit.co/sfx/download/mixkit-classic-alarm-995.mp3>
+- **Dream Siren** → `dream-siren.mp3` – <https://assets.mixkit.co/sfx/download/mixkit-facility-alarm-999.mp3>
+- **Vanilla Alert** → `vanilla-alert.mp3` – <https://assets.mixkit.co/sfx/download/mixkit-emergency-alert-1007.mp3>
+- **Echo Pulse** → `echo-pulse.mp3` – <https://assets.mixkit.co/sfx/download/mixkit-digital-beep-992.mp3>
+- **Surreal Ringtone** → `surreal-ringtone.mp3` – <https://assets.mixkit.co/sfx/download/mixkit-alert-alarm-1005.mp3>
+
+Place them in the `/alarms` directory so the application can play them. You may
+replace them with your own sounds or select custom files from the Settings screen.
+When uploading a custom alarm you can also specify a display name so it appears
+in the alarm sound dropdowns.
+

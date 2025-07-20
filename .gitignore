@@ -6,3 +6,7 @@ zenzalife-scheduler/node_modules/
 .env
 .DS_Store
 supabase/.env
+
+# Alarm sounds
+zenzalife-scheduler/public/alarms/*
+!zenzalife-scheduler/public/alarms/.gitkeep
