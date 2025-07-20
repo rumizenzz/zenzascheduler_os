@@ -110,6 +110,7 @@ This file tracks project progress and upcoming tasks.
 - Added book and version fields for scriptures with dropdown selection and sample Book of Mormon verses.
 - Hid version selector when the Book of Mormon is chosen since no editions exist.
 - Enabled pull-to-refresh on mobile with a "Swipe down to refresh" onboarding tip.
+- Refined calendar responsiveness with dynamic height and streamlined toolbar for flawless mobile viewing.
 
 ## Next Steps
 
