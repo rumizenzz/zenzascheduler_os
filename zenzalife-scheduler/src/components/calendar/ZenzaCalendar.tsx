@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
+import { AlarmModal } from "../alerts/AlarmModal";
 
 interface CalendarEvent {
   id: string;
@@ -30,6 +31,7 @@ interface CalendarEvent {
     completed?: boolean;
     assignedTo?: string;
     alarm?: boolean;
+    custom_sound_path?: string;
   };
 }
 
@@ -85,6 +87,8 @@ export function ZenzaCalendar() {
   const [familyMembers, setFamilyMembers] = useState<User[]>([]);
   const [showFamilySelect, setShowFamilySelect] = useState(false);
   const isOwnCalendar = !viewUser || viewUser.id === user?.id;
+  const [activeAlarm, setActiveAlarm] = useState<CalendarEvent | null>(null);
+  const triggeredRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     if (user) {
@@ -97,6 +101,22 @@ export function ZenzaCalendar() {
       loadFamilyMembers();
     }
   }, [profile?.family_id]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const upcoming = events.find((ev) => {
+        if (!ev.extendedProps?.alarm || triggeredRef.current.has(ev.id)) return false;
+        const start = new Date(ev.start).getTime();
+        return start <= now && now - start < 60000;
+      });
+      if (upcoming) {
+        setActiveAlarm(upcoming);
+        triggeredRef.current.add(upcoming.id);
+      }
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [events]);
 
   const loadTasks = async () => {
     if (!user) return;
@@ -150,8 +170,17 @@ export function ZenzaCalendar() {
         completed: task.completed,
         assignedTo: task.assigned_to,
         alarm: task.alarm,
+        custom_sound_path: task.custom_sound_path,
       },
     }));
+  };
+
+  const getAlarmSound = (ev: CalendarEvent) => {
+    return (
+      ev.extendedProps?.custom_sound_path ||
+      localStorage.getItem('defaultAlarmSound') ||
+      '/alarms/lucid-skybell.mp3'
+    );
   };
 
   const getCategoryColor = (category?: string, border = false) => {
@@ -512,6 +541,15 @@ export function ZenzaCalendar() {
             setViewUser(member);
             setShowFamilySelect(false);
           }}
+        />
+      )}
+
+      {activeAlarm && (
+        <AlarmModal
+          eventTitle={activeAlarm.title}
+          eventTime={dayjs(activeAlarm.start).format('h:mm A')}
+          soundUrl={getAlarmSound(activeAlarm)}
+          onDismiss={() => setActiveAlarm(null)}
         />
       )}
     </div>
