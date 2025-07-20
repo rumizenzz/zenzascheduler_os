@@ -33,6 +33,7 @@ interface CalendarEvent {
     assignedTo?: string;
     alarm?: boolean;
     custom_sound_path?: string;
+    notes?: string;
   };
 }
 
@@ -172,6 +173,7 @@ export function ZenzaCalendar() {
         assignedTo: task.assigned_to,
         alarm: task.alarm,
         custom_sound_path: task.custom_sound_path,
+        notes: task.notes,
       },
     }));
   };

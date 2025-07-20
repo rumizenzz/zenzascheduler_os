@@ -41,6 +41,7 @@ export type Task = {
   goal_linked?: string
   completed?: boolean
   visibility?: string
+  notes?: string
   assigned_to?: string
   created_at?: string
   updated_at?: string
