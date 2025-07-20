@@ -6,6 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import dayjs from "dayjs";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase, Task, User } from "@/lib/supabase";
+import { useLiveActivity } from "@/contexts/LiveActivityContext";
 import { toast } from "react-hot-toast";
 import {
   Plus,
@@ -91,6 +92,7 @@ export function ZenzaCalendar() {
   const isOwnCalendar = !viewUser || viewUser.id === user?.id;
   const [activeAlarm, setActiveAlarm] = useState<CalendarEvent | null>(null);
   const triggeredRef = useRef<Set<string>>(new Set());
+  const { start, end } = useLiveActivity();
 
   useEffect(() => {
     if (user) {
@@ -115,6 +117,8 @@ export function ZenzaCalendar() {
       if (upcoming) {
         setActiveAlarm(upcoming);
         triggeredRef.current.add(upcoming.id);
+        const endTime = new Date(upcoming.end || upcoming.start).getTime();
+        start({ id: upcoming.id, title: upcoming.title, endTime });
       }
     }, 30000);
     return () => clearInterval(interval);
@@ -553,14 +557,22 @@ export function ZenzaCalendar() {
         />
       )}
 
-      {activeAlarm && (
-        <AlarmModal
-          eventTitle={activeAlarm.title}
-          eventTime={dayjs(activeAlarm.start).format('h:mm A')}
-          soundUrl={getAlarmSound(activeAlarm)}
-          onDismiss={() => setActiveAlarm(null)}
-        />
-      )}
+        {activeAlarm && (
+          <AlarmModal
+            eventTitle={activeAlarm.title}
+            eventTime={dayjs(activeAlarm.start).format('h:mm A')}
+            soundUrl={getAlarmSound(activeAlarm)}
+            onDismiss={() => {
+              setActiveAlarm(null)
+              end()
+            }}
+            onSnooze={() => {
+              const newEnd = Date.now() + 5 * 60 * 1000
+              start({ id: activeAlarm.id, title: activeAlarm.title, endTime: newEnd })
+              setActiveAlarm(null)
+            }}
+          />
+        )}
     </div>
   );
 }

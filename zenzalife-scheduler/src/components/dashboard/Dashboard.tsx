@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
+import { LiveActivityBanner } from "../alerts/LiveActivityBanner";
 import { OnboardingModal } from "../onboarding/OnboardingModal";
 
 type DashboardTab =
@@ -262,6 +263,7 @@ export function Dashboard() {
       >
         <div className="p-6">{renderContent()}</div>
       </div>
+      <LiveActivityBanner />
       <OnboardingModal />
       <MailingListPrompt />
     </div>
