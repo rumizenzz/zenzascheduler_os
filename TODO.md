@@ -8,6 +8,7 @@ This file tracks project progress and upcoming tasks.
 - Added `netlify.toml` to configure build settings and SPA redirects.
 
 ## Latest Updates
+- Added family tree module with react-d3-tree for LDS-style view.
 
 - Fixed Netlify deployment error caused by stray JSX in `Dashboard.tsx`.
 
