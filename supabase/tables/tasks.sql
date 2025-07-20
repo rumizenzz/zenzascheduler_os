@@ -11,6 +11,7 @@ CREATE TABLE tasks (
     goal_linked UUID,
     completed BOOLEAN DEFAULT false,
     visibility VARCHAR(50) DEFAULT 'private',
+    notes TEXT,
     assigned_to UUID,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
