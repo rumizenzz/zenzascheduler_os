@@ -114,6 +114,8 @@ This file tracks project progress and upcoming tasks.
 - Refined calendar responsiveness with dynamic height and streamlined toolbar for flawless mobile viewing.
 - Added DoorDash and Uber Eats task categories with brand colors and SVG icons on the calendar.
 - Added DoorDash task category with emoji icon and color coding.
+- Fixed Netlify build error by closing the categories array in `TaskModal.tsx`.
+- Resolved TypeScript errors for calendar category icons.
 
 ## Next Steps
 
