@@ -84,6 +84,27 @@ export type GrowthLog = {
   updated_at?: string
 }
 
+export type ScriptureNote = {
+  id: string
+  user_id: string
+  date: string
+  scripture: string
+  notes?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type ConferenceNote = {
+  id: string
+  user_id: string
+  date: string
+  speaker: string
+  topic?: string
+  notes?: string
+  created_at?: string
+  updated_at?: string
+}
+
 // Helper functions
 export async function getCurrentUser() {
   const {
