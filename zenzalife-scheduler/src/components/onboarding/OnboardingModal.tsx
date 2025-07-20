@@ -64,6 +64,16 @@ export function OnboardingModal() {
           </div>
         </div>
       )
+    },
+    {
+      title: 'Refresh the Dashboard',
+      content: (
+        <div className="space-y-3 text-center">
+          <p className="text-sm text-gray-700">
+            Swipe down anywhere to refresh the app if something looks outdated.
+          </p>
+        </div>
+      )
     }
   ].filter(Boolean) as { title: string; content: JSX.Element }[]
 

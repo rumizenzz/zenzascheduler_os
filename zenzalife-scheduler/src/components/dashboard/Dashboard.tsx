@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useAuth } from "@/contexts/AuthContext";
 import { ZenzaCalendar } from "@/components/calendar/ZenzaCalendar";
 import { GrowthTracker } from "./GrowthTracker";
@@ -84,6 +85,7 @@ export function Dashboard() {
   const { user, profile, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState<DashboardTab>("calendar");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  usePullToRefresh();
 
   useEffect(() => {
     const handleResize = () => {
