@@ -181,6 +181,41 @@
   animation: text-shimmer 3s ease-in-out infinite;
 }
 
+@keyframes slow-swirl {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.animate-slow-swirl {
+  animation: slow-swirl 30s linear infinite;
+}
+
+@keyframes swirl-lucid {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.25;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+    opacity: 0.45;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 0.25;
+  }
+}
+
+.animate-swirl-lucid {
+  animation: swirl-lucid 30s ease-in-out infinite;
+}
+
 /* Smooth transitions for all elements */
 * {
   transition-property: all;
