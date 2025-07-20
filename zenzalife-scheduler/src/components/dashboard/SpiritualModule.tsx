@@ -5,15 +5,53 @@ import {
   ScriptureNote,
   ConferenceNote,
   HymnNote,
-  GratitudeNote
-  ,DiscipleshipNote
+  GratitudeNote,
+  DiscipleshipNote,
+  User
 } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import dayjs from 'dayjs'
 import { BookOpen, Video, Music, Heart, Sparkles } from 'lucide-react'
 
+interface FamilySelectModalProps {
+  isOpen: boolean
+  onClose: () => void
+  members: User[]
+  onSelect: (member: User) => void
+}
+
+function FamilySelectModal({ isOpen, onClose, members, onSelect }: FamilySelectModalProps) {
+  if (!isOpen) return null
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md mx-4">
+        <div className="p-6 space-y-4">
+          <h2 className="text-2xl font-light text-gray-800">Select Family Member</h2>
+          <ul className="space-y-2">
+            {members.map(m => (
+              <li key={m.id}>
+                <button
+                  onClick={() => onSelect(m)}
+                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100"
+                >
+                  {m.display_name}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className="text-right pt-2">
+            <button onClick={onClose} className="btn-dreamy">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function SpiritualModule() {
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
   const [scriptureNotes, setScriptureNotes] = useState<ScriptureNote[]>([])
   const [conferenceNotes, setConferenceNotes] = useState<ConferenceNote[]>([])
   const [hymnNotes, setHymnNotes] = useState<HymnNote[]>([])
@@ -38,21 +76,32 @@ export function SpiritualModule() {
   const [todayDiscipleship, setTodayDiscipleship] = useState<DiscipleshipNote | null>(
     null
   )
+  const [viewUser, setViewUser] = useState<User | null>(null)
+  const [familyMembers, setFamilyMembers] = useState<User[]>([])
+  const [showFamilySelect, setShowFamilySelect] = useState(false)
+  const isOwnNotes = !viewUser || viewUser.id === user?.id
 
   useEffect(() => {
     if (user) {
       loadNotes()
     }
-  }, [user])
+  }, [user, viewUser])
+
+  useEffect(() => {
+    if (profile?.family_id) {
+      loadFamilyMembers()
+    }
+  }, [profile?.family_id])
 
   const loadNotes = async () => {
     if (!user) return
+    const targetId = viewUser ? viewUser.id : user.id
     setLoading(true)
     try {
       const { data: scriptures } = await supabase
         .from('scripture_notes')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', targetId)
         .order('date', { ascending: false })
       setScriptureNotes(scriptures || [])
       const today = dayjs().format('YYYY-MM-DD')
@@ -61,7 +110,7 @@ export function SpiritualModule() {
       const { data: conferences } = await supabase
         .from('conference_notes')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', targetId)
         .order('date', { ascending: false })
       setConferenceNotes(conferences || [])
       setTodayConference(conferences?.find(c => c.date === today) || null)
@@ -69,7 +118,7 @@ export function SpiritualModule() {
       const { data: hymns } = await supabase
         .from('hymn_notes')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', targetId)
         .order('date', { ascending: false })
       setHymnNotes(hymns || [])
       setTodayHymn(hymns?.find(h => h.date === today) || null)
@@ -77,7 +126,7 @@ export function SpiritualModule() {
       const { data: gratitude } = await supabase
         .from('gratitude_notes')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', targetId)
         .order('date', { ascending: false })
       setGratitudeNotes(gratitude || [])
       setTodayGratitude(gratitude?.find(g => g.date === today) || null)
@@ -85,7 +134,7 @@ export function SpiritualModule() {
       const { data: discipleship } = await supabase
         .from('discipleship_notes')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', targetId)
         .order('date', { ascending: false })
       setDiscipleshipNotes(discipleship || [])
       setTodayDiscipleship(discipleship?.find(d => d.date === today) || null)
@@ -96,8 +145,23 @@ export function SpiritualModule() {
     }
   }
 
+  const loadFamilyMembers = async () => {
+    if (!profile?.family_id) return
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('family_id', profile.family_id)
+        .order('created_at', { ascending: true })
+      if (error) throw error
+      setFamilyMembers(data || [])
+    } catch (err: any) {
+      toast.error('Failed to load family members: ' + err.message)
+    }
+  }
+
   const saveScripture = async (scripture: string, fullText: string, notes: string) => {
-    if (!user) return
+    if (!user || !isOwnNotes) return
     const today = dayjs().format('YYYY-MM-DD')
     const payload = {
       user_id: user.id,
@@ -134,7 +198,7 @@ export function SpiritualModule() {
     topic: string,
     notes: string
   ) => {
-    if (!user) return
+    if (!user || !isOwnNotes) return
     const today = dayjs().format('YYYY-MM-DD')
     const payload = {
       user_id: user.id,
@@ -167,7 +231,7 @@ export function SpiritualModule() {
   }
 
   const saveHymn = async (hymn: string, feeling: string) => {
-    if (!user) return
+    if (!user || !isOwnNotes) return
     const today = dayjs().format('YYYY-MM-DD')
     const payload = {
       user_id: user.id,
@@ -199,7 +263,7 @@ export function SpiritualModule() {
   }
 
   const saveGratitude = async (content: string) => {
-    if (!user) return
+    if (!user || !isOwnNotes) return
     const today = dayjs().format('YYYY-MM-DD')
     const payload = {
       user_id: user.id,
@@ -230,7 +294,7 @@ export function SpiritualModule() {
   }
 
   const saveDiscipleship = async (content: string) => {
-    if (!user) return
+    if (!user || !isOwnNotes) return
     const today = dayjs().format('YYYY-MM-DD')
     const payload = {
       user_id: user.id,
@@ -274,14 +338,30 @@ export function SpiritualModule() {
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
             <BookOpen className="w-8 h-8 text-purple-500" />
-            Scripture Study
+            {isOwnNotes ? 'Scripture Study' : `${viewUser?.display_name}'s Scriptures`}
           </h1>
-          <button
-            onClick={() => setShowScriptureModal(true)}
-            className="btn-dreamy-primary"
-          >
-            {todayScripture ? 'Update Today' : 'Add Today'}
-          </button>
+          <div className="flex gap-3">
+            {isOwnNotes ? (
+              <>
+                <button
+                  onClick={() => setShowScriptureModal(true)}
+                  className="btn-dreamy-primary"
+                >
+                  {todayScripture ? 'Update Today' : 'Add Today'}
+                </button>
+                <button
+                  onClick={() => setShowFamilySelect(true)}
+                  className="btn-dreamy"
+                >
+                  See Family Member's Scriptures
+                </button>
+              </>
+            ) : (
+              <button onClick={() => setViewUser(null)} className="btn-dreamy">
+                Back to Your Scriptures
+              </button>
+            )}
+          </div>
         </div>
 
         {todayScripture ? (
@@ -552,6 +632,18 @@ export function SpiritualModule() {
           onClose={() => setShowDiscipleshipModal(false)}
           onSave={saveDiscipleship}
           existing={todayDiscipleship}
+        />
+      )}
+
+      {showFamilySelect && (
+        <FamilySelectModal
+          isOpen={showFamilySelect}
+          onClose={() => setShowFamilySelect(false)}
+          members={familyMembers.filter(m => m.id !== user?.id)}
+          onSelect={member => {
+            setViewUser(member)
+            setShowFamilySelect(false)
+          }}
         />
       )}
     </div>

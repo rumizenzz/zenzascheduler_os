@@ -82,6 +82,7 @@ This file tracks project progress and upcoming tasks.
 - Added full scripture text support and old scroll styling with daily discipleship reflections.
 - Fixed build failure by including `custom_sound_path` in calendar event types.
 - Fixed CalendarEvent typing for custom alarm paths to resolve TypeScript build error.
+- Enabled viewing of family member scripture notes with a selection modal.
 - Added swirling entrance animation with richer chime chord for dreamlike appeal.
 - Introduced Vitest with a basic utility test and stricter ESLint rules.
 - Documented Netlify deployment steps to run lint and tests before building.
