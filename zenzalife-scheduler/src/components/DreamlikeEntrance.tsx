@@ -78,6 +78,8 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100 animate-pulse" />
+      {/* Swirling overlay */}
+      <div className="absolute inset-0 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-blue-100 via-purple-200 to-blue-100 opacity-20 animate-slow-swirl" />
       
       {/* Animated Cloud Layers */}
       <div className="absolute inset-0">

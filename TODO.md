@@ -71,6 +71,10 @@ This file tracks project progress and upcoming tasks.
 - Added intense alarm system with selectable Mixkit sounds and custom uploads.
 - Removed Mixkit alarm audio files from the repo and documented manual download steps.
 - Renamed builtin alarm options and allowed naming custom uploads.
+- Added swirling entrance animation with richer chime chord for dreamlike appeal.
+- Introduced Vitest with a basic utility test and stricter ESLint rules.
+- Documented Netlify deployment steps to run lint and tests before building.
+- Fixed build failure by including `custom_sound_path` in calendar event types.
 
 ## Next Steps
 
@@ -90,6 +94,5 @@ This file tracks project progress and upcoming tasks.
 
 ## Improvement Ideas
 
-- Ensure entrance animations and audio meet the design philosophy.
-- Expand tests and lint rules for higher code quality.
-- Document additional deployment steps as they are discovered.
+(add any new ideas here)
+
