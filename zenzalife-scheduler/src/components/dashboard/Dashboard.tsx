@@ -8,6 +8,7 @@ import { LifeLogistics } from "./LifeLogistics";
 import { GarbageModule } from "./GarbageModule";
 import { SettingsModule } from "./SettingsModule";
 import { SpiritualModule } from "./SpiritualModule";
+import { TimerModule } from "./TimerModule";
 import {
   Calendar,
   TrendingUp,
@@ -15,6 +16,7 @@ import {
   Users,
   MapPin,
   Trash2,
+  Timer as TimerIcon,
   Settings,
   LogOut,
   Sparkles,
@@ -28,6 +30,7 @@ type DashboardTab =
   | "calendar"
   | "growth"
   | "affirmations"
+  | "timer"
   | "family"
   | "logistics"
   | "garbage"
@@ -47,6 +50,12 @@ const navigationItems = [
     label: "Affirmations",
     icon: Heart,
     color: "text-pink-500",
+  },
+  {
+    id: "timer",
+    label: "Timers",
+    icon: TimerIcon,
+    color: "text-blue-500",
   },
   { id: "family", label: "Family", icon: Users, color: "text-purple-500" },
   {
@@ -103,6 +112,8 @@ export function Dashboard() {
         return <GrowthTracker />;
       case "affirmations":
         return <AffirmationsModule />;
+      case "timer":
+        return <TimerModule />;
       case "family":
         return <FamilyModule />;
       case "logistics":

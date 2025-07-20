@@ -135,6 +135,17 @@ export type DiscipleshipNote = {
   updated_at?: string
 }
 
+export type Timer = {
+  id: string
+  user_id: string
+  label: string
+  duration: number
+  remaining: number
+  running: boolean
+  created_at?: string
+  updated_at?: string
+}
+
 // Helper functions
 export async function getCurrentUser() {
   const {
