@@ -22,7 +22,9 @@ const categories = [
   { value: 'family', label: 'Family', color: '#ef4444' },
   { value: 'hygiene', label: 'Hygiene', color: '#0ea5e9' },
   { value: 'meal', label: 'Meal', color: '#65a30d' },
-  { value: 'other', label: 'Other', color: '#6b7280' }
+  { value: 'doordash', label: 'DoorDash', color: '#ee2723' },
+  { value: 'ubereats', label: 'Uber Eats', color: '#06c167' },
+  { value: 'other', label: 'Other', color: '#6b7280' },
 ]
 
 const repeatPatterns = [

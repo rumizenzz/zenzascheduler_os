@@ -194,6 +194,7 @@ export function ZenzaCalendar() {
     );
   };
 
+
   const getCategoryColor = (category?: string, border = false) => {
     const colors: Record<string, { bg: string; border: string }> = {
       exercise: { bg: "#fef3c7", border: "#f59e0b" },
@@ -204,6 +205,8 @@ export function ZenzaCalendar() {
       family: { bg: "#fed7d7", border: "#ef4444" },
       hygiene: { bg: "#f0f9ff", border: "#0ea5e9" },
       meal: { bg: "#f7fee7", border: "#65a30d" },
+      doordash: { bg: "#fee2e2", border: "#ee2723" },
+      ubereats: { bg: "#dcfce7", border: "#06c167" },
       default: { bg: "#f3f4f6", border: "#6b7280" },
     };
 
@@ -507,7 +510,23 @@ export function ZenzaCalendar() {
                 </div>
               )}
               <span>{arg.timeText}</span>
-              <div>{arg.event.title}</div>
+              <div className="flex items-center gap-1">
+                {arg.event.extendedProps?.category === 'doordash' && (
+                  <img
+                    src="/icons/doordash.svg"
+                    alt="DoorDash"
+                    className="w-4 h-4"
+                  />
+                )}
+                {arg.event.extendedProps?.category === 'ubereats' && (
+                  <img
+                    src="/icons/ubereats.svg"
+                    alt="Uber Eats"
+                    className="w-4 h-4"
+                  />
+                )}
+                <span>{arg.event.title}</span>
+              </div>
             </div>
           )}
           height={isMobile ? 'auto' : '650px'}
