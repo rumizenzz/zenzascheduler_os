@@ -112,6 +112,7 @@ This file tracks project progress and upcoming tasks.
 - Enabled pull-to-refresh on mobile with a "Swipe down to refresh" onboarding tip.
 - Refined calendar responsiveness with dynamic height and streamlined toolbar for flawless mobile viewing.
 - Added DoorDash task category with emoji icon and color coding.
+- Added Uber Eats task category with emoji icon and color coding.
 
 ## Next Steps
 

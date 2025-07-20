@@ -204,6 +204,7 @@ export function ZenzaCalendar() {
     hygiene: '🛁',
     meal: '🍽️',
     doordash: '🍔',
+    ubereats: '🛵',
     default: '📌',
   };
 
@@ -218,6 +219,7 @@ export function ZenzaCalendar() {
       hygiene: { bg: "#f0f9ff", border: "#0ea5e9" },
       meal: { bg: "#f7fee7", border: "#65a30d" },
       doordash: { bg: "#fee2e2", border: "#ee2723" },
+      ubereats: { bg: "#dcfce7", border: "#06c167" },
       default: { bg: "#f3f4f6", border: "#6b7280" },
     };
 
