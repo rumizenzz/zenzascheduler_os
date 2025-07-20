@@ -33,6 +33,9 @@ This file tracks project progress and upcoming tasks.
 - Calendar events now convert timestamps to Date objects and FullCalendar uses
   explicit `timeZone="local"` to ensure no offset issues.
 - Updated calendar event types to accept `Date` objects, resolving TypeScript build error.
+- Added modal forms to Life Logistics so addresses, vehicles, jobs, and businesses can be added and edited.
+- Fixed Life Logistics forms to use column names from the database schema.
+- Removed obsolete `is_primary` field from Life Logistics address forms.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
