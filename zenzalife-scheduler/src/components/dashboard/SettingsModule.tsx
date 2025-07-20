@@ -4,6 +4,8 @@ import { supabase, updateUserProfile } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import { Settings, User, Upload, Bell, Palette, Shield, HelpCircle, Download } from 'lucide-react'
 import { useAudio } from '@/hooks/useAudio'
+import { useNotifications } from '@/hooks/useNotifications'
+import { AlarmModal } from '../alerts/AlarmModal'
 
 type SettingsTab = 'profile' | 'audio' | 'notifications' | 'appearance' | 'privacy' | 'help'
 
@@ -56,6 +58,8 @@ export function SettingsModule() {
     custom_alarms: JSON.parse(localStorage.getItem('customAlarmSounds') || '[]') as { name: string; url: string }[]
   })
   const { playEntranceSound, playAudio } = useAudio()
+  const { requestPermission, testAlarm } = useNotifications()
+  const [showTestAlarm, setShowTestAlarm] = useState(false)
 
   useEffect(() => {
     if (profile) {
@@ -380,13 +384,22 @@ export function SettingsModule() {
           <div className="space-y-6">
             <h3 className="text-lg font-medium text-gray-800">Notification Preferences</h3>
             <div className="space-y-4">
-              <div className="p-4 bg-blue-50/80 rounded-xl">
-                <h4 className="font-medium text-blue-900 mb-2">Browser Notifications</h4>
-                <p className="text-sm text-blue-700 mb-3">
+              <div className="p-4 bg-blue-50/80 rounded-xl space-y-3">
+                <h4 className="font-medium text-blue-900">Browser Notifications</h4>
+                <p className="text-sm text-blue-700">
                   Get notified about upcoming tasks and reminders
                 </p>
-                <button className="btn-dreamy text-sm">
+                <button onClick={requestPermission} className="btn-dreamy text-sm w-full">
                   Enable Notifications
+                </button>
+                <button
+                  onClick={() => {
+                    testAlarm()
+                    setTimeout(() => setShowTestAlarm(true), 5000)
+                  }}
+                  className="btn-dreamy-primary text-sm w-full"
+                >
+                  Test Alarm
                 </button>
               </div>
               
@@ -596,6 +609,20 @@ export function SettingsModule() {
       <div className="card-floating p-6">
         {renderTabContent()}
       </div>
+      {showTestAlarm && (
+        <AlarmModal
+          eventTitle="Test Alarm"
+          eventTime={new Date().toLocaleTimeString()}
+          soundUrl={audioSettings.default_alarm}
+          onDismiss={() => setShowTestAlarm(false)}
+          onSnooze={() => {
+            setShowTestAlarm(false)
+            setTimeout(() => {
+              setShowTestAlarm(true)
+            }, 300000)
+          }}
+        />
+      )}
     </div>
   )
 }
