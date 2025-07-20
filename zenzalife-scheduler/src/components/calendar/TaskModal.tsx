@@ -187,9 +187,9 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   onChange={(e) => handleChange('category', e.target.value)}
                   className="input-dreamy w-full"
                 >
-                  {categories.map(cat => (
+                  {categories.map((cat) => (
                     <option key={cat.value} value={cat.value}>
-                      {cat.icon} {cat.label}
+                      {cat.label}
                     </option>
                   ))}
                 </select>
