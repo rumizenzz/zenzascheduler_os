@@ -123,6 +123,7 @@ This file tracks project progress and upcoming tasks.
 - Calendar shows DoorDash and Uber Eats SVG icons only; other categories have no icons.
 - Added time sensitive notification option so alarms trigger on iOS.
 - Restored category icons and calendar icon mapping to resolve build failures.
+- Added Olive Garden task category with brand colors and SVG icon.
 
 ## Next Steps
 

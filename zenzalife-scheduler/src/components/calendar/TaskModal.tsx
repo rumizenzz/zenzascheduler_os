@@ -24,6 +24,7 @@ const categories = [
   { value: 'meal', label: 'Meal', color: '#65a30d', icon: '🍽️' },
   { value: 'doordash', label: 'DoorDash', color: '#ee2723', icon: '🍔' },
   { value: 'ubereats', label: 'Uber Eats', color: '#06c167', icon: '🍕' },
+  { value: 'olivegarden', label: 'Olive Garden', color: '#6c9321', icon: '🥗' },
   { value: 'other', label: 'Other', color: '#6b7280', icon: '📌' },
 ];
 
