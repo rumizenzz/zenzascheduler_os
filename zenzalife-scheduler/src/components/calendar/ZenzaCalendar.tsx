@@ -5,7 +5,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import dayjs from "dayjs";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase, Task } from "@/lib/supabase";
+import { supabase, Task, User } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import {
   Plus,
@@ -33,6 +33,43 @@ interface CalendarEvent {
   };
 }
 
+interface FamilySelectModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  members: User[];
+  onSelect: (member: User) => void;
+}
+
+function FamilySelectModal({ isOpen, onClose, members, onSelect }: FamilySelectModalProps) {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md mx-4">
+        <div className="p-6 space-y-4">
+          <h2 className="text-2xl font-light text-gray-800">Select Family Member</h2>
+          <ul className="space-y-2">
+            {members.map((m) => (
+              <li key={m.id}>
+                <button
+                  onClick={() => onSelect(m)}
+                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100"
+                >
+                  {m.display_name}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className="text-right pt-2">
+            <button onClick={onClose} className="btn-dreamy">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function ZenzaCalendar() {
   const { user, profile } = useAuth();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -44,22 +81,33 @@ export function ZenzaCalendar() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [calendarView, setCalendarView] = useState("timeGridDay");
   const calendarRef = useRef<FullCalendar>(null);
+  const [viewUser, setViewUser] = useState<User | null>(null);
+  const [familyMembers, setFamilyMembers] = useState<User[]>([]);
+  const [showFamilySelect, setShowFamilySelect] = useState(false);
+  const isOwnCalendar = !viewUser || viewUser.id === user?.id;
 
   useEffect(() => {
     if (user) {
       loadTasks();
     }
-  }, [user]);
+  }, [user, viewUser]);
+
+  useEffect(() => {
+    if (profile?.family_id) {
+      loadFamilyMembers();
+    }
+  }, [profile?.family_id]);
 
   const loadTasks = async () => {
     if (!user) return;
+    const targetId = viewUser ? viewUser.id : user.id;
 
     setLoading(true);
     try {
       const { data, error } = await supabase
         .from("tasks")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", targetId)
         .order("start_time", { ascending: true });
 
       if (error) throw error;
@@ -70,6 +118,21 @@ export function ZenzaCalendar() {
       toast.error("Failed to load tasks: " + error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadFamilyMembers = async () => {
+    if (!profile?.family_id) return;
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('family_id', profile.family_id)
+        .order('created_at', { ascending: true });
+      if (error) throw error;
+      setFamilyMembers(data || []);
+    } catch (error: any) {
+      toast.error('Failed to load family members: ' + error.message);
     }
   };
 
@@ -109,12 +172,14 @@ export function ZenzaCalendar() {
   };
 
   const handleDateSelect = (selectInfo: any) => {
+    if (!isOwnCalendar) return;
     setSelectedDate(selectInfo.startStr);
     setSelectedTask(null);
     setShowTaskModal(true);
   };
 
   const handleEventClick = (clickInfo: any) => {
+    if (!isOwnCalendar) return;
     const task = tasks.find((t) => t.id === clickInfo.event.id);
     if (task) {
       setSelectedTask(task);
@@ -124,7 +189,7 @@ export function ZenzaCalendar() {
   };
 
   const handleTaskSave = async (taskData: any) => {
-    if (!user) return;
+    if (!user || !isOwnCalendar) return;
 
     try {
       if (selectedTask) {
@@ -159,6 +224,7 @@ export function ZenzaCalendar() {
   };
 
   const handleTaskDelete = async (taskId: string) => {
+    if (!isOwnCalendar) return;
     try {
       const { error } = await supabase.from("tasks").delete().eq("id", taskId);
 
@@ -174,7 +240,7 @@ export function ZenzaCalendar() {
   };
 
   const applyDefaultSchedule = async (date: string) => {
-    if (!user) return;
+    if (!user || !isOwnCalendar) return;
 
     const defaultTasks = [
       {
@@ -309,33 +375,57 @@ export function ZenzaCalendar() {
         <div>
           <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
             <CalendarIcon className="w-8 h-8 text-blue-400" />
-            Life Calendar
+            {isOwnCalendar ? 'Life Calendar' : `${viewUser?.display_name}'s Calendar`}
           </h1>
           <p className="text-gray-600/80 font-light mt-1">
-            Welcome back, {profile?.display_name} ({profile?.relationship_role})
+            {isOwnCalendar
+              ? `Welcome back, ${profile?.display_name} (${profile?.relationship_role})`
+              : `Viewing ${viewUser?.display_name}'s calendar`}
           </p>
         </div>
 
         <div className="flex gap-3">
-          <button
-            onClick={() => setShowDefaultSchedule(true)}
-            className="btn-dreamy flex items-center gap-2"
-          >
-            <Clock className="w-4 h-4" />
-            Apply Default Schedule
-          </button>
+          {isOwnCalendar ? (
+            <>
+              <button
+                onClick={() => setShowDefaultSchedule(true)}
+                className="btn-dreamy flex items-center gap-2"
+              >
+                <Clock className="w-4 h-4" />
+                Apply Default Schedule
+              </button>
 
-          <button
-            onClick={() => {
-              setSelectedTask(null);
-              setSelectedDate(dayjs().format('YYYY-MM-DD'));
-              setShowTaskModal(true);
-            }}
-            className="btn-dreamy-primary flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            Add Task
-          </button>
+              <button
+                onClick={() => {
+                  setSelectedTask(null);
+                  setSelectedDate(dayjs().format('YYYY-MM-DD'));
+                  setShowTaskModal(true);
+                }}
+                className="btn-dreamy-primary flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                Add Task
+              </button>
+
+              <button
+                onClick={() => setShowFamilySelect(true)}
+                className="btn-dreamy flex items-center gap-2"
+              >
+                <Users className="w-4 h-4" />
+                See Family Member's Calendar
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => {
+                setViewUser(null);
+                setSelectedTask(null);
+              }}
+              className="btn-dreamy"
+            >
+              Back to Your Calendar
+            </button>
+          )}
         </div>
       </div>
 
@@ -351,8 +441,8 @@ export function ZenzaCalendar() {
           }}
           timeZone="local"
           initialView={calendarView}
-          editable={true}
-          selectable={true}
+          editable={isOwnCalendar}
+          selectable={isOwnCalendar}
           selectMirror={true}
           dayMaxEvents={true}
           weekends={true}
@@ -409,6 +499,19 @@ export function ZenzaCalendar() {
           isOpen={showDefaultSchedule}
           onClose={() => setShowDefaultSchedule(false)}
           onApply={applyDefaultSchedule}
+        />
+      )}
+
+      {/* Family Select Modal */}
+      {showFamilySelect && (
+        <FamilySelectModal
+          isOpen={showFamilySelect}
+          onClose={() => setShowFamilySelect(false)}
+          members={familyMembers.filter((m) => m.id !== user?.id)}
+          onSelect={(member) => {
+            setViewUser(member);
+            setShowFamilySelect(false);
+          }}
         />
       )}
     </div>

@@ -32,7 +32,7 @@ type DashboardTab =
   | "settings";
 
 const navigationItems = [
-  { id: "calendar", label: "Calendar", icon: Calendar, color: "text-blue-500" },
+  { id: "calendar", label: "Your Calendar", icon: Calendar, color: "text-blue-500" },
   {
     id: "growth",
     label: "1% Better",

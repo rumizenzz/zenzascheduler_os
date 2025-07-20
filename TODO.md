@@ -63,6 +63,8 @@ This file tracks project progress and upcoming tasks.
 - Resolved Netlify config parse error by removing duplicate `[functions]` section.
 - Adjusted calendar view to display early morning hours by default.
 - Set default calendar view to Day for focused scheduling.
+- Enabled viewing of individual family member calendars with a selection modal.
+- Navigation label renamed from "Calendar" to "Your Calendar" for clarity.
 
 ## Next Steps
 
