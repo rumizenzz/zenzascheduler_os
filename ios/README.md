@@ -41,7 +41,7 @@ The manager implements `UNUserNotificationCenterDelegate` and calls `completionH
 
 ## Turning On Time Sensitive Notifications
 
-Once permission is granted, users can toggle the **Time Sensitive Notifications** switch from Settings > Notifications. You can guide them to the right page by calling:
+Once permission is granted, users can toggle the **Time Sensitive Notifications** switch from Settings > Notifications. This toggle only appears for the native iOS app and is not available when running the PWA in Safari. You can guide native app users to the right page by calling:
 
 ```swift
 let manager = TimeSensitiveNotificationManager()

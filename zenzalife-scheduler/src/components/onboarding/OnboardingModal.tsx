@@ -54,9 +54,10 @@ export function OnboardingModal() {
       content: (
         <div className="space-y-3">
           <p className="text-sm text-gray-700 text-center">
-            For reliable alarms, enable <strong>Background App Refresh</strong> and{' '}
-            <strong>Time Sensitive Notifications</strong> on iOS. On Android,
-            allow ZenzaLife to run without battery optimization.
+            For reliable alarms, enable <strong>Background App Refresh</strong> on iOS.
+            The <strong>Time Sensitive Notifications</strong> switch only appears in the
+            native iOS app, so it isn't available in the PWA. On Android, allow
+            ZenzaLife to run without battery optimization.
           </p>
           <div className="flex gap-4 justify-center">
             <AndroidBatteryGuide />

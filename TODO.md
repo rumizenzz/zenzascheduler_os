@@ -122,6 +122,7 @@ This file tracks project progress and upcoming tasks.
 - Fixed missing category icons causing Netlify build failure.
 - Calendar shows DoorDash and Uber Eats SVG icons only; other categories have no icons.
 - Added time sensitive notification option so alarms trigger on iOS.
+- Clarified that the Time Sensitive toggle only appears in the native iOS app, not the PWA.
 - Restored category icons and calendar icon mapping to resolve build failures.
 
 ## Next Steps
