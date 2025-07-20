@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import dayjs from "dayjs";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -50,6 +51,20 @@ export function ZenzaCalendar() {
     }
   }, [user]);
 
+  // adjust calendar view on small screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setCalendarView("timeGridDay");
+      } else {
+        setCalendarView("timeGridWeek");
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const loadTasks = async () => {
     if (!user) return;
 
@@ -73,21 +88,32 @@ export function ZenzaCalendar() {
   };
 
   const convertTasksToEvents = (tasks: Task[]): CalendarEvent[] => {
-    return tasks.map((task) => ({
-      id: task.id,
-      title: task.title,
-      start: task.start_time || "",
-      end: task.end_time || "",
-      backgroundColor: getCategoryColor(task.category),
-      borderColor: getCategoryColor(task.category, true),
-      textColor: "#374151",
-      extendedProps: {
-        category: task.category,
-        completed: task.completed,
-        assignedTo: task.assigned_to,
-        alarm: task.alarm,
-      },
-    }));
+    const seen = new Set<string>();
+    return tasks.reduce<CalendarEvent[]>((acc, task) => {
+      const key = `${task.start_time}_${task.title}`;
+      if (seen.has(key)) return acc;
+      seen.add(key);
+
+      const start = task.start_time ? dayjs(task.start_time).local().format() : "";
+      const end = task.end_time ? dayjs(task.end_time).local().format() : "";
+
+      acc.push({
+        id: task.id,
+        title: task.title,
+        start,
+        end,
+        backgroundColor: getCategoryColor(task.category),
+        borderColor: getCategoryColor(task.category, true),
+        textColor: "#374151",
+        extendedProps: {
+          category: task.category,
+          completed: task.completed,
+          assignedTo: task.assigned_to,
+          alarm: task.alarm,
+        },
+      });
+      return acc;
+    }, []);
   };
 
   const getCategoryColor = (category?: string, border = false) => {
@@ -137,6 +163,22 @@ export function ZenzaCalendar() {
         toast.success("Task updated successfully!");
       } else {
         // Create new task
+        const duplicate = tasks.find(
+          (t) =>
+            t.start_time &&
+            taskData.start_time &&
+            dayjs(t.start_time).isSame(dayjs(taskData.start_time)) &&
+            t.title.trim().toLowerCase() ===
+              taskData.title.trim().toLowerCase()
+        );
+
+        if (duplicate) {
+          toast.error(
+            "This schedule already exists. Please try with another time."
+          );
+          return;
+        }
+
         const { error } = await supabase.from("tasks").insert({
           ...taskData,
           user_id: user.id,
@@ -347,6 +389,7 @@ export function ZenzaCalendar() {
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
           initialView={calendarView}
+          timeZone="local"
           editable={true}
           selectable={true}
           selectMirror={true}
@@ -357,7 +400,7 @@ export function ZenzaCalendar() {
           eventClick={handleEventClick}
           eventContent={(arg) => (
             <div
-              className="px-2 py-1 rounded-lg text-xs font-medium shadow"
+              className="px-2 py-1 rounded-lg text-xs font-medium shadow whitespace-normal"
               style={{
                 backgroundColor: arg.event.backgroundColor,
                 border: `1px solid ${arg.event.borderColor}`,
@@ -368,12 +411,15 @@ export function ZenzaCalendar() {
               <div>{arg.event.title}</div>
             </div>
           )}
-          height="600px"
+          height={calendarView === "timeGridDay" ? "auto" : 600}
+          aspectRatio={calendarView === "timeGridDay" ? 0.6 : 1.35}
+          eventOverlap={false}
           slotMinTime="06:00:00"
           slotMaxTime="23:00:00"
           slotDuration="00:30:00"
           scrollTime="07:00:00"
           eventDisplay="block"
+          eventMaxStack={3}
           eventBackgroundColor="transparent"
           eventBorderColor="transparent"
           displayEventTime={true}
