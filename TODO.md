@@ -71,6 +71,9 @@ This file tracks project progress and upcoming tasks.
 - Added intense alarm system with selectable Mixkit sounds and custom uploads.
 - Removed Mixkit alarm audio files from the repo and documented manual download steps.
 - Renamed builtin alarm options and allowed naming custom uploads.
+- Added custom_sound_path property to calendar events for personalized alarm sounds.
+- Added install guide, onboarding screens and service worker based notifications with a test alarm.
+- Fixed TypeScript build errors for PWA install prompt and service worker types.
 - Added swirling entrance animation with richer chime chord for dreamlike appeal.
 - Introduced Vitest with a basic utility test and stricter ESLint rules.
 - Documented Netlify deployment steps to run lint and tests before building.

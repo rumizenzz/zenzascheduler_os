@@ -9,6 +9,8 @@ import './globals.css'
 const root = document.getElementById('root')!
 const path = window.location.pathname
 
+registerSW({ immediate: true })
+
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
     {path === '/confirmed' ? (
