@@ -125,6 +125,7 @@ This file tracks project progress and upcoming tasks.
 - Habit, affirmation, and logistics tracking modules
 - 1% growth dashboard and analytics
 
+- Added Supabase tables and dashboard module for ancestor and temple work tracking.
 ## Improvement Ideas
 
 (add any new ideas here)
