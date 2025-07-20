@@ -179,76 +179,76 @@ export function ZenzaCalendar() {
       {
         title: "Wake up, brush teeth, floss, exfoliate",
         category: "hygiene",
-        start_time: `${date}T06:30:00`,
-        end_time: `${date}T07:00:00`,
+        start_time: new Date(`${date}T06:30:00`).toISOString(),
+        end_time: new Date(`${date}T07:00:00`).toISOString(),
         alarm: true,
       },
       {
         title: "Jog/Exercise",
         category: "exercise",
-        start_time: `${date}T07:00:00`,
-        end_time: `${date}T08:00:00`,
+        start_time: new Date(`${date}T07:00:00`).toISOString(),
+        end_time: new Date(`${date}T08:00:00`).toISOString(),
         alarm: true,
       },
       {
         title: "Shower, hygiene",
         category: "hygiene",
-        start_time: `${date}T08:00:00`,
-        end_time: `${date}T08:30:00`,
+        start_time: new Date(`${date}T08:00:00`).toISOString(),
+        end_time: new Date(`${date}T08:30:00`).toISOString(),
       },
       {
         title: "Make/eat breakfast, grace, dishes",
         category: "meal",
-        start_time: `${date}T08:30:00`,
-        end_time: `${date}T09:00:00`,
+        start_time: new Date(`${date}T08:30:00`).toISOString(),
+        end_time: new Date(`${date}T09:00:00`).toISOString(),
       },
       {
         title: "Business cold calls",
         category: "work",
-        start_time: `${date}T09:00:00`,
-        end_time: `${date}T11:00:00`,
+        start_time: new Date(`${date}T09:00:00`).toISOString(),
+        end_time: new Date(`${date}T11:00:00`).toISOString(),
       },
       {
         title: "GED math study",
         category: "study",
-        start_time: `${date}T11:00:00`,
-        end_time: `${date}T17:00:00`,
+        start_time: new Date(`${date}T11:00:00`).toISOString(),
+        end_time: new Date(`${date}T17:00:00`).toISOString(),
       },
       {
         title: "Scripture & prayer",
         category: "spiritual",
-        start_time: `${date}T17:00:00`,
-        end_time: `${date}T18:00:00`,
+        start_time: new Date(`${date}T17:00:00`).toISOString(),
+        end_time: new Date(`${date}T18:00:00`).toISOString(),
       },
       {
         title: "Dinner + dishes + kitchen cleanup",
         category: "meal",
-        start_time: `${date}T18:00:00`,
-        end_time: `${date}T19:00:00`,
+        start_time: new Date(`${date}T18:00:00`).toISOString(),
+        end_time: new Date(`${date}T19:00:00`).toISOString(),
       },
       {
         title: "Personal development book reading",
         category: "personal",
-        start_time: `${date}T19:00:00`,
-        end_time: `${date}T20:00:00`,
+        start_time: new Date(`${date}T19:00:00`).toISOString(),
+        end_time: new Date(`${date}T20:00:00`).toISOString(),
       },
       {
         title: "Cooking video training",
         category: "personal",
-        start_time: `${date}T20:00:00`,
-        end_time: `${date}T21:00:00`,
+        start_time: new Date(`${date}T20:00:00`).toISOString(),
+        end_time: new Date(`${date}T21:00:00`).toISOString(),
       },
       {
         title: "PM hygiene",
         category: "hygiene",
-        start_time: `${date}T21:00:00`,
-        end_time: `${date}T21:30:00`,
+        start_time: new Date(`${date}T21:00:00`).toISOString(),
+        end_time: new Date(`${date}T21:30:00`).toISOString(),
       },
       {
         title: "Final prayer",
         category: "spiritual",
-        start_time: `${date}T21:30:00`,
-        end_time: `${date}T21:45:00`,
+        start_time: new Date(`${date}T21:30:00`).toISOString(),
+        end_time: new Date(`${date}T21:45:00`).toISOString(),
       },
     ];
 
@@ -262,7 +262,9 @@ export function ZenzaCalendar() {
 
       if (fetchError) throw fetchError;
 
-      const existingTimes = new Set(existing?.map((t) => t.start_time));
+      const existingTimes = new Set(
+        existing?.map((t) => new Date(t.start_time).toISOString())
+      );
 
       const tasksToInsert = defaultTasks
         .filter((task) => !existingTimes.has(task.start_time))
