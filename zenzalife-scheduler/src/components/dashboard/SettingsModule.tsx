@@ -38,11 +38,21 @@ export function SettingsModule() {
     bio: profile?.bio || '',
     growth_identity: profile?.growth_identity || ''
   })
+  const builtinAlarms = [
+    '/alarms/classic-alarm-995.mp3',
+    '/alarms/facility-alarm-999.mp3',
+    '/alarms/emergency-alert-1007.mp3',
+    '/alarms/digital-beep-992.mp3',
+    '/alarms/alert-alarm-1005.mp3'
+  ]
+
   const [audioSettings, setAudioSettings] = useState({
     entrance_sound: true,
     task_alarms: true,
     reminder_sounds: true,
-    custom_alarm_file: null as File | null
+    default_alarm: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0],
+    custom_alarm_file: null as File | null,
+    custom_alarms: JSON.parse(localStorage.getItem('customAlarmSounds') || '[]') as string[]
   })
   const { playEntranceSound, playAudio } = useAudio()
 
@@ -57,6 +67,11 @@ export function SettingsModule() {
       })
     }
   }, [profile])
+
+  useEffect(() => {
+    localStorage.setItem('defaultAlarmSound', audioSettings.default_alarm)
+    localStorage.setItem('customAlarmSounds', JSON.stringify(audioSettings.custom_alarms))
+  }, [audioSettings.default_alarm, audioSettings.custom_alarms])
 
   const saveProfile = async () => {
     if (!user) return
@@ -101,8 +116,16 @@ export function SettingsModule() {
           
           if (error) throw error
           
+          if (data?.publicUrl) {
+            const newList = [...audioSettings.custom_alarms, data.publicUrl]
+            localStorage.setItem('customAlarmSounds', JSON.stringify(newList))
+            setAudioSettings(prev => ({
+              ...prev,
+              custom_alarm_file: null,
+              custom_alarms: newList
+            }))
+          }
           toast.success('Custom alarm uploaded successfully!')
-          setAudioSettings(prev => ({ ...prev, custom_alarm_file: null }))
         } catch (error: any) {
           toast.error('Failed to upload alarm: ' + error.message)
         } finally {
@@ -244,6 +267,32 @@ export function SettingsModule() {
           <div className="space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-800">Sound Settings</h3>
+
+              <div className="space-y-3">
+                <label htmlFor="defaultAlarm" className="text-sm font-medium text-gray-700">Default Alarm Sound</label>
+                <select
+                  id="defaultAlarm"
+                  value={audioSettings.default_alarm}
+                  onChange={(e) => {
+                    localStorage.setItem('defaultAlarmSound', e.target.value)
+                    setAudioSettings(prev => ({ ...prev, default_alarm: e.target.value }))
+                  }}
+                  className="input-dreamy w-full"
+                >
+                  {[...builtinAlarms, ...audioSettings.custom_alarms].map(url => (
+                    <option key={url} value={url}>
+                      {url.split('/').pop()}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={() => playAudio(audioSettings.default_alarm)}
+                  className="text-xs text-blue-500 underline"
+                >
+                  Test Selected
+                </button>
+              </div>
               
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
