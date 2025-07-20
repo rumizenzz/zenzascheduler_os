@@ -293,7 +293,10 @@ export function SpiritualModule() {
               </blockquote>
             )}
             {todayScripture.notes && (
-              <p className="text-gray-700 whitespace-pre-line">{todayScripture.notes}</p>
+              <p className="text-gray-700 whitespace-pre-line">
+                <span className="font-medium">What did you learn today:</span>{' '}
+                {todayScripture.notes}
+              </p>
             )}
           </div>
         ) : (
@@ -321,6 +324,7 @@ export function SpiritualModule() {
                   )}
                   {note.notes && (
                     <p className="text-gray-700 mt-1 whitespace-pre-line">
+                      <span className="font-medium">What did you learn:</span>{' '}
                       {note.notes}
                     </p>
                   )}
@@ -353,6 +357,7 @@ export function SpiritualModule() {
             </h3>
             {todayConference.notes && (
               <p className="text-gray-700 whitespace-pre-line">
+                <span className="font-medium">What did you learn today:</span>{' '}
                 {todayConference.notes}
               </p>
             )}
@@ -380,6 +385,7 @@ export function SpiritualModule() {
                   </h4>
                   {note.notes && (
                     <p className="text-gray-700 mt-1 whitespace-pre-line">
+                      <span className="font-medium">What did you learn:</span>{' '}
                       {note.notes}
                     </p>
                   )}
