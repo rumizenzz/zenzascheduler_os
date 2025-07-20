@@ -27,6 +27,7 @@ This file tracks project progress and upcoming tasks.
 - Refined mailing list prompt wording to remove explicit baby references.
 - Fixed Supabase queries for garbage schedules and addresses to match table schema.
 - Fixed additional Life Logistics queries for addresses and businesses.
+- Corrected calendar timezone handling so saved tasks keep the selected local times.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.

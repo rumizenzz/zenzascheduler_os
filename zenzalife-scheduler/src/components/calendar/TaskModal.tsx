@@ -96,8 +96,8 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     onSave({
       title: formData.title.trim(),
       category: formData.category,
-      start_time: formData.start_time,
-      end_time: formData.end_time || null,
+      start_time: new Date(formData.start_time).toISOString(),
+      end_time: formData.end_time ? new Date(formData.end_time).toISOString() : null,
       repeat_pattern: formData.repeat_pattern,
       alarm: formData.alarm,
       visibility: formData.visibility,
