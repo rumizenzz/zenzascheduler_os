@@ -41,6 +41,7 @@ export type Task = {
   goal_linked?: string
   completed?: boolean
   visibility?: string
+  notes?: string
   assigned_to?: string
   created_at?: string
   updated_at?: string
@@ -80,6 +81,69 @@ export type GrowthLog = {
   completed_tasks?: number
   missed_tasks?: number
   notes?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type ScriptureNote = {
+  id: string
+  user_id: string
+  date: string
+  scripture: string
+  book?: string
+  version?: string
+  full_text?: string
+  notes?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type ConferenceNote = {
+  id: string
+  user_id: string
+  date: string
+  speaker: string
+  topic?: string
+  notes?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type HymnNote = {
+  id: string
+  user_id: string
+  date: string
+  hymn: string
+  feeling?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type GratitudeNote = {
+  id: string
+  user_id: string
+  date: string
+  content: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type DiscipleshipNote = {
+  id: string
+  user_id: string
+  date: string
+  content: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type Timer = {
+  id: string
+  user_id: string
+  label: string
+  duration: number
+  remaining: number
+  running: boolean
   created_at?: string
   updated_at?: string
 }

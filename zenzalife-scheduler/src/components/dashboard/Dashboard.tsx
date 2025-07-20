@@ -7,6 +7,8 @@ import { FamilyModule } from "./FamilyModule";
 import { LifeLogistics } from "./LifeLogistics";
 import { GarbageModule } from "./GarbageModule";
 import { SettingsModule } from "./SettingsModule";
+import { SpiritualModule } from "./SpiritualModule";
+import { TimerModule } from "./TimerModule";
 import {
   Calendar,
   TrendingUp,
@@ -14,10 +16,12 @@ import {
   Users,
   MapPin,
   Trash2,
+  Timer as TimerIcon,
   Settings,
   LogOut,
   Sparkles,
   Menu,
+  BookOpen,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -27,9 +31,11 @@ type DashboardTab =
   | "calendar"
   | "growth"
   | "affirmations"
+  | "timer"
   | "family"
   | "logistics"
   | "garbage"
+  | "spiritual"
   | "settings";
 
 const navigationItems = [
@@ -46,6 +52,12 @@ const navigationItems = [
     icon: Heart,
     color: "text-pink-500",
   },
+  {
+    id: "timer",
+    label: "Timers",
+    icon: TimerIcon,
+    color: "text-blue-500",
+  },
   { id: "family", label: "Family", icon: Users, color: "text-purple-500" },
   {
     id: "logistics",
@@ -58,6 +70,12 @@ const navigationItems = [
     label: "Garbage/Recycling",
     icon: Trash2,
     color: "text-gray-500",
+  },
+  {
+    id: "spiritual",
+    label: "Spiritual Study",
+    icon: BookOpen,
+    color: "text-purple-500",
   },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
@@ -95,12 +113,16 @@ export function Dashboard() {
         return <GrowthTracker />;
       case "affirmations":
         return <AffirmationsModule />;
+      case "timer":
+        return <TimerModule />;
       case "family":
         return <FamilyModule />;
       case "logistics":
         return <LifeLogistics />;
       case "garbage":
         return <GarbageModule />;
+      case "spiritual":
+        return <SpiritualModule />;
       case "settings":
         return <SettingsModule />;
       default:
