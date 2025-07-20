@@ -116,6 +116,7 @@ This file tracks project progress and upcoming tasks.
 - Added DoorDash task category with emoji icon and color coding.
 - Fixed Netlify build error by closing the categories array in `TaskModal.tsx`.
 - Added time sensitive notification option so alarms trigger on iOS.
+- Restricted calendar category icons to DoorDash and Uber Eats only.
 
 ## Next Steps
 

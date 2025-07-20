@@ -194,6 +194,12 @@ export function ZenzaCalendar() {
     );
   };
 
+  const categoryIcons: Record<string, string> = {
+    doordash: '🍔',
+    ubereats: '🍕',
+    default: '',
+  };
+
 
   const getCategoryColor = (category?: string, border = false) => {
     const colors: Record<string, { bg: string; border: string }> = {
@@ -525,9 +531,11 @@ export function ZenzaCalendar() {
                     className="w-4 h-4"
                   />
                 )}
-                <span>
-                  {categoryIcons[arg.event.extendedProps?.category || 'default']}
-                </span>
+                {categoryIcons[arg.event.extendedProps?.category || 'default'] && (
+                  <span>
+                    {categoryIcons[arg.event.extendedProps?.category || 'default']}
+                  </span>
+                )}
                 <span>{arg.event.title}</span>
               </div>
             </div>

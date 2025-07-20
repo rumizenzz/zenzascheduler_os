@@ -22,8 +22,8 @@ const categories = [
   { value: 'family', label: 'Family', color: '#ef4444' },
   { value: 'hygiene', label: 'Hygiene', color: '#0ea5e9' },
   { value: 'meal', label: 'Meal', color: '#65a30d' },
-  { value: 'doordash', label: 'DoorDash', color: '#ee2723' },
-  { value: 'ubereats', label: 'Uber Eats', color: '#06c167' },
+  { value: 'doordash', label: 'DoorDash', color: '#ee2723', icon: '🍔' },
+  { value: 'ubereats', label: 'Uber Eats', color: '#06c167', icon: '🍕' },
   { value: 'other', label: 'Other', color: '#6b7280' },
 ];
 
@@ -187,9 +187,9 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   onChange={(e) => handleChange('category', e.target.value)}
                   className="input-dreamy w-full"
                 >
-                  {categories.map(cat => (
+                  {categories.map((cat) => (
                     <option key={cat.value} value={cat.value}>
-                      {cat.icon} {cat.label}
+                      {cat.icon ? `${cat.icon} ` : ''}{cat.label}
                     </option>
                   ))}
                 </select>
