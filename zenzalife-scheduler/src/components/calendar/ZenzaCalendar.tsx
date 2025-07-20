@@ -12,6 +12,7 @@ import {
   Clock,
   Users,
   Target,
+  Trash2,
   Calendar as CalendarIcon,
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
@@ -85,6 +86,12 @@ export function ZenzaCalendar() {
   const [familyMembers, setFamilyMembers] = useState<User[]>([]);
   const [showFamilySelect, setShowFamilySelect] = useState(false);
   const isOwnCalendar = !viewUser || viewUser.id === user?.id;
+  const [selectedEventIds, setSelectedEventIds] = useState<string[]>([]);
+  const [selectMode, setSelectMode] = useState(false);
+  const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+  const longPressTriggered = useRef(false);
+  const [moveDate, setMoveDate] = useState("");
+
 
   useEffect(() => {
     if (user) {
@@ -136,6 +143,32 @@ export function ZenzaCalendar() {
     }
   };
 
+  const clearSelection = () => {
+    setSelectedEventIds([]);
+    setSelectMode(false);
+    setMoveDate('');
+  };
+
+  const handlePointerDown = (id: string) => {
+    if (!isOwnCalendar) return;
+    longPressTriggered.current = false;
+    if (longPressTimer.current) clearTimeout(longPressTimer.current);
+    longPressTimer.current = setTimeout(() => {
+      longPressTriggered.current = true;
+      setSelectMode(true);
+      setSelectedEventIds((ids) =>
+        ids.includes(id) ? ids : [...ids, id]
+      );
+    }, 500);
+  };
+
+  const handlePointerUp = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
   const convertTasksToEvents = (tasks: Task[]): CalendarEvent[] => {
     return tasks.map((task) => ({
       id: task.id,
@@ -180,7 +213,16 @@ export function ZenzaCalendar() {
 
   const handleEventClick = (clickInfo: any) => {
     if (!isOwnCalendar) return;
-    const task = tasks.find((t) => t.id === clickInfo.event.id);
+    const id = clickInfo.event.id;
+    const shift = clickInfo.jsEvent?.shiftKey;
+    if (shift || selectMode || longPressTriggered.current) {
+      setSelectMode(true);
+      setSelectedEventIds((ids) =>
+        ids.includes(id) ? ids.filter((i) => i !== id) : [...ids, id]
+      );
+      return;
+    }
+    const task = tasks.find((t) => t.id === id);
     if (task) {
       setSelectedTask(task);
       setSelectedDate(null);
@@ -236,6 +278,59 @@ export function ZenzaCalendar() {
       setSelectedTask(null);
     } catch (error: any) {
       toast.error("Failed to delete task: " + error.message);
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    if (!isOwnCalendar || selectedEventIds.length === 0) return;
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .delete()
+        .in('id', selectedEventIds);
+      if (error) throw error;
+      toast.success('Tasks deleted successfully!');
+      clearSelection();
+      await loadTasks();
+    } catch (error: any) {
+      toast.error('Failed to delete tasks: ' + error.message);
+    }
+  };
+
+  const handleMoveSelected = async () => {
+    if (!isOwnCalendar || selectedEventIds.length === 0 || !moveDate) return;
+    try {
+      const target = dayjs(moveDate);
+      for (const id of selectedEventIds) {
+        const task = tasks.find((t) => t.id === id);
+        if (!task) continue;
+        const start = dayjs(task.start_time)
+          .year(target.year())
+          .month(target.month())
+          .date(target.date())
+          .format('YYYY-MM-DDTHH:mm:ssZ');
+        const end = task.end_time
+          ? dayjs(task.end_time)
+              .year(target.year())
+              .month(target.month())
+              .date(target.date())
+              .format('YYYY-MM-DDTHH:mm:ssZ')
+          : null;
+        const { error } = await supabase
+          .from('tasks')
+          .update({
+            start_time: start,
+            end_time: end,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', id);
+        if (error) throw error;
+      }
+      toast.success('Tasks moved successfully!');
+      clearSelection();
+      await loadTasks();
+    } catch (error: any) {
+      toast.error('Failed to move tasks: ' + error.message);
     }
   };
 
@@ -429,6 +524,39 @@ export function ZenzaCalendar() {
         </div>
       </div>
 
+      {selectMode && (
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow">
+          <div className="text-gray-700 font-light">
+            {selectedEventIds.length} selected
+          </div>
+          <div className="flex items-center gap-3">
+            <input
+              type="date"
+              value={moveDate}
+              onChange={(e) => setMoveDate(e.target.value)}
+              className="input-dreamy"
+            />
+            <button
+              onClick={handleMoveSelected}
+              className="btn-dreamy flex items-center gap-2"
+            >
+              <Target className="w-4 h-4" />
+              Move
+            </button>
+            <button
+              onClick={handleDeleteSelected}
+              className="btn-dreamy text-red-600 border-red-200 hover:bg-red-50 flex items-center gap-2"
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete
+            </button>
+            <button onClick={clearSelection} className="btn-dreamy">
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Calendar */}
       <div className="card-floating p-6">
         <FullCalendar
@@ -451,11 +579,17 @@ export function ZenzaCalendar() {
           eventClick={handleEventClick}
           eventContent={(arg) => (
             <div
+              onPointerDown={() => handlePointerDown(arg.event.id)}
+              onPointerUp={handlePointerUp}
               className="px-2 py-1 rounded-lg text-xs font-medium shadow"
               style={{
                 backgroundColor: arg.event.backgroundColor,
                 border: `1px solid ${arg.event.borderColor}`,
                 color: arg.event.textColor,
+                opacity: selectedEventIds.includes(arg.event.id) ? 0.6 : 1,
+                outline: selectedEventIds.includes(arg.event.id)
+                  ? '2px solid #6366f1'
+                  : undefined,
               }}
             >
               <span>{arg.timeText}</span>

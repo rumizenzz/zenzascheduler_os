@@ -68,6 +68,8 @@ This file tracks project progress and upcoming tasks.
 - Set default calendar view to Day for focused scheduling.
 - Enabled viewing of individual family member calendars with a selection modal.
 - Navigation label renamed from "Calendar" to "Your Calendar" for clarity.
+- Added long press multi-select for schedules with bulk delete and move options,
+  plus Shift+click selection on desktop.
 
 ## Next Steps
 
