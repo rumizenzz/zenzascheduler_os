@@ -31,6 +31,7 @@ interface CalendarEvent {
     completed?: boolean;
     assignedTo?: string;
     alarm?: boolean;
+    custom_sound_path?: string;
   };
 }
 
