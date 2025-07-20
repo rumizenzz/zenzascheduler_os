@@ -62,6 +62,7 @@ This file tracks project progress and upcoming tasks.
 - Fixed Netlify build error by installing `@semantic-ui-react/event-stack`.
 - Resolved Netlify config parse error by removing duplicate `[functions]` section.
 - Adjusted calendar view to display early morning hours by default.
+- Set default calendar view to Day for focused scheduling.
 
 ## Next Steps
 

@@ -42,7 +42,7 @@ export function ZenzaCalendar() {
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showDefaultSchedule, setShowDefaultSchedule] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [calendarView, setCalendarView] = useState("timeGridWeek");
+  const [calendarView, setCalendarView] = useState("timeGridDay");
   const calendarRef = useRef<FullCalendar>(null);
 
   useEffect(() => {
