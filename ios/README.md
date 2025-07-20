@@ -37,7 +37,7 @@ let manager = TimeSensitiveNotificationManager()
 manager.requestAuthorization()
 ```
 
-The manager implements `UNUserNotificationCenterDelegate` and calls `completionHandler([.banner, .list, .sound])` so alerts display even when your app is in the foreground.
+The manager implements `UNUserNotificationCenterDelegate` and calls `completionHandler([.banner, .list, .sound])` so alerts display even when your app is in the foreground. It also registers a `TIME_SENSITIVE` category with the `.allowAnnouncement` option so Siri can read the alert aloud.
 
 ## Turning On Time Sensitive Notifications
 
@@ -61,7 +61,7 @@ A remote push payload using the time-sensitive interruption level:
     },
     "sound": "default",
     "interruption-level": "time-sensitive",
-    "category": "REMINDER"
+    "category": "TIME_SENSITIVE"
   }
 }
 ```
