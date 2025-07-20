@@ -54,6 +54,11 @@ This file tracks project progress and upcoming tasks.
 - Implemented slide-out sidebar with overlay and menu button for mobile devices.
 - Fixed Netlify build error by installing `@semantic-ui-react/event-stack`.
 - Resolved Netlify config parse error by removing duplicate `[functions]` section.
+- Optimized calendar view for mobile devices with FullCalendar list layout.
+- Corrected calendar event times by storing timestamps in UTC.
+- Fixed calendar editing timezone bug by converting UTC timestamps to local time.
+- Adjusted calendar height to auto for improved desktop and mobile layout.
+- Linked official FullCalendar CSS for clear event display.
 
 ## Next Steps
 
