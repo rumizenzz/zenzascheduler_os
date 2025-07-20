@@ -29,6 +29,9 @@ This file tracks project progress and upcoming tasks.
 - Fixed additional Life Logistics queries for addresses and businesses.
 - Corrected calendar timezone handling so saved tasks keep the selected local times.
 - Times now store the user's timezone offset to prevent 4 hour shift after saving.
+- Calendar events now convert timestamps to Date objects and FullCalendar uses
+  explicit `timeZone="local"` to ensure no offset issues.
+- Updated calendar event types to accept `Date` objects, resolving TypeScript build error.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
