@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from 'react-hot-toast'
 import { Eye, EyeOff, Mail, Lock, User, Heart } from 'lucide-react'
+import { InstallGuide } from '../onboarding/InstallGuide'
 
 type AuthMode = 'signin' | 'signup'
 
@@ -179,6 +180,7 @@ export function AuthForm({ mode, onModeChange }: AuthFormProps) {
             }
           </button>
         </div>
+        <InstallGuide />
       </div>
     </div>
   )

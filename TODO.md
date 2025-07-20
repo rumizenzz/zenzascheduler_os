@@ -71,6 +71,7 @@ This file tracks project progress and upcoming tasks.
 - Added intense alarm system with selectable Mixkit sounds and custom uploads.
 - Removed Mixkit alarm audio files from the repo and documented manual download steps.
 - Renamed builtin alarm options and allowed naming custom uploads.
+- Added install guide, onboarding screens and service worker based notifications with a test alarm.
 
 ## Next Steps
 
