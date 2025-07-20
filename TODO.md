@@ -74,6 +74,17 @@ This file tracks project progress and upcoming tasks.
 - Added intense alarm system with selectable Mixkit sounds and custom uploads.
 - Removed Mixkit alarm audio files from the repo and documented manual download steps.
 - Renamed builtin alarm options and allowed naming custom uploads.
+- Added custom_sound_path property to calendar events for personalized alarm sounds.
+- Added install guide, onboarding screens and service worker based notifications with a test alarm.
+- Fixed TypeScript build errors for PWA install prompt and service worker types.
+- Improved notification permissions and test alarm reliability by awaiting the service worker.
+- Added incognito mode detection to the install guide to explain why installation may fail.
+- Detects if the PWA is already installed and hides the install step.
+- Warns that notifications cannot be enabled in incognito mode.
+- Detects when running in standalone mode and informs the user.
+- SVG icons added to the manifest for proper home screen branding.
+- Onboarding recommends enabling background refresh on iOS and disabling battery optimization on Android; alarms keep the screen awake.
+- Added visual guides showing where to enable Background App Refresh on iOS and disable Battery Optimization on Android.
 - Added swirling entrance animation with richer chime chord for dreamlike appeal.
 - Introduced Vitest with a basic utility test and stricter ESLint rules.
 - Documented Netlify deployment steps to run lint and tests before building.
