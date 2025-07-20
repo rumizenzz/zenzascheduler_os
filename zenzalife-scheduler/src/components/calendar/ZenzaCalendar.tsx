@@ -194,6 +194,18 @@ export function ZenzaCalendar() {
     );
   };
 
+  const categoryIcons: Record<string, string> = {
+    exercise: '🏃',
+    study: '📚',
+    spiritual: '🙏',
+    work: '💼',
+    personal: '🌟',
+    family: '👪',
+    hygiene: '🛁',
+    meal: '🍽️',
+    default: '📌',
+  };
+
 
   const getCategoryColor = (category?: string, border = false) => {
     const colors: Record<string, { bg: string; border: string }> = {
