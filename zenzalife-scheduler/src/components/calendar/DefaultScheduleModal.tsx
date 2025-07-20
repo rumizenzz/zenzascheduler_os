@@ -34,6 +34,7 @@ const getCategoryColor = (category: string) => {
     'hygiene': '#0ea5e9',
     'meal': '#65a30d',
     'doordash': '#ee2723',
+    'ubereats': '#06c167',
     'other': '#6b7280'
   }
   return colors[category] || '#6b7280'
