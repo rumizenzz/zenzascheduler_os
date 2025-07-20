@@ -178,6 +178,34 @@ export function LifeLogistics() {
     }
   }
 
+  const handleSave = async (data: any) => {
+    if (!user) return
+
+    const table = activeTab
+    const timestamp = new Date().toISOString()
+
+    try {
+      const payload = editingItem
+        ? { ...data, updated_at: timestamp }
+        : { ...data, user_id: user.id, created_at: timestamp, updated_at: timestamp }
+
+      const query = editingItem
+        ? supabase.from(table).update(payload).eq('id', editingItem.id)
+        : supabase.from(table).insert(payload)
+
+      const { error } = await query
+
+      if (error) throw error
+
+      toast.success(`Item ${editingItem ? 'updated' : 'added'} successfully!`)
+      setShowModal(false)
+      setEditingItem(null)
+      await loadData()
+    } catch (error: any) {
+      toast.error('Failed to save item: ' + error.message)
+    }
+  }
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'addresses':
@@ -389,27 +417,385 @@ export function LifeLogistics() {
         )}
       </div>
 
-      {/* Modal would go here - simplified for brevity */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md mx-4">
-            <div className="p-6">
-              <h2 className="text-xl font-medium text-gray-800 mb-4">
-                {editingItem ? 'Edit' : 'Add'} {tabConfig.find(t => t.id === activeTab)?.label.slice(0, -1)}
-              </h2>
-              <p className="text-gray-600 mb-6">Modal content would go here...</p>
-              <div className="flex justify-end gap-3">
-                <button onClick={() => setShowModal(false)} className="btn-dreamy">
-                  Cancel
-                </button>
-                <button className="btn-dreamy-primary">
-                  Save
-                </button>
+        <LogisticsModal
+          tab={activeTab}
+          item={editingItem}
+          onClose={() => setShowModal(false)}
+          onSave={handleSave}
+        />
+      )}
+    </div>
+  )
+}
+
+interface LogisticsModalProps {
+  tab: LogisticsTab
+  item: any
+  onClose: () => void
+  onSave: (data: any) => void
+}
+
+function LogisticsModal({ tab, item, onClose, onSave }: LogisticsModalProps) {
+  const [formData, setFormData] = useState<any>(() => {
+    switch (tab) {
+      case 'addresses':
+        return {
+          type: item?.type || '',
+          address_line_1: item?.address_line_1 || '',
+          address_line_2: item?.address_line_2 || '',
+          city: item?.city || '',
+          state: item?.state || '',
+          zip_code: item?.zip_code || '',
+          country: item?.country || '',
+          is_primary: item?.is_primary || false
+        }
+      case 'vehicles':
+        return {
+          make: item?.make || '',
+          model: item?.model || '',
+          year: item?.year || '',
+          color: item?.color || '',
+          license_plate: item?.license_plate || ''
+        }
+      case 'jobs':
+        return {
+          company_name: item?.company_name || '',
+          position: item?.position || '',
+          employment_type: item?.employment_type || '',
+          start_date: item?.start_date || '',
+          end_date: item?.end_date || '',
+          salary: item?.salary || '',
+          is_current: item?.is_current || false
+        }
+      case 'businesses':
+        return {
+          business_name: item?.business_name || '',
+          business_type: item?.business_type || '',
+          start_date: item?.start_date || '',
+          description: item?.description || '',
+          status: item?.status || 'active'
+        }
+      default:
+        return {}
+    }
+  })
+
+  const handleChange = (field: string, value: any) => {
+    setFormData((prev: any) => ({ ...prev, [field]: value }))
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSave(formData)
+  }
+
+  const renderFields = () => {
+    switch (tab) {
+      case 'addresses':
+        return (
+          <>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Type</label>
+              <input
+                type="text"
+                value={formData.type}
+                onChange={e => handleChange('type', e.target.value)}
+                className="input-dreamy w-full"
+                placeholder="Home"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Address Line 1</label>
+              <input
+                type="text"
+                value={formData.address_line_1}
+                onChange={e => handleChange('address_line_1', e.target.value)}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Address Line 2</label>
+              <input
+                type="text"
+                value={formData.address_line_2}
+                onChange={e => handleChange('address_line_2', e.target.value)}
+                className="input-dreamy w-full"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">City</label>
+                <input
+                  type="text"
+                  value={formData.city}
+                  onChange={e => handleChange('city', e.target.value)}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">State</label>
+                <input
+                  type="text"
+                  value={formData.state}
+                  onChange={e => handleChange('state', e.target.value)}
+                  className="input-dreamy w-full"
+                  required
+                />
               </div>
             </div>
-          </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">ZIP</label>
+                <input
+                  type="text"
+                  value={formData.zip_code}
+                  onChange={e => handleChange('zip_code', e.target.value)}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Country</label>
+                <input
+                  type="text"
+                  value={formData.country}
+                  onChange={e => handleChange('country', e.target.value)}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+            </div>
+            <label className="flex items-center gap-2 mt-2">
+              <input
+                type="checkbox"
+                checked={formData.is_primary}
+                onChange={e => handleChange('is_primary', e.target.checked)}
+                className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700">Primary Address</span>
+            </label>
+          </>
+        )
+
+      case 'vehicles':
+        return (
+          <>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Make</label>
+                <input
+                  type="text"
+                  value={formData.make}
+                  onChange={e => handleChange('make', e.target.value)}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Model</label>
+                <input
+                  type="text"
+                  value={formData.model}
+                  onChange={e => handleChange('model', e.target.value)}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Year</label>
+                <input
+                  type="number"
+                  value={formData.year}
+                  onChange={e => handleChange('year', e.target.value)}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Color</label>
+                <input
+                  type="text"
+                  value={formData.color}
+                  onChange={e => handleChange('color', e.target.value)}
+                  className="input-dreamy w-full"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">License Plate</label>
+              <input
+                type="text"
+                value={formData.license_plate}
+                onChange={e => handleChange('license_plate', e.target.value)}
+                className="input-dreamy w-full"
+              />
+            </div>
+          </>
+        )
+
+      case 'jobs':
+        return (
+          <>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Company</label>
+              <input
+                type="text"
+                value={formData.company_name}
+                onChange={e => handleChange('company_name', e.target.value)}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Position</label>
+              <input
+                type="text"
+                value={formData.position}
+                onChange={e => handleChange('position', e.target.value)}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Employment Type</label>
+                <input
+                  type="text"
+                  value={formData.employment_type}
+                  onChange={e => handleChange('employment_type', e.target.value)}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Salary</label>
+                <input
+                  type="number"
+                  value={formData.salary}
+                  onChange={e => handleChange('salary', e.target.value)}
+                  className="input-dreamy w-full"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Start Date</label>
+                <input
+                  type="date"
+                  value={formData.start_date}
+                  onChange={e => handleChange('start_date', e.target.value)}
+                  className="input-dreamy w-full"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">End Date</label>
+                <input
+                  type="date"
+                  value={formData.end_date}
+                  onChange={e => handleChange('end_date', e.target.value)}
+                  className="input-dreamy w-full"
+                />
+              </div>
+            </div>
+            <label className="flex items-center gap-2 mt-2">
+              <input
+                type="checkbox"
+                checked={formData.is_current}
+                onChange={e => handleChange('is_current', e.target.checked)}
+                className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700">Current Job</span>
+            </label>
+          </>
+        )
+
+      case 'businesses':
+        return (
+          <>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Business Name</label>
+              <input
+                type="text"
+                value={formData.business_name}
+                onChange={e => handleChange('business_name', e.target.value)}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Type</label>
+              <input
+                type="text"
+                value={formData.business_type}
+                onChange={e => handleChange('business_type', e.target.value)}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Start Date</label>
+              <input
+                type="date"
+                value={formData.start_date}
+                onChange={e => handleChange('start_date', e.target.value)}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Description</label>
+              <textarea
+                value={formData.description}
+                onChange={e => handleChange('description', e.target.value)}
+                className="input-dreamy w-full h-24 resize-none"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Status</label>
+              <select
+                value={formData.status}
+                onChange={e => handleChange('status', e.target.value)}
+                className="input-dreamy w-full"
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </>
+        )
+
+      default:
+        return null
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-y-auto max-h-[90vh]">
+        <div className="p-6">
+          <h2 className="text-xl font-medium text-gray-800 mb-6">
+            {item ? 'Edit' : 'Add'} {tab.slice(0, -1)}
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {renderFields()}
+            <div className="flex justify-end gap-3 pt-4">
+              <button type="button" onClick={onClose} className="btn-dreamy">
+                Cancel
+              </button>
+              <button type="submit" className="btn-dreamy-primary">
+                Save
+              </button>
+            </div>
+          </form>
         </div>
-      )}
+      </div>
     </div>
   )
 }
