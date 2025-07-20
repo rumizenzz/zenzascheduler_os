@@ -87,6 +87,7 @@ This file tracks project progress and upcoming tasks.
 - Warns that notifications cannot be enabled in incognito mode.
 - Detects when running in standalone mode and informs the user.
 - SVG icons added to the manifest for proper home screen branding.
+- Configured the Apple touch icon to reference the SVG so iPhones show the Vanilla Sky icon.
 - Onboarding recommends enabling background refresh on iOS and disabling battery optimization on Android; alarms keep the screen awake.
 - Added visual guides showing where to enable Background App Refresh on iOS and disable Battery Optimization on Android.
 - Added swirling entrance animation with richer chime chord for dreamlike appeal.
