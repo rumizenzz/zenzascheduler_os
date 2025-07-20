@@ -89,6 +89,8 @@ export type ScriptureNote = {
   user_id: string
   date: string
   scripture: string
+  book?: string
+  version?: string
   full_text?: string
   notes?: string
   created_at?: string

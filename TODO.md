@@ -87,6 +87,8 @@ This file tracks project progress and upcoming tasks.
 - Introduced Vitest with a basic utility test and stricter ESLint rules.
 - Documented Netlify deployment steps to run lint and tests before building.
 - Display a "What did you learn today:" label before scripture and conference notes so they're not mistaken for scripture text.
+- Added book and version fields for scriptures with dropdown selection and sample Book of Mormon verses.
+- Hid version selector when the Book of Mormon is chosen since no editions exist.
 
 ## Next Steps
 
