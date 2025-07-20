@@ -78,6 +78,7 @@ This file tracks project progress and upcoming tasks.
 - Added Supabase tables for storing scripture and conference notes.
 - Extended spiritual study with hymn and gratitude tracking.
 - Created Supabase tables for hymn_notes and gratitude_notes.
+- Added full scripture text support and old scroll styling with daily discipleship reflections.
 - Fixed build failure by including `custom_sound_path` in calendar event types.
 - Fixed CalendarEvent typing for custom alarm paths to resolve TypeScript build error.
 - Added swirling entrance animation with richer chime chord for dreamlike appeal.
