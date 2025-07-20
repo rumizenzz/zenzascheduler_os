@@ -111,6 +111,23 @@ export function useAudio() {
 
       oscillator2.start(audioContext.currentTime + 0.1)
       oscillator2.stop(audioContext.currentTime + 1.8)
+
+      // Add third harmonic for dreamlike richness
+      const oscillator3 = audioContext.createOscillator()
+      const gainNode3 = audioContext.createGain()
+
+      oscillator3.connect(gainNode3)
+      gainNode3.connect(audioContext.destination)
+
+      oscillator3.frequency.setValueAtTime(1318.51, audioContext.currentTime) // E6
+      oscillator3.type = 'sine'
+
+      gainNode3.gain.setValueAtTime(0, audioContext.currentTime)
+      gainNode3.gain.linearRampToValueAtTime(0.03, audioContext.currentTime + 0.3)
+      gainNode3.gain.exponentialRampToValueAtTime(0.005, audioContext.currentTime + 1.5)
+
+      oscillator3.start(audioContext.currentTime + 0.2)
+      oscillator3.stop(audioContext.currentTime + 1.6)
     } catch (error) {
       console.log('Web Audio API not available, using fallback')
       // Fallback - you could use a simple beep or silence
