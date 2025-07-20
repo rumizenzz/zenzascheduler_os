@@ -77,8 +77,8 @@ export function ZenzaCalendar() {
     return tasks.map((task) => ({
       id: task.id,
       title: task.title,
-      start: task.start_time || "",
-      end: task.end_time || "",
+      start: task.start_time ? dayjs(task.start_time).toDate() : "",
+      end: task.end_time ? dayjs(task.end_time).toDate() : "",
       backgroundColor: getCategoryColor(task.category),
       borderColor: getCategoryColor(task.category, true),
       textColor: "#374151",
@@ -349,6 +349,7 @@ export function ZenzaCalendar() {
             center: "title",
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
+          timeZone="local"
           initialView={calendarView}
           editable={true}
           selectable={true}
