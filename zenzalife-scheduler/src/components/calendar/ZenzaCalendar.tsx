@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import dayjs from "dayjs";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -126,11 +127,20 @@ export function ZenzaCalendar() {
     if (!user) return;
 
     try {
+      const formattedData = {
+        ...taskData,
+        start_time: taskData.start_time
+          ? dayjs(taskData.start_time).toISOString()
+          : null,
+        end_time: taskData.end_time
+          ? dayjs(taskData.end_time).toISOString()
+          : null,
+      };
       if (selectedTask) {
         // Update existing task
         const { error } = await supabase
           .from("tasks")
-          .update({ ...taskData, updated_at: new Date().toISOString() })
+          .update({ ...formattedData, updated_at: new Date().toISOString() })
           .eq("id", selectedTask.id);
 
         if (error) throw error;
@@ -138,7 +148,7 @@ export function ZenzaCalendar() {
       } else {
         // Create new task
         const { error } = await supabase.from("tasks").insert({
-          ...taskData,
+          ...formattedData,
           user_id: user.id,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
@@ -175,90 +185,95 @@ export function ZenzaCalendar() {
   const applyDefaultSchedule = async (date: string) => {
     if (!user) return;
 
+    const makeTime = (t: string) => dayjs(`${date}T${t}`).toISOString();
+
     const defaultTasks = [
       {
         title: "Wake up, brush teeth, floss, exfoliate",
         category: "hygiene",
-        start_time: `${date}T06:30:00`,
-        end_time: `${date}T07:00:00`,
+        start_time: makeTime("06:30:00"),
+        end_time: makeTime("07:00:00"),
         alarm: true,
       },
       {
         title: "Jog/Exercise",
         category: "exercise",
-        start_time: `${date}T07:00:00`,
-        end_time: `${date}T08:00:00`,
+        start_time: makeTime("07:00:00"),
+        end_time: makeTime("08:00:00"),
         alarm: true,
       },
       {
         title: "Shower, hygiene",
         category: "hygiene",
-        start_time: `${date}T08:00:00`,
-        end_time: `${date}T08:30:00`,
+        start_time: makeTime("08:00:00"),
+        end_time: makeTime("08:30:00"),
       },
       {
         title: "Make/eat breakfast, grace, dishes",
         category: "meal",
-        start_time: `${date}T08:30:00`,
-        end_time: `${date}T09:00:00`,
+        start_time: makeTime("08:30:00"),
+        end_time: makeTime("09:00:00"),
       },
       {
         title: "Business cold calls",
         category: "work",
-        start_time: `${date}T09:00:00`,
-        end_time: `${date}T11:00:00`,
+        start_time: makeTime("09:00:00"),
+        end_time: makeTime("11:00:00"),
       },
       {
         title: "GED math study",
         category: "study",
-        start_time: `${date}T11:00:00`,
-        end_time: `${date}T17:00:00`,
+        start_time: makeTime("11:00:00"),
+        end_time: makeTime("17:00:00"),
       },
       {
         title: "Scripture & prayer",
         category: "spiritual",
-        start_time: `${date}T17:00:00`,
-        end_time: `${date}T18:00:00`,
+        start_time: makeTime("17:00:00"),
+        end_time: makeTime("18:00:00"),
       },
       {
         title: "Dinner + dishes + kitchen cleanup",
         category: "meal",
-        start_time: `${date}T18:00:00`,
-        end_time: `${date}T19:00:00`,
+        start_time: makeTime("18:00:00"),
+        end_time: makeTime("19:00:00"),
       },
       {
         title: "Personal development book reading",
         category: "personal",
-        start_time: `${date}T19:00:00`,
-        end_time: `${date}T20:00:00`,
+        start_time: makeTime("19:00:00"),
+        end_time: makeTime("20:00:00"),
       },
       {
         title: "Cooking video training",
         category: "personal",
-        start_time: `${date}T20:00:00`,
-        end_time: `${date}T21:00:00`,
+        start_time: makeTime("20:00:00"),
+        end_time: makeTime("21:00:00"),
       },
       {
         title: "PM hygiene",
         category: "hygiene",
-        start_time: `${date}T21:00:00`,
-        end_time: `${date}T21:30:00`,
+        start_time: makeTime("21:00:00"),
+        end_time: makeTime("21:30:00"),
       },
       {
         title: "Final prayer",
         category: "spiritual",
-        start_time: `${date}T21:30:00`,
-        end_time: `${date}T21:45:00`,
+        start_time: makeTime("21:30:00"),
+        end_time: makeTime("21:45:00"),
       },
     ];
 
     try {
+      const dayStart = dayjs(`${date}T00:00:00`).toISOString();
+      const dayEnd = dayjs(`${date}T23:59:59`).toISOString();
+
       const { data: existing, error: fetchError } = await supabase
         .from("tasks")
         .select("start_time")
         .eq("user_id", user.id)
-        .gte("start_time", `${date}T00:00:00`)
-        .lt("start_time", `${date}T23:59:59`);
+        .gte("start_time", dayStart)
+        .lt("start_time", dayEnd);
 
       if (fetchError) throw fetchError;
 
