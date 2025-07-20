@@ -55,6 +55,7 @@ This file tracks project progress and upcoming tasks.
 - Implemented slide-out sidebar with overlay and menu button for mobile devices.
 - Fixed Netlify build error by installing `@semantic-ui-react/event-stack`.
 - Resolved Netlify config parse error by removing duplicate `[functions]` section.
+- Standardized task timestamps to ISO format to prevent duplicate default schedule entries and correct calendar times.
 
 ## Next Steps
 
