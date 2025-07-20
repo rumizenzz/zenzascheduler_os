@@ -41,6 +41,7 @@ export type Task = {
   goal_linked?: string
   completed?: boolean
   visibility?: string
+  notes?: string
   assigned_to?: string
   created_at?: string
   updated_at?: string
@@ -84,13 +85,95 @@ export type GrowthLog = {
   updated_at?: string
 }
 
+export type ScriptureNote = {
+  id: string
+  user_id: string
+  date: string
+  scripture: string
+  book?: string
+  version?: string
+  full_text?: string
+  notes?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type ConferenceNote = {
+  id: string
+  user_id: string
+  date: string
+  speaker: string
+  topic?: string
+  notes?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type HymnNote = {
+  id: string
+  user_id: string
+  date: string
+  hymn: string
+  feeling?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type GratitudeNote = {
+  id: string
+  user_id: string
+  date: string
+  content: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type DiscipleshipNote = {
+  id: string
+  user_id: string
+  date: string
+  content: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type Timer = {
+  id: string
+  user_id: string
+  label: string
+  duration: number
+  remaining: number
+  running: boolean
+  created_at?: string
+  updated_at?: string
+}
+
 // Helper functions
 export async function getCurrentUser() {
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const {
+    data: { session },
+    error: sessionError
+  } = await supabase.auth.getSession()
+
+  if (sessionError) {
+    console.error('Error getting session:', sessionError)
+    return null
+  }
+
+  if (!session) {
+    return null
+  }
+
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser()
+
   if (error) {
     console.error('Error getting user:', error)
     return null
   }
+
   return user
 }
 
