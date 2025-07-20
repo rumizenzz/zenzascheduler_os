@@ -35,5 +35,9 @@ export default defineConfig({
       external: ["workbox-window"],
     },
   },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+  },
 })
 

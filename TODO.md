@@ -71,6 +71,8 @@ This file tracks project progress and upcoming tasks.
 - Added intense alarm system with selectable Mixkit sounds and custom uploads.
 - Removed Mixkit alarm audio files from the repo and documented manual download steps.
 - Renamed builtin alarm options and allowed naming custom uploads.
+- Expanded ESLint rules with React plugin and enabled type-checked configuration.
+- Added Vitest setup with a sample component test.
 
 ## Next Steps
 
