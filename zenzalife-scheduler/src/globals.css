@@ -181,6 +181,19 @@
   animation: text-shimmer 3s ease-in-out infinite;
 }
 
+@keyframes slow-swirl {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-slow-swirl {
+  animation: slow-swirl 20s linear infinite;
+}
+
 /* Smooth transitions for all elements */
 * {
   transition-property: all;
@@ -223,6 +236,11 @@
 
 .glass-strong {
   @apply bg-white/40 backdrop-blur-lg border border-white/50;
+}
+
+/* Old scroll look for scriptures */
+.scripture-scroll {
+  @apply bg-yellow-50 border border-yellow-200 rounded-xl p-4 font-serif leading-relaxed text-yellow-900 shadow-inner;
 }
 
 /* Scroll styles */

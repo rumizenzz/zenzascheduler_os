@@ -36,6 +36,7 @@ This file tracks project progress and upcoming tasks.
 - Added modal forms to Life Logistics so addresses, vehicles, jobs, and businesses can be added and edited.
 - Fixed Life Logistics forms to use column names from the database schema.
 - Removed obsolete `is_primary` field from Life Logistics address forms.
+- Added missing `type` column to the `addresses` table so Logistics entries save.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
@@ -81,6 +82,25 @@ This file tracks project progress and upcoming tasks.
 - Detects when running in standalone mode and informs the user.
 - SVG icons added to the manifest for proper home screen branding.
 - Onboarding recommends enabling background refresh on iOS and disabling battery optimization on Android; alarms keep the screen awake.
+- Added swirling entrance animation with richer chime chord for dreamlike appeal.
+- Introduced Vitest with a basic utility test and stricter ESLint rules.
+- Documented Netlify deployment steps to run lint and tests before building.
+- Added notes field for calendar tasks to record what was accomplished.
+- Added clear "Completed" indicator with a green check for finished tasks on the calendar.
+- Implemented scripture and conference note tracking module for daily spiritual study.
+- Added Supabase tables for storing scripture and conference notes.
+- Extended spiritual study with hymn and gratitude tracking.
+- Created Supabase tables for hymn_notes and gratitude_notes.
+- Added full scripture text support and old scroll styling with daily discipleship reflections.
+- Fixed build failure by including `custom_sound_path` in calendar event types.
+- Fixed CalendarEvent typing for custom alarm paths to resolve TypeScript build error.
+- Enabled viewing of family member scripture notes with a selection modal.
+- Added swirling entrance animation with richer chime chord for dreamlike appeal.
+- Introduced Vitest with a basic utility test and stricter ESLint rules.
+- Documented Netlify deployment steps to run lint and tests before building.
+- Display a "What did you learn today:" label before scripture and conference notes so they're not mistaken for scripture text.
+- Added book and version fields for scriptures with dropdown selection and sample Book of Mormon verses.
+- Hid version selector when the Book of Mormon is chosen since no editions exist.
 
 ## Next Steps
 
@@ -100,6 +120,5 @@ This file tracks project progress and upcoming tasks.
 
 ## Improvement Ideas
 
-- Ensure entrance animations and audio meet the design philosophy.
-- Expand tests and lint rules for higher code quality.
-- Document additional deployment steps as they are discovered.
+(add any new ideas here)
+

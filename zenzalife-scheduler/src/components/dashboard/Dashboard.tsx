@@ -7,6 +7,7 @@ import { FamilyModule } from "./FamilyModule";
 import { LifeLogistics } from "./LifeLogistics";
 import { GarbageModule } from "./GarbageModule";
 import { SettingsModule } from "./SettingsModule";
+import { SpiritualModule } from "./SpiritualModule";
 import {
   Calendar,
   TrendingUp,
@@ -18,6 +19,7 @@ import {
   LogOut,
   Sparkles,
   Menu,
+  BookOpen,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -30,6 +32,7 @@ type DashboardTab =
   | "family"
   | "logistics"
   | "garbage"
+  | "spiritual"
   | "settings";
 
 const navigationItems = [
@@ -58,6 +61,12 @@ const navigationItems = [
     label: "Garbage/Recycling",
     icon: Trash2,
     color: "text-gray-500",
+  },
+  {
+    id: "spiritual",
+    label: "Spiritual Study",
+    icon: BookOpen,
+    color: "text-purple-500",
   },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
@@ -101,6 +110,8 @@ export function Dashboard() {
         return <LifeLogistics />;
       case "garbage":
         return <GarbageModule />;
+      case "spiritual":
+        return <SpiritualModule />;
       case "settings":
         return <SettingsModule />;
       default:

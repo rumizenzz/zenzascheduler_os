@@ -12,6 +12,7 @@ CREATE TABLE tasks (
     completed BOOLEAN DEFAULT false,
     visibility VARCHAR(50) DEFAULT 'private',
     assigned_to UUID,
+    notes TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
