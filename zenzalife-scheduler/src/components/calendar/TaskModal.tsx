@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Task } from '@/lib/supabase'
+import { useAudio } from '@/hooks/useAudio'
 import { X, Clock, Tag, Bell, Users, Target, Trash2 } from 'lucide-react'
 import dayjs from 'dayjs'
 
@@ -39,6 +40,14 @@ const visibilityOptions = [
   { value: 'public', label: 'Public' }
 ]
 
+const builtinAlarms = [
+  { name: 'Lucid Skybell', url: '/alarms/lucid-skybell.mp3' },
+  { name: 'Dream Siren', url: '/alarms/dream-siren.mp3' },
+  { name: 'Vanilla Alert', url: '/alarms/vanilla-alert.mp3' },
+  { name: 'Echo Pulse', url: '/alarms/echo-pulse.mp3' },
+  { name: 'Surreal Ringtone', url: '/alarms/surreal-ringtone.mp3' }
+]
+
 export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate }: TaskModalProps) {
   const [formData, setFormData] = useState({
     title: '',
@@ -47,9 +56,11 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     end_time: '',
     repeat_pattern: 'none',
     alarm: false,
+    custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
     visibility: 'private',
     completed: false
   })
+  const { playAudio } = useAudio()
 
   useEffect(() => {
     if (task) {
@@ -60,6 +71,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         end_time: task.end_time ? dayjs(task.end_time).format('YYYY-MM-DDTHH:mm') : '',
         repeat_pattern: task.repeat_pattern || 'none',
         alarm: task.alarm || false,
+        custom_sound_path: task.custom_sound_path || localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
         visibility: task.visibility || 'private',
         completed: task.completed || false
       })
@@ -74,6 +86,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         end_time: endTime,
         repeat_pattern: 'none',
         alarm: false,
+        custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
         visibility: 'private',
         completed: false
       })
@@ -100,6 +113,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
       end_time: formData.end_time ? dayjs(formData.end_time).format('YYYY-MM-DDTHH:mm:ssZ') : null,
       repeat_pattern: formData.repeat_pattern,
       alarm: formData.alarm,
+      custom_sound_path: formData.custom_sound_path,
       visibility: formData.visibility,
       completed: formData.completed
     })
@@ -260,6 +274,33 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   Set Alarm
                 </span>
               </label>
+
+              {formData.alarm && (
+                <div className="w-full space-y-1">
+                  <label className="text-sm text-gray-700">Alarm Sound</label>
+                  <select
+                    value={formData.custom_sound_path}
+                    onChange={(e) => handleChange('custom_sound_path', e.target.value)}
+                    className="input-dreamy w-full"
+                  >
+                    {[
+                      ...builtinAlarms,
+                      ...JSON.parse(localStorage.getItem('customAlarmSounds') || '[]')
+                    ].map((alarm: any) => (
+                      <option key={alarm.url} value={alarm.url}>
+                        {alarm.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => playAudio(formData.custom_sound_path)}
+                    className="text-xs text-blue-500 underline"
+                  >
+                    Test
+                  </button>
+                </div>
+              )}
 
               {task && (
                 <label className="flex items-center gap-3 cursor-pointer">

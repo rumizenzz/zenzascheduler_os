@@ -68,6 +68,9 @@ This file tracks project progress and upcoming tasks.
 - Set default calendar view to Day for focused scheduling.
 - Enabled viewing of individual family member calendars with a selection modal.
 - Navigation label renamed from "Calendar" to "Your Calendar" for clarity.
+- Added intense alarm system with selectable Mixkit sounds and custom uploads.
+- Removed Mixkit alarm audio files from the repo and documented manual download steps.
+- Renamed builtin alarm options and allowed naming custom uploads.
 
 ## Next Steps
 
