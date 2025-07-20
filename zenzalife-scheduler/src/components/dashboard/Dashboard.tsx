@@ -262,6 +262,9 @@ export function Dashboard() {
       >
         <div className="p-6">{renderContent()}</div>
       </div>
+      <MailingListPrompt />
+    </div>
+  )
       <OnboardingModal />
       <MailingListPrompt />
     </div>
