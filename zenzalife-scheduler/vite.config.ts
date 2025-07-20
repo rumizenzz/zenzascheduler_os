@@ -9,17 +9,29 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
+      srcDir: 'src',
+      filename: 'sw.ts',
+      devOptions: {
+        enabled: true
+      },
       manifest: {
         name: 'ZenzaLife Scheduler',
         short_name: 'ZenzaLife',
         description: 'Dreamlike family scheduler and life management platform.',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#ffffff',
         theme_color: '#2B5D3A',
         icons: [
           {
             src: '/favicon.svg',
+            sizes: '192x192',
+            type: 'image/svg+xml'
+          },
+          {
+            src: '/favicon.svg',
             sizes: '512x512',
-            type: 'image/svg+xml',
-            purpose: 'any'
+            type: 'image/svg+xml'
           }
         ]
       }
