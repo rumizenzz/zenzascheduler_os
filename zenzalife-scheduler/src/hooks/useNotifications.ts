@@ -15,7 +15,15 @@ export function useNotifications() {
         const reg = await navigator.serviceWorker.ready
         reg.active?.postMessage({
           type: 'schedule-notification',
-          payload: { title, options: { ...options, requireInteraction: true }, delay: delayMs }
+          payload: {
+            title,
+            options: {
+              ...options,
+              requireInteraction: true,
+              interruptionLevel: 'time-sensitive' as any
+            },
+            delay: delayMs
+          }
         })
       } catch (err) {
         console.error('Failed to schedule notification', err)
