@@ -89,6 +89,7 @@ export type ScriptureNote = {
   user_id: string
   date: string
   scripture: string
+  full_text?: string
   notes?: string
   created_at?: string
   updated_at?: string
@@ -116,6 +117,15 @@ export type HymnNote = {
 }
 
 export type GratitudeNote = {
+  id: string
+  user_id: string
+  date: string
+  content: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type DiscipleshipNote = {
   id: string
   user_id: string
   date: string

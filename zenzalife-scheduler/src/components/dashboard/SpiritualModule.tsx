@@ -6,10 +6,11 @@ import {
   ConferenceNote,
   HymnNote,
   GratitudeNote
+  ,DiscipleshipNote
 } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import dayjs from 'dayjs'
-import { BookOpen, Video, Music, Heart } from 'lucide-react'
+import { BookOpen, Video, Music, Heart, Sparkles } from 'lucide-react'
 
 export function SpiritualModule() {
   const { user } = useAuth()
@@ -17,11 +18,13 @@ export function SpiritualModule() {
   const [conferenceNotes, setConferenceNotes] = useState<ConferenceNote[]>([])
   const [hymnNotes, setHymnNotes] = useState<HymnNote[]>([])
   const [gratitudeNotes, setGratitudeNotes] = useState<GratitudeNote[]>([])
+  const [discipleshipNotes, setDiscipleshipNotes] = useState<DiscipleshipNote[]>([])
   const [loading, setLoading] = useState(true)
   const [showScriptureModal, setShowScriptureModal] = useState(false)
   const [showConferenceModal, setShowConferenceModal] = useState(false)
   const [showHymnModal, setShowHymnModal] = useState(false)
   const [showGratitudeModal, setShowGratitudeModal] = useState(false)
+  const [showDiscipleshipModal, setShowDiscipleshipModal] = useState(false)
   const [todayScripture, setTodayScripture] = useState<ScriptureNote | null>(
     null
   )
@@ -30,6 +33,9 @@ export function SpiritualModule() {
   )
   const [todayHymn, setTodayHymn] = useState<HymnNote | null>(null)
   const [todayGratitude, setTodayGratitude] = useState<GratitudeNote | null>(
+    null
+  )
+  const [todayDiscipleship, setTodayDiscipleship] = useState<DiscipleshipNote | null>(
     null
   )
 
@@ -75,6 +81,14 @@ export function SpiritualModule() {
         .order('date', { ascending: false })
       setGratitudeNotes(gratitude || [])
       setTodayGratitude(gratitude?.find(g => g.date === today) || null)
+
+      const { data: discipleship } = await supabase
+        .from('discipleship_notes')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('date', { ascending: false })
+      setDiscipleshipNotes(discipleship || [])
+      setTodayDiscipleship(discipleship?.find(d => d.date === today) || null)
     } catch (err: any) {
       toast.error('Failed to load notes: ' + err.message)
     } finally {
@@ -82,13 +96,14 @@ export function SpiritualModule() {
     }
   }
 
-  const saveScripture = async (scripture: string, notes: string) => {
+  const saveScripture = async (scripture: string, fullText: string, notes: string) => {
     if (!user) return
     const today = dayjs().format('YYYY-MM-DD')
     const payload = {
       user_id: user.id,
       date: today,
       scripture: scripture.trim(),
+      full_text: fullText.trim() || null,
       notes: notes.trim() || null,
       updated_at: new Date().toISOString()
     }
@@ -214,6 +229,37 @@ export function SpiritualModule() {
     }
   }
 
+  const saveDiscipleship = async (content: string) => {
+    if (!user) return
+    const today = dayjs().format('YYYY-MM-DD')
+    const payload = {
+      user_id: user.id,
+      date: today,
+      content: content.trim(),
+      updated_at: new Date().toISOString()
+    }
+    try {
+      if (todayDiscipleship) {
+        const { error } = await supabase
+          .from('discipleship_notes')
+          .update(payload)
+          .eq('id', todayDiscipleship.id)
+        if (error) throw error
+        toast.success('Reflection updated')
+      } else {
+        const { error } = await supabase
+          .from('discipleship_notes')
+          .insert({ ...payload, created_at: new Date().toISOString() })
+        if (error) throw error
+        toast.success('Reflection saved')
+      }
+      await loadNotes()
+      setShowDiscipleshipModal(false)
+    } catch (e: any) {
+      toast.error('Failed to save reflection: ' + e.message)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -239,14 +285,15 @@ export function SpiritualModule() {
         </div>
 
         {todayScripture ? (
-          <div className="card-floating p-4">
-            <h3 className="font-medium text-gray-800 mb-2">
-              {todayScripture.scripture}
-            </h3>
+          <div className="card-floating p-4 space-y-4">
+            <h3 className="font-medium text-gray-800">{todayScripture.scripture}</h3>
+            {todayScripture.full_text && (
+              <blockquote className="scripture-scroll whitespace-pre-line">
+                {todayScripture.full_text}
+              </blockquote>
+            )}
             {todayScripture.notes && (
-              <p className="text-gray-700 whitespace-pre-line">
-                {todayScripture.notes}
-              </p>
+              <p className="text-gray-700 whitespace-pre-line">{todayScripture.notes}</p>
             )}
           </div>
         ) : (
@@ -267,6 +314,11 @@ export function SpiritualModule() {
                     {dayjs(note.date).format('MMM D, YYYY')}
                   </div>
                   <h4 className="font-medium text-gray-800">{note.scripture}</h4>
+                  {note.full_text && (
+                    <blockquote className="scripture-scroll mt-2 whitespace-pre-line">
+                      {note.full_text}
+                    </blockquote>
+                  )}
                   {note.notes && (
                     <p className="text-gray-700 mt-1 whitespace-pre-line">
                       {note.notes}
@@ -403,22 +455,60 @@ export function SpiritualModule() {
           </div>
         )}
 
-        {gratitudeNotes.length > 0 && (
-          <div className="card-floating p-4">
-            <h3 className="text-lg font-medium text-gray-800 mb-4">Past Gratitude</h3>
-            <div className="space-y-4">
-              {gratitudeNotes.map(note => (
-                <div key={note.id} className="p-3 bg-gray-50 rounded-xl">
-                  <div className="text-sm text-gray-600 mb-1">
-                    {dayjs(note.date).format('MMM D, YYYY')}
-                  </div>
-                  <p className="text-gray-700">{note.content}</p>
+      {gratitudeNotes.length > 0 && (
+        <div className="card-floating p-4">
+          <h3 className="text-lg font-medium text-gray-800 mb-4">Past Gratitude</h3>
+          <div className="space-y-4">
+            {gratitudeNotes.map(note => (
+              <div key={note.id} className="p-3 bg-gray-50 rounded-xl">
+                <div className="text-sm text-gray-600 mb-1">
+                  {dayjs(note.date).format('MMM D, YYYY')}
                 </div>
-              ))}
-            </div>
+                <p className="text-gray-700">{note.content}</p>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+      )}
+    </div>
+
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
+          <Sparkles className="w-8 h-8 text-yellow-500" />
+          What am I doing to become more like Jesus today?
+        </h1>
+        <button onClick={() => setShowDiscipleshipModal(true)} className="btn-dreamy-primary">
+          {todayDiscipleship ? 'Update Today' : 'Add Today'}
+        </button>
       </div>
+
+      {todayDiscipleship ? (
+        <div className="card-floating p-4">
+          <p className="text-gray-700 whitespace-pre-line">{todayDiscipleship.content}</p>
+        </div>
+      ) : (
+        <div className="card-floating p-4 text-center">
+          <p className="text-gray-600">No reflection logged for today</p>
+        </div>
+      )}
+
+      {discipleshipNotes.length > 0 && (
+        <div className="card-floating p-4">
+          <h3 className="text-lg font-medium text-gray-800 mb-4">Past Reflections</h3>
+          <div className="space-y-4">
+            {discipleshipNotes.map(note => (
+              <div key={note.id} className="p-3 bg-gray-50 rounded-xl">
+                <div className="text-sm text-gray-600 mb-1">
+                  {dayjs(note.date).format('MMM D, YYYY')}
+                </div>
+                <p className="text-gray-700">{note.content}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
 
       {showScriptureModal && (
         <ScriptureModal
@@ -455,6 +545,15 @@ export function SpiritualModule() {
           existing={todayGratitude}
         />
       )}
+
+      {showDiscipleshipModal && (
+        <DiscipleshipModal
+          isOpen={showDiscipleshipModal}
+          onClose={() => setShowDiscipleshipModal(false)}
+          onSave={saveDiscipleship}
+          existing={todayDiscipleship}
+        />
+      )}
     </div>
   )
 }
@@ -462,7 +561,7 @@ export function SpiritualModule() {
 interface ScriptureModalProps {
   isOpen: boolean
   onClose: () => void
-  onSave: (scripture: string, notes: string) => void
+  onSave: (scripture: string, fullText: string, notes: string) => void
   existing?: ScriptureNote | null
 }
 
@@ -473,6 +572,7 @@ function ScriptureModal({
   existing
 }: ScriptureModalProps) {
   const [scripture, setScripture] = useState(existing?.scripture || '')
+  const [fullText, setFullText] = useState(existing?.full_text || '')
   const [notes, setNotes] = useState(existing?.notes || '')
 
   if (!isOpen) return null
@@ -483,7 +583,7 @@ function ScriptureModal({
       toast.error('Enter scripture reference')
       return
     }
-    onSave(scripture, notes)
+    onSave(scripture, fullText, notes)
   }
 
   return (
@@ -509,6 +609,17 @@ function ScriptureModal({
               className="input-dreamy w-full"
               placeholder="John 3:16"
               required
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="scriptureText" className="text-sm font-medium text-gray-700">
+              Full Scripture Text
+            </label>
+            <textarea
+              id="scriptureText"
+              value={fullText}
+              onChange={e => setFullText(e.target.value)}
+              className="input-dreamy w-full h-32 resize-none"
             />
           </div>
           <div className="space-y-2">
@@ -734,6 +845,63 @@ function GratitudeModal({ isOpen, onClose, onSave, existing }: GratitudeModalPro
             </label>
             <textarea
               id="gratitudeContent"
+              value={content}
+              onChange={e => setContent(e.target.value)}
+              className="input-dreamy w-full h-32 resize-none"
+              required
+            />
+          </div>
+          <div className="flex justify-end gap-3">
+            <button type="button" onClick={onClose} className="btn-dreamy">
+              Cancel
+            </button>
+            <button type="submit" className="btn-dreamy-primary">
+              {existing ? 'Update' : 'Save'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+interface DiscipleshipModalProps {
+  isOpen: boolean
+  onClose: () => void
+  onSave: (content: string) => void
+  existing?: DiscipleshipNote | null
+}
+
+function DiscipleshipModal({ isOpen, onClose, onSave, existing }: DiscipleshipModalProps) {
+  const [content, setContent] = useState(existing?.content || '')
+
+  if (!isOpen) return null
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!content.trim()) {
+      toast.error('Enter your reflection')
+      return
+    }
+    onSave(content)
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6 space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-medium text-gray-800">
+            {existing ? 'Update' : 'Add'} Reflection
+          </h2>
+          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-full">×</button>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="discipleshipContent" className="text-sm font-medium text-gray-700">
+              How are you becoming more like Jesus today?
+            </label>
+            <textarea
+              id="discipleshipContent"
               value={content}
               onChange={e => setContent(e.target.value)}
               className="input-dreamy w-full h-32 resize-none"
