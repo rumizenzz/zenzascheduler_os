@@ -58,6 +58,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     alarm: false,
     custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
     visibility: 'private',
+    notes: '',
     completed: false
   })
   const { playAudio } = useAudio()
@@ -73,6 +74,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         alarm: task.alarm || false,
         custom_sound_path: task.custom_sound_path || localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
         visibility: task.visibility || 'private',
+        notes: task.notes || '',
         completed: task.completed || false
       })
     } else if (initialDate) {
@@ -88,6 +90,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         alarm: false,
         custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
         visibility: 'private',
+        notes: '',
         completed: false
       })
     }
@@ -115,6 +118,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
       alarm: formData.alarm,
       custom_sound_path: formData.custom_sound_path,
       visibility: formData.visibility,
+      notes: formData.notes.trim() || null,
       completed: formData.completed
     })
   }
@@ -264,6 +268,17 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   </option>
                 ))}
               </select>
+            </div>
+
+            {/* Notes */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Notes</label>
+              <textarea
+                value={formData.notes}
+                onChange={(e) => handleChange('notes', e.target.value)}
+                className="input-dreamy w-full h-20 resize-none"
+                placeholder="Additional details or what was accomplished"
+              />
             </div>
 
             {/* Checkboxes */}
