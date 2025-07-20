@@ -4,6 +4,7 @@ import { ZenzaCalendar } from "@/components/calendar/ZenzaCalendar";
 import { GrowthTracker } from "./GrowthTracker";
 import { AffirmationsModule } from "./AffirmationsModule";
 import { FamilyModule } from "./FamilyModule";
+import { FamilyTree } from "./FamilyTree";
 import { LifeLogistics } from "./LifeLogistics";
 import { GarbageModule } from "./GarbageModule";
 import { SettingsModule } from "./SettingsModule";
@@ -14,6 +15,7 @@ import {
   TrendingUp,
   Heart,
   Users,
+  TreeDeciduous,
   MapPin,
   Trash2,
   Timer as TimerIcon,
@@ -33,6 +35,7 @@ type DashboardTab =
   | "affirmations"
   | "timer"
   | "family"
+  | "family-tree"
   | "logistics"
   | "garbage"
   | "spiritual"
@@ -59,6 +62,12 @@ const navigationItems = [
     color: "text-blue-500",
   },
   { id: "family", label: "Family", icon: Users, color: "text-purple-500" },
+  {
+    id: "family-tree",
+    label: "Family Tree",
+    icon: TreeDeciduous,
+    color: "text-green-600",
+  },
   {
     id: "logistics",
     label: "Life Logistics",
@@ -117,6 +126,8 @@ export function Dashboard() {
         return <TimerModule />;
       case "family":
         return <FamilyModule />;
+      case "family-tree":
+        return <FamilyTree />;
       case "logistics":
         return <LifeLogistics />;
       case "garbage":
