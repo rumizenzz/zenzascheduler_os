@@ -79,7 +79,9 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100 animate-pulse" />
       {/* Swirling overlay */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-50 via-blue-50 to-purple-100 blur-2xl animate-swirl-lucid" />
+      <div
+        className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-black via-indigo-900 to-purple-900 blur-3xl mix-blend-multiply animate-swirl-lucid"
+      />
       
       {/* Animated Cloud Layers */}
       <div className="absolute inset-0">
