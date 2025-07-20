@@ -3,6 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import dayjs from "dayjs";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase, Task } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
@@ -179,76 +180,76 @@ export function ZenzaCalendar() {
       {
         title: "Wake up, brush teeth, floss, exfoliate",
         category: "hygiene",
-        start_time: `${date}T06:30:00`,
-        end_time: `${date}T07:00:00`,
+        start_time: dayjs(`${date}T06:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T07:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
         alarm: true,
       },
       {
         title: "Jog/Exercise",
         category: "exercise",
-        start_time: `${date}T07:00:00`,
-        end_time: `${date}T08:00:00`,
+        start_time: dayjs(`${date}T07:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T08:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
         alarm: true,
       },
       {
         title: "Shower, hygiene",
         category: "hygiene",
-        start_time: `${date}T08:00:00`,
-        end_time: `${date}T08:30:00`,
+        start_time: dayjs(`${date}T08:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T08:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
       },
       {
         title: "Make/eat breakfast, grace, dishes",
         category: "meal",
-        start_time: `${date}T08:30:00`,
-        end_time: `${date}T09:00:00`,
+        start_time: dayjs(`${date}T08:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T09:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
       },
       {
         title: "Business cold calls",
         category: "work",
-        start_time: `${date}T09:00:00`,
-        end_time: `${date}T11:00:00`,
+        start_time: dayjs(`${date}T09:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T11:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
       },
       {
         title: "GED math study",
         category: "study",
-        start_time: `${date}T11:00:00`,
-        end_time: `${date}T17:00:00`,
+        start_time: dayjs(`${date}T11:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T17:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
       },
       {
         title: "Scripture & prayer",
         category: "spiritual",
-        start_time: `${date}T17:00:00`,
-        end_time: `${date}T18:00:00`,
+        start_time: dayjs(`${date}T17:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T18:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
       },
       {
         title: "Dinner + dishes + kitchen cleanup",
         category: "meal",
-        start_time: `${date}T18:00:00`,
-        end_time: `${date}T19:00:00`,
+        start_time: dayjs(`${date}T18:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T19:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
       },
       {
         title: "Personal development book reading",
         category: "personal",
-        start_time: `${date}T19:00:00`,
-        end_time: `${date}T20:00:00`,
+        start_time: dayjs(`${date}T19:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T20:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
       },
       {
         title: "Cooking video training",
         category: "personal",
-        start_time: `${date}T20:00:00`,
-        end_time: `${date}T21:00:00`,
+        start_time: dayjs(`${date}T20:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T21:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
       },
       {
         title: "PM hygiene",
         category: "hygiene",
-        start_time: `${date}T21:00:00`,
-        end_time: `${date}T21:30:00`,
+        start_time: dayjs(`${date}T21:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T21:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
       },
       {
         title: "Final prayer",
         category: "spiritual",
-        start_time: `${date}T21:30:00`,
-        end_time: `${date}T21:45:00`,
+        start_time: dayjs(`${date}T21:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        end_time: dayjs(`${date}T21:45:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
       },
     ];
 
@@ -262,7 +263,9 @@ export function ZenzaCalendar() {
 
       if (fetchError) throw fetchError;
 
-      const existingTimes = new Set(existing?.map((t) => t.start_time));
+      const existingTimes = new Set(
+        existing?.map((t) => dayjs(t.start_time).format('YYYY-MM-DDTHH:mm:ssZ'))
+      );
 
       const tasksToInsert = defaultTasks
         .filter((task) => !existingTimes.has(task.start_time))
@@ -325,7 +328,7 @@ export function ZenzaCalendar() {
           <button
             onClick={() => {
               setSelectedTask(null);
-              setSelectedDate(new Date().toISOString().split("T")[0]);
+              setSelectedDate(dayjs().format('YYYY-MM-DD'));
               setShowTaskModal(true);
             }}
             className="btn-dreamy-primary flex items-center gap-2"
