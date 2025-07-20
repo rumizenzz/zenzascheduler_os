@@ -27,13 +27,14 @@ This file tracks project progress and upcoming tasks.
 - Added a mandatory "Click to Enter ZenzaLife OS Scheduler" button before the entrance animation to satisfy autoplay restrictions.
 - Added custom-coded Vanilla Sky inspired favicon.
 - Added missing `next_collection` field to `garbage_schedule` table so the Garbage Module loads correctly.
+- Implemented edge functions for location-based garbage updates and daily progress tracking.
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
 - [ ] STEP 2: Design database schema and create initial tables.
 - [ ] STEP 3: Configure Supabase storage bucket for uploads.
 - [ ] STEP 4: Build the React front‑end with the dreamlike entrance experience.
-- [ ] STEP 5: Add backend logic via Supabase Edge Functions.
+- [x] STEP 5: Add backend logic via Supabase Edge Functions.
 - [ ] STEP 6: Deploy the app publicly and verify all features.
 
 ### Feature Breakdown
