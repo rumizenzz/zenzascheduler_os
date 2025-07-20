@@ -5,6 +5,7 @@ import { GrowthTracker } from "./GrowthTracker";
 import { AffirmationsModule } from "./AffirmationsModule";
 import { FamilyModule } from "./FamilyModule";
 import { LifeLogistics } from "./LifeLogistics";
+import { AncestryModule } from "./AncestryModule";
 import { GarbageModule } from "./GarbageModule";
 import { SettingsModule } from "./SettingsModule";
 import { SpiritualModule } from "./SpiritualModule";
@@ -20,6 +21,7 @@ import {
   Settings,
   LogOut,
   Sparkles,
+  TreePine,
   Menu,
   BookOpen,
 } from "lucide-react";
@@ -33,6 +35,7 @@ type DashboardTab =
   | "affirmations"
   | "timer"
   | "family"
+  | "ancestry"
   | "logistics"
   | "garbage"
   | "spiritual"
@@ -59,6 +62,7 @@ const navigationItems = [
     color: "text-blue-500",
   },
   { id: "family", label: "Family", icon: Users, color: "text-purple-500" },
+    { id: "ancestry", label: "Ancestry", icon: TreePine, color: "text-green-600" },
   {
     id: "logistics",
     label: "Life Logistics",
@@ -117,6 +121,8 @@ export function Dashboard() {
         return <TimerModule />;
       case "family":
         return <FamilyModule />;
+      case "ancestry":
+        return <AncestryModule />;
       case "logistics":
         return <LifeLogistics />;
       case "garbage":
