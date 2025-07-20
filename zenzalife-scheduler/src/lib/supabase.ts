@@ -137,6 +137,19 @@ export type DiscipleshipNote = {
   updated_at?: string
 }
 
+
+export type Ancestor = {
+  id: string
+  family_id: string
+  name: string
+  relation?: string
+  birth_year?: number
+  death_year?: number
+  baptized?: boolean
+  created_at?: string
+  updated_at?: string
+}
+
 export type Timer = {
   id: string
   user_id: string
