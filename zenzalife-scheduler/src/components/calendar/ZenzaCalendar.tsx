@@ -9,6 +9,8 @@ import { toast } from 'react-hot-toast'
 import { Plus, Clock, Users, Target, Calendar as CalendarIcon } from 'lucide-react'
 import { TaskModal } from './TaskModal'
 import { DefaultScheduleModal } from './DefaultScheduleModal'
+import { AlarmModal } from '../alarms/AlarmModal'
+import { useAlarmContext } from '@/contexts/AlarmContext'
 
 interface CalendarEvent {
   id: string
@@ -37,6 +39,8 @@ export function ZenzaCalendar() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [calendarView, setCalendarView] = useState('timeGridWeek')
   const calendarRef = useRef<FullCalendar>(null)
+  const [alarmInfo, setAlarmInfo] = useState<{msg: string; sound: string} | null>(null)
+  const { sounds, defaultSoundId } = useAlarmContext()
 
   useEffect(() => {
     if (user) {
@@ -56,9 +60,10 @@ export function ZenzaCalendar() {
         .order('start_time', { ascending: true })
       
       if (error) throw error
-      
+
       setTasks(data || [])
       setEvents(convertTasksToEvents(data || []))
+      scheduleAlarms(data || [])
     } catch (error: any) {
       toast.error('Failed to load tasks: ' + error.message)
     } finally {
@@ -82,6 +87,20 @@ export function ZenzaCalendar() {
         alarm: task.alarm
       }
     }))
+  }
+
+  const scheduleAlarms = (tasks: Task[]) => {
+    tasks.forEach(task => {
+      if (task.alarm && task.start_time) {
+        const alarmTime = new Date(task.start_time).getTime() - Date.now()
+        if (alarmTime > 0 && alarmTime < 86400000) {
+          setTimeout(() => {
+            const sound = sounds.find(s => s.id === (task.custom_sound_path || defaultSoundId))
+            setAlarmInfo({ msg: task.title, sound: sound ? sound.src : '' })
+          }, alarmTime)
+        }
+      }
+    })
   }
 
   const getCategoryColor = (category?: string, border = false) => {
@@ -373,6 +392,16 @@ export function ZenzaCalendar() {
           isOpen={showDefaultSchedule}
           onClose={() => setShowDefaultSchedule(false)}
           onApply={applyDefaultSchedule}
+        />
+      )}
+
+      {/* Alarm Modal */}
+      {alarmInfo && (
+        <AlarmModal
+          isOpen={!!alarmInfo}
+          onDismiss={() => setAlarmInfo(null)}
+          soundSrc={alarmInfo.sound}
+          message={alarmInfo.msg}
         />
       )}
     </div>

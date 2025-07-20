@@ -4,6 +4,7 @@ import { supabase, updateUserProfile } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import { Settings, User, Upload, Bell, Palette, Shield, HelpCircle, Download } from 'lucide-react'
 import { useAudio } from '@/hooks/useAudio'
+import { useAlarmContext } from '@/contexts/AlarmContext'
 
 type SettingsTab = 'profile' | 'audio' | 'notifications' | 'appearance' | 'privacy' | 'help'
 
@@ -45,6 +46,7 @@ export function SettingsModule() {
     custom_alarm_file: null as File | null
   })
   const { playEntranceSound, playAudio } = useAudio()
+  const { sounds, defaultSoundId, setDefaultSoundId, registerSound } = useAlarmContext()
 
   useEffect(() => {
     if (profile) {
@@ -102,6 +104,9 @@ export function SettingsModule() {
           if (error) throw error
           
           toast.success('Custom alarm uploaded successfully!')
+          if (data && data.path) {
+            registerSound({ id: data.path, name: audioSettings.custom_alarm_file!.name, src: data.publicUrl })
+          }
           setAudioSettings(prev => ({ ...prev, custom_alarm_file: null }))
         } catch (error: any) {
           toast.error('Failed to upload alarm: ' + error.message)
@@ -284,6 +289,30 @@ export function SettingsModule() {
                   />
                   <span className="text-sm text-gray-700">Play reminder sounds</span>
                 </label>
+
+                {/* Default Alarm Selection */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mr-2">Default alarm</label>
+                  <select
+                    value={defaultSoundId}
+                    onChange={(e) => setDefaultSoundId(e.target.value)}
+                    className="input-dreamy"
+                  >
+                    {sounds.map(s => (
+                      <option key={s.id} value={s.id}>{s.name}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const sound = sounds.find(s => s.id === defaultSoundId)
+                      if (sound) playAudio(sound.src, 1)
+                    }}
+                    className="text-xs text-blue-500 hover:text-blue-700 ml-2 underline"
+                  >
+                    Preview
+                  </button>
+                </div>
               </div>
             </div>
             

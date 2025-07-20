@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Task } from '@/lib/supabase'
 import { X, Clock, Tag, Bell, Users, Target, Trash2 } from 'lucide-react'
 import dayjs from 'dayjs'
+import { useAlarmContext } from '@/contexts/AlarmContext'
+import { useAudio } from '@/hooks/useAudio'
 
 interface TaskModalProps {
   isOpen: boolean
@@ -47,9 +49,12 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     end_time: '',
     repeat_pattern: 'none',
     alarm: false,
+    alarm_sound_id: '',
     visibility: 'private',
     completed: false
   })
+  const { sounds, defaultSoundId } = useAlarmContext()
+  const { playAudio } = useAudio()
 
   useEffect(() => {
     if (task) {
@@ -60,6 +65,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         end_time: task.end_time ? dayjs(task.end_time).format('YYYY-MM-DDTHH:mm') : '',
         repeat_pattern: task.repeat_pattern || 'none',
         alarm: task.alarm || false,
+        alarm_sound_id: task.custom_sound_path || '',
         visibility: task.visibility || 'private',
         completed: task.completed || false
       })
@@ -74,6 +80,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         end_time: endTime,
         repeat_pattern: 'none',
         alarm: false,
+        alarm_sound_id: '',
         visibility: 'private',
         completed: false
       })
@@ -100,13 +107,19 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
       end_time: formData.end_time || null,
       repeat_pattern: formData.repeat_pattern,
       alarm: formData.alarm,
+      custom_sound_path: formData.alarm_sound_id || null,
       visibility: formData.visibility,
       completed: formData.completed
     })
   }
 
   const handleChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+    setFormData(prev => {
+      if (field === 'alarm' && value && !prev.alarm_sound_id) {
+        return { ...prev, alarm: value, alarm_sound_id: defaultSoundId }
+      }
+      return { ...prev, [field]: value }
+    })
   }
 
   const autoSetEndTime = () => {
@@ -260,6 +273,30 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   Set Alarm
                 </span>
               </label>
+
+              {formData.alarm && (
+                <div className="flex items-center gap-2">
+                  <select
+                    value={formData.alarm_sound_id}
+                    onChange={(e) => handleChange('alarm_sound_id', e.target.value)}
+                    className="input-dreamy"
+                  >
+                    {sounds.map(s => (
+                      <option key={s.id} value={s.id}>{s.name}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const sound = sounds.find(s => s.id === formData.alarm_sound_id)
+                      if (sound) playAudio(sound.src, 1)
+                    }}
+                    className="text-xs text-blue-500 hover:text-blue-700 underline"
+                  >
+                    Test
+                  </button>
+                </div>
+              )}
 
               {task && (
                 <label className="flex items-center gap-3 cursor-pointer">
