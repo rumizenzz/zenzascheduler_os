@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
+import { AlarmModal } from "../AlarmModal";
+import { useTaskAlarms } from "@/hooks/useTaskAlarms";
 
 interface CalendarEvent {
   id: string;
@@ -44,6 +46,10 @@ export function ZenzaCalendar() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [calendarView, setCalendarView] = useState("timeGridWeek");
   const calendarRef = useRef<FullCalendar>(null);
+  const defaultAlarm =
+    localStorage.getItem('default_alarm') ||
+    'https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg'
+  const { activeTask, dismissAlarm, snoozeAlarm } = useTaskAlarms(tasks, defaultAlarm)
 
   useEffect(() => {
     if (user) {
@@ -400,6 +406,15 @@ export function ZenzaCalendar() {
           }
           task={selectedTask}
           initialDate={selectedDate}
+        />
+      )}
+
+      {activeTask && (
+        <AlarmModal
+          task={activeTask}
+          soundUrl={activeTask.custom_sound_path || defaultAlarm}
+          onDismiss={dismissAlarm}
+          onSnooze={() => snoozeAlarm()}
         />
       )}
 

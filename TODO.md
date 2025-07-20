@@ -82,3 +82,4 @@ This file tracks project progress and upcoming tasks.
 - Ensure entrance animations and audio meet the design philosophy.
 - Expand tests and lint rules for higher code quality.
 - Document additional deployment steps as they are discovered.
+- Integrated high-volume alarm sounds with looping notifications using external URLs

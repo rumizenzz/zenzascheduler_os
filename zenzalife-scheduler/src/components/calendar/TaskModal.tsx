@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Task } from '@/lib/supabase'
 import { X, Clock, Tag, Bell, Users, Target, Trash2 } from 'lucide-react'
+import { useAudio } from '@/hooks/useAudio'
 import dayjs from 'dayjs'
 
 interface TaskModalProps {
@@ -47,9 +48,11 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     end_time: '',
     repeat_pattern: 'none',
     alarm: false,
+    custom_sound_path: '',
     visibility: 'private',
     completed: false
   })
+  const { playAudio } = useAudio()
 
   useEffect(() => {
     if (task) {
@@ -60,6 +63,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         end_time: task.end_time ? dayjs(task.end_time).format('YYYY-MM-DDTHH:mm') : '',
         repeat_pattern: task.repeat_pattern || 'none',
         alarm: task.alarm || false,
+        custom_sound_path: task.custom_sound_path || '',
         visibility: task.visibility || 'private',
         completed: task.completed || false
       })
@@ -74,6 +78,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         end_time: endTime,
         repeat_pattern: 'none',
         alarm: false,
+        custom_sound_path: '',
         visibility: 'private',
         completed: false
       })
@@ -100,6 +105,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
       end_time: formData.end_time ? dayjs(formData.end_time).format('YYYY-MM-DDTHH:mm:ssZ') : null,
       repeat_pattern: formData.repeat_pattern,
       alarm: formData.alarm,
+      custom_sound_path: formData.custom_sound_path || null,
       visibility: formData.visibility,
       completed: formData.completed
     })
@@ -260,6 +266,49 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   Set Alarm
                 </span>
               </label>
+
+              {formData.alarm && (
+                <div className="flex items-center gap-2 w-full">
+                  <select
+                    value={formData.custom_sound_path || 'default'}
+                    onChange={(e) => handleChange('custom_sound_path', e.target.value)}
+                    className="input-dreamy flex-grow"
+                  >
+                    <option value="default">Use Default</option>
+                    <option value="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg">
+                      Classic Alarm
+                    </option>
+                    <option value="https://actions.google.com/sounds/v1/alarms/phone_alerts_and_rings.ogg">
+                      Warning Buzzer
+                    </option>
+                    <option value="https://actions.google.com/sounds/v1/alarms/police_siren.ogg">
+                      City Siren
+                    </option>
+                    <option value="https://actions.google.com/sounds/v1/alarms/beep_short.ogg">
+                      Digital Beeps
+                    </option>
+                    <option value="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg">
+                      Alarm Clock Beep
+                    </option>
+                  </select>
+                  <button
+                    type="button"
+                    className="text-xs underline"
+                    onClick={() =>
+                      playAudio(
+                        formData.custom_sound_path &&
+                        formData.custom_sound_path !== 'default'
+                          ? formData.custom_sound_path
+                          : localStorage.getItem('default_alarm') ||
+                            'https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg',
+                        1
+                      )
+                    }
+                  >
+                    Test
+                  </button>
+                </div>
+              )}
 
               {task && (
                 <label className="flex items-center gap-3 cursor-pointer">

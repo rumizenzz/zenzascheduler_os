@@ -42,7 +42,11 @@ export function SettingsModule() {
     entrance_sound: true,
     task_alarms: true,
     reminder_sounds: true,
-    custom_alarm_file: null as File | null
+    custom_alarm_file: null as File | null,
+    default_alarm:
+      localStorage.getItem('default_alarm') ||
+      'https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg',
+    custom_alarm_url: localStorage.getItem('custom_alarm_url') || ''
   })
   const { playEntranceSound, playAudio } = useAudio()
 
@@ -98,11 +102,19 @@ export function SettingsModule() {
               userId: user.id
             }
           })
-          
+
           if (error) throw error
-          
+
+          if (data?.data?.publicUrl) {
+            localStorage.setItem('custom_alarm_url', data.data.publicUrl)
+            setAudioSettings(prev => ({
+              ...prev,
+              custom_alarm_url: data.data.publicUrl,
+              custom_alarm_file: null,
+              default_alarm: 'custom'
+            }))
+          }
           toast.success('Custom alarm uploaded successfully!')
-          setAudioSettings(prev => ({ ...prev, custom_alarm_file: null }))
         } catch (error: any) {
           toast.error('Failed to upload alarm: ' + error.message)
         } finally {
@@ -284,6 +296,51 @@ export function SettingsModule() {
                   />
                   <span className="text-sm text-gray-700">Play reminder sounds</span>
                 </label>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-gray-700">Default alarm sound</label>
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={audioSettings.default_alarm}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        setAudioSettings(prev => ({ ...prev, default_alarm: val }))
+                        localStorage.setItem('default_alarm', val)
+                      }}
+                      className="input-dreamy"
+                    >
+                      <option value="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg">
+                        Classic Alarm
+                      </option>
+                      <option value="https://actions.google.com/sounds/v1/alarms/phone_alerts_and_rings.ogg">
+                        Warning Buzzer
+                      </option>
+                      <option value="https://actions.google.com/sounds/v1/alarms/police_siren.ogg">
+                        City Siren
+                      </option>
+                      <option value="https://actions.google.com/sounds/v1/alarms/beep_short.ogg">
+                        Digital Beeps
+                      </option>
+                      <option value="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg">
+                        Alarm Clock Beep
+                      </option>
+                      {audioSettings.custom_alarm_url && <option value="custom">Custom Upload</option>}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const sound =
+                          audioSettings.default_alarm === 'custom'
+                            ? audioSettings.custom_alarm_url
+                            : audioSettings.default_alarm
+                        if (sound) playAudio(sound, 1)
+                      }}
+                      className="text-xs text-blue-500 underline"
+                    >
+                      Test
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
             

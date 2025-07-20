@@ -62,6 +62,32 @@ export function useAudio() {
     }
   }, [resumeContext])
 
+  const playLoopingAudio = useCallback(
+    (audioUrl: string, volume: number = 1) => {
+      try {
+        resumeContext()
+        if (audioRef.current) {
+          audioRef.current.pause()
+          audioRef.current.currentTime = 0
+        }
+
+        audioRef.current = new Audio(audioUrl)
+        audioRef.current.volume = volume
+        audioRef.current.loop = true
+
+        const playPromise = audioRef.current.play()
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            console.log('Looping audio play failed')
+          })
+        }
+      } catch (error) {
+        console.error('Error playing audio:', error)
+      }
+    },
+    [resumeContext]
+  )
+
   const stopAudio = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause()
@@ -117,6 +143,7 @@ export function useAudio() {
 
   return {
     playAudio,
+    playLoopingAudio,
     stopAudio,
     playEntranceSound
   }
