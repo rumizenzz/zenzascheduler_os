@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Task } from '@/lib/supabase'
 import { useAudio } from '@/hooks/useAudio'
-import { X, Clock, Tag, Bell, Users, Target, Trash2 } from 'lucide-react'
+import { X, Clock, Tag, Bell, Users, Target, Trash2, CheckCircle } from 'lucide-react'
 import dayjs from 'dayjs'
 
 interface TaskModalProps {
@@ -148,6 +148,12 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
               <X className="w-5 h-5" />
             </button>
           </div>
+          {task?.completed && (
+            <div className="flex items-center gap-2 mb-4 text-green-600">
+              <CheckCircle className="w-4 h-4" />
+              <span className="font-medium text-sm">Completed</span>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Title */}

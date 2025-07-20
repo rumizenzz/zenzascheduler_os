@@ -13,6 +13,7 @@ import {
   Users,
   Target,
   Calendar as CalendarIcon,
+  CheckCircle,
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
@@ -480,13 +481,19 @@ export function ZenzaCalendar() {
           eventClick={handleEventClick}
           eventContent={(arg) => (
             <div
-              className="px-2 py-1 rounded-lg text-xs font-medium shadow"
+              className="relative px-2 py-1 rounded-lg text-xs font-medium shadow"
               style={{
                 backgroundColor: arg.event.backgroundColor,
                 border: `1px solid ${arg.event.borderColor}`,
                 color: arg.event.textColor,
               }}
             >
+              {arg.event.extendedProps?.completed && (
+                <div className="absolute -top-1 -right-1 flex items-center gap-1 bg-white/80 rounded-full px-1 text-green-600">
+                  <CheckCircle className="w-3 h-3" />
+                  <span className="text-[10px]">Completed</span>
+                </div>
+              )}
               <span>{arg.timeText}</span>
               <div>{arg.event.title}</div>
             </div>
