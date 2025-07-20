@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
+import { OnboardingModal } from "../onboarding/OnboardingModal";
 
 type DashboardTab =
   | "calendar"
@@ -239,6 +240,7 @@ export function Dashboard() {
       >
         <div className="p-6">{renderContent()}</div>
       </div>
+      <OnboardingModal />
       <MailingListPrompt />
     </div>
   );
