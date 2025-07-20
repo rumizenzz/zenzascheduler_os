@@ -74,6 +74,19 @@ This file tracks project progress and upcoming tasks.
 - Added custom_sound_path property to calendar events for personalized alarm sounds.
 - Added install guide, onboarding screens and service worker based notifications with a test alarm.
 - Fixed TypeScript build errors for PWA install prompt and service worker types.
+- Added swirling entrance animation with richer chime chord for dreamlike appeal.
+- Introduced Vitest with a basic utility test and stricter ESLint rules.
+- Documented Netlify deployment steps to run lint and tests before building.
+- Implemented scripture and conference note tracking module for daily spiritual study.
+- Added Supabase tables for storing scripture and conference notes.
+- Extended spiritual study with hymn and gratitude tracking.
+- Created Supabase tables for hymn_notes and gratitude_notes.
+- Added full scripture text support and old scroll styling with daily discipleship reflections.
+- Fixed build failure by including `custom_sound_path` in calendar event types.
+- Fixed CalendarEvent typing for custom alarm paths to resolve TypeScript build error.
+- Added swirling entrance animation with richer chime chord for dreamlike appeal.
+- Introduced Vitest with a basic utility test and stricter ESLint rules.
+- Documented Netlify deployment steps to run lint and tests before building.
 
 ## Next Steps
 
@@ -93,6 +106,5 @@ This file tracks project progress and upcoming tasks.
 
 ## Improvement Ideas
 
-- Ensure entrance animations and audio meet the design philosophy.
-- Expand tests and lint rules for higher code quality.
-- Document additional deployment steps as they are discovered.
+(add any new ideas here)
+
