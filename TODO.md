@@ -33,6 +33,9 @@ This file tracks project progress and upcoming tasks.
 - Calendar events now convert timestamps to Date objects and FullCalendar uses
   explicit `timeZone="local"` to ensure no offset issues.
 - Updated calendar event types to accept `Date` objects, resolving TypeScript build error.
+- Added modal forms to Life Logistics so addresses, vehicles, jobs, and businesses can be added and edited.
+- Fixed Life Logistics forms to use column names from the database schema.
+- Removed obsolete `is_primary` field from Life Logistics address forms.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
@@ -69,6 +72,9 @@ This file tracks project progress and upcoming tasks.
 - Removed Mixkit alarm audio files from the repo and documented manual download steps.
 - Renamed builtin alarm options and allowed naming custom uploads.
 - Fixed CalendarEvent typing for custom alarm paths to resolve TypeScript build error.
+- Added swirling entrance animation with richer chime chord for dreamlike appeal.
+- Introduced Vitest with a basic utility test and stricter ESLint rules.
+- Documented Netlify deployment steps to run lint and tests before building.
 
 ## Next Steps
 
@@ -88,6 +94,5 @@ This file tracks project progress and upcoming tasks.
 
 ## Improvement Ideas
 
-- Ensure entrance animations and audio meet the design philosophy.
-- Expand tests and lint rules for higher code quality.
-- Document additional deployment steps as they are discovered.
+(add any new ideas here)
+
