@@ -3,23 +3,33 @@ import { useAuth } from '@/contexts/AuthContext'
 import {
   supabase,
   ScriptureNote,
-  ConferenceNote
+  ConferenceNote,
+  HymnNote,
+  GratitudeNote
 } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import dayjs from 'dayjs'
-import { BookOpen, Video } from 'lucide-react'
+import { BookOpen, Video, Music, Heart } from 'lucide-react'
 
 export function SpiritualModule() {
   const { user } = useAuth()
   const [scriptureNotes, setScriptureNotes] = useState<ScriptureNote[]>([])
   const [conferenceNotes, setConferenceNotes] = useState<ConferenceNote[]>([])
+  const [hymnNotes, setHymnNotes] = useState<HymnNote[]>([])
+  const [gratitudeNotes, setGratitudeNotes] = useState<GratitudeNote[]>([])
   const [loading, setLoading] = useState(true)
   const [showScriptureModal, setShowScriptureModal] = useState(false)
   const [showConferenceModal, setShowConferenceModal] = useState(false)
+  const [showHymnModal, setShowHymnModal] = useState(false)
+  const [showGratitudeModal, setShowGratitudeModal] = useState(false)
   const [todayScripture, setTodayScripture] = useState<ScriptureNote | null>(
     null
   )
   const [todayConference, setTodayConference] = useState<ConferenceNote | null>(
+    null
+  )
+  const [todayHymn, setTodayHymn] = useState<HymnNote | null>(null)
+  const [todayGratitude, setTodayGratitude] = useState<GratitudeNote | null>(
     null
   )
 
@@ -49,6 +59,22 @@ export function SpiritualModule() {
         .order('date', { ascending: false })
       setConferenceNotes(conferences || [])
       setTodayConference(conferences?.find(c => c.date === today) || null)
+
+      const { data: hymns } = await supabase
+        .from('hymn_notes')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('date', { ascending: false })
+      setHymnNotes(hymns || [])
+      setTodayHymn(hymns?.find(h => h.date === today) || null)
+
+      const { data: gratitude } = await supabase
+        .from('gratitude_notes')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('date', { ascending: false })
+      setGratitudeNotes(gratitude || [])
+      setTodayGratitude(gratitude?.find(g => g.date === today) || null)
     } catch (err: any) {
       toast.error('Failed to load notes: ' + err.message)
     } finally {
@@ -122,6 +148,69 @@ export function SpiritualModule() {
       setShowConferenceModal(false)
     } catch (e: any) {
       toast.error('Failed to save conference: ' + e.message)
+    }
+  }
+
+  const saveHymn = async (hymn: string, feeling: string) => {
+    if (!user) return
+    const today = dayjs().format('YYYY-MM-DD')
+    const payload = {
+      user_id: user.id,
+      date: today,
+      hymn: hymn.trim(),
+      feeling: feeling.trim() || null,
+      updated_at: new Date().toISOString()
+    }
+    try {
+      if (todayHymn) {
+        const { error } = await supabase
+          .from('hymn_notes')
+          .update(payload)
+          .eq('id', todayHymn.id)
+        if (error) throw error
+        toast.success('Hymn updated')
+      } else {
+        const { error } = await supabase
+          .from('hymn_notes')
+          .insert({ ...payload, created_at: new Date().toISOString() })
+        if (error) throw error
+        toast.success('Hymn saved')
+      }
+      await loadNotes()
+      setShowHymnModal(false)
+    } catch (e: any) {
+      toast.error('Failed to save hymn: ' + e.message)
+    }
+  }
+
+  const saveGratitude = async (content: string) => {
+    if (!user) return
+    const today = dayjs().format('YYYY-MM-DD')
+    const payload = {
+      user_id: user.id,
+      date: today,
+      content: content.trim(),
+      updated_at: new Date().toISOString()
+    }
+    try {
+      if (todayGratitude) {
+        const { error } = await supabase
+          .from('gratitude_notes')
+          .update(payload)
+          .eq('id', todayGratitude.id)
+        if (error) throw error
+        toast.success('Gratitude updated')
+      } else {
+        const { error } = await supabase
+          .from('gratitude_notes')
+          .insert({ ...payload, created_at: new Date().toISOString() })
+        if (error) throw error
+        toast.success('Gratitude saved')
+      }
+      await loadNotes()
+      setShowGratitudeModal(false)
+    } catch (e: any) {
+      toast.error('Failed to save gratitude: ' + e.message)
     }
   }
 
@@ -222,11 +311,11 @@ export function SpiritualModule() {
           </div>
         )}
 
-        {conferenceNotes.length > 0 && (
-          <div className="card-floating p-4">
-            <h3 className="text-lg font-medium text-gray-800 mb-4">
-              Past Conferences
-            </h3>
+      {conferenceNotes.length > 0 && (
+        <div className="card-floating p-4">
+          <h3 className="text-lg font-medium text-gray-800 mb-4">
+            Past Conferences
+          </h3>
             <div className="space-y-4">
               {conferenceNotes.map(note => (
                 <div key={note.id} className="p-3 bg-gray-50 rounded-xl">
@@ -249,6 +338,88 @@ export function SpiritualModule() {
         )}
       </div>
 
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
+            <Music className="w-8 h-8 text-green-500" />
+            Hymns Sung
+          </h1>
+          <button onClick={() => setShowHymnModal(true)} className="btn-dreamy-primary">
+            {todayHymn ? 'Update Today' : 'Add Today'}
+          </button>
+        </div>
+
+        {todayHymn ? (
+          <div className="card-floating p-4">
+            <h3 className="font-medium text-gray-800 mb-1">{todayHymn.hymn}</h3>
+            {todayHymn.feeling && (
+              <p className="text-gray-700 whitespace-pre-line">{todayHymn.feeling}</p>
+            )}
+          </div>
+        ) : (
+          <div className="card-floating p-4 text-center">
+            <p className="text-gray-600">No hymn logged for today</p>
+          </div>
+        )}
+
+        {hymnNotes.length > 0 && (
+          <div className="card-floating p-4">
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Past Hymns</h3>
+            <div className="space-y-4">
+              {hymnNotes.map(note => (
+                <div key={note.id} className="p-3 bg-gray-50 rounded-xl">
+                  <div className="text-sm text-gray-600 mb-1">
+                    {dayjs(note.date).format('MMM D, YYYY')}
+                  </div>
+                  <h4 className="font-medium text-gray-800">{note.hymn}</h4>
+                  {note.feeling && (
+                    <p className="text-gray-700 mt-1 whitespace-pre-line">{note.feeling}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
+            <Heart className="w-8 h-8 text-red-500" />
+            Gratitude
+          </h1>
+          <button onClick={() => setShowGratitudeModal(true)} className="btn-dreamy-primary">
+            {todayGratitude ? 'Update Today' : 'Add Today'}
+          </button>
+        </div>
+
+        {todayGratitude ? (
+          <div className="card-floating p-4">
+            <p className="text-gray-700 whitespace-pre-line">{todayGratitude.content}</p>
+          </div>
+        ) : (
+          <div className="card-floating p-4 text-center">
+            <p className="text-gray-600">No gratitude logged for today</p>
+          </div>
+        )}
+
+        {gratitudeNotes.length > 0 && (
+          <div className="card-floating p-4">
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Past Gratitude</h3>
+            <div className="space-y-4">
+              {gratitudeNotes.map(note => (
+                <div key={note.id} className="p-3 bg-gray-50 rounded-xl">
+                  <div className="text-sm text-gray-600 mb-1">
+                    {dayjs(note.date).format('MMM D, YYYY')}
+                  </div>
+                  <p className="text-gray-700">{note.content}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
       {showScriptureModal && (
         <ScriptureModal
           isOpen={showScriptureModal}
@@ -264,6 +435,24 @@ export function SpiritualModule() {
           onClose={() => setShowConferenceModal(false)}
           onSave={saveConference}
           existing={todayConference}
+        />
+      )}
+
+      {showHymnModal && (
+        <HymnModal
+          isOpen={showHymnModal}
+          onClose={() => setShowHymnModal(false)}
+          onSave={saveHymn}
+          existing={todayHymn}
+        />
+      )}
+
+      {showGratitudeModal && (
+        <GratitudeModal
+          isOpen={showGratitudeModal}
+          onClose={() => setShowGratitudeModal(false)}
+          onSave={saveGratitude}
+          existing={todayGratitude}
         />
       )}
     </div>
@@ -419,6 +608,136 @@ function ConferenceModal({
               value={notes}
               onChange={e => setNotes(e.target.value)}
               className="input-dreamy w-full h-32 resize-none"
+            />
+          </div>
+          <div className="flex justify-end gap-3">
+            <button type="button" onClick={onClose} className="btn-dreamy">
+              Cancel
+            </button>
+            <button type="submit" className="btn-dreamy-primary">
+              {existing ? 'Update' : 'Save'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+interface HymnModalProps {
+  isOpen: boolean
+  onClose: () => void
+  onSave: (hymn: string, feeling: string) => void
+  existing?: HymnNote | null
+}
+
+function HymnModal({ isOpen, onClose, onSave, existing }: HymnModalProps) {
+  const [hymn, setHymn] = useState(existing?.hymn || '')
+  const [feeling, setFeeling] = useState(existing?.feeling || '')
+
+  if (!isOpen) return null
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!hymn.trim()) {
+      toast.error('Enter a hymn')
+      return
+    }
+    onSave(hymn, feeling)
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6 space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-medium text-gray-800">
+            {existing ? 'Update' : 'Add'} Today's Hymn
+          </h2>
+          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-full">
+            ×
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="hymnTitle" className="text-sm font-medium text-gray-700">
+              Hymn
+            </label>
+            <input
+              id="hymnTitle"
+              value={hymn}
+              onChange={e => setHymn(e.target.value)}
+              className="input-dreamy w-full"
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="hymnFeeling" className="text-sm font-medium text-gray-700">
+              How did it make you feel?
+            </label>
+            <textarea
+              id="hymnFeeling"
+              value={feeling}
+              onChange={e => setFeeling(e.target.value)}
+              className="input-dreamy w-full h-32 resize-none"
+            />
+          </div>
+          <div className="flex justify-end gap-3">
+            <button type="button" onClick={onClose} className="btn-dreamy">
+              Cancel
+            </button>
+            <button type="submit" className="btn-dreamy-primary">
+              {existing ? 'Update' : 'Save'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+interface GratitudeModalProps {
+  isOpen: boolean
+  onClose: () => void
+  onSave: (content: string) => void
+  existing?: GratitudeNote | null
+}
+
+function GratitudeModal({ isOpen, onClose, onSave, existing }: GratitudeModalProps) {
+  const [content, setContent] = useState(existing?.content || '')
+
+  if (!isOpen) return null
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!content.trim()) {
+      toast.error('Enter what you are grateful for')
+      return
+    }
+    onSave(content)
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6 space-y-6">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-medium text-gray-800">
+            {existing ? 'Update' : 'Add'} Gratitude
+          </h2>
+          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-full">
+            ×
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="gratitudeContent" className="text-sm font-medium text-gray-700">
+              What are you grateful for?
+            </label>
+            <textarea
+              id="gratitudeContent"
+              value={content}
+              onChange={e => setContent(e.target.value)}
+              className="input-dreamy w-full h-32 resize-none"
+              required
             />
           </div>
           <div className="flex justify-end gap-3">

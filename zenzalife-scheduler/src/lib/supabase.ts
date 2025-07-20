@@ -105,6 +105,25 @@ export type ConferenceNote = {
   updated_at?: string
 }
 
+export type HymnNote = {
+  id: string
+  user_id: string
+  date: string
+  hymn: string
+  feeling?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type GratitudeNote = {
+  id: string
+  user_id: string
+  date: string
+  content: string
+  created_at?: string
+  updated_at?: string
+}
+
 // Helper functions
 export async function getCurrentUser() {
   const {
