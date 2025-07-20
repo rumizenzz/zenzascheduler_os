@@ -74,6 +74,7 @@ This file tracks project progress and upcoming tasks.
 - Added swirling entrance animation with richer chime chord for dreamlike appeal.
 - Introduced Vitest with a basic utility test and stricter ESLint rules.
 - Documented Netlify deployment steps to run lint and tests before building.
+- Added clear "Completed" indicator with a green check for finished tasks on the calendar.
 - Implemented scripture and conference note tracking module for daily spiritual study.
 - Added Supabase tables for storing scripture and conference notes.
 - Extended spiritual study with hymn and gratitude tracking.
