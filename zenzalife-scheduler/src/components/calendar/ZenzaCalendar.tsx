@@ -525,6 +525,9 @@ export function ZenzaCalendar() {
                     className="w-4 h-4"
                   />
                 )}
+                <span>
+                  {categoryIcons[arg.event.extendedProps?.category || 'default']}
+                </span>
                 <span>{arg.event.title}</span>
               </div>
             </div>

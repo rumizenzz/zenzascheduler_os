@@ -88,6 +88,7 @@ This file tracks project progress and upcoming tasks.
 - Detects when running in standalone mode and informs the user.
 - SVG icons added to the manifest for proper home screen branding.
 - Configured the Apple touch icon to reference the SVG so iPhones show the Vanilla Sky icon.
+- Updated the PWA manifest to use `sizes: "any"` so the SVG icon reliably displays on mobile.
 - Onboarding recommends enabling background refresh on iOS and disabling battery optimization on Android; alarms keep the screen awake.
 - Added visual guides showing where to enable Background App Refresh on iOS and disable Battery Optimization on Android.
 - Added swirling entrance animation with richer chime chord for dreamlike appeal.
@@ -112,6 +113,7 @@ This file tracks project progress and upcoming tasks.
 - Enabled pull-to-refresh on mobile with a "Swipe down to refresh" onboarding tip.
 - Refined calendar responsiveness with dynamic height and streamlined toolbar for flawless mobile viewing.
 - Added DoorDash and Uber Eats task categories with brand colors and SVG icons on the calendar.
+- Added DoorDash task category with emoji icon and color coding.
 
 ## Next Steps
 
@@ -129,6 +131,7 @@ This file tracks project progress and upcoming tasks.
 - Habit, affirmation, and logistics tracking modules
 - 1% growth dashboard and analytics
 
+- Added Supabase tables and dashboard module for ancestor and temple work tracking.
 ## Improvement Ideas
 
 (add any new ideas here)

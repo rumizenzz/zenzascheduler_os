@@ -25,7 +25,6 @@ const categories = [
   { value: 'doordash', label: 'DoorDash', color: '#ee2723' },
   { value: 'ubereats', label: 'Uber Eats', color: '#06c167' },
   { value: 'other', label: 'Other', color: '#6b7280' },
-]
 
 const repeatPatterns = [
   { value: 'none', label: 'No Repeat' },
@@ -189,7 +188,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                 >
                   {categories.map(cat => (
                     <option key={cat.value} value={cat.value}>
-                      {cat.label}
+                      {cat.icon} {cat.label}
                     </option>
                   ))}
                 </select>
