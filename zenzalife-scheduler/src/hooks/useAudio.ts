@@ -31,7 +31,8 @@ export function useAudio() {
     }
   }, [resumeContext])
 
-  const playAudio = useCallback((audioUrl: string, volume: number = 0.3) => {
+  const playAudio = useCallback(
+    (audioUrl: string, volume: number = 0.3, loop = false) => {
     try {
       resumeContext()
       // Stop any currently playing audio
@@ -43,6 +44,7 @@ export function useAudio() {
       // Create new audio instance
       audioRef.current = new Audio(audioUrl)
       audioRef.current.volume = volume
+      audioRef.current.loop = loop
       
       // Play with user interaction handling
       const playPromise = audioRef.current.play()
