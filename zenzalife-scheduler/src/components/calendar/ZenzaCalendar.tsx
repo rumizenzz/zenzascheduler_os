@@ -13,6 +13,7 @@ import {
   Users,
   Target,
   Calendar as CalendarIcon,
+  Check,
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
@@ -480,15 +481,29 @@ export function ZenzaCalendar() {
           eventClick={handleEventClick}
           eventContent={(arg) => (
             <div
-              className="px-2 py-1 rounded-lg text-xs font-medium shadow"
+              className={`px-2 py-1 rounded-lg text-xs font-medium shadow flex items-center gap-2 ${
+                arg.event.extendedProps?.completed ? "opacity-80" : ""
+              }`}
               style={{
                 backgroundColor: arg.event.backgroundColor,
                 border: `1px solid ${arg.event.borderColor}`,
                 color: arg.event.textColor,
               }}
             >
+              {arg.event.extendedProps?.completed && (
+                <span className="flex items-center gap-1 text-green-600 font-semibold">
+                  <Check className="w-3 h-3" />
+                  Completed
+                </span>
+              )}
               <span>{arg.timeText}</span>
-              <div>{arg.event.title}</div>
+              <div
+                className={
+                  arg.event.extendedProps?.completed ? "line-through" : undefined
+                }
+              >
+                {arg.event.title}
+              </div>
             </div>
           )}
           height="600px"
