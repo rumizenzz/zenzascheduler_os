@@ -7,6 +7,8 @@ This file tracks project progress and upcoming tasks.
 - Added `netlify.toml` to configure build settings and SPA redirects.
 
 ## Latest Updates
+- Added functional modal forms in the Life Logistics module so addresses,
+  vehicles, jobs and businesses can be added or edited.
 - Added `.env.example` for local development credentials.
 - Implemented income tracking module to log job and business earnings.
 - Clarified Netlify environment variables in the README.
@@ -14,7 +16,9 @@ This file tracks project progress and upcoming tasks.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.
- - Added custom confirmation email Netlify function using IONOS and confirmation
+- Fixed TypeScript checkbox handling in Life Logistics forms to restore Netlify
+  build.
+- Added custom confirmation email Netlify function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
 - Created unsubscribe edge function and page with mailing list table documentation.
