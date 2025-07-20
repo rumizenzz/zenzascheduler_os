@@ -11,6 +11,8 @@ This file tracks project progress and upcoming tasks.
 
 - Added `.env.example` for local development credentials.
 - Implemented income tracking module to log job and business earnings.
+- Added income entry modal with automatic totals for a complete tracker.
+- Expanded income tracker with editing, deletion, filters and charts for comprehensive tracking.
 - Clarified Netlify environment variables in the README.
 - Introduced Netlify configuration file for easier setup.
 - Added runtime check for missing Supabase environment variables.
