@@ -96,8 +96,8 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     onSave({
       title: formData.title.trim(),
       category: formData.category,
-      start_time: formData.start_time,
-      end_time: formData.end_time || null,
+      start_time: dayjs(formData.start_time).format('YYYY-MM-DDTHH:mm:ssZ'),
+      end_time: formData.end_time ? dayjs(formData.end_time).format('YYYY-MM-DDTHH:mm:ssZ') : null,
       repeat_pattern: formData.repeat_pattern,
       alarm: formData.alarm,
       visibility: formData.visibility,
