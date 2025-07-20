@@ -7,6 +7,7 @@ import { FamilyModule } from "./FamilyModule";
 import { LifeLogistics } from "./LifeLogistics";
 import { GarbageModule } from "./GarbageModule";
 import { SettingsModule } from "./SettingsModule";
+import { ScheduleProgress } from "./ScheduleProgress";
 import {
   Calendar,
   TrendingUp,
@@ -240,6 +241,7 @@ export function Dashboard() {
         <div className="p-6">{renderContent()}</div>
       </div>
       <MailingListPrompt />
+      <ScheduleProgress />
     </div>
   );
 }

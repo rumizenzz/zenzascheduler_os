@@ -9,6 +9,8 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 
+- Introduced schedule progress widget with analog clock, countdown, and focus mode.
+
 - Added `.env.example` for local development credentials.
 - Implemented income tracking module to log job and business earnings.
 - Added income entry modal with automatic totals for a complete tracker.
