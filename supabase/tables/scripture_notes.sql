@@ -3,6 +3,8 @@ CREATE TABLE scripture_notes (
     user_id UUID NOT NULL,
     date DATE NOT NULL,
     scripture VARCHAR(255) NOT NULL,
+    book VARCHAR(255),
+    version VARCHAR(50),
     full_text TEXT,
     notes TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

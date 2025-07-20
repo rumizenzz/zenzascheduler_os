@@ -12,6 +12,7 @@ import {
 import { toast } from 'react-hot-toast'
 import dayjs from 'dayjs'
 import { BookOpen, Video, Music, Heart, Sparkles } from 'lucide-react'
+import { bookOfMormonScriptures } from '@/data/bookOfMormon'
 
 interface FamilySelectModalProps {
   isOpen: boolean
@@ -160,13 +161,21 @@ export function SpiritualModule() {
     }
   }
 
-  const saveScripture = async (scripture: string, fullText: string, notes: string) => {
+  const saveScripture = async (
+    scripture: string,
+    fullText: string,
+    notes: string,
+    book: string,
+    version: string
+  ) => {
     if (!user || !isOwnNotes) return
     const today = dayjs().format('YYYY-MM-DD')
     const payload = {
       user_id: user.id,
       date: today,
       scripture: scripture.trim(),
+      book: book.trim() || null,
+      version: version.trim() || null,
       full_text: fullText.trim() || null,
       notes: notes.trim() || null,
       updated_at: new Date().toISOString()
@@ -659,7 +668,13 @@ export function SpiritualModule() {
 interface ScriptureModalProps {
   isOpen: boolean
   onClose: () => void
-  onSave: (scripture: string, fullText: string, notes: string) => void
+  onSave: (
+    scripture: string,
+    fullText: string,
+    notes: string,
+    book: string,
+    version: string
+  ) => void
   existing?: ScriptureNote | null
 }
 
@@ -672,6 +687,19 @@ function ScriptureModal({
   const [scripture, setScripture] = useState(existing?.scripture || '')
   const [fullText, setFullText] = useState(existing?.full_text || '')
   const [notes, setNotes] = useState(existing?.notes || '')
+  const [book, setBook] = useState(existing?.book || 'The Bible')
+  const [customBook, setCustomBook] = useState('')
+  const [version, setVersion] = useState(existing?.version || '')
+  const [useCustomRef, setUseCustomRef] = useState(book !== 'Book of Mormon')
+
+  const bookOptions = [
+    'The Bible',
+    'Book of Mormon',
+    'Doctrine and Covenants',
+    'Pearl of Great Price',
+    'Other'
+  ]
+  const versionOptions = ['KJV', 'NKJV', 'NIV', 'ESV', 'NASB']
 
   if (!isOpen) return null
 
@@ -681,7 +709,11 @@ function ScriptureModal({
       toast.error('Enter scripture reference')
       return
     }
-    onSave(scripture, fullText, notes)
+    if (book === 'Other' && !customBook.trim()) {
+      toast.error('Enter book name')
+      return
+    }
+    onSave(scripture, fullText, notes, book === 'Other' ? customBook : book, version)
   }
 
   return (
@@ -697,17 +729,91 @@ function ScriptureModal({
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="scriptureRef" className="text-sm font-medium text-gray-700">
-              Scripture
+            <label htmlFor="scriptureBook" className="text-sm font-medium text-gray-700">
+              Book
             </label>
-            <input
-              id="scriptureRef"
-              value={scripture}
-              onChange={e => setScripture(e.target.value)}
+            <select
+              id="scriptureBook"
+              value={book}
+              onChange={e => {
+                setBook(e.target.value)
+                setUseCustomRef(e.target.value !== 'Book of Mormon')
+              }}
               className="input-dreamy w-full"
-              placeholder="John 3:16"
-              required
-            />
+            >
+              {bookOptions.map(b => (
+                <option key={b} value={b}>
+                  {b}
+                </option>
+              ))}
+            </select>
+            {book === 'Other' && (
+              <input
+                className="input-dreamy w-full mt-2"
+                value={customBook}
+                onChange={e => setCustomBook(e.target.value)}
+                placeholder="Enter book name"
+              />
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="scriptureVersion" className="text-sm font-medium text-gray-700">
+              Version
+            </label>
+            <select
+              id="scriptureVersion"
+              value={version}
+              onChange={e => setVersion(e.target.value)}
+              className="input-dreamy w-full"
+            >
+              <option value="">Select version</option>
+              {versionOptions.map(v => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="scriptureRef" className="text-sm font-medium text-gray-700">
+              Scripture Reference
+            </label>
+            {book === 'Book of Mormon' && !useCustomRef ? (
+              <select
+                id="scriptureRef"
+                value={scripture}
+                onChange={e => {
+                  if (e.target.value === '__custom__') {
+                    setUseCustomRef(true)
+                    setScripture('')
+                  } else {
+                    setScripture(e.target.value)
+                    const match = bookOfMormonScriptures.find(s => s.reference === e.target.value)
+                    if (match) setFullText(match.text)
+                  }
+                }}
+                className="input-dreamy w-full"
+              >
+                <option value="">Select reference</option>
+                {bookOfMormonScriptures.map(s => (
+                  <option key={s.reference} value={s.reference}>
+                    {s.reference}
+                  </option>
+                ))}
+                <option value="__custom__">Other...</option>
+              </select>
+            ) : (
+              <input
+                id="scriptureRef"
+                value={scripture}
+                onChange={e => setScripture(e.target.value)}
+                className="input-dreamy w-full"
+                placeholder="John 3:16"
+                required
+              />
+            )}
           </div>
           <div className="space-y-2">
             <label htmlFor="scriptureText" className="text-sm font-medium text-gray-700">
