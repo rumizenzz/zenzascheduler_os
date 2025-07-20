@@ -194,7 +194,7 @@ export function ZenzaCalendar() {
     );
   };
 
-
+  // Only DoorDash and Uber Eats use icons in the calendar
   const getCategoryColor = (category?: string, border = false) => {
     const colors: Record<string, { bg: string; border: string }> = {
       exercise: { bg: "#fef3c7", border: "#f59e0b" },
@@ -525,9 +525,6 @@ export function ZenzaCalendar() {
                     className="w-4 h-4"
                   />
                 )}
-                <span>
-                  {categoryIcons[arg.event.extendedProps?.category || 'default']}
-                </span>
                 <span>{arg.event.title}</span>
               </div>
             </div>
