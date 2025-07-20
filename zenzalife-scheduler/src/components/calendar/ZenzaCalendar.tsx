@@ -373,10 +373,10 @@ export function ZenzaCalendar() {
             </div>
           )}
           height="600px"
-          slotMinTime="06:00:00"
+          slotMinTime="05:00:00"
           slotMaxTime="23:00:00"
           slotDuration="00:30:00"
-          scrollTime="07:00:00"
+          scrollTime="06:00:00"
           eventDisplay="block"
           eventBackgroundColor="transparent"
           eventBorderColor="transparent"
