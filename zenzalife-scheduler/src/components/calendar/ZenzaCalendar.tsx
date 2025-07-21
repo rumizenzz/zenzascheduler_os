@@ -5,15 +5,18 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import dayjs from "dayjs";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase, Task, User } from "@/lib/supabase";
+import { supabase, Task, User, TaskHistory } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import {
   Plus,
+  Undo2,
+  Redo2,
   Clock,
   Users,
   Target,
   Calendar as CalendarIcon,
   CheckCircle,
+  Trash,
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
@@ -93,6 +96,8 @@ export function ZenzaCalendar() {
   const [activeAlarm, setActiveAlarm] = useState<CalendarEvent | null>(null);
   const triggeredRef = useRef<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
+  const [history, setHistory] = useState<TaskHistory[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(0);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -104,6 +109,7 @@ export function ZenzaCalendar() {
   useEffect(() => {
     if (user) {
       loadTasks();
+      loadHistory();
     }
   }, [user, viewUser]);
 
@@ -129,8 +135,8 @@ export function ZenzaCalendar() {
     return () => clearInterval(interval);
   }, [events]);
 
-  const loadTasks = async () => {
-    if (!user) return;
+  const loadTasks = async (): Promise<Task[]> => {
+    if (!user) return [];
     const targetId = viewUser ? viewUser.id : user.id;
 
     setLoading(true);
@@ -145,8 +151,10 @@ export function ZenzaCalendar() {
 
       setTasks(data || []);
       setEvents(convertTasksToEvents(data || []));
+      return data || [];
     } catch (error: any) {
       toast.error("Failed to load tasks: " + error.message);
+      return [];
     } finally {
       setLoading(false);
     }
@@ -165,6 +173,29 @@ export function ZenzaCalendar() {
     } catch (error: any) {
       toast.error('Failed to load family members: ' + error.message);
     }
+  };
+
+  const loadHistory = async () => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from('task_history')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
+    if (!error && data) {
+      setHistory(data as TaskHistory[]);
+      setHistoryIndex(0);
+    }
+  };
+
+  const saveHistory = async (snapshot: Task[]) => {
+    if (!user) return;
+    await supabase.from('task_history').insert({
+      user_id: user.id,
+      task_data: snapshot,
+      created_at: new Date().toISOString(),
+    });
+    await loadHistory();
   };
 
   const convertTasksToEvents = (tasks: Task[]): CalendarEvent[] => {
@@ -286,7 +317,8 @@ export function ZenzaCalendar() {
         toast.success("Task created successfully!");
       }
 
-      await loadTasks();
+      const updated = await loadTasks();
+      await saveHistory(updated);
       setShowTaskModal(false);
       setSelectedTask(null);
       setSelectedDate(null);
@@ -303,7 +335,8 @@ export function ZenzaCalendar() {
       if (error) throw error;
 
       toast.success("Task deleted successfully!");
-      await loadTasks();
+      const updated = await loadTasks();
+      await saveHistory(updated);
       setShowTaskModal(false);
       setSelectedTask(null);
     } catch (error: any) {
@@ -426,10 +459,109 @@ export function ZenzaCalendar() {
       if (error) throw error;
 
       toast.success("Default schedule applied successfully!");
-      await loadTasks();
+      const updated = await loadTasks();
+      await saveHistory(updated);
     } catch (error: any) {
       toast.error("Failed to apply default schedule: " + error.message);
     }
+  };
+
+  const shiftDaySchedule = async (date: string, newStart: string) => {
+    if (!user || !isOwnCalendar) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('user_id', user.id)
+        .gte('start_time', `${date}T00:00:00`)
+        .lt('start_time', `${date}T23:59:59`)
+        .order('start_time', { ascending: true });
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        toast('No tasks found for this date', { icon: 'ℹ️' });
+        return;
+      }
+
+      const oldStart = dayjs(data[0].start_time);
+      const newStartTime = dayjs(`${date}T${newStart}`);
+      const diff = newStartTime.diff(oldStart, 'minute');
+
+      await Promise.all(
+        data.map((t) =>
+          supabase
+            .from('tasks')
+            .update({
+              start_time: dayjs(t.start_time)
+                .add(diff, 'minute')
+                .format('YYYY-MM-DDTHH:mm:ssZ'),
+              end_time: t.end_time
+                ? dayjs(t.end_time)
+                    .add(diff, 'minute')
+                    .format('YYYY-MM-DDTHH:mm:ssZ')
+                : null,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', t.id)
+        )
+      );
+
+      toast.success('Schedule shifted successfully!');
+      const updated = await loadTasks();
+      await saveHistory(updated);
+    } catch (err: any) {
+      toast.error('Failed to shift schedule: ' + err.message);
+    }
+  };
+
+  const deleteDaySchedule = async (date: string) => {
+    if (!user || !isOwnCalendar) return;
+    const confirmText = prompt(
+      'Type DELETE-ALL-TASKS to remove all tasks for this day'
+    );
+    if (confirmText !== 'DELETE-ALL-TASKS') {
+      toast('Deletion cancelled');
+      return;
+    }
+    await supabase
+      .from('tasks')
+      .delete()
+      .eq('user_id', user.id)
+      .gte('start_time', `${date}T00:00:00`)
+      .lt('start_time', `${date}T23:59:59`);
+    const updated = await loadTasks();
+    await saveHistory(updated);
+    toast.success('All tasks deleted');
+  };
+
+  const undo = async () => {
+    if (historyIndex >= history.length - 1) {
+      toast('Nothing to undo');
+      return;
+    }
+    const snapshot = history[historyIndex + 1];
+    await supabase.from('tasks').delete().eq('user_id', user!.id);
+    if (snapshot.task_data.length) {
+      await supabase.from('tasks').insert(snapshot.task_data);
+    }
+    setHistoryIndex(historyIndex + 1);
+    await loadTasks();
+  };
+
+  const redo = async () => {
+    if (historyIndex === 0) {
+      toast('Nothing to redo');
+      return;
+    }
+    const snapshot = history[historyIndex - 1];
+    await supabase.from('tasks').delete().eq('user_id', user!.id);
+    if (snapshot.task_data.length) {
+      await supabase.from('tasks').insert(snapshot.task_data);
+    }
+    setHistoryIndex(historyIndex - 1);
+    await loadTasks();
   };
 
   if (loading) {
@@ -477,6 +609,30 @@ export function ZenzaCalendar() {
               >
                 <Plus className="w-4 h-4" />
                 Add Task
+              </button>
+
+              <button
+                onClick={undo}
+                className="btn-dreamy flex items-center gap-2"
+              >
+                <Undo2 className="w-4 h-4" />
+                Undo
+              </button>
+
+              <button
+                onClick={redo}
+                className="btn-dreamy flex items-center gap-2"
+              >
+                <Redo2 className="w-4 h-4" />
+                Redo
+              </button>
+
+              <button
+                onClick={() => deleteDaySchedule(dayjs().format('YYYY-MM-DD'))}
+                className="btn-dreamy text-red-600 border-red-200 hover:bg-red-50 flex items-center gap-2"
+              >
+                <Trash className="w-4 h-4" />
+                Delete Today
               </button>
 
               <button

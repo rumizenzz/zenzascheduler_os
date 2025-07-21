@@ -44,6 +44,9 @@ This file tracks project progress and upcoming tasks.
 - Times now store the user's timezone offset to prevent 4 hour shift after saving.
 - Calendar events now convert timestamps to Date objects and FullCalendar uses
   explicit `timeZone="local"` to ensure no offset issues.
+- Fixed minute drift for tasks by saving timestamps in ISO UTC and converting
+  back to local time when editing.
+- Extended dayjs with the UTC plugin so `.local()` works and Netlify builds pass.
 - Updated calendar event types to accept `Date` objects, resolving TypeScript build error.
 - Added modal forms to Life Logistics so addresses, vehicles, jobs, and businesses can be added and edited.
 - Fixed Life Logistics forms to use column names from the database schema.
@@ -133,6 +136,9 @@ This file tracks project progress and upcoming tasks.
 - Extended calendar view to 5am so tasks can span past midnight.
 - Resolved TypeScript syntax errors in `Dashboard.tsx` and `main.tsx`.
 - Added shift-drag rescheduling with animated hint and mobile long-press support.
+- Added Android install instructions and unknown apps onboarding guide.
+- Added undo/redo history for the calendar with Supabase snapshots.
+- Secure delete button wipes a day's schedule only after typing "DELETE-ALL-TASKS".
 
 ## Next Steps
 
