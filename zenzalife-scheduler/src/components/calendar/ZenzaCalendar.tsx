@@ -147,8 +147,6 @@ export function ZenzaCalendar() {
     }
   }, [showMoveSuccess])
 
-  const loadTasks = async () => {
-    if (!user) return;
   const loadTasks = async (): Promise<Task[]> => {
     if (!user) return [];
     const targetId = viewUser ? viewUser.id : user.id;
@@ -275,33 +273,6 @@ export function ZenzaCalendar() {
       setSelectedTask(task);
       setSelectedDate(null);
       setShowTaskModal(true);
-    }
-  };
-
-  const handleEventDrop = async (info: any) => {
-    if (!isOwnCalendar) return;
-    if (!isMobile && !info.jsEvent?.shiftKey) {
-      info.revert();
-      toast('Hold Shift while dragging to reschedule');
-      return;
-    }
-    try {
-      const { error } = await supabase
-        .from('tasks')
-        .update({
-          start_time: dayjs(info.event.start).format('YYYY-MM-DDTHH:mm:ssZ'),
-          end_time: info.event.end
-            ? dayjs(info.event.end).format('YYYY-MM-DDTHH:mm:ssZ')
-            : null,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', info.event.id);
-      if (error) throw error;
-      toast.success('Task rescheduled');
-      await loadTasks();
-    } catch (err: any) {
-      info.revert();
-      toast.error('Failed to update task: ' + err.message);
     }
   };
 
@@ -543,6 +514,8 @@ export function ZenzaCalendar() {
     } catch (error: any) {
       toast.error('Failed to move schedule: ' + error.message);
     }
+  };
+
   const shiftDaySchedule = async (date: string, newStart: string) => {
     if (!user || !isOwnCalendar) return;
 
