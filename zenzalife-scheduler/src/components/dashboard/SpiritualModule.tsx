@@ -693,7 +693,7 @@ function ScriptureModal({
   const [useCustomRef, setUseCustomRef] = useState(book !== 'Book of Mormon')
 
   useEffect(() => {
-    if (book === 'Book of Mormon') {
+    if (book !== 'The Bible') {
       setVersion('')
     }
   }, [book])
@@ -764,7 +764,7 @@ function ScriptureModal({
             )}
           </div>
 
-          {book !== 'Book of Mormon' && (
+          {book === 'The Bible' && (
             <div className="space-y-2">
               <label htmlFor="scriptureVersion" className="text-sm font-medium text-gray-700">
                 Version
