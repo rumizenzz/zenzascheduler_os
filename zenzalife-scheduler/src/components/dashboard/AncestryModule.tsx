@@ -4,6 +4,7 @@ import { supabase, Ancestor } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import { TreePine, Plus, Check } from 'lucide-react'
 import { FamilyTreeMindMap } from './FamilyTreeMindMap'
+import { FamilyTreeView } from './FamilyTreeView'
 
 export function AncestryModule() {
   const { profile } = useAuth()
@@ -152,7 +153,7 @@ export function AncestryModule() {
         <p className="text-gray-600">No ancestors added yet.</p>
       )}
 
-      <FamilyTreeMindMap />
+      <FamilyTreeView profile={profile} />
 
       {showAddModal && (
         <AddAncestorModal
