@@ -110,6 +110,7 @@ export function ZenzaCalendar() {
   const [showMoveSuccess, setShowMoveSuccess] = useState(false);
   const [history, setHistory] = useState<TaskHistory[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
+  const [weekdayFilter, setWeekdayFilter] = useState('all');
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -649,6 +650,11 @@ export function ZenzaCalendar() {
     await loadTasks();
   };
 
+  const displayedEvents = events.filter((ev) => {
+    if (weekdayFilter === 'all') return true;
+    return dayjs(ev.start).format('dddd') === weekdayFilter;
+  });
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -744,6 +750,21 @@ export function ZenzaCalendar() {
                 <Users className="w-4 h-4" />
                 See Family Member's Calendar
               </button>
+
+              <select
+                value={weekdayFilter}
+                onChange={(e) => setWeekdayFilter(e.target.value)}
+                className="input-dreamy flex-shrink-0"
+              >
+                <option value="all">All Days</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+              </select>
             </>
           ) : (
             <button
@@ -778,7 +799,7 @@ export function ZenzaCalendar() {
           selectMirror={true}
           dayMaxEvents={true}
           weekends={true}
-          events={events}
+          events={displayedEvents}
           select={handleDateSelect}
           eventClick={handleEventClick}
           eventDrop={handleEventDrop}
