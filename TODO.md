@@ -134,6 +134,9 @@ This file tracks project progress and upcoming tasks.
 - Extended calendar view to 5am so tasks can span past midnight.
 - Resolved TypeScript syntax errors in `Dashboard.tsx` and `main.tsx`.
 - Added Android install instructions and unknown apps onboarding guide.
+- Added undo/redo history for the calendar with Supabase snapshots.
+- Secure delete button wipes a day's schedule only after typing "DELETE-ALL-TASKS".
+- Fixed drag-and-drop edits so moving or resizing tasks now updates history for undo/redo.
 
 ## Next Steps
 
