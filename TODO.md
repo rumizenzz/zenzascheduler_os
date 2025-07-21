@@ -199,6 +199,7 @@ This file tracks project progress and upcoming tasks.
 - Categories are editable and a reorder mode toggle makes moving items easier.
 - Redesigned calendar UI with polished ZenzaLife branding and responsive styles.
 - Added mind map style FamilyTree component to visualize ancestors.
+- Implemented Dark Mode theme with toggle in Appearance settings.
 
 ## Improvement Ideas
 
