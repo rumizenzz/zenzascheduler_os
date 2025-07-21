@@ -149,6 +149,7 @@ This file tracks project progress and upcoming tasks.
 - Fixed unclosed JSX in `ZenzaCalendar.tsx` after a merge mishap so Netlify builds succeed.
 - Prevented duplicate tasks from appearing by deduplicating schedules when loading the calendar.
 - Improved calendar toolbar with sticky action buttons, horizontal scrolling on mobile, and a floating Add Task button for quick scheduling.
+- Added weekday filter to view tasks for a selected day.
 
 ## Next Steps
 
