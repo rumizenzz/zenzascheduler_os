@@ -144,6 +144,7 @@ This file tracks project progress and upcoming tasks.
 - Secure delete button wipes a day's schedule only after typing "DELETE-ALL-TASKS".
 - Fixed drag-and-drop edits so moving or resizing tasks now updates history for undo/redo.
 - Fixed stray braces in `ZenzaCalendar.tsx` and undefined variable in `OnboardingModal.tsx` that broke the Netlify build.
+- Fixed unclosed JSX in `ZenzaCalendar.tsx` after a merge mishap so Netlify builds succeed.
 
 ## Next Steps
 
