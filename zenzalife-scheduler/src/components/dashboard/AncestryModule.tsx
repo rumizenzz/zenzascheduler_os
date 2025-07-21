@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase, Ancestor } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
-import { TreePine, Plus, Check } from 'lucide-react'
+import { TreePine, Plus, Check, Edit } from 'lucide-react'
 
 export function AncestryModule() {
   const { profile } = useAuth()
   const [ancestors, setAncestors] = useState<Ancestor[]>([])
   const [loading, setLoading] = useState(true)
   const [showAddModal, setShowAddModal] = useState(false)
+  const [editingAncestor, setEditingAncestor] = useState<Ancestor | null>(null)
 
   useEffect(() => {
     if (profile?.family_id) {
@@ -84,6 +85,35 @@ export function AncestryModule() {
     }
   }
 
+  const updateAncestor = async (
+    id: string,
+    name: string,
+    relation: string,
+    birthYear?: number,
+    deathYear?: number
+  ) => {
+    try {
+      const { data, error } = await supabase
+        .from('ancestors')
+        .update({
+          name,
+          relation,
+          birth_year: birthYear,
+          death_year: deathYear,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single()
+      if (error) throw error
+      setAncestors(prev => prev.map(a => (a.id === id ? data : a)))
+      toast.success('Ancestor updated!')
+      setEditingAncestor(null)
+    } catch (error: any) {
+      toast.error('Failed to update ancestor: ' + error.message)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -144,6 +174,12 @@ export function AncestryModule() {
                   'Mark Baptized'
                 )}
               </button>
+              <button
+                onClick={() => setEditingAncestor(ancestor)}
+                className="p-1 text-gray-500 hover:text-blue-500"
+              >
+                <Edit className="w-4 h-4" />
+              </button>
             </div>
           ))}
         </div>
@@ -156,6 +192,14 @@ export function AncestryModule() {
           isOpen={showAddModal}
           onClose={() => setShowAddModal(false)}
           onAdd={addAncestor}
+        />
+      )}
+      {editingAncestor && (
+        <EditAncestorModal
+          isOpen={true}
+          onClose={() => setEditingAncestor(null)}
+          ancestor={editingAncestor}
+          onSave={updateAncestor}
         />
       )}
     </div>
@@ -245,6 +289,110 @@ function AddAncestorModal({ isOpen, onClose, onAdd }: AddAncestorModalProps) {
               </button>
               <button type="submit" className="btn-dreamy-primary">
                 Add
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+interface EditAncestorModalProps {
+  isOpen: boolean
+  onClose: () => void
+  ancestor: Ancestor
+  onSave: (
+    id: string,
+    name: string,
+    relation: string,
+    birthYear?: number,
+    deathYear?: number
+  ) => void
+}
+
+function EditAncestorModal({
+  isOpen,
+  onClose,
+  ancestor,
+  onSave
+}: EditAncestorModalProps) {
+  const [name, setName] = useState(ancestor.name)
+  const [relation, setRelation] = useState(ancestor.relation || '')
+  const [birthYear, setBirthYear] = useState(
+    ancestor.birth_year ? String(ancestor.birth_year) : ''
+  )
+  const [deathYear, setDeathYear] = useState(
+    ancestor.death_year ? String(ancestor.death_year) : ''
+  )
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!name.trim()) {
+      toast.error('Please enter a name')
+      return
+    }
+    onSave(
+      ancestor.id,
+      name.trim(),
+      relation.trim(),
+      birthYear ? parseInt(birthYear) : undefined,
+      deathYear ? parseInt(deathYear) : undefined
+    )
+  }
+
+  if (!isOpen) return null
+
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md mx-4">
+        <div className="p-6 space-y-6">
+          <h2 className="text-2xl font-light text-gray-800">Edit Ancestor</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="input-dreamy w-full"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Relation</label>
+              <input
+                type="text"
+                value={relation}
+                onChange={(e) => setRelation(e.target.value)}
+                className="input-dreamy w-full"
+                placeholder="great-grandfather"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Birth Year</label>
+              <input
+                type="number"
+                value={birthYear}
+                onChange={(e) => setBirthYear(e.target.value)}
+                className="input-dreamy w-full"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Death Year (optional)</label>
+              <input
+                type="number"
+                value={deathYear}
+                onChange={(e) => setDeathYear(e.target.value)}
+                className="input-dreamy w-full"
+              />
+            </div>
+            <div className="flex justify-end gap-3 pt-4">
+              <button type="button" onClick={onClose} className="btn-dreamy">
+                Cancel
+              </button>
+              <button type="submit" className="btn-dreamy-primary">
+                Save
               </button>
             </div>
           </form>
