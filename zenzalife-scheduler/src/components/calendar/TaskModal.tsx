@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Task } from '@/lib/supabase'
+import { parseNaturalTask } from '@/lib/nlp'
 import { useAudio } from '@/hooks/useAudio'
 import { X, Clock, Tag, Bell, Users, Target, Trash2, CheckCircle } from 'lucide-react'
 import dayjs from 'dayjs'
@@ -146,6 +147,20 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     }
   }
 
+  const [quickInput, setQuickInput] = useState('')
+
+  const handleParseQuick = () => {
+    const parsed = parseNaturalTask(quickInput)
+    if (parsed) {
+      setFormData(prev => ({
+        ...prev,
+        title: parsed.title,
+        start_time: dayjs(parsed.start).format('YYYY-MM-DDTHH:mm'),
+        end_time: parsed.end ? dayjs(parsed.end).format('YYYY-MM-DDTHH:mm') : '',
+      }))
+    }
+  }
+
   if (!isOpen) return null
 
   return (
@@ -172,6 +187,21 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Quick Entry */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Quick Task Entry</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={quickInput}
+                  onChange={(e) => setQuickInput(e.target.value)}
+                  className="input-dreamy w-full"
+                  placeholder="Dentist at 2pm Friday"
+                />
+                <button type="button" onClick={handleParseQuick} className="btn-dreamy">Parse</button>
+              </div>
+            </div>
+
             {/* Title */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Task Title</label>
