@@ -56,16 +56,24 @@
   body {
     @apply bg-background text-foreground;
     font-family: "Inter", sans-serif;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: "Playfair Display", serif;
   }
 }
 
 /* Dreamlike Entrance Animations */
 @keyframes float-slow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
   33% {
@@ -77,7 +85,8 @@
 }
 
 @keyframes float-medium {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
   50% {
@@ -86,7 +95,8 @@
 }
 
 @keyframes float-slower {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
   25% {
@@ -98,7 +108,8 @@
 }
 
 @keyframes float-particle {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) scale(1) rotate(0deg);
     opacity: 0.4;
   }
@@ -133,11 +144,14 @@
 }
 
 @keyframes text-shimmer {
-  0%, 100% {
+  0%,
+  100% {
     text-shadow: 0 0 20px rgba(147, 197, 253, 0.3);
   }
   50% {
-    text-shadow: 0 0 30px rgba(196, 181, 253, 0.4), 0 0 40px rgba(147, 197, 253, 0.2);
+    text-shadow:
+      0 0 30px rgba(196, 181, 253, 0.4),
+      0 0 40px rgba(147, 197, 253, 0.2);
   }
 }
 
@@ -260,7 +274,6 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(147, 197, 253, 0.5);
-
 }
 /* Calendar toolbar improvements */
 .fc-header-toolbar {
@@ -273,4 +286,22 @@
 /* Floating action button */
 .fab-add-task {
   @apply fixed bottom-24 right-4 sm:bottom-6 sm:right-6 z-40 p-4 rounded-full bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 text-white shadow-xl hover:shadow-2xl active:scale-95 transition-transform;
+}
+
+/* ZenzaLife calendar polish */
+.fc-toolbar-title {
+  @apply font-light text-gray-700;
+  font-family: "Playfair Display", serif;
+}
+
+.fc-daygrid-day-number {
+  @apply font-medium text-gray-800;
+}
+
+.fc .fc-button-primary {
+  @apply bg-gradient-to-r from-green-600 to-blue-500 border-none text-white shadow hover:from-green-700 hover:to-blue-600;
+}
+
+.fc-event {
+  @apply rounded-lg border-none overflow-hidden;
 }
