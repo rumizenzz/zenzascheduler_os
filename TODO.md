@@ -185,6 +185,7 @@ This file tracks project progress and upcoming tasks.
 - Ancestor entries now support optional death year, displaying "1963-Present" when no death year is provided.
 - Redesigned calendar UI with polished ZenzaLife branding and responsive styles.
 - Added mind map style FamilyTree component to visualize ancestors.
+- Introduced zoomable FamilyTreeView with Supabase People and Relationships tables.
 
 ## Improvement Ideas
 

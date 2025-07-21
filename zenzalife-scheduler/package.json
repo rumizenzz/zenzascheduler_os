@@ -58,6 +58,7 @@
     "nodemailer": "^7.0.5",
     "pulltorefreshjs": "^0.1.22",
     "react": "^18.3.1",
+    "react-d3-tree": "^3.6.6",
     "react-day-picker": "8.10.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
