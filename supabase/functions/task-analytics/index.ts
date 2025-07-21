@@ -18,7 +18,7 @@ Deno.serve(async (req) => {
             throw new Error('User ID is required');
         }
 
-        const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+        const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_KEY');
         const supabaseUrl = Deno.env.get('SUPABASE_URL');
 
         if (!serviceRoleKey || !supabaseUrl) {
