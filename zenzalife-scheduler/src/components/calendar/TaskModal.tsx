@@ -14,6 +14,8 @@ interface TaskModalProps {
   onDelete?: () => void
   task?: Task | null
   initialDate?: string | null
+  showCompletedToggle?: boolean
+  initialCompleted?: boolean
 }
 
 const categories = [
@@ -54,7 +56,7 @@ const builtinAlarms = [
   { name: 'Surreal Ringtone', url: '/alarms/surreal-ringtone.mp3' }
 ]
 
-export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate }: TaskModalProps) {
+export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate, showCompletedToggle = false, initialCompleted = false }: TaskModalProps) {
   const [formData, setFormData] = useState({
     title: '',
     category: 'other',
@@ -65,7 +67,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
     visibility: 'private',
     notes: '',
-    completed: false
+    completed: initialCompleted
   })
   const { playAudio } = useAudio()
 
@@ -333,7 +335,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                 </div>
               )}
 
-              {task && (
+              {(task || showCompletedToggle) && (
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
