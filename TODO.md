@@ -31,6 +31,7 @@ This file tracks project progress and upcoming tasks.
 - Confirmation email edge function now stores new sign ups in the mailing list table.
 - Unsubscribe page includes instructions for re-subscribing.
 - Added login prompt asking users to join the mailing list if they aren't subscribed.
+- Replaced the popup with a persistent "Mailing List" button so it no longer appears on every login.
 - Refined mailing list prompt wording to remove explicit baby references.
 - Added SQL snippet in the README explaining how to create the mailing list table.
 - Fixed Netlify configuration parsing error by cleaning up netlify.toml
