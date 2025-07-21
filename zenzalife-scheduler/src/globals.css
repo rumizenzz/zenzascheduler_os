@@ -277,10 +277,10 @@
 }
 /* Calendar toolbar improvements */
 .fc-header-toolbar {
-  @apply sticky top-0 z-20 bg-white/80 backdrop-blur-md p-2 rounded-b-xl shadow;
+  @apply sticky top-0 z-20 bg-white/70 backdrop-blur-md p-2 rounded-b-xl shadow flex flex-wrap items-center gap-2;
 }
 .fc-header-toolbar .fc-button {
-  @apply px-4 py-2 rounded-full text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 active:scale-95 transition-all m-1;
+  @apply px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-primary to-secondary text-white hover:from-primary/80 hover:to-secondary/80 active:scale-95 transition-all m-1;
 }
 
 /* Floating action button */
@@ -290,20 +290,27 @@
 
 /* ZenzaLife calendar polish */
 .fc-toolbar-title {
-  @apply font-light text-gray-700;
-  font-family: "Playfair Display", serif;
+  @apply font-serif font-light text-gray-700 text-lg sm:text-2xl;
 }
 
 .fc-daygrid-day-number {
-  @apply font-medium text-gray-800;
+  @apply font-semibold text-gray-700;
 }
 
 .fc .fc-button-primary {
-  @apply bg-gradient-to-r from-green-600 to-blue-500 border-none text-white shadow hover:from-green-700 hover:to-blue-600;
+  @apply bg-gradient-to-r from-primary to-secondary border-none text-white shadow hover:from-primary/80 hover:to-secondary/80;
 }
 
 .fc-event {
-  @apply rounded-lg border-none overflow-hidden;
+  @apply rounded-xl border border-white/60 overflow-hidden shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md;
+}
+
+.calendar-event {
+  @apply relative flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium shadow border backdrop-blur-sm;
+}
+
+.event-preview {
+  @apply mt-0.5 w-full overflow-hidden whitespace-nowrap text-[10px] rounded px-1;
 }
 
 /* Grid layout for month/week events */
