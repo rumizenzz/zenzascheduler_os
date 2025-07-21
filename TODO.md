@@ -121,6 +121,7 @@ This file tracks project progress and upcoming tasks.
 - Display a "What did you learn today:" label before scripture and conference notes so they're not mistaken for scripture text.
 - Added book and version fields for scriptures with dropdown selection and sample Book of Mormon verses.
 - Hid version selector when the Book of Mormon is chosen since no editions exist.
+- Version dropdown now only appears for the Bible, since other books have no editions.
 - Enabled pull-to-refresh on mobile with a "Swipe down to refresh" onboarding tip.
 - Refined calendar responsiveness with dynamic height and streamlined toolbar for flawless mobile viewing.
 - Added DoorDash and Uber Eats task categories with brand colors and SVG icons on the calendar.
