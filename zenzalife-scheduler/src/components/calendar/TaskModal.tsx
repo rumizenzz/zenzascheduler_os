@@ -3,6 +3,9 @@ import { Task } from '@/lib/supabase'
 import { useAudio } from '@/hooks/useAudio'
 import { X, Clock, Tag, Bell, Users, Target, Trash2, CheckCircle } from 'lucide-react'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 interface TaskModalProps {
   isOpen: boolean
@@ -71,8 +74,12 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
       setFormData({
         title: task.title || '',
         category: task.category || 'other',
-        start_time: task.start_time ? dayjs(task.start_time).format('YYYY-MM-DDTHH:mm') : '',
-        end_time: task.end_time ? dayjs(task.end_time).format('YYYY-MM-DDTHH:mm') : '',
+        start_time: task.start_time
+          ? dayjs(task.start_time).local().format('YYYY-MM-DDTHH:mm')
+          : '',
+        end_time: task.end_time
+          ? dayjs(task.end_time).local().format('YYYY-MM-DDTHH:mm')
+          : '',
         repeat_pattern: task.repeat_pattern || 'none',
         alarm: task.alarm || false,
         custom_sound_path: task.custom_sound_path || localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
@@ -115,8 +122,8 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     onSave({
       title: formData.title.trim(),
       category: formData.category,
-      start_time: dayjs(formData.start_time).format('YYYY-MM-DDTHH:mm:ssZ'),
-      end_time: formData.end_time ? dayjs(formData.end_time).format('YYYY-MM-DDTHH:mm:ssZ') : null,
+      start_time: dayjs(formData.start_time).toISOString(),
+      end_time: formData.end_time ? dayjs(formData.end_time).toISOString() : null,
       repeat_pattern: formData.repeat_pattern,
       alarm: formData.alarm,
       custom_sound_path: formData.custom_sound_path,
