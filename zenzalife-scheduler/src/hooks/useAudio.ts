@@ -71,6 +71,12 @@ export function useAudio() {
     }
   }, [])
 
+  const setMuted = useCallback((muted: boolean) => {
+    if (audioRef.current) {
+      audioRef.current.muted = muted
+    }
+  }, [])
+
   const playEntranceSound = useCallback(() => {
     try {
       const audioContext = getContext()
@@ -137,6 +143,7 @@ export function useAudio() {
   return {
     playAudio,
     stopAudio,
-    playEntranceSound
+    playEntranceSound,
+    setMuted
   }
 }

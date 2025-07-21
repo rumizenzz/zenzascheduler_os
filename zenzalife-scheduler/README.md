@@ -132,6 +132,9 @@ replace them with your own sounds or select custom files from the Settings scree
 When uploading a custom alarm you can also specify a display name so it appears
 in the alarm sound dropdowns.
 
+## Star Canopy Background Track
+
+The "Family Legacy" view plays the emotional **Star Canopy** song from *The Croods: A New Age*. Download `star-canopy.mp3` separately and place it in `zenzalife-scheduler/public/audio`. The animation references `/audio/star-canopy.mp3` and will autoplay when present.
 
 ## Installing on Android
 
