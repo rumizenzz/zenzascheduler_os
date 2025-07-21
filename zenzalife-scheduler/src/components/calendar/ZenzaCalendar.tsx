@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
+import { DefaultScheduleItem } from "@/data/defaultSchedule";
 import { MoveScheduleModal } from "./MoveScheduleModal";
 import { DayScheduleModal } from "./DayScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
@@ -450,85 +451,21 @@ export function ZenzaCalendar() {
     await saveHistory(updated);
   };
 
-  const applyDefaultSchedule = async (date: string) => {
+  const applyDefaultSchedule = async (date: string, items: DefaultScheduleItem[]) => {
     if (!user || !isOwnCalendar) return;
 
-    const defaultTasks = [
-      {
-        title: "Wake up, brush teeth, floss, exfoliate",
-        category: "hygiene",
-        start_time: dayjs(`${date}T06:30:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T07:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        alarm: true,
-      },
-      {
-        title: "Jog/Exercise",
-        category: "exercise",
-        start_time: dayjs(`${date}T07:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T08:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        alarm: true,
-      },
-      {
-        title: "Shower, hygiene",
-        category: "hygiene",
-        start_time: dayjs(`${date}T08:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T08:30:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-      },
-      {
-        title: "Make/eat breakfast, grace, dishes",
-        category: "meal",
-        start_time: dayjs(`${date}T08:30:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T09:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-      },
-      {
-        title: "Business cold calls",
-        category: "work",
-        start_time: dayjs(`${date}T09:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T11:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-      },
-      {
-        title: "GED math study",
-        category: "study",
-        start_time: dayjs(`${date}T11:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T17:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-      },
-      {
-        title: "Scripture & prayer",
-        category: "spiritual",
-        start_time: dayjs(`${date}T17:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T18:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-      },
-      {
-        title: "Dinner + dishes + kitchen cleanup",
-        category: "meal",
-        start_time: dayjs(`${date}T18:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T19:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-      },
-      {
-        title: "Personal development book reading",
-        category: "personal",
-        start_time: dayjs(`${date}T19:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T20:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-      },
-      {
-        title: "Cooking video training",
-        category: "personal",
-        start_time: dayjs(`${date}T20:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T21:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-      },
-      {
-        title: "PM hygiene",
-        category: "hygiene",
-        start_time: dayjs(`${date}T21:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T21:30:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-      },
-      {
-        title: "Final prayer",
-        category: "spiritual",
-        start_time: dayjs(`${date}T21:30:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-        end_time: dayjs(`${date}T21:45:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
-      },
-    ];
+    const defaultTasks = items.map((item) => {
+      const start = dayjs(`${date}T${item.start}`)
+      let end = dayjs(`${date}T${item.end}`)
+      if (end.isBefore(start)) end = end.add(1, "day")
+      return {
+        title: item.title,
+        category: item.category,
+        start_time: start.format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: end.format("YYYY-MM-DDTHH:mm:ssZ"),
+        alarm: item.alarm,
+      }
+    })
 
     try {
       const { data: existing, error: fetchError } = await supabase
