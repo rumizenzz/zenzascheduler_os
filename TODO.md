@@ -153,6 +153,8 @@ This file tracks project progress and upcoming tasks.
 
 - Polished calendar styling with ZenzaLife branding for headers, day cells, and events.
 
+- Mobile calendar now shows the Week button for easier navigation.
+
 ## Next Steps
 
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
