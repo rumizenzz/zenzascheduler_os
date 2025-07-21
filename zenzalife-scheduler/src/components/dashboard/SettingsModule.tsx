@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import { supabase, updateUserProfile } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import { Settings, User, Upload, Bell, Palette, Shield, HelpCircle, Download } from 'lucide-react'
@@ -62,6 +63,7 @@ export function SettingsModule() {
   const { playEntranceSound, playAudio } = useAudio()
   const { requestPermission, testAlarm } = useNotifications()
   const [showTestAlarm, setShowTestAlarm] = useState(false)
+  const { theme, setTheme } = useTheme()
 
   useEffect(() => {
     if (profile) {
@@ -456,8 +458,26 @@ export function SettingsModule() {
                   ZenzaLife uses a dreamy, cloud-like aesthetic designed for tranquility
                 </p>
                 <div className="flex gap-3">
-                  <button className="btn-dreamy-primary text-sm">Light (Current)</button>
-                  <button className="btn-dreamy text-sm opacity-50">Dark (Coming Soon)</button>
+                  <button
+                    onClick={() => setTheme('light')}
+                    className={
+                      theme === 'light'
+                        ? 'btn-dreamy-primary text-sm'
+                        : 'btn-dreamy text-sm'
+                    }
+                  >
+                    Light {theme === 'light' && '(Current)'}
+                  </button>
+                  <button
+                    onClick={() => setTheme('dark')}
+                    className={
+                      theme === 'dark'
+                        ? 'btn-dreamy-primary text-sm'
+                        : 'btn-dreamy text-sm'
+                    }
+                  >
+                    Dark {theme === 'dark' && '(Current)'}
+                  </button>
                 </div>
               </div>
               
