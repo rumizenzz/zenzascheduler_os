@@ -135,6 +135,7 @@ This file tracks project progress and upcoming tasks.
 - Added Olive Garden task category with brand colors and SVG icon.
 - Extended calendar view to 5am so tasks can span past midnight.
 - Resolved TypeScript syntax errors in `Dashboard.tsx` and `main.tsx`.
+- Added Move Schedule modal to shift an entire day of tasks to a new date.
 - Added shift-drag rescheduling with animated hint and mobile long-press support.
 - Added Android install instructions and unknown apps onboarding guide.
 - Added undo/redo history for the calendar with Supabase snapshots.
