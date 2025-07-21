@@ -867,9 +867,7 @@ export function ZenzaCalendar() {
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: isMobile
-              ? "dayGridMonth,timeGridDay"
-              : "dayGridMonth,timeGridWeek,timeGridDay",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
           timeZone="local"
           initialView={calendarView}
