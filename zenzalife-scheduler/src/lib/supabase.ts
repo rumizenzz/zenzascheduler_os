@@ -137,6 +137,13 @@ export type DiscipleshipNote = {
   updated_at?: string
 }
 
+export type TaskHistory = {
+  id: string
+  user_id: string
+  task_data: Task[]
+  created_at?: string
+}
+
 
 export type Ancestor = {
   id: string
