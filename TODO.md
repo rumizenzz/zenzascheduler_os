@@ -151,6 +151,7 @@ This file tracks project progress and upcoming tasks.
 - Prevented duplicate tasks from appearing by deduplicating schedules when loading the calendar.
 - Improved calendar toolbar with sticky action buttons, horizontal scrolling on mobile, and a floating Add Task button for quick scheduling.
 - Added mobile action dropup so toolbar options open in a sticky menu with descriptive buttons.
+- Enabled swipe gestures on mobile to switch days or months in the calendar.
 
 - Polished calendar styling with ZenzaLife branding for headers, day cells, and events.
 - Enhanced month/week view with boxed event layout and a day schedule modal to review all tasks on mobile.

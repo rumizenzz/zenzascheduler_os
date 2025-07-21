@@ -110,6 +110,7 @@ export function ZenzaCalendar() {
   const triggeredRef = useRef<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
   const [showActionMenu, setShowActionMenu] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [showMoveSuccess, setShowMoveSuccess] = useState(false);
   const [history, setHistory] = useState<TaskHistory[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
@@ -699,6 +700,25 @@ export function ZenzaCalendar() {
     await loadTasks();
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isMobile || touchStartX === null) return;
+    const diffX = e.changedTouches[0].clientX - touchStartX;
+    const threshold = 50;
+    const api = calendarRef.current?.getApi();
+    if (!api) return;
+    if (diffX > threshold) {
+      api.next();
+    } else if (diffX < -threshold) {
+      api.prev();
+    }
+    setTouchStartX(null);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -904,7 +924,11 @@ export function ZenzaCalendar() {
       </div>
 
       {/* Calendar */}
-      <div className="card-floating p-2 sm:p-6">
+      <div
+        className="card-floating p-2 sm:p-6"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
