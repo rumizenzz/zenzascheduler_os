@@ -625,7 +625,7 @@ export function ZenzaCalendar() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4">
         <div>
           <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
             <CalendarIcon className="w-8 h-8 text-blue-400" />
@@ -638,12 +638,12 @@ export function ZenzaCalendar() {
           </p>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 overflow-x-auto sm:overflow-visible whitespace-nowrap w-full sm:w-auto pb-2 sm:pb-0">
           {isOwnCalendar ? (
             <>
               <button
                 onClick={() => setShowDefaultSchedule(true)}
-                className="btn-dreamy flex items-center gap-2"
+                className="btn-dreamy flex items-center gap-2 flex-shrink-0"
               >
                 <Clock className="w-4 h-4" />
                 Apply Default Schedule
@@ -658,7 +658,7 @@ export function ZenzaCalendar() {
                   setMoveFromDate(current);
                   setShowMoveSchedule(true);
                 }}
-                className="btn-dreamy flex items-center gap-2"
+                className="btn-dreamy flex items-center gap-2 flex-shrink-0"
               >
                 <MoveRight className="w-4 h-4" />
                 Move Day
@@ -670,7 +670,7 @@ export function ZenzaCalendar() {
                   setSelectedDate(dayjs().format('YYYY-MM-DD'));
                   setShowTaskModal(true);
                 }}
-                className="btn-dreamy-primary flex items-center gap-2"
+                className="btn-dreamy-primary flex items-center gap-2 flex-shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 Add Task
@@ -678,7 +678,7 @@ export function ZenzaCalendar() {
 
               <button
                 onClick={undo}
-                className="btn-dreamy flex items-center gap-2"
+                className="btn-dreamy flex items-center gap-2 flex-shrink-0"
               >
                 <Undo2 className="w-4 h-4" />
                 Undo
@@ -686,7 +686,7 @@ export function ZenzaCalendar() {
 
               <button
                 onClick={redo}
-                className="btn-dreamy flex items-center gap-2"
+                className="btn-dreamy flex items-center gap-2 flex-shrink-0"
               >
                 <Redo2 className="w-4 h-4" />
                 Redo
@@ -694,7 +694,7 @@ export function ZenzaCalendar() {
 
               <button
                 onClick={() => deleteDaySchedule(dayjs().format('YYYY-MM-DD'))}
-                className="btn-dreamy text-red-600 border-red-200 hover:bg-red-50 flex items-center gap-2"
+                className="btn-dreamy text-red-600 border-red-200 hover:bg-red-50 flex items-center gap-2 flex-shrink-0"
               >
                 <Trash className="w-4 h-4" />
                 Delete Today
@@ -702,7 +702,7 @@ export function ZenzaCalendar() {
 
               <button
                 onClick={() => setShowFamilySelect(true)}
-                className="btn-dreamy flex items-center gap-2"
+                className="btn-dreamy flex items-center gap-2 flex-shrink-0"
               >
                 <Users className="w-4 h-4" />
                 See Family Member's Calendar
@@ -714,7 +714,7 @@ export function ZenzaCalendar() {
                 setViewUser(null);
                 setSelectedTask(null);
               }}
-              className="btn-dreamy"
+              className="btn-dreamy flex-shrink-0"
             >
               Back to Your Calendar
             </button>
@@ -835,6 +835,20 @@ export function ZenzaCalendar() {
       </div>
 
       <DragHint isMobile={isMobile} />
+
+      {isOwnCalendar && (
+        <button
+          onClick={() => {
+            setSelectedTask(null);
+            setSelectedDate(dayjs().format('YYYY-MM-DD'));
+            setShowTaskModal(true);
+          }}
+          className="fab-add-task"
+          aria-label="Add Task"
+        >
+          <Plus className="w-6 h-6" />
+        </button>
+      )}
 
       {/* Task Modal */}
       {showTaskModal && (
