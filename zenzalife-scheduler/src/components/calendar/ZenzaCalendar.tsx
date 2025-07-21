@@ -14,9 +14,11 @@ import {
   Target,
   Calendar as CalendarIcon,
   CheckCircle,
+  MoveRight,
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
+import { MoveScheduleModal } from "./MoveScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
 
 interface CalendarEvent {
@@ -82,6 +84,8 @@ export function ZenzaCalendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showDefaultSchedule, setShowDefaultSchedule] = useState(false);
+  const [showMoveSchedule, setShowMoveSchedule] = useState(false);
+  const [moveFromDate, setMoveFromDate] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [calendarView, setCalendarView] = useState("timeGridDay");
   const calendarRef = useRef<FullCalendar>(null);
@@ -92,6 +96,7 @@ export function ZenzaCalendar() {
   const [activeAlarm, setActiveAlarm] = useState<CalendarEvent | null>(null);
   const triggeredRef = useRef<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
+  const [showMoveSuccess, setShowMoveSuccess] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -127,6 +132,13 @@ export function ZenzaCalendar() {
     }, 30000);
     return () => clearInterval(interval);
   }, [events]);
+
+  useEffect(() => {
+    if (showMoveSuccess) {
+      const timer = setTimeout(() => setShowMoveSuccess(false), 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [showMoveSuccess])
 
   const loadTasks = async () => {
     if (!user) return;
@@ -404,6 +416,31 @@ export function ZenzaCalendar() {
     }
   };
 
+  const moveSchedule = async (toDate: string) => {
+    if (!user || !isOwnCalendar || !moveFromDate) return;
+    try {
+      const dayTasks = tasks.filter(
+        (t) => dayjs(t.start_time).format('YYYY-MM-DD') === moveFromDate
+      );
+      for (const t of dayTasks) {
+        const newStart = dayjs(toDate + dayjs(t.start_time!).format('THH:mm:ssZ')).format('YYYY-MM-DDTHH:mm:ssZ');
+        const newEnd = t.end_time
+          ? dayjs(toDate + dayjs(t.end_time).format('THH:mm:ssZ')).format('YYYY-MM-DDTHH:mm:ssZ')
+          : null;
+        const { error } = await supabase
+          .from('tasks')
+          .update({ start_time: newStart, end_time: newEnd, updated_at: new Date().toISOString() })
+          .eq('id', t.id);
+        if (error) throw error;
+      }
+      toast.success('Schedule moved!');
+      setShowMoveSuccess(true);
+      await loadTasks();
+    } catch (error: any) {
+      toast.error('Failed to move schedule: ' + error.message);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -437,6 +474,21 @@ export function ZenzaCalendar() {
               >
                 <Clock className="w-4 h-4" />
                 Apply Default Schedule
+              </button>
+
+              <button
+                onClick={() => {
+                  const api = calendarRef.current?.getApi();
+                  const current = api
+                    ? dayjs(api.getDate()).format('YYYY-MM-DD')
+                    : dayjs().format('YYYY-MM-DD');
+                  setMoveFromDate(current);
+                  setShowMoveSchedule(true);
+                }}
+                className="btn-dreamy flex items-center gap-2"
+              >
+                <MoveRight className="w-4 h-4" />
+                Move Day
               </button>
 
               <button
@@ -578,6 +630,15 @@ export function ZenzaCalendar() {
         />
       )}
 
+      {showMoveSchedule && moveFromDate && (
+        <MoveScheduleModal
+          isOpen={showMoveSchedule}
+          onClose={() => setShowMoveSchedule(false)}
+          fromDate={moveFromDate}
+          onMove={moveSchedule}
+        />
+      )}
+
       {/* Family Select Modal */}
       {showFamilySelect && (
         <FamilySelectModal
@@ -598,6 +659,12 @@ export function ZenzaCalendar() {
           soundUrl={getAlarmSound(activeAlarm)}
           onDismiss={() => setActiveAlarm(null)}
         />
+      )}
+
+      {showMoveSuccess && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg animate-bounce z-50">
+          Schedule moved!
+        </div>
       )}
     </div>
   );
