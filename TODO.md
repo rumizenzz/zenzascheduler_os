@@ -145,6 +145,8 @@ This file tracks project progress and upcoming tasks.
 - Fixed JSX closing tags in ZenzaCalendar so Netlify builds succeed.
 - Verified calendar build succeeds with midnight hours and manual time display.
 - Fixed drag-and-drop edits so moving or resizing tasks now updates history for undo/redo.
+- Polished calendar UI with refined FullCalendar styles for a professional look.
+- Fixed missing brace in `ZenzaCalendar` that caused a lint parsing error.
 - Fixed stray braces in `ZenzaCalendar.tsx` and undefined variable in `OnboardingModal.tsx` that broke the Netlify build.
 - Fixed unclosed JSX in `ZenzaCalendar.tsx` after a merge mishap so Netlify builds succeed.
 
