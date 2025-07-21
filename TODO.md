@@ -193,4 +193,17 @@ This file tracks project progress and upcoming tasks.
 
 ## Improvement Ideas
 
-(add any new ideas here)
+### Natural language event creation
+- [ ] Allow users to type phrases like "Dentist at 2pm Friday" to auto-fill the task form.
+
+### Memory features
+- [ ] Build a "Memory Lane" view showing anniversaries and past photos from this day.
+
+### Social sharing
+- [ ] Create a private "Family Wall" with posts, photos and comment threads.
+
+### Mood and health tracking
+- [ ] Let family members log moods and health stats and link them to events.
+
+### Interactive timelines
+- [ ] Provide personal timelines with milestones, media and notes for each user.
