@@ -23,6 +23,7 @@ import {
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
 import { MoveScheduleModal } from "./MoveScheduleModal";
+import { DayScheduleModal } from "./DayScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
 import { DragHint } from "./DragHint";
 
@@ -112,6 +113,9 @@ export function ZenzaCalendar() {
   const [showMoveSuccess, setShowMoveSuccess] = useState(false);
   const [history, setHistory] = useState<TaskHistory[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
+  const [dayModalEvents, setDayModalEvents] = useState<CalendarEvent[]>([]);
+  const [dayModalDate, setDayModalDate] = useState<string>("");
+  const [showDayModal, setShowDayModal] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -287,6 +291,17 @@ export function ZenzaCalendar() {
     setSelectedDate(selectInfo.startStr);
     setSelectedTask(null);
     setShowTaskModal(true);
+  };
+
+  const handleDateClick = (info: any) => {
+    if (calendarView === "dayGridMonth" || calendarView === "timeGridWeek") {
+      const dayEvents = events.filter((ev) =>
+        dayjs(ev.start).isSame(info.date, "day"),
+      );
+      setDayModalDate(info.dateStr);
+      setDayModalEvents(dayEvents);
+      setShowDayModal(true);
+    }
   };
 
   const handleEventClick = (clickInfo: any) => {
@@ -873,12 +888,14 @@ export function ZenzaCalendar() {
           }}
           timeZone="local"
           initialView={calendarView}
+          datesSet={(arg) => setCalendarView(arg.view.type)}
           editable={isOwnCalendar}
           selectable={isOwnCalendar}
           selectMirror={true}
           dayMaxEvents={true}
           weekends={true}
           events={events}
+          dateClick={handleDateClick}
           select={handleDateSelect}
           eventClick={handleEventClick}
           eventDrop={handleEventDrop}
@@ -1015,6 +1032,15 @@ export function ZenzaCalendar() {
           eventTime={dayjs(activeAlarm.start).format("h:mm A")}
           soundUrl={getAlarmSound(activeAlarm)}
           onDismiss={() => setActiveAlarm(null)}
+        />
+      )}
+
+      {showDayModal && (
+        <DayScheduleModal
+          isOpen={showDayModal}
+          onClose={() => setShowDayModal(false)}
+          date={dayModalDate}
+          events={dayModalEvents}
         />
       )}
 

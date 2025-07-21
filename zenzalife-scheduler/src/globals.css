@@ -305,3 +305,20 @@
 .fc-event {
   @apply rounded-lg border-none overflow-hidden;
 }
+
+/* Grid layout for month/week events */
+.fc-daygrid-day-events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.fc-daygrid-event-harness {
+  flex: 1 1 calc(50% - 4px);
+}
+
+@media (max-width: 640px) {
+  .fc-daygrid-event-harness {
+    flex-basis: 100%;
+  }
+}
