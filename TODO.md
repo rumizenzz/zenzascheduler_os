@@ -185,6 +185,8 @@ This file tracks project progress and upcoming tasks.
 - Ancestor entries now support optional death year, displaying "1963-Present" when no death year is provided.
 - Redesigned calendar UI with polished ZenzaLife branding and responsive styles.
 - Added mind map style FamilyTree component to visualize ancestors.
+- Designed advanced family tree schema (people, relationships, life events,
+  sources, media, permissions) and added pedigree view component.
 
 ## Improvement Ideas
 
