@@ -28,7 +28,6 @@ This file tracks project progress and upcoming tasks.
 - Created unsubscribe edge function and page with mailing list table documentation.
 - Added warning message when an email is not found during unsubscribe.
 - Confirmation email edge function now stores new sign ups in the mailing list table.
-- Added ability to shift a day's schedule later to match wake up time.
 - Unsubscribe page includes instructions for re-subscribing.
 - Added login prompt asking users to join the mailing list if they aren't subscribed.
 - Refined mailing list prompt wording to remove explicit baby references.
