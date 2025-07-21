@@ -51,13 +51,20 @@ interface FamilySelectModalProps {
   onSelect: (member: User) => void;
 }
 
-function FamilySelectModal({ isOpen, onClose, members, onSelect }: FamilySelectModalProps) {
+function FamilySelectModal({
+  isOpen,
+  onClose,
+  members,
+  onSelect,
+}: FamilySelectModalProps) {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md mx-4">
         <div className="p-6 space-y-4">
-          <h2 className="text-2xl font-light text-gray-800">Select Family Member</h2>
+          <h2 className="text-2xl font-light text-gray-800">
+            Select Family Member
+          </h2>
           <ul className="space-y-2">
             {members.map((m) => (
               <li key={m.id}>
@@ -134,7 +141,8 @@ export function ZenzaCalendar() {
     const interval = setInterval(() => {
       const now = Date.now();
       const upcoming = events.find((ev) => {
-        if (!ev.extendedProps?.alarm || triggeredRef.current.has(ev.id)) return false;
+        if (!ev.extendedProps?.alarm || triggeredRef.current.has(ev.id))
+          return false;
         const start = new Date(ev.start).getTime();
         return start <= now && now - start < 60000;
       });
@@ -148,10 +156,10 @@ export function ZenzaCalendar() {
 
   useEffect(() => {
     if (showMoveSuccess) {
-      const timer = setTimeout(() => setShowMoveSuccess(false), 2000)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(() => setShowMoveSuccess(false), 2000);
+      return () => clearTimeout(timer);
     }
-  }, [showMoveSuccess])
+  }, [showMoveSuccess]);
 
   const loadTasks = async (): Promise<Task[]> => {
     if (!user) return [];
@@ -191,24 +199,24 @@ export function ZenzaCalendar() {
     if (!profile?.family_id) return;
     try {
       const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('family_id', profile.family_id)
-        .order('created_at', { ascending: true });
+        .from("users")
+        .select("*")
+        .eq("family_id", profile.family_id)
+        .order("created_at", { ascending: true });
       if (error) throw error;
       setFamilyMembers(data || []);
     } catch (error: any) {
-      toast.error('Failed to load family members: ' + error.message);
+      toast.error("Failed to load family members: " + error.message);
     }
   };
 
   const loadHistory = async () => {
     if (!user) return;
     const { data, error } = await supabase
-      .from('task_history')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false });
+      .from("task_history")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
     if (!error && data) {
       setHistory(data as TaskHistory[]);
       setHistoryIndex(0);
@@ -217,7 +225,7 @@ export function ZenzaCalendar() {
 
   const saveHistory = async (snapshot: Task[]) => {
     if (!user) return;
-    await supabase.from('task_history').insert({
+    await supabase.from("task_history").insert({
       user_id: user.id,
       task_data: snapshot,
       created_at: new Date().toISOString(),
@@ -248,8 +256,8 @@ export function ZenzaCalendar() {
   const getAlarmSound = (ev: CalendarEvent) => {
     return (
       ev.extendedProps?.custom_sound_path ||
-      localStorage.getItem('defaultAlarmSound') ||
-      '/alarms/lucid-skybell.mp3'
+      localStorage.getItem("defaultAlarmSound") ||
+      "/alarms/lucid-skybell.mp3"
     );
   };
 
@@ -347,16 +355,20 @@ export function ZenzaCalendar() {
   const handleEventDrop = async (info: any) => {
     if (!user || !isOwnCalendar) return;
     const id = info.event.id;
-    const start = dayjs(info.event.start).format('YYYY-MM-DDTHH:mm:ssZ');
+    const start = dayjs(info.event.start).format("YYYY-MM-DDTHH:mm:ssZ");
     const end = info.event.end
-      ? dayjs(info.event.end).format('YYYY-MM-DDTHH:mm:ssZ')
+      ? dayjs(info.event.end).format("YYYY-MM-DDTHH:mm:ssZ")
       : null;
     const { error } = await supabase
-      .from('tasks')
-      .update({ start_time: start, end_time: end, updated_at: new Date().toISOString() })
-      .eq('id', id);
+      .from("tasks")
+      .update({
+        start_time: start,
+        end_time: end,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", id);
     if (error) {
-      toast.error('Failed to move task: ' + error.message);
+      toast.error("Failed to move task: " + error.message);
       info.revert();
       return;
     }
@@ -367,16 +379,20 @@ export function ZenzaCalendar() {
   const handleEventResize = async (info: any) => {
     if (!user || !isOwnCalendar) return;
     const id = info.event.id;
-    const start = dayjs(info.event.start).format('YYYY-MM-DDTHH:mm:ssZ');
+    const start = dayjs(info.event.start).format("YYYY-MM-DDTHH:mm:ssZ");
     const end = info.event.end
-      ? dayjs(info.event.end).format('YYYY-MM-DDTHH:mm:ssZ')
+      ? dayjs(info.event.end).format("YYYY-MM-DDTHH:mm:ssZ")
       : null;
     const { error } = await supabase
-      .from('tasks')
-      .update({ start_time: start, end_time: end, updated_at: new Date().toISOString() })
-      .eq('id', id);
+      .from("tasks")
+      .update({
+        start_time: start,
+        end_time: end,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", id);
     if (error) {
-      toast.error('Failed to resize task: ' + error.message);
+      toast.error("Failed to resize task: " + error.message);
       info.revert();
       return;
     }
@@ -391,76 +407,76 @@ export function ZenzaCalendar() {
       {
         title: "Wake up, brush teeth, floss, exfoliate",
         category: "hygiene",
-        start_time: dayjs(`${date}T06:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T07:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T06:30:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T07:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
         alarm: true,
       },
       {
         title: "Jog/Exercise",
         category: "exercise",
-        start_time: dayjs(`${date}T07:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T08:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T07:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T08:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
         alarm: true,
       },
       {
         title: "Shower, hygiene",
         category: "hygiene",
-        start_time: dayjs(`${date}T08:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T08:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T08:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T08:30:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
       },
       {
         title: "Make/eat breakfast, grace, dishes",
         category: "meal",
-        start_time: dayjs(`${date}T08:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T09:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T08:30:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T09:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
       },
       {
         title: "Business cold calls",
         category: "work",
-        start_time: dayjs(`${date}T09:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T11:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T09:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T11:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
       },
       {
         title: "GED math study",
         category: "study",
-        start_time: dayjs(`${date}T11:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T17:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T11:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T17:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
       },
       {
         title: "Scripture & prayer",
         category: "spiritual",
-        start_time: dayjs(`${date}T17:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T18:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T17:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T18:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
       },
       {
         title: "Dinner + dishes + kitchen cleanup",
         category: "meal",
-        start_time: dayjs(`${date}T18:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T19:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T18:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T19:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
       },
       {
         title: "Personal development book reading",
         category: "personal",
-        start_time: dayjs(`${date}T19:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T20:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T19:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T20:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
       },
       {
         title: "Cooking video training",
         category: "personal",
-        start_time: dayjs(`${date}T20:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T21:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T20:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T21:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
       },
       {
         title: "PM hygiene",
         category: "hygiene",
-        start_time: dayjs(`${date}T21:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T21:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T21:00:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T21:30:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
       },
       {
         title: "Final prayer",
         category: "spiritual",
-        start_time: dayjs(`${date}T21:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T21:45:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
+        start_time: dayjs(`${date}T21:30:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: dayjs(`${date}T21:45:00`).format("YYYY-MM-DDTHH:mm:ssZ"),
       },
     ];
 
@@ -475,7 +491,9 @@ export function ZenzaCalendar() {
       if (fetchError) throw fetchError;
 
       const existingTimes = new Set(
-        existing?.map((t) => dayjs(t.start_time).format('YYYY-MM-DDTHH:mm:ssZ'))
+        existing?.map((t) =>
+          dayjs(t.start_time).format("YYYY-MM-DDTHH:mm:ssZ"),
+        ),
       );
 
       const tasksToInsert = defaultTasks
@@ -510,24 +528,32 @@ export function ZenzaCalendar() {
     if (!user || !isOwnCalendar || !moveFromDate) return;
     try {
       const dayTasks = tasks.filter(
-        (t) => dayjs(t.start_time).format('YYYY-MM-DD') === moveFromDate
+        (t) => dayjs(t.start_time).format("YYYY-MM-DD") === moveFromDate,
       );
       for (const t of dayTasks) {
-        const newStart = dayjs(toDate + dayjs(t.start_time!).format('THH:mm:ssZ')).format('YYYY-MM-DDTHH:mm:ssZ');
+        const newStart = dayjs(
+          toDate + dayjs(t.start_time!).format("THH:mm:ssZ"),
+        ).format("YYYY-MM-DDTHH:mm:ssZ");
         const newEnd = t.end_time
-          ? dayjs(toDate + dayjs(t.end_time).format('THH:mm:ssZ')).format('YYYY-MM-DDTHH:mm:ssZ')
+          ? dayjs(toDate + dayjs(t.end_time).format("THH:mm:ssZ")).format(
+              "YYYY-MM-DDTHH:mm:ssZ",
+            )
           : null;
         const { error } = await supabase
-          .from('tasks')
-          .update({ start_time: newStart, end_time: newEnd, updated_at: new Date().toISOString() })
-          .eq('id', t.id);
+          .from("tasks")
+          .update({
+            start_time: newStart,
+            end_time: newEnd,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", t.id);
         if (error) throw error;
       }
-      toast.success('Schedule moved!');
+      toast.success("Schedule moved!");
       setShowMoveSuccess(true);
       await loadTasks();
     } catch (error: any) {
-      toast.error('Failed to move schedule: ' + error.message);
+      toast.error("Failed to move schedule: " + error.message);
     }
   };
 
@@ -536,80 +562,80 @@ export function ZenzaCalendar() {
 
     try {
       const { data, error } = await supabase
-        .from('tasks')
-        .select('*')
-        .eq('user_id', user.id)
-        .gte('start_time', `${date}T00:00:00`)
-        .lt('start_time', `${date}T23:59:59`)
-        .order('start_time', { ascending: true });
+        .from("tasks")
+        .select("*")
+        .eq("user_id", user.id)
+        .gte("start_time", `${date}T00:00:00`)
+        .lt("start_time", `${date}T23:59:59`)
+        .order("start_time", { ascending: true });
 
       if (error) throw error;
 
       if (!data || data.length === 0) {
-        toast('No tasks found for this date', { icon: 'ℹ️' });
+        toast("No tasks found for this date", { icon: "ℹ️" });
         return;
       }
 
       const oldStart = dayjs(data[0].start_time);
       const newStartTime = dayjs(`${date}T${newStart}`);
-      const diff = newStartTime.diff(oldStart, 'minute');
+      const diff = newStartTime.diff(oldStart, "minute");
 
       await Promise.all(
         data.map((t) =>
           supabase
-            .from('tasks')
+            .from("tasks")
             .update({
               start_time: dayjs(t.start_time)
-                .add(diff, 'minute')
-                .format('YYYY-MM-DDTHH:mm:ssZ'),
+                .add(diff, "minute")
+                .format("YYYY-MM-DDTHH:mm:ssZ"),
               end_time: t.end_time
                 ? dayjs(t.end_time)
-                    .add(diff, 'minute')
-                    .format('YYYY-MM-DDTHH:mm:ssZ')
+                    .add(diff, "minute")
+                    .format("YYYY-MM-DDTHH:mm:ssZ")
                 : null,
               updated_at: new Date().toISOString(),
             })
-            .eq('id', t.id)
-        )
+            .eq("id", t.id),
+        ),
       );
 
-      toast.success('Schedule shifted successfully!');
+      toast.success("Schedule shifted successfully!");
       const updated = await loadTasks();
       await saveHistory(updated);
     } catch (err: any) {
-      toast.error('Failed to shift schedule: ' + err.message);
+      toast.error("Failed to shift schedule: " + err.message);
     }
   };
 
   const deleteDaySchedule = async (date: string) => {
     if (!user || !isOwnCalendar) return;
     const confirmText = prompt(
-      'Type DELETE-ALL-TASKS to remove all tasks for this day'
+      "Type DELETE-ALL-TASKS to remove all tasks for this day",
     );
-    if (confirmText !== 'DELETE-ALL-TASKS') {
-      toast('Deletion cancelled');
+    if (confirmText !== "DELETE-ALL-TASKS") {
+      toast("Deletion cancelled");
       return;
     }
     await supabase
-      .from('tasks')
+      .from("tasks")
       .delete()
-      .eq('user_id', user.id)
-      .gte('start_time', `${date}T00:00:00`)
-      .lt('start_time', `${date}T23:59:59`);
+      .eq("user_id", user.id)
+      .gte("start_time", `${date}T00:00:00`)
+      .lt("start_time", `${date}T23:59:59`);
     const updated = await loadTasks();
     await saveHistory(updated);
-    toast.success('All tasks deleted');
+    toast.success("All tasks deleted");
   };
 
   const undo = async () => {
     if (historyIndex >= history.length - 1) {
-      toast('Nothing to undo');
+      toast("Nothing to undo");
       return;
     }
     const snapshot = history[historyIndex + 1];
-    await supabase.from('tasks').delete().eq('user_id', user!.id);
+    await supabase.from("tasks").delete().eq("user_id", user!.id);
     if (snapshot.task_data.length) {
-      await supabase.from('tasks').insert(snapshot.task_data);
+      await supabase.from("tasks").insert(snapshot.task_data);
     }
     setHistoryIndex(historyIndex + 1);
     await loadTasks();
@@ -617,13 +643,13 @@ export function ZenzaCalendar() {
 
   const redo = async () => {
     if (historyIndex === 0) {
-      toast('Nothing to redo');
+      toast("Nothing to redo");
       return;
     }
     const snapshot = history[historyIndex - 1];
-    await supabase.from('tasks').delete().eq('user_id', user!.id);
+    await supabase.from("tasks").delete().eq("user_id", user!.id);
     if (snapshot.task_data.length) {
-      await supabase.from('tasks').insert(snapshot.task_data);
+      await supabase.from("tasks").insert(snapshot.task_data);
     }
     setHistoryIndex(historyIndex - 1);
     await loadTasks();
@@ -644,7 +670,9 @@ export function ZenzaCalendar() {
         <div>
           <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
             <CalendarIcon className="w-8 h-8 text-blue-400" />
-            {isOwnCalendar ? 'Life Calendar' : `${viewUser?.display_name}'s Calendar`}
+            {isOwnCalendar
+              ? "Life Calendar"
+              : `${viewUser?.display_name}'s Calendar`}
           </h1>
           <p className="text-gray-600/80 font-light mt-1">
             {isOwnCalendar
@@ -856,13 +884,13 @@ export function ZenzaCalendar() {
           eventDrop={handleEventDrop}
           eventResize={handleEventResize}
           eventContent={(arg) => {
-            const start = dayjs(arg.event.start!).format('h:mm A');
+            const start = dayjs(arg.event.start!).format("h:mm A");
             const end = arg.event.end
-              ? dayjs(arg.event.end).format('h:mm A')
+              ? dayjs(arg.event.end).format("h:mm A")
               : undefined;
             return (
               <div
-                className="relative px-2 py-1 rounded-lg text-xs font-medium shadow"
+                className="relative flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium shadow"
                 style={{
                   backgroundColor: arg.event.backgroundColor,
                   border: `1px solid ${arg.event.borderColor}`,
@@ -872,64 +900,37 @@ export function ZenzaCalendar() {
                 {arg.event.extendedProps?.completed && (
                   <div className="absolute -top-1 -right-1 flex items-center gap-1 bg-white/80 rounded-full px-1 text-green-600">
                     <CheckCircle className="w-3 h-3" />
-                    <span className="text-[10px]">Completed</span>
                   </div>
                 )}
-                <span>{end ? `${start} - ${end}` : start}</span>
-                <span>{arg.timeText}</span>
-                <div className="flex items-center gap-1">
-                  {arg.event.extendedProps?.category === 'doordash' && (
-                    <img
-                      src="/icons/doordash.svg"
-                      alt="DoorDash"
-                      className="w-4 h-4"
-                    />
-                  )}
-                  {arg.event.extendedProps?.category === 'ubereats' && (
-                    <img
-                      src="/icons/ubereats.svg"
-                      alt="Uber Eats"
-                      className="w-4 h-4"
-                    />
-                  )}
-                  {arg.event.extendedProps?.category === 'olivegarden' && (
-                    <img
-                      src="/icons/olivegarden.svg"
-                      alt="Olive Garden"
-                      className="w-4 h-4"
-                    />
-                  )}
-                  <span>{arg.event.title}</span>
-                  <span>{end ? `${start} - ${end}` : start}</span>
-                  <div className="flex items-center gap-1">
-                    {arg.event.extendedProps?.category === 'doordash' && (
-                      <img
-                        src="/icons/doordash.svg"
-                        alt="DoorDash"
-                        className="w-4 h-4"
-                      />
-                    )}
-                    {arg.event.extendedProps?.category === 'ubereats' && (
-                      <img
-                        src="/icons/ubereats.svg"
-                        alt="Uber Eats"
-                        className="w-4 h-4"
-                      />
-                    )}
-                    {arg.event.extendedProps?.category === 'olivegarden' && (
-                      <img
-                        src="/icons/olivegarden.svg"
-                        alt="Olive Garden"
-                        className="w-4 h-4"
-                      />
-                    )}
-                    <span>{arg.event.title}</span>
-                  </div>
-                </div>
+                {arg.event.extendedProps?.category === "doordash" && (
+                  <img
+                    src="/icons/doordash.svg"
+                    alt="DoorDash"
+                    className="w-4 h-4"
+                  />
+                )}
+                {arg.event.extendedProps?.category === "ubereats" && (
+                  <img
+                    src="/icons/ubereats.svg"
+                    alt="Uber Eats"
+                    className="w-4 h-4"
+                  />
+                )}
+                {arg.event.extendedProps?.category === "olivegarden" && (
+                  <img
+                    src="/icons/olivegarden.svg"
+                    alt="Olive Garden"
+                    className="w-4 h-4"
+                  />
+                )}
+                <span className="flex-1 truncate">{arg.event.title}</span>
+                <span className="ml-auto">
+                  {end ? `${start} - ${end}` : start}
+                </span>
               </div>
             );
           }}
-          height={isMobile ? 'auto' : '650px'}
+          height={isMobile ? "auto" : "650px"}
           /* show full overnight tasks */
           slotMinTime="00:00:00"
           slotMaxTime="32:00:00"
@@ -949,7 +950,7 @@ export function ZenzaCalendar() {
         <button
           onClick={() => {
             setSelectedTask(null);
-            setSelectedDate(dayjs().format('YYYY-MM-DD'));
+            setSelectedDate(dayjs().format("YYYY-MM-DD"));
             setShowTaskModal(true);
           }}
           className="fab-add-task"
@@ -1011,7 +1012,7 @@ export function ZenzaCalendar() {
       {activeAlarm && (
         <AlarmModal
           eventTitle={activeAlarm.title}
-          eventTime={dayjs(activeAlarm.start).format('h:mm A')}
+          eventTime={dayjs(activeAlarm.start).format("h:mm A")}
           soundUrl={getAlarmSound(activeAlarm)}
           onDismiss={() => setActiveAlarm(null)}
         />
