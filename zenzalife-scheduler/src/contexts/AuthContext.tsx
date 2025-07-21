@@ -90,45 +90,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function signUp(email: string, password: string, displayName: string, relationshipRole?: string) {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.protocol}//${window.location.host}/confirmed`
-      }
+    const res = await fetch('/.netlify/functions/send-confirmation-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, displayName, relationshipRole })
     })
 
-    if (error) {
-      throw error
-    }
+    const data = await res.json()
 
-    // Create user profile if signup was successful
-    if (data.user) {
-      const { error: profileError } = await supabase
-        .from('users')
-        .insert({
-          id: data.user.id,
-          email: email,
-          display_name: displayName,
-          relationship_role: relationshipRole || 'individual',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-      
-      if (profileError) {
-        console.error('Error creating user profile:', profileError)
-      }
-
-      // Send custom confirmation email via Netlify function
-      try {
-        await fetch('/.netlify/functions/send-confirmation-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, displayName })
-        })
-      } catch (e) {
-        console.error('Custom email error', e)
-      }
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to sign up')
     }
 
     return data
