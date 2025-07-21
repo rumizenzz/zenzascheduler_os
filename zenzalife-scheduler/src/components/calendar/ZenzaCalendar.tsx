@@ -766,6 +766,7 @@ export function ZenzaCalendar() {
                     <span className="text-[10px]">Completed</span>
                   </div>
                 )}
+                <span>{end ? `${start} - ${end}` : start}</span>
                 <span>{arg.timeText}</span>
                 <div className="flex items-center gap-1">
                   {arg.event.extendedProps?.category === 'doordash' && (
@@ -789,6 +790,7 @@ export function ZenzaCalendar() {
                       className="w-4 h-4"
                     />
                   )}
+                  <span>{arg.event.title}</span>
                   <span>{end ? `${start} - ${end}` : start}</span>
                   <div className="flex items-center gap-1">
                     {arg.event.extendedProps?.category === 'doordash' && (
