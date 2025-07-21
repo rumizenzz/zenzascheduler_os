@@ -18,6 +18,7 @@ import {
   CheckCircle,
   MoveRight,
   Trash,
+  Menu,
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
@@ -100,6 +101,7 @@ export function ZenzaCalendar() {
   const [activeAlarm, setActiveAlarm] = useState<CalendarEvent | null>(null);
   const triggeredRef = useRef<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
+  const [showActionMenu, setShowActionMenu] = useState(false);
   const [showMoveSuccess, setShowMoveSuccess] = useState(false);
   const [history, setHistory] = useState<TaskHistory[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
@@ -110,6 +112,10 @@ export function ZenzaCalendar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (!isMobile) setShowActionMenu(false);
+  }, [isMobile]);
 
   useEffect(() => {
     if (user) {
@@ -647,76 +653,170 @@ export function ZenzaCalendar() {
           </p>
         </div>
 
-        <div className="flex gap-3 overflow-x-auto sm:overflow-visible whitespace-nowrap w-full sm:w-auto pb-2 sm:pb-0">
+        <div className="flex gap-3 w-full sm:w-auto pb-2 sm:pb-0">
           {isOwnCalendar ? (
-            <>
-              <button
-                onClick={() => setShowDefaultSchedule(true)}
-                className="btn-dreamy flex items-center gap-2 flex-shrink-0"
-              >
-                <Clock className="w-4 h-4" />
-                Apply Default Schedule
-              </button>
+            isMobile ? (
+              <div className="relative w-full">
+                <button
+                  onClick={() => setShowActionMenu(!showActionMenu)}
+                  className="btn-dreamy flex items-center gap-2 w-full justify-center"
+                  aria-label="Calendar actions"
+                >
+                  <Menu className="w-4 h-4" />
+                  Actions
+                </button>
+                {showActionMenu && (
+                  <div className="absolute left-0 right-0 top-full mt-2 bg-white/95 backdrop-blur-lg rounded-xl shadow-xl p-3 space-y-2 z-40">
+                    <button
+                      onClick={() => {
+                        setShowActionMenu(false);
+                        setShowDefaultSchedule(true);
+                      }}
+                      className="btn-dreamy flex items-center gap-2 w-full justify-start"
+                    >
+                      <Clock className="w-4 h-4" />
+                      Apply Default Schedule
+                    </button>
+                    <button
+                      onClick={() => {
+                        const api = calendarRef.current?.getApi();
+                        const current = api
+                          ? dayjs(api.getDate()).format('YYYY-MM-DD')
+                          : dayjs().format('YYYY-MM-DD');
+                        setMoveFromDate(current);
+                        setShowMoveSchedule(true);
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy flex items-center gap-2 w-full justify-start"
+                    >
+                      <MoveRight className="w-4 h-4" />
+                      Move Day
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedTask(null);
+                        setSelectedDate(dayjs().format('YYYY-MM-DD'));
+                        setShowTaskModal(true);
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy-primary flex items-center gap-2 w-full justify-start"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add Task
+                    </button>
+                    <button
+                      onClick={() => {
+                        undo();
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy flex items-center gap-2 w-full justify-start"
+                    >
+                      <Undo2 className="w-4 h-4" />
+                      Undo
+                    </button>
+                    <button
+                      onClick={() => {
+                        redo();
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy flex items-center gap-2 w-full justify-start"
+                    >
+                      <Redo2 className="w-4 h-4" />
+                      Redo
+                    </button>
+                    <button
+                      onClick={() => {
+                        deleteDaySchedule(dayjs().format('YYYY-MM-DD'));
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy text-red-600 border-red-200 hover:bg-red-50 flex items-center gap-2 w-full justify-start"
+                    >
+                      <Trash className="w-4 h-4" />
+                      Delete Today
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowFamilySelect(true);
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy flex items-center gap-2 w-full justify-start"
+                    >
+                      <Users className="w-4 h-4" />
+                      See Family Member's Calendar
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => setShowDefaultSchedule(true)}
+                  className="btn-dreamy flex items-center gap-2 flex-shrink-0"
+                >
+                  <Clock className="w-4 h-4" />
+                  Apply Default Schedule
+                </button>
 
-              <button
-                onClick={() => {
-                  const api = calendarRef.current?.getApi();
-                  const current = api
-                    ? dayjs(api.getDate()).format('YYYY-MM-DD')
-                    : dayjs().format('YYYY-MM-DD');
-                  setMoveFromDate(current);
-                  setShowMoveSchedule(true);
-                }}
-                className="btn-dreamy flex items-center gap-2 flex-shrink-0"
-              >
-                <MoveRight className="w-4 h-4" />
-                Move Day
-              </button>
+                <button
+                  onClick={() => {
+                    const api = calendarRef.current?.getApi();
+                    const current = api
+                      ? dayjs(api.getDate()).format('YYYY-MM-DD')
+                      : dayjs().format('YYYY-MM-DD');
+                    setMoveFromDate(current);
+                    setShowMoveSchedule(true);
+                  }}
+                  className="btn-dreamy flex items-center gap-2 flex-shrink-0"
+                >
+                  <MoveRight className="w-4 h-4" />
+                  Move Day
+                </button>
 
-              <button
-                onClick={() => {
-                  setSelectedTask(null);
-                  setSelectedDate(dayjs().format('YYYY-MM-DD'));
-                  setShowTaskModal(true);
-                }}
-                className="btn-dreamy-primary flex items-center gap-2 flex-shrink-0"
-              >
-                <Plus className="w-4 h-4" />
-                Add Task
-              </button>
+                <button
+                  onClick={() => {
+                    setSelectedTask(null);
+                    setSelectedDate(dayjs().format('YYYY-MM-DD'));
+                    setShowTaskModal(true);
+                  }}
+                  className="btn-dreamy-primary flex items-center gap-2 flex-shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Task
+                </button>
 
-              <button
-                onClick={undo}
-                className="btn-dreamy flex items-center gap-2 flex-shrink-0"
-              >
-                <Undo2 className="w-4 h-4" />
-                Undo
-              </button>
+                <button
+                  onClick={undo}
+                  className="btn-dreamy flex items-center gap-2 flex-shrink-0"
+                >
+                  <Undo2 className="w-4 h-4" />
+                  Undo
+                </button>
 
-              <button
-                onClick={redo}
-                className="btn-dreamy flex items-center gap-2 flex-shrink-0"
-              >
-                <Redo2 className="w-4 h-4" />
-                Redo
-              </button>
+                <button
+                  onClick={redo}
+                  className="btn-dreamy flex items-center gap-2 flex-shrink-0"
+                >
+                  <Redo2 className="w-4 h-4" />
+                  Redo
+                </button>
 
-              <button
-                onClick={() => deleteDaySchedule(dayjs().format('YYYY-MM-DD'))}
-                className="btn-dreamy text-red-600 border-red-200 hover:bg-red-50 flex items-center gap-2 flex-shrink-0"
-              >
-                <Trash className="w-4 h-4" />
-                Delete Today
-              </button>
+                <button
+                  onClick={() => deleteDaySchedule(dayjs().format('YYYY-MM-DD'))}
+                  className="btn-dreamy text-red-600 border-red-200 hover:bg-red-50 flex items-center gap-2 flex-shrink-0"
+                >
+                  <Trash className="w-4 h-4" />
+                  Delete Today
+                </button>
 
-              <button
-                onClick={() => setShowFamilySelect(true)}
-                className="btn-dreamy flex items-center gap-2 flex-shrink-0"
-              >
-                <Users className="w-4 h-4" />
-                See Family Member's Calendar
-              </button>
-            </>
+                <button
+                  onClick={() => setShowFamilySelect(true)}
+                  className="btn-dreamy flex items-center gap-2 flex-shrink-0"
+                >
+                  <Users className="w-4 h-4" />
+                  See Family Member's Calendar
+                </button>
+              </>
+            )
           ) : (
             <button
               onClick={() => {
