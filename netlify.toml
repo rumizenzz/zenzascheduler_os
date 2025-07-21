@@ -4,7 +4,10 @@
   publish = "dist"
 
 [functions]
-  directory = "netlify/functions"
+  # The build runs from the `zenzalife-scheduler` subdirectory. Use a
+  # relative path so Netlify can locate the serverless functions stored
+  # at the repository root.
+  directory = "../netlify/functions"
 
 [[redirects]]
   from = "/*"
