@@ -539,7 +539,8 @@ export function ZenzaCalendar() {
           )}
           height={isMobile ? 'auto' : '650px'}
           slotMinTime="05:00:00"
-          slotMaxTime="23:00:00"
+          /* allow tasks that run past midnight */
+          slotMaxTime="29:00:00"
           slotDuration="00:30:00"
           scrollTime="06:00:00"
           eventDisplay="block"
