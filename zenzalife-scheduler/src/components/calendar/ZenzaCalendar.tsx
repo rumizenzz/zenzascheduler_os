@@ -161,9 +161,18 @@ export function ZenzaCalendar() {
 
       if (error) throw error;
 
-      setTasks(data || []);
-      setEvents(convertTasksToEvents(data || []));
-      return data || [];
+      const uniqueMap = new Map<string, Task>();
+      for (const t of data || []) {
+        const key = `${t.title}-${t.start_time}-${t.end_time}-${t.user_id}`;
+        if (!uniqueMap.has(key)) {
+          uniqueMap.set(key, t);
+        }
+      }
+      const deduped = Array.from(uniqueMap.values());
+
+      setTasks(deduped);
+      setEvents(convertTasksToEvents(deduped));
+      return deduped;
     } catch (error: any) {
       toast.error("Failed to load tasks: " + error.message);
       return [];
