@@ -9,6 +9,7 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 
+- Fixed default schedule reordering on mobile with touch-friendly drag.
 - Added task template and completed tasks tracking with a collapsible checklist.
 - Fixed Netlify deployment error caused by stray JSX in `Dashboard.tsx`.
 
@@ -193,6 +194,9 @@ This file tracks project progress and upcoming tasks.
 
 - Added Supabase tables and dashboard module for ancestor and temple work tracking.
 - Ancestor entries now support optional death year, displaying "1963-Present" when no death year is provided.
+- Added ability to edit the default schedule template before applying.
+- Default schedule now supports adding tasks and rearranging them with times auto-adjusting.
+- Categories are editable and a reorder mode toggle makes moving items easier.
 - Redesigned calendar UI with polished ZenzaLife branding and responsive styles.
 - Added mind map style FamilyTree component to visualize ancestors.
 
