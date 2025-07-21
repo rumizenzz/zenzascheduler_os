@@ -134,10 +134,14 @@ This file tracks project progress and upcoming tasks.
 - Restored category icons and calendar icon mapping to resolve build failures.
 - Added Olive Garden task category with brand colors and SVG icon.
 - Extended calendar view to 5am so tasks can span past midnight.
+- Widened calendar hours to show midnight through 8am so overnight tasks display accurately.
+- Displayed exact start times for overnight tasks across day views.
 - Resolved TypeScript syntax errors in `Dashboard.tsx` and `main.tsx`.
 - Added Android install instructions and unknown apps onboarding guide.
 - Added undo/redo history for the calendar with Supabase snapshots.
 - Secure delete button wipes a day's schedule only after typing "DELETE-ALL-TASKS".
+- Fixed JSX closing tags in ZenzaCalendar so Netlify builds succeed.
+- Verified calendar build succeeds with midnight hours and manual time display.
 
 ## Next Steps
 
