@@ -9,6 +9,7 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 
+- Fixed default schedule reordering on mobile with touch-friendly drag.
 - Added task template and completed tasks tracking with a collapsible checklist.
 - Fixed Netlify deployment error caused by stray JSX in `Dashboard.tsx`.
 

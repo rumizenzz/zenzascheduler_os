@@ -149,8 +149,14 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
               {items.map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-4 p-3 bg-white/50 rounded-xl border border-white/50"
-                  draggable={reorderEnabled}
+                  className={`flex items-center gap-4 p-3 bg-white/50 rounded-xl border border-white/50 ${
+                    reorderEnabled ? 'select-none cursor-grab active:cursor-grabbing' : ''
+                  }`}
+                  draggable={
+                    reorderEnabled &&
+                    typeof window !== 'undefined' &&
+                    !('ontouchstart' in window)
+                  }
                   onDragStart={(e) => {
                     if (!reorderEnabled) return
                     if (e.shiftKey || dragIndex !== null) setDragIndex(index)
@@ -180,6 +186,11 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
                       holdTimer.current = setTimeout(() => setDragIndex(index), 300)
                     }
                   }}
+                  onPointerEnter={() => {
+                    if (!reorderEnabled || dragIndex === null || dragIndex === index) return
+                    reorderItems(dragIndex, index)
+                    setDragIndex(index)
+                  }}
                   onPointerLeave={() => {
                     if (holdTimer.current) {
                       clearTimeout(holdTimer.current)
@@ -190,6 +201,9 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
                     if (holdTimer.current) {
                       clearTimeout(holdTimer.current)
                       holdTimer.current = null
+                    }
+                    if (dragIndex !== null) {
+                      setDragIndex(null)
                     }
                   }}
                 >
