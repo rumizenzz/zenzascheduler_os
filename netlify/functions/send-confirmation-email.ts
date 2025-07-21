@@ -21,13 +21,13 @@ const handler: Handler = async (event) => {
   }
 
   try {
-    const { email, displayName } = JSON.parse(event.body || '{}')
+    const { email, password, displayName, relationshipRole } = JSON.parse(event.body || '{}')
 
-    if (!email) {
+    if (!email || !password) {
       return {
         statusCode: 400,
         headers: corsHeaders,
-        body: JSON.stringify({ error: 'Email required' })
+        body: JSON.stringify({ error: 'Email and password required' })
       }
     }
 
@@ -49,7 +49,11 @@ const handler: Handler = async (event) => {
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
       type: 'signup',
       email,
-      options: { redirectTo: `${event.headers.origin || supabaseUrl}/confirmed` }
+      password,
+      options: {
+        redirectTo: `${event.headers.origin || supabaseUrl}/confirmed`,
+        data: { display_name: displayName, relationship_role: relationshipRole || 'individual' }
+      }
     })
 
     if (linkError || !linkData) {
@@ -57,6 +61,20 @@ const handler: Handler = async (event) => {
     }
 
     const actionLink: string = (linkData as any).action_link || (linkData as any).properties?.action_link
+    const newUserId: string | undefined = (linkData as any).user?.id
+
+    if (newUserId) {
+      await supabase
+        .from('users')
+        .insert({
+          id: newUserId,
+          email,
+          display_name: displayName,
+          relationship_role: relationshipRole || 'individual',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+    }
 
     await supabase
       .from(table)

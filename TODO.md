@@ -133,6 +133,8 @@ This file tracks project progress and upcoming tasks.
 - Extended calendar view to 5am so tasks can span past midnight.
 - Resolved TypeScript syntax errors in `Dashboard.tsx` and `main.tsx`.
 - Added Android install instructions and unknown apps onboarding guide.
+- Switched sign up flow to Netlify function so confirmation emails use our custom SMTP instead of Supabase defaults.
+- Handled invalid JSON responses from the signup function to avoid errors.
 
 ## Next Steps
 
