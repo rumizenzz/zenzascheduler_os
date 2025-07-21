@@ -32,6 +32,7 @@ This file tracks project progress and upcoming tasks.
 - Added login prompt asking users to join the mailing list if they aren't subscribed.
 - Refined mailing list prompt wording to remove explicit baby references.
 - Fixed Netlify configuration parsing error by cleaning up netlify.toml
+- Fixed TypeScript syntax issue in `Dashboard.tsx` that broke Netlify build
 - Fixed Supabase queries for garbage schedules and addresses to match table schema.
 - Fixed additional Life Logistics queries for addresses and businesses.
 - Corrected calendar timezone handling so saved tasks keep the selected local times.

@@ -21,6 +21,10 @@ import {
   Timer as TimerIcon,
   Settings,
   LogOut,
+  Sparkles
+} from 'lucide-react'
+import { toast } from 'react-hot-toast'
+import { MailingListPrompt } from '../auth/MailingListPrompt'
   Sparkles,
   TreePine,
   Menu,
@@ -111,7 +115,7 @@ export function Dashboard() {
     }
   };
 
-  const renderContent = () => {
+  const renderContent = (): JSX.Element => {
     switch (activeTab) {
       case "calendar":
         return <ZenzaCalendar />;
@@ -270,6 +274,9 @@ export function Dashboard() {
       >
         <div className="p-6">{renderContent()}</div>
       </div>
+      <MailingListPrompt />
+    </div>
+  )
       <OnboardingModal />
       <MailingListPrompt />
     </div>
