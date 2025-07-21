@@ -13,6 +13,17 @@ This file tracks project progress and upcoming tasks.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.
+ - Added custom confirmation email Netlify function using IONOS and confirmation
+  page for verified users.
+- Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
+- Created unsubscribe edge function and page with mailing list table documentation.
+- Added warning message when an email is not found during unsubscribe.
+- Confirmation email edge function now stores new sign ups in the mailing list table.
+- Unsubscribe page includes instructions for re-subscribing.
+- Added login prompt asking users to join the mailing list if they aren't subscribed.
+- Refined mailing list prompt wording to remove explicit baby references.
+- Fixed Netlify configuration parsing error by cleaning up netlify.toml
+- Fixed TypeScript syntax issue in `Dashboard.tsx` that broke Netlify build
 
 ## Next Steps
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
