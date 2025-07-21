@@ -1,0 +1,5 @@
+node_modules/
+zenzalife-scheduler/node_modules/
+.env
+.DS_Store
+supabase/.env

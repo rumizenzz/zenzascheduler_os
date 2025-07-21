@@ -19,6 +19,7 @@ import {
   Sparkles
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { MailingListPrompt } from '../auth/MailingListPrompt'
 
 type DashboardTab = 'calendar' | 'growth' | 'affirmations' | 'family' | 'logistics' | 'garbage' | 'settings'
 
@@ -30,7 +31,7 @@ const navigationItems = [
   { id: 'logistics', label: 'Life Logistics', icon: MapPin, color: 'text-orange-500' },
   { id: 'garbage', label: 'Garbage/Recycling', icon: Trash2, color: 'text-gray-500' },
   { id: 'settings', label: 'Settings', icon: Settings, color: 'text-gray-600' }
-] as const
+] as const;
 
 export function Dashboard() {
   const { user, profile, signOut } = useAuth()
@@ -46,7 +47,7 @@ export function Dashboard() {
     }
   }
 
-  const renderContent = () => {
+  const renderContent = (): JSX.Element => {
     switch (activeTab) {
       case 'calendar':
         return <ZenzaCalendar />
@@ -161,7 +162,7 @@ export function Dashboard() {
           <span className={`text-xs transition-transform duration-300 ${
             sidebarCollapsed ? 'rotate-180' : ''
           }`}>
-            ‹
+            {'<'}
           </span>
         </button>
       </div>
@@ -174,6 +175,7 @@ export function Dashboard() {
           {renderContent()}
         </div>
       </div>
+      <MailingListPrompt />
     </div>
   )
 }
