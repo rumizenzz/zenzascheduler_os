@@ -358,6 +358,46 @@ export function ZenzaCalendar() {
     }
   };
 
+  const handleEventDrop = async (info: any) => {
+    if (!user || !isOwnCalendar) return;
+    const id = info.event.id;
+    const start = dayjs(info.event.start).format('YYYY-MM-DDTHH:mm:ssZ');
+    const end = info.event.end
+      ? dayjs(info.event.end).format('YYYY-MM-DDTHH:mm:ssZ')
+      : null;
+    const { error } = await supabase
+      .from('tasks')
+      .update({ start_time: start, end_time: end, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    if (error) {
+      toast.error('Failed to move task: ' + error.message);
+      info.revert();
+      return;
+    }
+    const updated = await loadTasks();
+    await saveHistory(updated);
+  };
+
+  const handleEventResize = async (info: any) => {
+    if (!user || !isOwnCalendar) return;
+    const id = info.event.id;
+    const start = dayjs(info.event.start).format('YYYY-MM-DDTHH:mm:ssZ');
+    const end = info.event.end
+      ? dayjs(info.event.end).format('YYYY-MM-DDTHH:mm:ssZ')
+      : null;
+    const { error } = await supabase
+      .from('tasks')
+      .update({ start_time: start, end_time: end, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    if (error) {
+      toast.error('Failed to resize task: ' + error.message);
+      info.revert();
+      return;
+    }
+    const updated = await loadTasks();
+    await saveHistory(updated);
+  };
+
   const applyDefaultSchedule = async (date: string) => {
     if (!user || !isOwnCalendar) return;
 
@@ -732,6 +772,7 @@ export function ZenzaCalendar() {
           select={handleDateSelect}
           eventClick={handleEventClick}
           eventDrop={handleEventDrop}
+          eventResize={handleEventResize}
           eventContent={(arg) => (
             <div
               className="relative px-2 py-1 rounded-lg text-xs font-medium shadow"
