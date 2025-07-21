@@ -18,6 +18,7 @@ import {
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
+import { DragHint } from "./DragHint";
 
 interface CalendarEvent {
   id: string;
@@ -229,6 +230,33 @@ export function ZenzaCalendar() {
       setSelectedTask(task);
       setSelectedDate(null);
       setShowTaskModal(true);
+    }
+  };
+
+  const handleEventDrop = async (info: any) => {
+    if (!isOwnCalendar) return;
+    if (!isMobile && !info.jsEvent?.shiftKey) {
+      info.revert();
+      toast('Hold Shift while dragging to reschedule');
+      return;
+    }
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .update({
+          start_time: dayjs(info.event.start).format('YYYY-MM-DDTHH:mm:ssZ'),
+          end_time: info.event.end
+            ? dayjs(info.event.end).format('YYYY-MM-DDTHH:mm:ssZ')
+            : null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', info.event.id);
+      if (error) throw error;
+      toast.success('Task rescheduled');
+      await loadTasks();
+    } catch (err: any) {
+      info.revert();
+      toast.error('Failed to update task: ' + err.message);
     }
   };
 
@@ -495,6 +523,7 @@ export function ZenzaCalendar() {
           events={events}
           select={handleDateSelect}
           eventClick={handleEventClick}
+          eventDrop={handleEventDrop}
           eventContent={(arg) => (
             <div
               className="relative px-2 py-1 rounded-lg text-xs font-medium shadow"
@@ -550,6 +579,8 @@ export function ZenzaCalendar() {
           allDaySlot={false}
         />
       </div>
+
+      <DragHint isMobile={isMobile} />
 
       {/* Task Modal */}
       {showTaskModal && (
