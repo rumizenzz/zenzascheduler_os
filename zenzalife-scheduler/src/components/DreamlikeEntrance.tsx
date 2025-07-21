@@ -156,8 +156,9 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
 
       {/* Bottom Message */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in-delayed-3">
-        <p className="text-xs text-gray-400/80 font-light">
-          Preparing your elevated life management experience...
+        <p className="text-xs text-gray-400/80 font-light text-center">
+          Made with ❤️ for my fiancée (soon to be wife) Khen Shantel Zappalorti.
+          <br />Gihigugma tika sa tibuok nakong kasingkasing, baby ko.
         </p>
       </div>
     </div>

@@ -29,6 +29,7 @@ import {
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
 import { OnboardingModal } from "../onboarding/OnboardingModal";
+import { Footer } from "../Footer";
 
 type DashboardTab =
   | "calendar"
@@ -242,6 +243,7 @@ export function Dashboard() {
       </div>
       <OnboardingModal />
       <MailingListPrompt />
+      <Footer />
     </div>
   );
 }
