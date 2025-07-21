@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useTheme } from '@/contexts/ThemeContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase, updateUserProfile } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
@@ -34,6 +35,7 @@ export function SettingsModule() {
   const { user, profile, refreshProfile } = useAuth()
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile')
   const [loading, setLoading] = useState(false)
+  const { theme, setTheme } = useTheme()
   const { isIncognito } = useInstallPrompt()
   const [profileData, setProfileData] = useState({
     display_name: profile?.display_name || '',
@@ -456,8 +458,18 @@ export function SettingsModule() {
                   ZenzaLife uses a dreamy, cloud-like aesthetic designed for tranquility
                 </p>
                 <div className="flex gap-3">
-                  <button className="btn-dreamy-primary text-sm">Light (Current)</button>
-                  <button className="btn-dreamy text-sm opacity-50">Dark (Coming Soon)</button>
+                  <button
+                    onClick={() => setTheme('light')}
+                    className={`btn-dreamy text-sm ${theme === 'light' ? 'btn-dreamy-primary' : ''}`}
+                  >
+                    Light
+                  </button>
+                  <button
+                    onClick={() => setTheme('dark')}
+                    className={`btn-dreamy text-sm ${theme === 'dark' ? 'btn-dreamy-primary' : ''}`}
+                  >
+                    Dark
+                  </button>
                 </div>
               </div>
               

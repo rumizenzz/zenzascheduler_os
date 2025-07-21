@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider, useAuth } from '@/contexts/AuthContext'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 import { DreamlikeEntrance } from '@/components/DreamlikeEntrance'
 import { AuthForm } from '@/components/auth/AuthForm'
 import { Dashboard } from '@/components/dashboard/Dashboard'
@@ -55,11 +56,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AppContent />
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
+        <ThemeProvider>
+          <AppContent />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
             style: {
               background: 'rgba(255, 255, 255, 0.9)',
               backdropFilter: 'blur(10px)',
@@ -83,6 +85,7 @@ function App() {
             }
           }}
         />
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   )

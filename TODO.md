@@ -9,6 +9,7 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 
+- Added dark mode toggle with ThemeContext and persistent preference.
 - Added task template and completed tasks tracking with a collapsible checklist.
 - Fixed Netlify deployment error caused by stray JSX in `Dashboard.tsx`.
 
