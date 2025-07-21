@@ -156,6 +156,9 @@ This file tracks project progress and upcoming tasks.
 
 - Mobile calendar now shows the Week button for easier navigation.
 
+- Added a dreamlike Family Legacy constellation view with animated stars
+  walking across the sky.
+
 ## Next Steps
 
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.

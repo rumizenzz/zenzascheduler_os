@@ -2,7 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase, FamilyGroup, User } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
-import { Users, Plus, Crown, Baby, GraduationCap, Heart, Target } from 'lucide-react'
+import {
+  Users,
+  Plus,
+  Crown,
+  Baby,
+  GraduationCap,
+  Heart,
+  Target,
+  Sparkles
+} from 'lucide-react'
+import { FamilyConstellation } from '@/components/FamilyConstellation'
 
 export function FamilyModule() {
   const { user, profile } = useAuth()
@@ -11,6 +21,7 @@ export function FamilyModule() {
   const [loading, setLoading] = useState(true)
   const [showCreateFamily, setShowCreateFamily] = useState(false)
   const [showJoinFamily, setShowJoinFamily] = useState(false)
+  const [showConstellation, setShowConstellation] = useState(false)
 
   useEffect(() => {
     if (user && profile) {
@@ -258,8 +269,16 @@ export function FamilyModule() {
           </p>
         </div>
         
-        <div className="text-sm text-gray-600">
-          Family ID: <span className="font-mono bg-gray-100 px-2 py-1 rounded">{familyGroup.id}</span>
+        <div className="flex items-center gap-4 text-sm text-gray-600">
+          <div>
+            Family ID: <span className="font-mono bg-gray-100 px-2 py-1 rounded">{familyGroup.id}</span>
+          </div>
+          <button
+            onClick={() => setShowConstellation(true)}
+            className="btn-dreamy flex items-center gap-1"
+          >
+            <Sparkles className="w-4 h-4" /> Legacy View
+          </button>
         </div>
       </div>
 
@@ -356,6 +375,9 @@ export function FamilyModule() {
           <p className="text-gray-600 text-center py-8">No milestones yet. Add your first family milestone!</p>
         )}
       </div>
+      {showConstellation && (
+        <FamilyConstellation onClose={() => setShowConstellation(false)} />
+      )}
     </div>
   )
 }
