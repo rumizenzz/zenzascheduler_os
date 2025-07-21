@@ -16,12 +16,14 @@ import {
   Target,
   Calendar as CalendarIcon,
   CheckCircle,
+  MoveRight,
   Trash,
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
+import { MoveScheduleModal } from "./MoveScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
-import { ShiftScheduleModal } from "./ShiftScheduleModal";
+import { DragHint } from "./DragHint";
 
 interface CalendarEvent {
   id: string;
@@ -86,9 +88,8 @@ export function ZenzaCalendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showDefaultSchedule, setShowDefaultSchedule] = useState(false);
-  const [showShiftModal, setShowShiftModal] = useState(false);
-  const [shiftDate, setShiftDate] = useState(dayjs().format('YYYY-MM-DD'));
-  const [shiftStart, setShiftStart] = useState('06:30');
+  const [showMoveSchedule, setShowMoveSchedule] = useState(false);
+  const [moveFromDate, setMoveFromDate] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [calendarView, setCalendarView] = useState("timeGridDay");
   const calendarRef = useRef<FullCalendar>(null);
@@ -99,6 +100,7 @@ export function ZenzaCalendar() {
   const [activeAlarm, setActiveAlarm] = useState<CalendarEvent | null>(null);
   const triggeredRef = useRef<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
+  const [showMoveSuccess, setShowMoveSuccess] = useState(false);
   const [history, setHistory] = useState<TaskHistory[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
 
@@ -138,6 +140,15 @@ export function ZenzaCalendar() {
     return () => clearInterval(interval);
   }, [events]);
 
+  useEffect(() => {
+    if (showMoveSuccess) {
+      const timer = setTimeout(() => setShowMoveSuccess(false), 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [showMoveSuccess])
+
+  const loadTasks = async () => {
+    if (!user) return;
   const loadTasks = async (): Promise<Task[]> => {
     if (!user) return [];
     const targetId = viewUser ? viewUser.id : user.id;
@@ -264,6 +275,33 @@ export function ZenzaCalendar() {
       setSelectedTask(task);
       setSelectedDate(null);
       setShowTaskModal(true);
+    }
+  };
+
+  const handleEventDrop = async (info: any) => {
+    if (!isOwnCalendar) return;
+    if (!isMobile && !info.jsEvent?.shiftKey) {
+      info.revert();
+      toast('Hold Shift while dragging to reschedule');
+      return;
+    }
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .update({
+          start_time: dayjs(info.event.start).format('YYYY-MM-DDTHH:mm:ssZ'),
+          end_time: info.event.end
+            ? dayjs(info.event.end).format('YYYY-MM-DDTHH:mm:ssZ')
+            : null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', info.event.id);
+      if (error) throw error;
+      toast.success('Task rescheduled');
+      await loadTasks();
+    } catch (err: any) {
+      info.revert();
+      toast.error('Failed to update task: ' + err.message);
     }
   };
 
@@ -482,6 +520,29 @@ export function ZenzaCalendar() {
     }
   };
 
+  const moveSchedule = async (toDate: string) => {
+    if (!user || !isOwnCalendar || !moveFromDate) return;
+    try {
+      const dayTasks = tasks.filter(
+        (t) => dayjs(t.start_time).format('YYYY-MM-DD') === moveFromDate
+      );
+      for (const t of dayTasks) {
+        const newStart = dayjs(toDate + dayjs(t.start_time!).format('THH:mm:ssZ')).format('YYYY-MM-DDTHH:mm:ssZ');
+        const newEnd = t.end_time
+          ? dayjs(toDate + dayjs(t.end_time).format('THH:mm:ssZ')).format('YYYY-MM-DDTHH:mm:ssZ')
+          : null;
+        const { error } = await supabase
+          .from('tasks')
+          .update({ start_time: newStart, end_time: newEnd, updated_at: new Date().toISOString() })
+          .eq('id', t.id);
+        if (error) throw error;
+      }
+      toast.success('Schedule moved!');
+      setShowMoveSuccess(true);
+      await loadTasks();
+    } catch (error: any) {
+      toast.error('Failed to move schedule: ' + error.message);
+    }
   const shiftDaySchedule = async (date: string, newStart: string) => {
     if (!user || !isOwnCalendar) return;
 
@@ -617,22 +678,17 @@ export function ZenzaCalendar() {
 
               <button
                 onClick={() => {
-                  const today = dayjs().format('YYYY-MM-DD');
-                  const todaysTasks = tasks.filter(
-                    (t) => dayjs(t.start_time).format('YYYY-MM-DD') === today
-                  );
-                  setShiftDate(today);
-                  setShiftStart(
-                    todaysTasks.length
-                      ? dayjs(todaysTasks[0].start_time).format('HH:mm')
-                      : '06:30'
-                  );
-                  setShowShiftModal(true);
+                  const api = calendarRef.current?.getApi();
+                  const current = api
+                    ? dayjs(api.getDate()).format('YYYY-MM-DD')
+                    : dayjs().format('YYYY-MM-DD');
+                  setMoveFromDate(current);
+                  setShowMoveSchedule(true);
                 }}
                 className="btn-dreamy flex items-center gap-2"
               >
-                <Clock className="w-4 h-4" />
-                Shift Today's Schedule
+                <MoveRight className="w-4 h-4" />
+                Move Day
               </button>
 
               <button
@@ -773,6 +829,8 @@ export function ZenzaCalendar() {
         />
       </div>
 
+      <DragHint isMobile={isMobile} />
+
       {/* Task Modal */}
       {showTaskModal && (
         <TaskModal
@@ -800,13 +858,12 @@ export function ZenzaCalendar() {
         />
       )}
 
-      {showShiftModal && (
-        <ShiftScheduleModal
-          isOpen={showShiftModal}
-          onClose={() => setShowShiftModal(false)}
-          onApply={(d, t) => shiftDaySchedule(d, t)}
-          initialDate={shiftDate}
-          currentStart={shiftStart}
+      {showMoveSchedule && moveFromDate && (
+        <MoveScheduleModal
+          isOpen={showMoveSchedule}
+          onClose={() => setShowMoveSchedule(false)}
+          fromDate={moveFromDate}
+          onMove={moveSchedule}
         />
       )}
 
@@ -830,6 +887,12 @@ export function ZenzaCalendar() {
           soundUrl={getAlarmSound(activeAlarm)}
           onDismiss={() => setActiveAlarm(null)}
         />
+      )}
+
+      {showMoveSuccess && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg animate-bounce z-50">
+          Schedule moved!
+        </div>
       )}
     </div>
   );
