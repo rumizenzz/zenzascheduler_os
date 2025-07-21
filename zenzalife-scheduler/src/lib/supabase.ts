@@ -187,6 +187,72 @@ export type Timer = {
   updated_at?: string
 }
 
+export type Person = {
+  id: string
+  family_id: string
+  first_name: string
+  last_name?: string
+  middle_name?: string
+  gender?: string
+  birth_date?: string
+  death_date?: string
+  profile_photo?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type Relationship = {
+  id: string
+  family_id: string
+  person_id: string
+  related_person_id: string
+  relationship_type: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type LifeEvent = {
+  id: string
+  person_id: string
+  event_type: string
+  event_date?: string
+  event_place?: string
+  description?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type Source = {
+  id: string
+  person_id?: string
+  event_id?: string
+  title?: string
+  description?: string
+  url?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type Media = {
+  id: string
+  person_id?: string
+  event_id?: string
+  media_type?: string
+  url?: string
+  caption?: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type Permission = {
+  id: string
+  family_id: string
+  user_id: string
+  role?: string
+  created_at?: string
+  updated_at?: string
+}
+
 // Helper functions
 export async function getCurrentUser() {
   const {
