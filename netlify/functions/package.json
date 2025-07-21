@@ -1,0 +1,9 @@
+{
+  "name": "zenzalife-netlify-functions",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.52.0",
+    "nodemailer": "^7.0.5"
+  }
+}
