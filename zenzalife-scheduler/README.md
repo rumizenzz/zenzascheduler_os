@@ -132,3 +132,20 @@ replace them with your own sounds or select custom files from the Settings scree
 When uploading a custom alarm you can also specify a display name so it appears
 in the alarm sound dropdowns.
 
+
+## Installing on Android
+
+You can install ZenzaLife Scheduler as a Progressive Web App. Open
+`https://os.zenzadaegroup.com` in Chrome on your Android device and use the
+**Add to Home Screen** option from the browser menu. Chrome will create an app
+icon that launches the full experience.
+
+If Chrome blocks the installation, enable the system permission for installing
+unknown apps:
+
+1. Open **Settings** → **Apps** → **Special access**.
+2. Tap **Install unknown apps**.
+3. Select your browser (e.g. Chrome) and toggle **Allow from this source**.
+
+With this enabled, the PWA installs without restrictions and alarms will work
+even when launched from the home screen.
