@@ -20,6 +20,8 @@ This file tracks project progress and upcoming tasks.
 - Added income entry modal with automatic totals for a complete tracker.
 - Clarified Netlify environment variables in the README.
 - Introduced Netlify configuration file for easier setup.
+- Fixed functions path in `netlify.toml` so confirmation emails deploy properly.
+- Added root `package.json` and Netlify build step to install serverless dependencies.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.
