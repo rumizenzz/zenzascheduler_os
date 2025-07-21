@@ -134,6 +134,8 @@ This file tracks project progress and upcoming tasks.
 - Restored category icons and calendar icon mapping to resolve build failures.
 - Added Olive Garden task category with brand colors and SVG icon.
 - Extended calendar view to 5am so tasks can span past midnight.
+- Widened calendar hours to show midnight through 8am so overnight tasks display accurately.
+- Displayed exact start times for overnight tasks across day views.
 - Resolved TypeScript syntax errors in `Dashboard.tsx` and `main.tsx`.
 - Added Move Schedule modal to shift an entire day of tasks to a new date.
 - Added shift-drag rescheduling with animated hint and mobile long-press support.
