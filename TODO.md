@@ -127,6 +127,7 @@ This file tracks project progress and upcoming tasks.
 - Restored category icons and calendar icon mapping to resolve build failures.
 - Added Olive Garden task category with brand colors and SVG icon.
 - Extended calendar view to 5am so tasks can span past midnight.
+- Resolved TypeScript syntax errors in `Dashboard.tsx` and `main.tsx`.
 
 ## Next Steps
 

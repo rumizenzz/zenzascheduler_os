@@ -43,52 +43,15 @@ type DashboardTab =
   | "settings";
 
 const navigationItems = [
-  { id: 'calendar', label: 'Calendar', icon: Calendar, color: 'text-blue-500' },
-  { id: 'growth', label: '1% Better', icon: TrendingUp, color: 'text-green-500' },
-  { id: 'affirmations', label: 'Affirmations', icon: Heart, color: 'text-pink-500' },
-  { id: 'family', label: 'Family', icon: Users, color: 'text-purple-500' },
-  { id: 'logistics', label: 'Life Logistics', icon: MapPin, color: 'text-orange-500' },
-  { id: 'garbage', label: 'Garbage/Recycling', icon: Trash2, color: 'text-gray-500' },
-  { id: 'settings', label: 'Settings', icon: Settings, color: 'text-gray-600' }
   { id: "calendar", label: "Your Calendar", icon: Calendar, color: "text-blue-500" },
-  {
-    id: "growth",
-    label: "1% Better",
-    icon: TrendingUp,
-    color: "text-green-500",
-  },
-  {
-    id: "affirmations",
-    label: "Affirmations",
-    icon: Heart,
-    color: "text-pink-500",
-  },
-  {
-    id: "timer",
-    label: "Timers",
-    icon: TimerIcon,
-    color: "text-blue-500",
-  },
+  { id: "growth", label: "1% Better", icon: TrendingUp, color: "text-green-500" },
+  { id: "affirmations", label: "Affirmations", icon: Heart, color: "text-pink-500" },
+  { id: "timer", label: "Timers", icon: TimerIcon, color: "text-blue-500" },
   { id: "family", label: "Family", icon: Users, color: "text-purple-500" },
-    { id: "ancestry", label: "Ancestry", icon: TreePine, color: "text-green-600" },
-  {
-    id: "logistics",
-    label: "Life Logistics",
-    icon: MapPin,
-    color: "text-orange-500",
-  },
-  {
-    id: "garbage",
-    label: "Garbage/Recycling",
-    icon: Trash2,
-    color: "text-gray-500",
-  },
-  {
-    id: "spiritual",
-    label: "Spiritual Study",
-    icon: BookOpen,
-    color: "text-purple-500",
-  },
+  { id: "ancestry", label: "Ancestry", icon: TreePine, color: "text-green-600" },
+  { id: "logistics", label: "Life Logistics", icon: MapPin, color: "text-orange-500" },
+  { id: "garbage", label: "Garbage/Recycling", icon: Trash2, color: "text-gray-500" },
+  { id: "spiritual", label: "Spiritual Study", icon: BookOpen, color: "text-purple-500" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
 
