@@ -294,3 +294,17 @@
 .fc .fc-event {
   @apply cursor-pointer rounded-lg border-none;
 }
+
+}
+/* Calendar toolbar improvements */
+.fc-header-toolbar {
+  @apply sticky top-0 z-20 bg-white/80 backdrop-blur-md p-2 rounded-b-xl shadow;
+}
+.fc-header-toolbar .fc-button {
+  @apply px-4 py-2 rounded-full text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 active:scale-95 transition-all m-1;
+}
+
+/* Floating action button */
+.fab-add-task {
+  @apply fixed bottom-24 right-4 sm:bottom-6 sm:right-6 z-40 p-4 rounded-full bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 text-white shadow-xl hover:shadow-2xl active:scale-95 transition-transform;
+}
