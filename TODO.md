@@ -143,6 +143,9 @@ This file tracks project progress and upcoming tasks.
 - Added undo/redo history for the calendar with Supabase snapshots.
 - Secure delete button wipes a day's schedule only after typing "DELETE-ALL-TASKS".
 - Fixed drag-and-drop edits so moving or resizing tasks now updates history for undo/redo.
+- Polished calendar UI with refined FullCalendar styles for a professional look.
+- Fixed missing brace in `ZenzaCalendar` that caused a lint parsing error.
+- Fixed build error by properly importing `isAndroid` in `OnboardingModal`.
 
 ## Next Steps
 

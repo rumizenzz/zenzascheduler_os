@@ -261,3 +261,22 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(147, 197, 253, 0.5);
 }
+/* Calendar professional styling */
+.fc .fc-toolbar-title {
+  @apply font-light text-gray-800;
+}
+
+.fc .fc-button {
+  @apply btn-dreamy px-3 py-1 text-xs;
+  border: none;
+}
+
+.fc .fc-daygrid-event,
+.fc .fc-timegrid-event {
+  @apply rounded-lg border-none text-xs;
+  padding: 2px 4px;
+}
+
+.fc .fc-daygrid-event-dot {
+  display: none;
+}
