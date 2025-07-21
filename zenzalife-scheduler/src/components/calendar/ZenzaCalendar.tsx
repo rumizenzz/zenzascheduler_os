@@ -276,33 +276,6 @@ export function ZenzaCalendar() {
     }
   };
 
-  const handleEventDrop = async (info: any) => {
-    if (!isOwnCalendar) return;
-    if (!isMobile && !info.jsEvent?.shiftKey) {
-      info.revert();
-      toast('Hold Shift while dragging to reschedule');
-      return;
-    }
-    try {
-      const { error } = await supabase
-        .from('tasks')
-        .update({
-          start_time: dayjs(info.event.start).format('YYYY-MM-DDTHH:mm:ssZ'),
-          end_time: info.event.end
-            ? dayjs(info.event.end).format('YYYY-MM-DDTHH:mm:ssZ')
-            : null,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', info.event.id);
-      if (error) throw error;
-      toast.success('Task rescheduled');
-      await loadTasks();
-    } catch (err: any) {
-      info.revert();
-      toast.error('Failed to update task: ' + err.message);
-    }
-  };
-
   const handleTaskSave = async (taskData: any) => {
     if (!user || !isOwnCalendar) return;
 
@@ -775,6 +748,7 @@ export function ZenzaCalendar() {
                   </div>
                 )}
                 <span>{end ? `${start} - ${end}` : start}</span>
+                <span>{arg.timeText}</span>
                 <div className="flex items-center gap-1">
                   {arg.event.extendedProps?.category === 'doordash' && (
                     <img src="/icons/doordash.svg" alt="DoorDash" className="w-4 h-4" />
@@ -786,6 +760,31 @@ export function ZenzaCalendar() {
                     <img src="/icons/olivegarden.svg" alt="Olive Garden" className="w-4 h-4" />
                   )}
                   <span>{arg.event.title}</span>
+                  <span>{end ? `${start} - ${end}` : start}</span>
+                  <div className="flex items-center gap-1">
+                    {arg.event.extendedProps?.category === 'doordash' && (
+                      <img
+                        src="/icons/doordash.svg"
+                        alt="DoorDash"
+                        className="w-4 h-4"
+                      />
+                    )}
+                    {arg.event.extendedProps?.category === 'ubereats' && (
+                      <img
+                        src="/icons/ubereats.svg"
+                        alt="Uber Eats"
+                        className="w-4 h-4"
+                      />
+                    )}
+                    {arg.event.extendedProps?.category === 'olivegarden' && (
+                      <img
+                        src="/icons/olivegarden.svg"
+                        alt="Olive Garden"
+                        className="w-4 h-4"
+                      />
+                    )}
+                    <span>{arg.event.title}</span>
+                  </div>
                 </div>
               </div>
             );

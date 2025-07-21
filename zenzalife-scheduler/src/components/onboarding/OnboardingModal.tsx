@@ -11,7 +11,7 @@ export function OnboardingModal() {
   const [show, setShow] = useState(false)
   const [step, setStep] = useState(0)
   const { requestPermission, testAlarm } = useNotifications()
-  const { installed, isIncognito } = useInstallPrompt()
+  const { installed, isIncognito, isAndroid } = useInstallPrompt()
   const isMobile = useIsMobile()
 
   useEffect(() => {
