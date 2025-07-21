@@ -24,6 +24,7 @@ import { DefaultScheduleModal } from "./DefaultScheduleModal";
 import { MoveScheduleModal } from "./MoveScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
 import { DragHint } from "./DragHint";
+import { CompletedTasksModal } from "./CompletedTasksModal";
 
 interface CalendarEvent {
   id: string;
@@ -103,6 +104,8 @@ export function ZenzaCalendar() {
   const [showMoveSuccess, setShowMoveSuccess] = useState(false);
   const [history, setHistory] = useState<TaskHistory[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
+  const [showCompletedModal, setShowCompletedModal] = useState(false);
+  const [completedDate, setCompletedDate] = useState<string>(dayjs().format('YYYY-MM-DD'));
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -686,6 +689,19 @@ export function ZenzaCalendar() {
               </button>
 
               <button
+                onClick={() => {
+                  const api = calendarRef.current?.getApi();
+                  const current = api ? dayjs(api.getDate()).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD');
+                  setCompletedDate(current);
+                  setShowCompletedModal(true);
+                }}
+                className="btn-dreamy flex items-center gap-2"
+              >
+                <CheckCircle className="w-4 h-4" />
+                Tasks Completed
+              </button>
+
+              <button
                 onClick={undo}
                 className="btn-dreamy flex items-center gap-2 flex-shrink-0"
               >
@@ -905,6 +921,22 @@ export function ZenzaCalendar() {
             setViewUser(member);
             setShowFamilySelect(false);
           }}
+        />
+      )}
+
+      {showCompletedModal && (
+        <CompletedTasksModal
+          isOpen={showCompletedModal}
+          onClose={() => setShowCompletedModal(false)}
+          date={completedDate}
+          onAddTask={(d) => {
+            setSelectedTask(null);
+            setSelectedDate(d);
+            setShowTaskModal(true);
+            setShowCompletedModal(false);
+          }}
+          refreshTasks={loadTasks}
+          tasks={tasks}
         />
       )}
 
