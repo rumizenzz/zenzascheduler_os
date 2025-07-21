@@ -111,6 +111,7 @@ export function ZenzaCalendar() {
   const [isMobile, setIsMobile] = useState(false);
   const [showActionMenu, setShowActionMenu] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [swipeEnabled, setSwipeEnabled] = useState(false);
   const [showMoveSuccess, setShowMoveSuccess] = useState(false);
   const [history, setHistory] = useState<TaskHistory[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
@@ -301,14 +302,18 @@ export function ZenzaCalendar() {
     setShowTaskModal(true);
   };
 
+  const openDayModal = (date: Date) => {
+    const dayEvents = events.filter((ev) =>
+      dayjs(ev.start).isSame(date, "day"),
+    );
+    setDayModalDate(dayjs(date).format("YYYY-MM-DD"));
+    setDayModalEvents(dayEvents);
+    setShowDayModal(true);
+  };
+
   const handleDateClick = (info: any) => {
     if (calendarView === "dayGridMonth" || calendarView === "timeGridWeek") {
-      const dayEvents = events.filter((ev) =>
-        dayjs(ev.start).isSame(info.date, "day"),
-      );
-      setDayModalDate(info.dateStr);
-      setDayModalEvents(dayEvents);
-      setShowDayModal(true);
+      openDayModal(info.date);
     }
   };
 
@@ -701,12 +706,12 @@ export function ZenzaCalendar() {
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (!isMobile) return;
+    if (!isMobile || !swipeEnabled) return;
     setTouchStartX(e.touches[0].clientX);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!isMobile || touchStartX === null) return;
+    if (!isMobile || touchStartX === null || !swipeEnabled) return;
     const diffX = e.changedTouches[0].clientX - touchStartX;
     const threshold = 50;
     const api = calendarRef.current?.getApi();
@@ -924,6 +929,27 @@ export function ZenzaCalendar() {
       </div>
 
       {/* Calendar */}
+      {(calendarView === "dayGridMonth" || calendarView === "timeGridDay") && (
+        <div className="text-center my-2">
+          {swipeEnabled ? (
+            <button
+              onClick={() => setSwipeEnabled(false)}
+              className="btn-dreamy"
+            >
+              Disable Swipe
+            </button>
+          ) : (
+            <button
+              onClick={() => setSwipeEnabled(true)}
+              className="btn-dreamy-primary"
+            >
+              {calendarView === "dayGridMonth"
+                ? "Click to Enable Swipe for Month"
+                : "Click to Enable Swipe for Day"}
+            </button>
+          )}
+        </div>
+      )}
       <div
         className="card-floating p-2 sm:p-6"
         onTouchStart={handleTouchStart}
@@ -949,12 +975,29 @@ export function ZenzaCalendar() {
           dayMaxEvents={true}
           weekends={true}
           events={events}
+          dayCellContent={(arg) => {
+            if (calendarView === "dayGridMonth" || calendarView === "timeGridWeek") {
+              return (
+                <div className="flex flex-col items-start">
+                  <span className="fc-daygrid-day-number">{arg.dayNumberText}</span>
+                  <button
+                    className="text-[10px] text-blue-600 underline"
+                    onClick={() => openDayModal(arg.date)}
+                  >
+                    View Schedules
+                  </button>
+                </div>
+              );
+            }
+            return <span className="fc-daygrid-day-number">{arg.dayNumberText}</span>;
+          }}
           dateClick={handleDateClick}
           select={handleDateSelect}
           eventClick={handleEventClick}
           eventDrop={handleEventDrop}
           eventResize={handleEventResize}
           eventContent={(arg) => {
+            if (calendarView !== "timeGridDay") return null;
             const start = dayjs(arg.event.start!).format("h:mm A");
             const end = arg.event.end
               ? dayjs(arg.event.end).format("h:mm A")
@@ -1007,7 +1050,7 @@ export function ZenzaCalendar() {
           slotMaxTime="32:00:00"
           slotDuration="00:30:00"
           scrollTime="06:00:00"
-          eventDisplay="block"
+          eventDisplay={calendarView === "timeGridDay" ? "block" : "none"}
           eventBackgroundColor="transparent"
           eventBorderColor="transparent"
           displayEventTime={true}
