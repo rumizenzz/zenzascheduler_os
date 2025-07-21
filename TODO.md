@@ -157,6 +157,7 @@ This file tracks project progress and upcoming tasks.
 - Enhanced month/week view with boxed event layout and a day schedule modal to review all tasks on mobile.
 
 - Mobile calendar now shows the Week button for easier navigation.
+- Added optional swipe toggle and clean day links so month and week views stay tidy.
 
 ## Next Steps
 
