@@ -57,10 +57,11 @@ export default tseslint.config({
    - **Base directory**: `zenzalife-scheduler`
    - **Build command**: `pnpm run build`
    - **Publish directory**: `dist`
+   - **Functions directory**: `../netlify/functions`
 4. Before deploying, run `pnpm run lint` and `pnpm run test` locally to catch errors early.
 5. Click **Deploy site** and wait for the build to complete.
 6. After deployment, Netlify provides a public URL which can be customized in the site settings.
-7. Netlify reads the `netlify.toml` in the repo root which sets the same build options and includes a redirect rule for single-page app routing.
+7. Netlify reads the `netlify.toml` in the repo root which sets the same build options, points to `../netlify/functions`, and includes a redirect rule for single-page app routing.
 
 ### Environment variables
 
