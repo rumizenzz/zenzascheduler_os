@@ -133,6 +133,7 @@ This file tracks project progress and upcoming tasks.
 - Extended calendar view to 5am so tasks can span past midnight.
 - Resolved TypeScript syntax errors in `Dashboard.tsx` and `main.tsx`.
 - Added Android install instructions and unknown apps onboarding guide.
+- Dismissing or snoozing an alarm now closes it across all open tabs.
 
 ## Next Steps
 

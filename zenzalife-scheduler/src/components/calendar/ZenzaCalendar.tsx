@@ -18,6 +18,7 @@ import {
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
+import { useAlarmChannel } from "@/hooks/useAlarmChannel";
 
 interface CalendarEvent {
   id: string;
@@ -92,6 +93,11 @@ export function ZenzaCalendar() {
   const [activeAlarm, setActiveAlarm] = useState<CalendarEvent | null>(null);
   const triggeredRef = useRef<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
+  const { postMessage } = useAlarmChannel(msg => {
+    if (msg.type === 'dismiss' || msg.type === 'snooze') {
+      setActiveAlarm(null)
+    }
+  })
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -596,7 +602,10 @@ export function ZenzaCalendar() {
           eventTitle={activeAlarm.title}
           eventTime={dayjs(activeAlarm.start).format('h:mm A')}
           soundUrl={getAlarmSound(activeAlarm)}
-          onDismiss={() => setActiveAlarm(null)}
+          onDismiss={() => {
+            setActiveAlarm(null)
+            postMessage({ type: 'dismiss' })
+          }}
         />
       )}
     </div>

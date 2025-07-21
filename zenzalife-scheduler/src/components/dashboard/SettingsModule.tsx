@@ -6,6 +6,7 @@ import { Settings, User, Upload, Bell, Palette, Shield, HelpCircle, Download } f
 import { useAudio } from '@/hooks/useAudio'
 import { useNotifications } from '@/hooks/useNotifications'
 import { useInstallPrompt } from '@/hooks/useInstallPrompt'
+import { useAlarmChannel } from '@/hooks/useAlarmChannel'
 import { AlarmModal } from '../alerts/AlarmModal'
 
 type SettingsTab = 'profile' | 'audio' | 'notifications' | 'appearance' | 'privacy' | 'help'
@@ -62,6 +63,15 @@ export function SettingsModule() {
   const { playEntranceSound, playAudio } = useAudio()
   const { requestPermission, testAlarm } = useNotifications()
   const [showTestAlarm, setShowTestAlarm] = useState(false)
+  const { postMessage } = useAlarmChannel(msg => {
+    if (msg.type === 'dismiss') {
+      setShowTestAlarm(false)
+    }
+    if (msg.type === 'snooze') {
+      setShowTestAlarm(false)
+      setTimeout(() => setShowTestAlarm(true), 300000)
+    }
+  })
 
   useEffect(() => {
     if (profile) {
@@ -621,9 +631,13 @@ export function SettingsModule() {
           eventTitle="Test Alarm"
           eventTime={new Date().toLocaleTimeString()}
           soundUrl={audioSettings.default_alarm}
-          onDismiss={() => setShowTestAlarm(false)}
+          onDismiss={() => {
+            setShowTestAlarm(false)
+            postMessage({ type: 'dismiss' })
+          }}
           onSnooze={() => {
             setShowTestAlarm(false)
+            postMessage({ type: 'snooze' })
             setTimeout(() => {
               setShowTestAlarm(true)
             }, 300000)
