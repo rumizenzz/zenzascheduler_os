@@ -55,8 +55,11 @@ export default tseslint.config({
 2. Sign in to [Netlify](https://www.netlify.com/) and choose **New site from Git**.
 3. Select this repository and configure the following build settings:
    - **Base directory**: `zenzalife-scheduler`
-   - **Build command**: `pnpm run build`
+   - **Build command**: `pnpm --dir .. install && pnpm run build`
    - **Publish directory**: `dist`
+   - **Functions directory**: `../netlify/functions` (defined in `netlify.toml`)
+   - The repo root contains a `package.json` with serverless dependencies so
+     Netlify installs them before bundling.
 4. Before deploying, run `pnpm run lint` and `pnpm run test` locally to catch errors early.
 5. Click **Deploy site** and wait for the build to complete.
 6. After deployment, Netlify provides a public URL which can be customized in the site settings.
