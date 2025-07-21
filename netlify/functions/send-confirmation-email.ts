@@ -22,7 +22,6 @@ const handler: Handler = async (event) => {
 
   try {
     const { email, displayName } = JSON.parse(event.body || '{}')
-
     if (!email) {
       return {
         statusCode: 400,
@@ -30,6 +29,33 @@ const handler: Handler = async (event) => {
         body: JSON.stringify({ error: 'Email required' })
       }
     }
+
+    const ip =
+      event.headers['client-ip'] ||
+      event.headers['x-forwarded-for']?.split(',')[0] ||
+      'unknown'
+
+    const supabaseUrl = process.env.SUPABASE_URL as string
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string
+    const table = process.env.SUPABASE_TABLE || 'mailing_list'
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+    const { data: attempts } = await supabase
+      .from('signup_attempts')
+      .select('id')
+      .or(`ip.eq.${ip},email.eq.${email}`)
+      .gt('created_at', oneHourAgo)
+
+    if (attempts && attempts.length > 5) {
+      return {
+        statusCode: 429,
+        headers: corsHeaders,
+        body: JSON.stringify({ error: 'Too many signup attempts' })
+      }
+    }
+
+    await supabase.from('signup_attempts').insert({ email, ip })
 
     const disposableDomains = ['mailinator.com', 'temp-mail.org', '10minutemail.com']
     const domain = email.split('@').pop()
@@ -41,26 +67,19 @@ const handler: Handler = async (event) => {
       }
     }
 
-    const supabaseUrl = process.env.SUPABASE_URL as string
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string
-    const table = process.env.SUPABASE_TABLE || 'mailing_list'
-    const supabase = createClient(supabaseUrl, supabaseKey)
-
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
       type: 'signup',
       email,
       options: { redirectTo: `${event.headers.origin || supabaseUrl}/confirmed` }
     })
-
     if (linkError || !linkData) {
       throw linkError || new Error('Failed to generate link')
     }
-
     const actionLink: string = (linkData as any).action_link || (linkData as any).properties?.action_link
 
     await supabase
       .from(table)
-      .upsert({ email, unsubscribed: false }, { onConflict: 'email' })
+      .upsert({ email, unsubscribed: false, confirmed: false }, { onConflict: 'email' })
 
     const host = process.env.SMTP_HOST || process.env.IONOS_HOST
     const port = Number(process.env.SMTP_PORT || process.env.IONOS_PORT || 465)

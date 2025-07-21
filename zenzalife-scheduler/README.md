@@ -96,10 +96,20 @@ Create the table referenced by `SUPABASE_TABLE` inside your Supabase project:
 
 ```sql
 create table if not exists mailing_list (
-  id uuid default uuid_generate_v4() primary key,
+  id uuid primary key default uuid_generate_v4(),
   email text unique not null,
+  confirmed boolean default false,
   unsubscribed boolean default false,
-  created_at timestamp with time zone default now()
+  created_at timestamptz default now(),
+  confirmed_at timestamptz,
+  unsubscribed_at timestamptz
+);
+
+create table if not exists signup_attempts (
+  id uuid primary key default uuid_generate_v4(),
+  email text,
+  ip text,
+  created_at timestamptz default now()
 );
 ```
 
