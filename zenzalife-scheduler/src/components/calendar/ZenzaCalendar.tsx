@@ -116,6 +116,9 @@ export function ZenzaCalendar() {
   const [dayModalEvents, setDayModalEvents] = useState<CalendarEvent[]>([]);
   const [dayModalDate, setDayModalDate] = useState<string>("");
   const [showDayModal, setShowDayModal] = useState(false);
+  const [currentDate, setCurrentDate] = useState(dayjs().format('YYYY-MM-DD'));
+  const [showCompleted, setShowCompleted] = useState(false);
+  const [modalShowCompleted, setModalShowCompleted] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -265,6 +268,10 @@ export function ZenzaCalendar() {
     );
   };
 
+  const tasksForToday = tasks.filter((t) =>
+    dayjs(t.start_time).isSame(currentDate, 'day'),
+  );
+
   // Only DoorDash, Uber Eats, and Olive Garden use icons in the calendar
   const getCategoryColor = (category?: string, border = false) => {
     const colors: Record<string, { bg: string; border: string }> = {
@@ -365,6 +372,28 @@ export function ZenzaCalendar() {
     } catch (error: any) {
       toast.error("Failed to delete task: " + error.message);
     }
+  };
+
+  const toggleTaskCompleted = async (task: Task, completed: boolean) => {
+    if (!user || !isOwnCalendar) return;
+    await supabase
+      .from('tasks')
+      .update({ completed, updated_at: new Date().toISOString() })
+      .eq('id', task.id);
+    if (completed) {
+      await supabase.from('completed_tasks').insert({
+        user_id: user.id,
+        task_id: task.id,
+        title: task.title,
+        completed_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+    } else {
+      await supabase.from('completed_tasks').delete().eq('task_id', task.id);
+    }
+    const updated = await loadTasks();
+    await saveHistory(updated);
   };
 
   const handleEventDrop = async (info: any) => {
@@ -886,7 +915,10 @@ export function ZenzaCalendar() {
           }}
           timeZone="local"
           initialView={calendarView}
-          datesSet={(arg) => setCalendarView(arg.view.type)}
+          datesSet={(arg) => {
+            setCalendarView(arg.view.type);
+            setCurrentDate(dayjs(arg.start).format('YYYY-MM-DD'));
+          }}
           editable={isOwnCalendar}
           selectable={isOwnCalendar}
           selectMirror={true}
@@ -962,10 +994,49 @@ export function ZenzaCalendar() {
       <DragHint isMobile={isMobile} />
 
       {isOwnCalendar && (
+        <div className="mt-6 space-y-2">
+          <button
+            onClick={() => setShowCompleted(!showCompleted)}
+            className="btn-dreamy flex items-center gap-2"
+          >
+            <CheckCircle className="w-4 h-4" />
+            Tasks Completed ({tasksForToday.filter(t => t.completed).length}/{tasksForToday.length})
+          </button>
+          {showCompleted && (
+            <div className="space-y-2 p-4 bg-white/80 rounded-xl">
+              {tasksForToday.map(t => (
+                <label key={t.id} className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={!!t.completed}
+                    onChange={(e) => toggleTaskCompleted(t, e.target.checked)}
+                    className="rounded border-gray-300 text-green-500 focus:ring-green-500"
+                  />
+                  <span className={t.completed ? 'line-through' : ''}>{t.title}</span>
+                </label>
+              ))}
+              <button
+                onClick={() => {
+                  setSelectedTask(null);
+                  setSelectedDate(currentDate);
+                  setModalShowCompleted(true);
+                  setShowTaskModal(true);
+                }}
+                className="btn-dreamy-primary mt-2"
+              >
+                Add Completed Task
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {isOwnCalendar && (
         <button
           onClick={() => {
             setSelectedTask(null);
             setSelectedDate(dayjs().format("YYYY-MM-DD"));
+            setModalShowCompleted(false);
             setShowTaskModal(true);
           }}
           className="fab-add-task"
@@ -983,6 +1054,7 @@ export function ZenzaCalendar() {
             setShowTaskModal(false);
             setSelectedTask(null);
             setSelectedDate(null);
+            setModalShowCompleted(false);
           }}
           onSave={handleTaskSave}
           onDelete={
@@ -990,6 +1062,8 @@ export function ZenzaCalendar() {
           }
           task={selectedTask}
           initialDate={selectedDate}
+          showCompletedToggle={modalShowCompleted}
+          initialCompleted={modalShowCompleted}
         />
       )}
 
