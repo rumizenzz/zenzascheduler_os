@@ -180,6 +180,7 @@ This file tracks project progress and upcoming tasks.
 - Added Supabase tables and dashboard module for ancestor and temple work tracking.
 - Ancestor entries now support optional death year, displaying "1963-Present" when no death year is provided.
 - Redesigned calendar UI with polished ZenzaLife branding and responsive styles.
+- Added mind map style FamilyTree component to visualize ancestors.
 
 ## Improvement Ideas
 
