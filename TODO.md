@@ -167,6 +167,7 @@ This file tracks project progress and upcoming tasks.
 
 - Added personalized splash screen and footer message dedicated to Khen Shantel Zappalorti.
 - Enhanced dedication with dark starry entrance and constellation overlay celebrating the future family.
+- Enabled dark mode across the app with a theme toggle in Settings.
 
 ## Next Steps
 
