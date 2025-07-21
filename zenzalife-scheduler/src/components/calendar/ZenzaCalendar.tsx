@@ -977,15 +977,34 @@ export function ZenzaCalendar() {
           events={events}
           dayCellContent={(arg) => {
             if (calendarView === "dayGridMonth" || calendarView === "timeGridWeek") {
+              const dayEvents = events.filter((ev) =>
+                dayjs(ev.start).isSame(arg.date, "day"),
+              );
+              const previews = dayEvents.slice(0, 2);
               return (
                 <div className="flex flex-col items-start">
                   <span className="fc-daygrid-day-number">{arg.dayNumberText}</span>
-                  <button
-                    className="text-[10px] text-blue-600 underline"
-                    onClick={() => openDayModal(arg.date)}
-                  >
-                    View Schedules
-                  </button>
+                  {previews.map((ev) => (
+                    <span
+                      key={ev.id}
+                      className="mt-0.5 w-full overflow-hidden whitespace-nowrap text-[10px] rounded px-1"
+                      style={{
+                        backgroundColor: ev.backgroundColor,
+                        border: `1px solid ${ev.borderColor}`,
+                        color: ev.textColor || "#374151",
+                      }}
+                    >
+                      {ev.title}
+                    </span>
+                  ))}
+                  {dayEvents.length > previews.length && (
+                    <button
+                      className="text-[10px] text-blue-600 underline"
+                      onClick={() => openDayModal(arg.date)}
+                    >
+                      View Schedules
+                    </button>
+                  )}
                 </div>
               );
             }
