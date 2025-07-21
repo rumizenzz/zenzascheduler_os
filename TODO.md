@@ -21,7 +21,7 @@ This file tracks project progress and upcoming tasks.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.
- - Added custom confirmation email Netlify function using IONOS and confirmation
+- Added custom confirmation email Netlify function using IONOS and confirmation
 - Added custom confirmation email Netlify function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
@@ -150,6 +150,8 @@ This file tracks project progress and upcoming tasks.
 - Prevented duplicate tasks from appearing by deduplicating schedules when loading the calendar.
 - Improved calendar toolbar with sticky action buttons, horizontal scrolling on mobile, and a floating Add Task button for quick scheduling.
 
+- Polished calendar styling with ZenzaLife branding for headers, day cells, and events.
+
 ## Next Steps
 
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
@@ -167,7 +169,7 @@ This file tracks project progress and upcoming tasks.
 - 1% growth dashboard and analytics
 
 - Added Supabase tables and dashboard module for ancestor and temple work tracking.
+
 ## Improvement Ideas
 
 (add any new ideas here)
-
