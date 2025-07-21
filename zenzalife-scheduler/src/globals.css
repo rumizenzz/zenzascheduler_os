@@ -261,3 +261,36 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(147, 197, 253, 0.5);
 }
+
+/* ZenzaLife FullCalendar theme */
+.fc .fc-toolbar-title {
+  @apply font-serif text-2xl font-light text-primary;
+}
+
+.fc .fc-button {
+  @apply rounded-full px-3 py-1 text-sm font-light bg-white border border-gray-300 shadow hover:bg-gray-100 transition;
+}
+
+.fc .fc-button-primary {
+  @apply bg-primary text-white border-primary hover:bg-primary/90;
+}
+
+.fc .fc-button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.fc .fc-col-header-cell-cushion {
+  @apply py-2 text-gray-600 font-medium;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  @apply bg-primary/10;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.fc .fc-event {
+  @apply cursor-pointer rounded-lg border-none;
+}
