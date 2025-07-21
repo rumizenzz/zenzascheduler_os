@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { InstallGuide } from './InstallGuide'
 import { AndroidBatteryGuide } from './AndroidBatteryGuide'
+import { AndroidUnknownAppsGuide } from './AndroidUnknownAppsGuide'
 import { IOSBackgroundGuide } from './IOSBackgroundGuide'
 import { useNotifications } from '@/hooks/useNotifications'
 import { useInstallPrompt } from '@/hooks/useInstallPrompt'
@@ -9,7 +10,7 @@ export function OnboardingModal() {
   const [show, setShow] = useState(false)
   const [step, setStep] = useState(0)
   const { requestPermission, testAlarm } = useNotifications()
-  const { installed, isIncognito } = useInstallPrompt()
+  const { installed, isIncognito, isAndroid } = useInstallPrompt()
 
   useEffect(() => {
     if (localStorage.getItem('onboardingComplete')) return
@@ -27,6 +28,10 @@ export function OnboardingModal() {
     !installed && {
       title: 'Install ZenzaLife Scheduler',
       content: <InstallGuide />
+    },
+    isAndroid && {
+      title: 'Allow Unknown Apps',
+      content: <AndroidUnknownAppsGuide />
     },
     {
       title: 'Enable Notifications',
