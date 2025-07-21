@@ -61,12 +61,30 @@ export function GrowthTracker() {
       const todaysLog = data?.find(log => log.date === today)
       setTodayLog(todaysLog || null)
       
-      // Calculate stats
-      calculateStats(data || [])
+      // Calculate stats via edge function
+      await fetchAnalytics()
     } catch (error: any) {
       toast.error('Failed to load growth logs: ' + error.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchAnalytics = async () => {
+    if (!user) return
+    try {
+      const res = await fetch('/functions/v1/task-analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id })
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error?.message || 'Failed')
+      setStats(json.data)
+    } catch (e: any) {
+      console.error('Analytics error', e)
+      // fallback to client calculation
+      calculateStats(growthLogs)
     }
   }
 
@@ -150,6 +168,7 @@ export function GrowthTracker() {
       }
       
       await loadGrowthLogs()
+      await fetchAnalytics()
       setShowAddModal(false)
     } catch (error: any) {
       toast.error('Failed to save progress: ' + error.message)
@@ -167,7 +186,7 @@ export function GrowthTracker() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
             <TrendingUp className="w-8 h-8 text-green-400" />
@@ -188,7 +207,7 @@ export function GrowthTracker() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         <div className="card-floating p-6 text-center">
           <div className="text-3xl font-light text-green-500 mb-2">
             {stats.averageScore}
@@ -377,8 +396,10 @@ function ProgressModal({ isOpen, onClose, onSave, existingLog }: ProgressModalPr
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Score */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">1% Better Score (0-2)</label>
+              <label htmlFor="growthScore" className="text-sm font-medium text-gray-700">1% Better Score (0-2)</label>
               <input
+                id="growthScore"
+                name="growthScore"
                 type="number"
                 step="0.1"
                 min="0"
@@ -395,7 +416,7 @@ function ProgressModal({ isOpen, onClose, onSave, existingLog }: ProgressModalPr
 
             {/* Identity Categories */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Identity Focus (Select all that apply)</label>
+              <p className="text-sm font-medium text-gray-700">Identity Focus (Select all that apply)</p>
               <div className="grid grid-cols-2 gap-2">
                 {identityCategories.map((identity) => (
                   <button
@@ -416,8 +437,10 @@ function ProgressModal({ isOpen, onClose, onSave, existingLog }: ProgressModalPr
 
             {/* Notes */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Notes (Optional)</label>
+              <label htmlFor="growthNotes" className="text-sm font-medium text-gray-700">Notes (Optional)</label>
               <textarea
+                id="growthNotes"
+                name="growthNotes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 className="input-dreamy w-full h-24 resize-none"

@@ -4,6 +4,9 @@ import { supabase, updateUserProfile } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import { Settings, User, Upload, Bell, Palette, Shield, HelpCircle, Download } from 'lucide-react'
 import { useAudio } from '@/hooks/useAudio'
+import { useNotifications } from '@/hooks/useNotifications'
+import { useInstallPrompt } from '@/hooks/useInstallPrompt'
+import { AlarmModal } from '../alerts/AlarmModal'
 
 type SettingsTab = 'profile' | 'audio' | 'notifications' | 'appearance' | 'privacy' | 'help'
 
@@ -31,6 +34,7 @@ export function SettingsModule() {
   const { user, profile, refreshProfile } = useAuth()
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile')
   const [loading, setLoading] = useState(false)
+  const { isIncognito } = useInstallPrompt()
   const [profileData, setProfileData] = useState({
     display_name: profile?.display_name || '',
     relationship_role: profile?.relationship_role || 'individual',
@@ -38,13 +42,26 @@ export function SettingsModule() {
     bio: profile?.bio || '',
     growth_identity: profile?.growth_identity || ''
   })
+  const builtinAlarms = [
+    { name: 'Lucid Skybell', url: '/alarms/lucid-skybell.mp3' },
+    { name: 'Dream Siren', url: '/alarms/dream-siren.mp3' },
+    { name: 'Vanilla Alert', url: '/alarms/vanilla-alert.mp3' },
+    { name: 'Echo Pulse', url: '/alarms/echo-pulse.mp3' },
+    { name: 'Surreal Ringtone', url: '/alarms/surreal-ringtone.mp3' }
+  ]
+
   const [audioSettings, setAudioSettings] = useState({
     entrance_sound: true,
     task_alarms: true,
     reminder_sounds: true,
-    custom_alarm_file: null as File | null
+    default_alarm: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
+    custom_alarm_file: null as File | null,
+    custom_alarm_name: '',
+    custom_alarms: JSON.parse(localStorage.getItem('customAlarmSounds') || '[]') as { name: string; url: string }[]
   })
   const { playEntranceSound, playAudio } = useAudio()
+  const { requestPermission, testAlarm } = useNotifications()
+  const [showTestAlarm, setShowTestAlarm] = useState(false)
 
   useEffect(() => {
     if (profile) {
@@ -57,6 +74,11 @@ export function SettingsModule() {
       })
     }
   }, [profile])
+
+  useEffect(() => {
+    localStorage.setItem('defaultAlarmSound', audioSettings.default_alarm)
+    localStorage.setItem('customAlarmSounds', JSON.stringify(audioSettings.custom_alarms))
+  }, [audioSettings.default_alarm, audioSettings.custom_alarms])
 
   const saveProfile = async () => {
     if (!user) return
@@ -101,8 +123,20 @@ export function SettingsModule() {
           
           if (error) throw error
           
+          if (data?.publicUrl) {
+            const newList = [
+              ...audioSettings.custom_alarms,
+              { name: audioSettings.custom_alarm_name || audioSettings.custom_alarm_file!.name, url: data.publicUrl }
+            ]
+            localStorage.setItem('customAlarmSounds', JSON.stringify(newList))
+            setAudioSettings(prev => ({
+              ...prev,
+              custom_alarm_file: null,
+              custom_alarm_name: '',
+              custom_alarms: newList
+            }))
+          }
           toast.success('Custom alarm uploaded successfully!')
-          setAudioSettings(prev => ({ ...prev, custom_alarm_file: null }))
         } catch (error: any) {
           toast.error('Failed to upload alarm: ' + error.message)
         } finally {
@@ -159,8 +193,10 @@ export function SettingsModule() {
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Display Name</label>
+                <label htmlFor="displayName" className="text-sm font-medium text-gray-700">Display Name</label>
                 <input
+                  id="displayName"
+                  name="displayName"
                   type="text"
                   value={profileData.display_name}
                   onChange={(e) => setProfileData(prev => ({ ...prev, display_name: e.target.value }))}
@@ -170,8 +206,10 @@ export function SettingsModule() {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Role in Family</label>
+                <label htmlFor="relationshipRoleSettings" className="text-sm font-medium text-gray-700">Role in Family</label>
                 <select
+                  id="relationshipRoleSettings"
+                  name="relationshipRoleSettings"
                   value={profileData.relationship_role}
                   onChange={(e) => setProfileData(prev => ({ ...prev, relationship_role: e.target.value }))}
                   className="input-dreamy w-full"
@@ -186,8 +224,10 @@ export function SettingsModule() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Age (Optional)</label>
+              <label htmlFor="age" className="text-sm font-medium text-gray-700">Age (Optional)</label>
               <input
+                id="age"
+                name="age"
                 type="number"
                 value={profileData.age}
                 onChange={(e) => setProfileData(prev => ({ ...prev, age: e.target.value }))}
@@ -199,8 +239,10 @@ export function SettingsModule() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Growth Identity</label>
+              <label htmlFor="growthIdentity" className="text-sm font-medium text-gray-700">Growth Identity</label>
               <input
+                id="growthIdentity"
+                name="growthIdentity"
                 type="text"
                 value={profileData.growth_identity}
                 onChange={(e) => setProfileData(prev => ({ ...prev, growth_identity: e.target.value }))}
@@ -210,8 +252,10 @@ export function SettingsModule() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Bio</label>
+              <label htmlFor="bio" className="text-sm font-medium text-gray-700">Bio</label>
               <textarea
+                id="bio"
+                name="bio"
                 value={profileData.bio}
                 onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
                 className="input-dreamy w-full h-24 resize-none"
@@ -234,10 +278,37 @@ export function SettingsModule() {
           <div className="space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-800">Sound Settings</h3>
+
+              <div className="space-y-3">
+                <label htmlFor="defaultAlarm" className="text-sm font-medium text-gray-700">Default Alarm Sound</label>
+                <select
+                  id="defaultAlarm"
+                  value={audioSettings.default_alarm}
+                  onChange={(e) => {
+                    localStorage.setItem('defaultAlarmSound', e.target.value)
+                    setAudioSettings(prev => ({ ...prev, default_alarm: e.target.value }))
+                  }}
+                  className="input-dreamy w-full"
+                >
+                  {[...builtinAlarms, ...audioSettings.custom_alarms].map(alarm => (
+                    <option key={alarm.url} value={alarm.url}>
+                      {alarm.name}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={() => playAudio(audioSettings.default_alarm)}
+                  className="text-xs text-blue-500 underline"
+                >
+                  Test Selected
+                </button>
+              </div>
               
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="entranceSound"
                     type="checkbox"
                     checked={audioSettings.entrance_sound}
                     onChange={(e) => setAudioSettings(prev => ({ ...prev, entrance_sound: e.target.checked }))}
@@ -254,6 +325,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="taskAlarms"
                     type="checkbox"
                     checked={audioSettings.task_alarms}
                     onChange={(e) => setAudioSettings(prev => ({ ...prev, task_alarms: e.target.checked }))}
@@ -264,6 +336,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="reminderSounds"
                     type="checkbox"
                     checked={audioSettings.reminder_sounds}
                     onChange={(e) => setAudioSettings(prev => ({ ...prev, reminder_sounds: e.target.checked }))}
@@ -281,6 +354,13 @@ export function SettingsModule() {
                   type="file"
                   accept="audio/*"
                   onChange={(e) => setAudioSettings(prev => ({ ...prev, custom_alarm_file: e.target.files?.[0] || null }))}
+                  className="input-dreamy w-full"
+                />
+                <input
+                  type="text"
+                  placeholder="Alarm name"
+                  value={audioSettings.custom_alarm_name}
+                  onChange={(e) => setAudioSettings(prev => ({ ...prev, custom_alarm_name: e.target.value }))}
                   className="input-dreamy w-full"
                 />
                 <p className="text-xs text-gray-500">
@@ -306,19 +386,34 @@ export function SettingsModule() {
           <div className="space-y-6">
             <h3 className="text-lg font-medium text-gray-800">Notification Preferences</h3>
             <div className="space-y-4">
-              <div className="p-4 bg-blue-50/80 rounded-xl">
-                <h4 className="font-medium text-blue-900 mb-2">Browser Notifications</h4>
-                <p className="text-sm text-blue-700 mb-3">
+              <div className="p-4 bg-blue-50/80 rounded-xl space-y-3">
+                <h4 className="font-medium text-blue-900">Browser Notifications</h4>
+                <p className="text-sm text-blue-700">
                   Get notified about upcoming tasks and reminders
                 </p>
-                <button className="btn-dreamy text-sm">
+                {isIncognito && (
+                  <p className="text-sm text-red-600">
+                    Notifications are disabled in incognito mode.
+                  </p>
+                )}
+                <button onClick={requestPermission} className="btn-dreamy text-sm w-full">
                   Enable Notifications
+                </button>
+                <button
+                  onClick={() => {
+                    testAlarm()
+                    setTimeout(() => setShowTestAlarm(true), 5000)
+                  }}
+                  className="btn-dreamy-primary text-sm w-full"
+                >
+                  Test Alarm
                 </button>
               </div>
               
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="notifyTasks"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
@@ -328,6 +423,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="notifyAffirmations"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-green-500 focus:ring-green-500"
@@ -337,6 +433,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="notifyProgress"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-purple-500 focus:ring-purple-500"
@@ -367,6 +464,7 @@ export function SettingsModule() {
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="showEntranceAnimation"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
@@ -376,6 +474,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="smoothTransitions"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-purple-500 focus:ring-purple-500"
@@ -409,6 +508,7 @@ export function SettingsModule() {
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="shareProgress"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
@@ -418,6 +518,7 @@ export function SettingsModule() {
                 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
+                    name="shareAffirmations"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-gray-300 text-purple-500 focus:ring-purple-500"
@@ -515,6 +616,20 @@ export function SettingsModule() {
       <div className="card-floating p-6">
         {renderTabContent()}
       </div>
+      {showTestAlarm && (
+        <AlarmModal
+          eventTitle="Test Alarm"
+          eventTime={new Date().toLocaleTimeString()}
+          soundUrl={audioSettings.default_alarm}
+          onDismiss={() => setShowTestAlarm(false)}
+          onSnooze={() => {
+            setShowTestAlarm(false)
+            setTimeout(() => {
+              setShowTestAlarm(true)
+            }, 300000)
+          }}
+        />
+      )}
     </div>
   )
 }
