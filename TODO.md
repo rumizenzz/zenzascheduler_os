@@ -152,6 +152,7 @@ This file tracks project progress and upcoming tasks.
 - Added mobile action dropup so toolbar options open in a sticky menu with descriptive buttons.
 
 - Polished calendar styling with ZenzaLife branding for headers, day cells, and events.
+- Enhanced month/week view with boxed event layout and a day schedule modal to review all tasks on mobile.
 
 - Mobile calendar now shows the Week button for easier navigation.
 
