@@ -7,6 +7,7 @@ import { useAudio } from '@/hooks/useAudio'
 import { useNotifications } from '@/hooks/useNotifications'
 import { useInstallPrompt } from '@/hooks/useInstallPrompt'
 import { AlarmModal } from '../alerts/AlarmModal'
+import { useTheme } from '@/contexts/ThemeContext'
 
 type SettingsTab = 'profile' | 'audio' | 'notifications' | 'appearance' | 'privacy' | 'help'
 
@@ -35,6 +36,7 @@ export function SettingsModule() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile')
   const [loading, setLoading] = useState(false)
   const { isIncognito } = useInstallPrompt()
+  const { theme, setTheme } = useTheme()
   const [profileData, setProfileData] = useState({
     display_name: profile?.display_name || '',
     relationship_role: profile?.relationship_role || 'individual',
@@ -456,8 +458,22 @@ export function SettingsModule() {
                   ZenzaLife uses a dreamy, cloud-like aesthetic designed for tranquility
                 </p>
                 <div className="flex gap-3">
-                  <button className="btn-dreamy-primary text-sm">Light (Current)</button>
-                  <button className="btn-dreamy text-sm opacity-50">Dark (Coming Soon)</button>
+                  <button
+                    className={
+                      theme === 'light' ? 'btn-dreamy-primary text-sm' : 'btn-dreamy text-sm'
+                    }
+                    onClick={() => setTheme('light')}
+                  >
+                    {theme === 'light' ? 'Light (Current)' : 'Light'}
+                  </button>
+                  <button
+                    className={
+                      theme === 'dark' ? 'btn-dreamy-primary text-sm' : 'btn-dreamy text-sm'
+                    }
+                    onClick={() => setTheme('dark')}
+                  >
+                    {theme === 'dark' ? 'Dark (Current)' : 'Dark'}
+                  </button>
                 </div>
               </div>
               
