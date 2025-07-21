@@ -134,6 +134,7 @@ This file tracks project progress and upcoming tasks.
 - Restored category icons and calendar icon mapping to resolve build failures.
 - Added Olive Garden task category with brand colors and SVG icon.
 - Extended calendar view to 5am so tasks can span past midnight.
+- Widened calendar hours to show midnight through 8am so overnight tasks display accurately.
 - Resolved TypeScript syntax errors in `Dashboard.tsx` and `main.tsx`.
 - Added Android install instructions and unknown apps onboarding guide.
 - Added undo/redo history for the calendar with Supabase snapshots.
