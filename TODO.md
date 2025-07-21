@@ -169,6 +169,11 @@ This file tracks project progress and upcoming tasks.
 
 - Added personalized splash screen and footer message dedicated to Khen Shantel Zappalorti.
 - Enhanced dedication with dark starry entrance and constellation overlay celebrating the future family.
+- Implemented natural language task entry with chrono-node for quick scheduling.
+- Improved parser to recognize start and stop times like "Walk at 4:30 pm today and stop at 5:30 pm".
+- Added speech input with animated microphone for quick voice task entry.
+- Parser now converts spelled-out times and understands phrases like "till" or "until" for end times.
+- Added custom SpeechRecognition typings so microphone input builds correctly.
 
 ## Next Steps
 
