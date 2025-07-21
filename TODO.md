@@ -124,6 +124,7 @@ This file tracks project progress and upcoming tasks.
 - Added time sensitive notification option so alarms trigger on iOS.
 - Restored category icons and calendar icon mapping to resolve build failures.
 - Added Olive Garden task category with brand colors and SVG icon.
+- Extended calendar view to 5am so tasks can span past midnight.
 
 ## Next Steps
 
