@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Task } from '@/lib/supabase'
-import { X, Clock, Tag, Bell, Users, Target, Trash2 } from 'lucide-react'
+import { useAudio } from '@/hooks/useAudio'
+import { X, Clock, Tag, Bell, Users, Target, Trash2, CheckCircle } from 'lucide-react'
 import dayjs from 'dayjs'
 
 interface TaskModalProps {
@@ -13,16 +14,19 @@ interface TaskModalProps {
 }
 
 const categories = [
-  { value: 'exercise', label: 'Exercise', color: '#f59e0b' },
-  { value: 'study', label: 'Study', color: '#3b82f6' },
-  { value: 'spiritual', label: 'Spiritual', color: '#ec4899' },
-  { value: 'work', label: 'Work', color: '#10b981' },
-  { value: 'personal', label: 'Personal', color: '#6366f1' },
-  { value: 'family', label: 'Family', color: '#ef4444' },
-  { value: 'hygiene', label: 'Hygiene', color: '#0ea5e9' },
-  { value: 'meal', label: 'Meal', color: '#65a30d' },
-  { value: 'other', label: 'Other', color: '#6b7280' }
-]
+  { value: 'exercise', label: 'Exercise', color: '#f59e0b', icon: '🏃' },
+  { value: 'study', label: 'Study', color: '#3b82f6', icon: '📚' },
+  { value: 'spiritual', label: 'Spiritual', color: '#ec4899', icon: '🙏' },
+  { value: 'work', label: 'Work', color: '#10b981', icon: '💼' },
+  { value: 'personal', label: 'Personal', color: '#6366f1', icon: '🌟' },
+  { value: 'family', label: 'Family', color: '#ef4444', icon: '👪' },
+  { value: 'hygiene', label: 'Hygiene', color: '#0ea5e9', icon: '🛁' },
+  { value: 'meal', label: 'Meal', color: '#65a30d', icon: '🍽️' },
+  { value: 'doordash', label: 'DoorDash', color: '#ee2723', icon: '🍔' },
+  { value: 'ubereats', label: 'Uber Eats', color: '#06c167', icon: '🍕' },
+  { value: 'olivegarden', label: 'Olive Garden', color: '#6c9321', icon: '🥗' },
+  { value: 'other', label: 'Other', color: '#6b7280', icon: '📌' },
+];
 
 const repeatPatterns = [
   { value: 'none', label: 'No Repeat' },
@@ -39,6 +43,14 @@ const visibilityOptions = [
   { value: 'public', label: 'Public' }
 ]
 
+const builtinAlarms = [
+  { name: 'Lucid Skybell', url: '/alarms/lucid-skybell.mp3' },
+  { name: 'Dream Siren', url: '/alarms/dream-siren.mp3' },
+  { name: 'Vanilla Alert', url: '/alarms/vanilla-alert.mp3' },
+  { name: 'Echo Pulse', url: '/alarms/echo-pulse.mp3' },
+  { name: 'Surreal Ringtone', url: '/alarms/surreal-ringtone.mp3' }
+]
+
 export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate }: TaskModalProps) {
   const [formData, setFormData] = useState({
     title: '',
@@ -47,9 +59,12 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     end_time: '',
     repeat_pattern: 'none',
     alarm: false,
+    custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
     visibility: 'private',
+    notes: '',
     completed: false
   })
+  const { playAudio } = useAudio()
 
   useEffect(() => {
     if (task) {
@@ -60,7 +75,9 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         end_time: task.end_time ? dayjs(task.end_time).format('YYYY-MM-DDTHH:mm') : '',
         repeat_pattern: task.repeat_pattern || 'none',
         alarm: task.alarm || false,
+        custom_sound_path: task.custom_sound_path || localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
         visibility: task.visibility || 'private',
+        notes: task.notes || '',
         completed: task.completed || false
       })
     } else if (initialDate) {
@@ -74,7 +91,9 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         end_time: endTime,
         repeat_pattern: 'none',
         alarm: false,
+        custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
         visibility: 'private',
+        notes: '',
         completed: false
       })
     }
@@ -96,11 +115,13 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     onSave({
       title: formData.title.trim(),
       category: formData.category,
-      start_time: formData.start_time,
-      end_time: formData.end_time || null,
+      start_time: dayjs(formData.start_time).format('YYYY-MM-DDTHH:mm:ssZ'),
+      end_time: formData.end_time ? dayjs(formData.end_time).format('YYYY-MM-DDTHH:mm:ssZ') : null,
       repeat_pattern: formData.repeat_pattern,
       alarm: formData.alarm,
+      custom_sound_path: formData.custom_sound_path,
       visibility: formData.visibility,
+      notes: formData.notes.trim() || null,
       completed: formData.completed
     })
   }
@@ -134,6 +155,12 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
               <X className="w-5 h-5" />
             </button>
           </div>
+          {task?.completed && (
+            <div className="flex items-center gap-2 mb-4 text-green-600">
+              <CheckCircle className="w-4 h-4" />
+              <span className="font-medium text-sm">Completed</span>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Title */}
@@ -161,7 +188,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   onChange={(e) => handleChange('category', e.target.value)}
                   className="input-dreamy w-full"
                 >
-                  {categories.map(cat => (
+                  {categories.map((cat) => (
                     <option key={cat.value} value={cat.value}>
                       {cat.label}
                     </option>
@@ -246,6 +273,17 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
               </select>
             </div>
 
+            {/* Notes */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Notes</label>
+              <textarea
+                value={formData.notes}
+                onChange={(e) => handleChange('notes', e.target.value)}
+                className="input-dreamy w-full h-20 resize-none"
+                placeholder="Additional details or what was accomplished"
+              />
+            </div>
+
             {/* Checkboxes */}
             <div className="flex flex-wrap gap-6">
               <label className="flex items-center gap-3 cursor-pointer">
@@ -260,6 +298,33 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   Set Alarm
                 </span>
               </label>
+
+              {formData.alarm && (
+                <div className="w-full space-y-1">
+                  <label className="text-sm text-gray-700">Alarm Sound</label>
+                  <select
+                    value={formData.custom_sound_path}
+                    onChange={(e) => handleChange('custom_sound_path', e.target.value)}
+                    className="input-dreamy w-full"
+                  >
+                    {[
+                      ...builtinAlarms,
+                      ...JSON.parse(localStorage.getItem('customAlarmSounds') || '[]')
+                    ].map((alarm: any) => (
+                      <option key={alarm.url} value={alarm.url}>
+                        {alarm.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => playAudio(formData.custom_sound_path)}
+                    className="text-xs text-blue-500 underline"
+                  >
+                    Test
+                  </button>
+                </div>
+              )}
 
               {task && (
                 <label className="flex items-center gap-3 cursor-pointer">
