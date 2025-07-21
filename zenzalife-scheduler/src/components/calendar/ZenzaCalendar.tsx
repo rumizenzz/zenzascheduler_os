@@ -627,8 +627,8 @@ export function ZenzaCalendar() {
       {/* Header */}
       <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4">
         <div>
-          <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
-            <CalendarIcon className="w-8 h-8 text-blue-400" />
+          <h1 className="text-3xl font-light text-primary flex items-center gap-3">
+            <CalendarIcon className="w-8 h-8 text-primary" />
             {isOwnCalendar ? 'Life Calendar' : `${viewUser?.display_name}'s Calendar`}
           </h1>
           <p className="text-gray-600/80 font-light mt-1">
@@ -637,7 +637,6 @@ export function ZenzaCalendar() {
               : `Viewing ${viewUser?.display_name}'s calendar`}
           </p>
         </div>
-
         <div className="flex gap-3 overflow-x-auto sm:overflow-visible whitespace-nowrap w-full sm:w-auto pb-2 sm:pb-0">
           {isOwnCalendar ? (
             <>
@@ -751,9 +750,19 @@ export function ZenzaCalendar() {
             const end = arg.event.end
               ? dayjs(arg.event.end).format('h:mm A')
               : undefined;
+
+            const icon =
+              arg.event.extendedProps?.category === 'doordash' ? (
+                <img src="/icons/doordash.svg" alt="DoorDash" className="w-4 h-4" />
+              ) : arg.event.extendedProps?.category === 'ubereats' ? (
+                <img src="/icons/ubereats.svg" alt="Uber Eats" className="w-4 h-4" />
+              ) : arg.event.extendedProps?.category === 'olivegarden' ? (
+                <img src="/icons/olivegarden.svg" alt="Olive Garden" className="w-4 h-4" />
+              ) : null;
+
             return (
               <div
-                className="relative px-2 py-1 rounded-lg text-xs font-medium shadow"
+                className="relative p-2 rounded-lg text-xs font-medium shadow flex flex-col gap-1"
                 style={{
                   backgroundColor: arg.event.backgroundColor,
                   border: `1px solid ${arg.event.borderColor}`,
@@ -761,62 +770,17 @@ export function ZenzaCalendar() {
                 }}
               >
                 {arg.event.extendedProps?.completed && (
-                  <div className="absolute -top-1 -right-1 flex items-center gap-1 bg-white/80 rounded-full px-1 text-green-600">
+                  <div className="absolute -top-1 -right-1 bg-white/80 rounded-full p-1 text-green-600">
                     <CheckCircle className="w-3 h-3" />
-                    <span className="text-[10px]">Completed</span>
                   </div>
                 )}
-                <span>{end ? `${start} - ${end}` : start}</span>
-                <span>{arg.timeText}</span>
                 <div className="flex items-center gap-1">
-                  {arg.event.extendedProps?.category === 'doordash' && (
-                    <img
-                      src="/icons/doordash.svg"
-                      alt="DoorDash"
-                      className="w-4 h-4"
-                    />
-                  )}
-                  {arg.event.extendedProps?.category === 'ubereats' && (
-                    <img
-                      src="/icons/ubereats.svg"
-                      alt="Uber Eats"
-                      className="w-4 h-4"
-                    />
-                  )}
-                  {arg.event.extendedProps?.category === 'olivegarden' && (
-                    <img
-                      src="/icons/olivegarden.svg"
-                      alt="Olive Garden"
-                      className="w-4 h-4"
-                    />
-                  )}
-                  <span>{arg.event.title}</span>
-                  <span>{end ? `${start} - ${end}` : start}</span>
-                  <div className="flex items-center gap-1">
-                    {arg.event.extendedProps?.category === 'doordash' && (
-                      <img
-                        src="/icons/doordash.svg"
-                        alt="DoorDash"
-                        className="w-4 h-4"
-                      />
-                    )}
-                    {arg.event.extendedProps?.category === 'ubereats' && (
-                      <img
-                        src="/icons/ubereats.svg"
-                        alt="Uber Eats"
-                        className="w-4 h-4"
-                      />
-                    )}
-                    {arg.event.extendedProps?.category === 'olivegarden' && (
-                      <img
-                        src="/icons/olivegarden.svg"
-                        alt="Olive Garden"
-                        className="w-4 h-4"
-                      />
-                    )}
-                    <span>{arg.event.title}</span>
-                  </div>
+                  {icon}
+                  <span className="truncate">{arg.event.title}</span>
                 </div>
+                <span className="text-[10px] text-gray-600">
+                  {end ? `${start} - ${end}` : start}
+                </span>
               </div>
             );
           }}
