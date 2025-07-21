@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Task } from '@/lib/supabase'
 import { useAudio } from '@/hooks/useAudio'
+import { parseTaskInput } from '@/lib/nlp'
 import { X, Clock, Tag, Bell, Users, Target, Trash2, CheckCircle } from 'lucide-react'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -69,6 +70,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     notes: '',
     completed: initialCompleted
   })
+  const [quickInput, setQuickInput] = useState('')
   const { playAudio } = useAudio()
 
   useEffect(() => {
@@ -146,6 +148,18 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     }
   }
 
+  const handleQuickParse = () => {
+    const parsed = parseTaskInput(quickInput)
+    if (!parsed) return
+    handleChange('title', parsed.title)
+    if (parsed.start_time) {
+      handleChange('start_time', dayjs(parsed.start_time).format('YYYY-MM-DDTHH:mm'))
+    }
+    if (parsed.end_time) {
+      handleChange('end_time', dayjs(parsed.end_time).format('YYYY-MM-DDTHH:mm'))
+    }
+  }
+
   if (!isOpen) return null
 
   return (
@@ -170,6 +184,27 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
               <span className="font-medium text-sm">Completed</span>
             </div>
           )}
+
+          {/* Quick Add */}
+          <div className="space-y-2 mb-4">
+            <label className="text-sm font-medium text-gray-700">Quick Add</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={quickInput}
+                onChange={(e) => setQuickInput(e.target.value)}
+                className="input-dreamy flex-1"
+                placeholder="e.g., Dentist at 2pm Friday"
+              />
+              <button
+                type="button"
+                onClick={handleQuickParse}
+                className="btn-dreamy"
+              >
+                Parse
+              </button>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Title */}
