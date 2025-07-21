@@ -33,7 +33,12 @@ This file tracks project progress and upcoming tasks.
 - Added login prompt asking users to join the mailing list if they aren't subscribed.
 - Refined mailing list prompt wording to remove explicit baby references.
 - Added SQL snippet in the README explaining how to create the mailing list table.
+- Confirmation page now auto-updates the mailing list when the user verifies their email.
+- Signups are throttled using a `signup_attempts` table to block abuse.
+- Renamed `SUPABASE_SERVICE_ROLE_KEY` to `SUPABASE_SERVICE_KEY` and clarified
+  timestamp with time zone columns for the mailing list tables.
 - Fixed Netlify configuration parsing error by cleaning up netlify.toml
+- Configured Netlify functions directory so the custom email function is detected
 - Fixed TypeScript syntax issue in `Dashboard.tsx` that broke Netlify build
 - Addressed additional parsing error in `Dashboard.tsx` for the sidebar toggle
 - Fixed Netlify configuration parsing error by cleaning up netlify.toml

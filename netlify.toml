@@ -4,7 +4,8 @@
   publish = "dist"
 
 [functions]
-  directory = "netlify/functions"
+  # Path is relative to the build base directory so we go up one level
+  directory = "../netlify/functions"
 
 [[redirects]]
   from = "/*"

@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_KEY')!
     const table = Deno.env.get('SUPABASE_TABLE') || 'mailing_list'
     const supabase = createClient(supabaseUrl, supabaseKey)
 
