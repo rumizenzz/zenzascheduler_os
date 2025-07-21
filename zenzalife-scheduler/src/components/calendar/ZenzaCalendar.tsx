@@ -21,7 +21,6 @@ import {
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
-import { ShiftScheduleModal } from "./ShiftScheduleModal";
 
 interface CalendarEvent {
   id: string;
@@ -86,9 +85,6 @@ export function ZenzaCalendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showDefaultSchedule, setShowDefaultSchedule] = useState(false);
-  const [showShiftModal, setShowShiftModal] = useState(false);
-  const [shiftDate, setShiftDate] = useState(dayjs().format('YYYY-MM-DD'));
-  const [shiftStart, setShiftStart] = useState('06:30');
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [calendarView, setCalendarView] = useState("timeGridDay");
   const calendarRef = useRef<FullCalendar>(null);
@@ -577,26 +573,6 @@ export function ZenzaCalendar() {
 
               <button
                 onClick={() => {
-                  const today = dayjs().format('YYYY-MM-DD');
-                  const todaysTasks = tasks.filter(
-                    (t) => dayjs(t.start_time).format('YYYY-MM-DD') === today
-                  );
-                  setShiftDate(today);
-                  setShiftStart(
-                    todaysTasks.length
-                      ? dayjs(todaysTasks[0].start_time).format('HH:mm')
-                      : '06:30'
-                  );
-                  setShowShiftModal(true);
-                }}
-                className="btn-dreamy flex items-center gap-2"
-              >
-                <Clock className="w-4 h-4" />
-                Shift Today's Schedule
-              </button>
-
-              <button
-                onClick={() => {
                   setSelectedTask(null);
                   setSelectedDate(dayjs().format('YYYY-MM-DD'));
                   setShowTaskModal(true);
@@ -755,16 +731,6 @@ export function ZenzaCalendar() {
           isOpen={showDefaultSchedule}
           onClose={() => setShowDefaultSchedule(false)}
           onApply={applyDefaultSchedule}
-        />
-      )}
-
-      {showShiftModal && (
-        <ShiftScheduleModal
-          isOpen={showShiftModal}
-          onClose={() => setShowShiftModal(false)}
-          onApply={(d, t) => shiftDaySchedule(d, t)}
-          initialDate={shiftDate}
-          currentStart={shiftStart}
         />
       )}
 
