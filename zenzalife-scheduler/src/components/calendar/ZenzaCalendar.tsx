@@ -987,7 +987,7 @@ export function ZenzaCalendar() {
                   {previews.map((ev) => (
                     <span
                       key={ev.id}
-                      className="mt-0.5 w-full overflow-hidden whitespace-nowrap text-[10px] rounded px-1"
+                      className="event-preview"
                       style={{
                         backgroundColor: ev.backgroundColor,
                         border: `1px solid ${ev.borderColor}`,
@@ -1023,7 +1023,7 @@ export function ZenzaCalendar() {
               : undefined;
             return (
               <div
-                className="relative flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium shadow"
+                className="calendar-event"
                 style={{
                   backgroundColor: arg.event.backgroundColor,
                   border: `1px solid ${arg.event.borderColor}`,
