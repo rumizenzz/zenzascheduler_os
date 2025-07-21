@@ -11,6 +11,8 @@ This file tracks project progress and upcoming tasks.
 
 - Fixed Netlify deployment error caused by stray JSX in `Dashboard.tsx`.
 
+- Added Completed Tasks modal to mark daily tasks as done.
+
 - Introduced a world-class multi-timer module with flexible countdowns saved to Supabase.
 
 - Added `.env.example` for local development credentials.
