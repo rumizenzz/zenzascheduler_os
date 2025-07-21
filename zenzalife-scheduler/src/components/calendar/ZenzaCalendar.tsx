@@ -16,11 +16,14 @@ import {
   Target,
   Calendar as CalendarIcon,
   CheckCircle,
+  MoveRight,
   Trash,
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
+import { MoveScheduleModal } from "./MoveScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
+import { DragHint } from "./DragHint";
 
 interface CalendarEvent {
   id: string;
@@ -85,6 +88,8 @@ export function ZenzaCalendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showDefaultSchedule, setShowDefaultSchedule] = useState(false);
+  const [showMoveSchedule, setShowMoveSchedule] = useState(false);
+  const [moveFromDate, setMoveFromDate] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [calendarView, setCalendarView] = useState("timeGridDay");
   const calendarRef = useRef<FullCalendar>(null);
@@ -95,6 +100,7 @@ export function ZenzaCalendar() {
   const [activeAlarm, setActiveAlarm] = useState<CalendarEvent | null>(null);
   const triggeredRef = useRef<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
+  const [showMoveSuccess, setShowMoveSuccess] = useState(false);
   const [history, setHistory] = useState<TaskHistory[]>([]);
   const [historyIndex, setHistoryIndex] = useState(0);
 
@@ -133,6 +139,13 @@ export function ZenzaCalendar() {
     }, 30000);
     return () => clearInterval(interval);
   }, [events]);
+
+  useEffect(() => {
+    if (showMoveSuccess) {
+      const timer = setTimeout(() => setShowMoveSuccess(false), 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [showMoveSuccess])
 
   const loadTasks = async (): Promise<Task[]> => {
     if (!user) return [];
@@ -316,6 +329,46 @@ export function ZenzaCalendar() {
     }
   };
 
+  const handleEventDrop = async (info: any) => {
+    if (!user || !isOwnCalendar) return;
+    const id = info.event.id;
+    const start = dayjs(info.event.start).format('YYYY-MM-DDTHH:mm:ssZ');
+    const end = info.event.end
+      ? dayjs(info.event.end).format('YYYY-MM-DDTHH:mm:ssZ')
+      : null;
+    const { error } = await supabase
+      .from('tasks')
+      .update({ start_time: start, end_time: end, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    if (error) {
+      toast.error('Failed to move task: ' + error.message);
+      info.revert();
+      return;
+    }
+    const updated = await loadTasks();
+    await saveHistory(updated);
+  };
+
+  const handleEventResize = async (info: any) => {
+    if (!user || !isOwnCalendar) return;
+    const id = info.event.id;
+    const start = dayjs(info.event.start).format('YYYY-MM-DDTHH:mm:ssZ');
+    const end = info.event.end
+      ? dayjs(info.event.end).format('YYYY-MM-DDTHH:mm:ssZ')
+      : null;
+    const { error } = await supabase
+      .from('tasks')
+      .update({ start_time: start, end_time: end, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    if (error) {
+      toast.error('Failed to resize task: ' + error.message);
+      info.revert();
+      return;
+    }
+    const updated = await loadTasks();
+    await saveHistory(updated);
+  };
+
   const applyDefaultSchedule = async (date: string) => {
     if (!user || !isOwnCalendar) return;
 
@@ -435,6 +488,31 @@ export function ZenzaCalendar() {
       await saveHistory(updated);
     } catch (error: any) {
       toast.error("Failed to apply default schedule: " + error.message);
+    }
+  };
+
+  const moveSchedule = async (toDate: string) => {
+    if (!user || !isOwnCalendar || !moveFromDate) return;
+    try {
+      const dayTasks = tasks.filter(
+        (t) => dayjs(t.start_time).format('YYYY-MM-DD') === moveFromDate
+      );
+      for (const t of dayTasks) {
+        const newStart = dayjs(toDate + dayjs(t.start_time!).format('THH:mm:ssZ')).format('YYYY-MM-DDTHH:mm:ssZ');
+        const newEnd = t.end_time
+          ? dayjs(toDate + dayjs(t.end_time).format('THH:mm:ssZ')).format('YYYY-MM-DDTHH:mm:ssZ')
+          : null;
+        const { error } = await supabase
+          .from('tasks')
+          .update({ start_time: newStart, end_time: newEnd, updated_at: new Date().toISOString() })
+          .eq('id', t.id);
+        if (error) throw error;
+      }
+      toast.success('Schedule moved!');
+      setShowMoveSuccess(true);
+      await loadTasks();
+    } catch (error: any) {
+      toast.error('Failed to move schedule: ' + error.message);
     }
   };
 
@@ -573,6 +651,21 @@ export function ZenzaCalendar() {
 
               <button
                 onClick={() => {
+                  const api = calendarRef.current?.getApi();
+                  const current = api
+                    ? dayjs(api.getDate()).format('YYYY-MM-DD')
+                    : dayjs().format('YYYY-MM-DD');
+                  setMoveFromDate(current);
+                  setShowMoveSchedule(true);
+                }}
+                className="btn-dreamy flex items-center gap-2"
+              >
+                <MoveRight className="w-4 h-4" />
+                Move Day
+              </button>
+
+              <button
+                onClick={() => {
                   setSelectedTask(null);
                   setSelectedDate(dayjs().format('YYYY-MM-DD'));
                   setShowTaskModal(true);
@@ -651,6 +744,8 @@ export function ZenzaCalendar() {
           events={events}
           select={handleDateSelect}
           eventClick={handleEventClick}
+          eventDrop={handleEventDrop}
+          eventResize={handleEventResize}
           eventContent={(arg) => {
             const start = dayjs(arg.event.start!).format('h:mm A');
             const end = arg.event.end
@@ -672,6 +767,7 @@ export function ZenzaCalendar() {
                   </div>
                 )}
                 <span>{end ? `${start} - ${end}` : start}</span>
+                <span>{arg.timeText}</span>
                 <div className="flex items-center gap-1">
                   {arg.event.extendedProps?.category === 'doordash' && (
                     <img
@@ -695,6 +791,31 @@ export function ZenzaCalendar() {
                     />
                   )}
                   <span>{arg.event.title}</span>
+                  <span>{end ? `${start} - ${end}` : start}</span>
+                  <div className="flex items-center gap-1">
+                    {arg.event.extendedProps?.category === 'doordash' && (
+                      <img
+                        src="/icons/doordash.svg"
+                        alt="DoorDash"
+                        className="w-4 h-4"
+                      />
+                    )}
+                    {arg.event.extendedProps?.category === 'ubereats' && (
+                      <img
+                        src="/icons/ubereats.svg"
+                        alt="Uber Eats"
+                        className="w-4 h-4"
+                      />
+                    )}
+                    {arg.event.extendedProps?.category === 'olivegarden' && (
+                      <img
+                        src="/icons/olivegarden.svg"
+                        alt="Olive Garden"
+                        className="w-4 h-4"
+                      />
+                    )}
+                    <span>{arg.event.title}</span>
+                  </div>
                 </div>
               </div>
             );
@@ -712,6 +833,8 @@ export function ZenzaCalendar() {
           allDaySlot={false}
         />
       </div>
+
+      <DragHint isMobile={isMobile} />
 
       {/* Task Modal */}
       {showTaskModal && (
@@ -740,6 +863,15 @@ export function ZenzaCalendar() {
         />
       )}
 
+      {showMoveSchedule && moveFromDate && (
+        <MoveScheduleModal
+          isOpen={showMoveSchedule}
+          onClose={() => setShowMoveSchedule(false)}
+          fromDate={moveFromDate}
+          onMove={moveSchedule}
+        />
+      )}
+
       {/* Family Select Modal */}
       {showFamilySelect && (
         <FamilySelectModal
@@ -760,6 +892,12 @@ export function ZenzaCalendar() {
           soundUrl={getAlarmSound(activeAlarm)}
           onDismiss={() => setActiveAlarm(null)}
         />
+      )}
+
+      {showMoveSuccess && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg animate-bounce z-50">
+          Schedule moved!
+        </div>
       )}
     </div>
   );

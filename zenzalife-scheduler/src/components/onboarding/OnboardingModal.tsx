@@ -5,12 +5,14 @@ import { AndroidUnknownAppsGuide } from './AndroidUnknownAppsGuide'
 import { IOSBackgroundGuide } from './IOSBackgroundGuide'
 import { useNotifications } from '@/hooks/useNotifications'
 import { useInstallPrompt } from '@/hooks/useInstallPrompt'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export function OnboardingModal() {
   const [show, setShow] = useState(false)
   const [step, setStep] = useState(0)
   const { requestPermission, testAlarm } = useNotifications()
   const { installed, isIncognito, isAndroid } = useInstallPrompt()
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (localStorage.getItem('onboardingComplete')) return
@@ -76,6 +78,18 @@ export function OnboardingModal() {
         <div className="space-y-3 text-center">
           <p className="text-sm text-gray-700">
             Swipe down anywhere to refresh the app if something looks outdated.
+          </p>
+        </div>
+      )
+    },
+    {
+      title: 'Reschedule Tasks',
+      content: (
+        <div className="space-y-3 text-center">
+          <p className="text-sm text-gray-700">
+            {isMobile
+              ? 'Long press then drag a task to move it to a new time.'
+              : 'Hold Shift and drag a task to move it to a new time.'}
           </p>
         </div>
       )
