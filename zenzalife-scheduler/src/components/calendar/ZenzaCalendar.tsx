@@ -18,7 +18,6 @@ import {
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
-import { ShiftScheduleModal } from "./ShiftScheduleModal";
 
 interface CalendarEvent {
   id: string;
@@ -83,9 +82,6 @@ export function ZenzaCalendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showDefaultSchedule, setShowDefaultSchedule] = useState(false);
-  const [showShiftModal, setShowShiftModal] = useState(false);
-  const [shiftDate, setShiftDate] = useState(dayjs().format('YYYY-MM-DD'));
-  const [shiftStart, setShiftStart] = useState('06:30');
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [calendarView, setCalendarView] = useState("timeGridDay");
   const calendarRef = useRef<FullCalendar>(null);
@@ -408,55 +404,6 @@ export function ZenzaCalendar() {
     }
   };
 
-  const shiftDaySchedule = async (date: string, newStart: string) => {
-    if (!user || !isOwnCalendar) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('tasks')
-        .select('*')
-        .eq('user_id', user.id)
-        .gte('start_time', `${date}T00:00:00`)
-        .lt('start_time', `${date}T23:59:59`)
-        .order('start_time', { ascending: true });
-
-      if (error) throw error;
-
-      if (!data || data.length === 0) {
-        toast('No tasks found for this date', { icon: 'ℹ️' });
-        return;
-      }
-
-      const oldStart = dayjs(data[0].start_time);
-      const newStartTime = dayjs(`${date}T${newStart}`);
-      const diff = newStartTime.diff(oldStart, 'minute');
-
-      await Promise.all(
-        data.map((t) =>
-          supabase
-            .from('tasks')
-            .update({
-              start_time: dayjs(t.start_time)
-                .add(diff, 'minute')
-                .format('YYYY-MM-DDTHH:mm:ssZ'),
-              end_time: t.end_time
-                ? dayjs(t.end_time)
-                    .add(diff, 'minute')
-                    .format('YYYY-MM-DDTHH:mm:ssZ')
-                : null,
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', t.id)
-        )
-      );
-
-      toast.success('Schedule shifted successfully!');
-      await loadTasks();
-    } catch (err: any) {
-      toast.error('Failed to shift schedule: ' + err.message);
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -490,26 +437,6 @@ export function ZenzaCalendar() {
               >
                 <Clock className="w-4 h-4" />
                 Apply Default Schedule
-              </button>
-
-              <button
-                onClick={() => {
-                  const today = dayjs().format('YYYY-MM-DD');
-                  const todaysTasks = tasks.filter(
-                    (t) => dayjs(t.start_time).format('YYYY-MM-DD') === today
-                  );
-                  setShiftDate(today);
-                  setShiftStart(
-                    todaysTasks.length
-                      ? dayjs(todaysTasks[0].start_time).format('HH:mm')
-                      : '06:30'
-                  );
-                  setShowShiftModal(true);
-                }}
-                className="btn-dreamy flex items-center gap-2"
-              >
-                <Clock className="w-4 h-4" />
-                Shift Today's Schedule
               </button>
 
               <button
@@ -648,16 +575,6 @@ export function ZenzaCalendar() {
           isOpen={showDefaultSchedule}
           onClose={() => setShowDefaultSchedule(false)}
           onApply={applyDefaultSchedule}
-        />
-      )}
-
-      {showShiftModal && (
-        <ShiftScheduleModal
-          isOpen={showShiftModal}
-          onClose={() => setShowShiftModal(false)}
-          onApply={(d, t) => shiftDaySchedule(d, t)}
-          initialDate={shiftDate}
-          currentStart={shiftStart}
         />
       )}
 
