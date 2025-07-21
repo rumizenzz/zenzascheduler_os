@@ -167,6 +167,8 @@ This file tracks project progress and upcoming tasks.
 - Mobile calendar now shows the Week button for easier navigation.
 - Added optional swipe toggle and clean day links so month and week views stay tidy.
 
+- Introduced natural language quick-add to parse phrases like "Dentist at 2pm Friday" into calendar tasks.
+
 - Added personalized splash screen and footer message dedicated to Khen Shantel Zappalorti.
 - Enhanced dedication with dark starry entrance and constellation overlay celebrating the future family.
 

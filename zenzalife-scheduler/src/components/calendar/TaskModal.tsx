@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import chrono from 'chrono-node'
 import { Task } from '@/lib/supabase'
 import { useAudio } from '@/hooks/useAudio'
 import { X, Clock, Tag, Bell, Users, Target, Trash2, CheckCircle } from 'lucide-react'
@@ -57,6 +58,7 @@ const builtinAlarms = [
 ]
 
 export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate, showCompletedToggle = false, initialCompleted = false }: TaskModalProps) {
+  const [nlInput, setNlInput] = useState('')
   const [formData, setFormData] = useState({
     title: '',
     category: 'other',
@@ -139,6 +141,26 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
+  const handleParseNLP = () => {
+    if (!nlInput.trim()) return
+    const results = chrono.parse(nlInput)
+    if (results.length === 0) {
+      alert('Could not understand the text. Try including a date or time.')
+      return
+    }
+    const res = results[0]
+    const title = nlInput.replace(res.text, '').trim() || 'Untitled Task'
+    handleChange('title', title)
+    const startDate = res.start?.date()
+    if (startDate) {
+      handleChange('start_time', dayjs(startDate).format('YYYY-MM-DDTHH:mm'))
+    }
+    const endDate = res.end?.date()
+    if (endDate) {
+      handleChange('end_time', dayjs(endDate).format('YYYY-MM-DDTHH:mm'))
+    }
+  }
+
   const autoSetEndTime = () => {
     if (formData.start_time) {
       const endTime = dayjs(formData.start_time).add(1, 'hour').format('YYYY-MM-DDTHH:mm')
@@ -172,6 +194,27 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Natural Language Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Quick Add</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={nlInput}
+                  onChange={(e) => setNlInput(e.target.value)}
+                  className="input-dreamy flex-1"
+                  placeholder="e.g. Dentist at 2pm Friday"
+                />
+                <button
+                  type="button"
+                  onClick={handleParseNLP}
+                  className="btn-dreamy-primary whitespace-nowrap"
+                >
+                  Parse
+                </button>
+              </div>
+            </div>
+
             {/* Title */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Task Title</label>
