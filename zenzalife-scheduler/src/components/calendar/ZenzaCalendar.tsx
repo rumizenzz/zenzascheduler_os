@@ -744,6 +744,8 @@ export function ZenzaCalendar() {
           events={events}
           select={handleDateSelect}
           eventClick={handleEventClick}
+          eventDrop={handleEventDrop}
+          eventResize={handleEventResize}
           eventContent={(arg) => {
             const start = dayjs(arg.event.start!).format('h:mm A');
             const end = arg.event.end
@@ -763,47 +765,8 @@ export function ZenzaCalendar() {
                     <CheckCircle className="w-3 h-3" />
                     <span className="text-[10px]">Completed</span>
                   </div>
-          eventDrop={handleEventDrop}
-          eventResize={handleEventResize}
-          eventContent={(arg) => (
-            <div
-              className="relative px-2 py-1 rounded-lg text-xs font-medium shadow"
-              style={{
-                backgroundColor: arg.event.backgroundColor,
-                border: `1px solid ${arg.event.borderColor}`,
-                color: arg.event.textColor,
-              }}
-            >
-              {arg.event.extendedProps?.completed && (
-                <div className="absolute -top-1 -right-1 flex items-center gap-1 bg-white/80 rounded-full px-1 text-green-600">
-                  <CheckCircle className="w-3 h-3" />
-                  <span className="text-[10px]">Completed</span>
-                </div>
-              )}
-              <span>{arg.timeText}</span>
-              <div className="flex items-center gap-1">
-                {arg.event.extendedProps?.category === 'doordash' && (
-                  <img
-                    src="/icons/doordash.svg"
-                    alt="DoorDash"
-                    className="w-4 h-4"
-                  />
                 )}
-                {arg.event.extendedProps?.category === 'ubereats' && (
-                  <img
-                    src="/icons/ubereats.svg"
-                    alt="Uber Eats"
-                    className="w-4 h-4"
-                  />
-                )}
-                {arg.event.extendedProps?.category === 'olivegarden' && (
-                  <img
-                    src="/icons/olivegarden.svg"
-                    alt="Olive Garden"
-                    className="w-4 h-4"
-                  />
-                )}
-                <span>{end ? `${start} - ${end}` : start}</span>
+                <span>{arg.timeText}</span>
                 <div className="flex items-center gap-1">
                   {arg.event.extendedProps?.category === 'doordash' && (
                     <img
@@ -826,7 +789,31 @@ export function ZenzaCalendar() {
                       className="w-4 h-4"
                     />
                   )}
-                  <span>{arg.event.title}</span>
+                  <span>{end ? `${start} - ${end}` : start}</span>
+                  <div className="flex items-center gap-1">
+                    {arg.event.extendedProps?.category === 'doordash' && (
+                      <img
+                        src="/icons/doordash.svg"
+                        alt="DoorDash"
+                        className="w-4 h-4"
+                      />
+                    )}
+                    {arg.event.extendedProps?.category === 'ubereats' && (
+                      <img
+                        src="/icons/ubereats.svg"
+                        alt="Uber Eats"
+                        className="w-4 h-4"
+                      />
+                    )}
+                    {arg.event.extendedProps?.category === 'olivegarden' && (
+                      <img
+                        src="/icons/olivegarden.svg"
+                        alt="Olive Garden"
+                        className="w-4 h-4"
+                      />
+                    )}
+                    <span>{arg.event.title}</span>
+                  </div>
                 </div>
               </div>
             );
