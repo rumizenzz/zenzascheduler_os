@@ -157,6 +157,7 @@ This file tracks project progress and upcoming tasks.
 - Enhanced month/week view with boxed event layout and a day schedule modal to review all tasks on mobile.
 
 - Mobile calendar now shows the Week button for easier navigation.
+- Introduced a starry Family Legacy view with walking constellation animation and optional Star Canopy music.
 
 ## Next Steps
 

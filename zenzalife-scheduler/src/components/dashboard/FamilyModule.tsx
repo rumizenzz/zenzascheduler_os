@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { supabase, FamilyGroup, User } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import { Users, Plus, Crown, Baby, GraduationCap, Heart, Target } from 'lucide-react'
+import { FamilyLegacyView } from '../family/FamilyLegacyView'
 
 export function FamilyModule() {
   const { user, profile } = useAuth()
@@ -11,6 +12,7 @@ export function FamilyModule() {
   const [loading, setLoading] = useState(true)
   const [showCreateFamily, setShowCreateFamily] = useState(false)
   const [showJoinFamily, setShowJoinFamily] = useState(false)
+  const [showLegacy, setShowLegacy] = useState(false)
 
   useEffect(() => {
     if (user && profile) {
@@ -240,6 +242,9 @@ export function FamilyModule() {
             onJoin={joinFamily}
           />
         )}
+        {showLegacy && (
+          <FamilyLegacyView onClose={() => setShowLegacy(false)} />
+        )}
       </div>
     )
   }
@@ -258,8 +263,13 @@ export function FamilyModule() {
           </p>
         </div>
         
-        <div className="text-sm text-gray-600">
-          Family ID: <span className="font-mono bg-gray-100 px-2 py-1 rounded">{familyGroup.id}</span>
+        <div className="flex flex-col items-start gap-2 text-sm text-gray-600">
+          <div>
+            Family ID: <span className="font-mono bg-gray-100 px-2 py-1 rounded">{familyGroup.id}</span>
+          </div>
+          <button onClick={() => setShowLegacy(true)} className="btn-dreamy px-3 py-1">
+            View Family Legacy
+          </button>
         </div>
       </div>
 
