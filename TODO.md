@@ -31,6 +31,10 @@ This file tracks project progress and upcoming tasks.
 - Unsubscribe page includes instructions for re-subscribing.
 - Added login prompt asking users to join the mailing list if they aren't subscribed.
 - Refined mailing list prompt wording to remove explicit baby references.
+- Added SQL snippet in the README explaining how to create the mailing list table.
+- Fixed Netlify configuration parsing error by cleaning up netlify.toml
+- Fixed TypeScript syntax issue in `Dashboard.tsx` that broke Netlify build
+- Addressed additional parsing error in `Dashboard.tsx` for the sidebar toggle
 - Fixed Netlify configuration parsing error by cleaning up netlify.toml
 - Fixed TypeScript syntax issue in `Dashboard.tsx` that broke Netlify build
 - Addressed additional parsing error in `Dashboard.tsx` for the sidebar toggle
