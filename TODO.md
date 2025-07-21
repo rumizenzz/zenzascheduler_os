@@ -148,6 +148,7 @@ This file tracks project progress and upcoming tasks.
 - Fixed stray braces in `ZenzaCalendar.tsx` and undefined variable in `OnboardingModal.tsx` that broke the Netlify build.
 - Fixed unclosed JSX in `ZenzaCalendar.tsx` after a merge mishap so Netlify builds succeed.
 - Prevented duplicate tasks from appearing by deduplicating schedules when loading the calendar.
+- Improved calendar toolbar with sticky action buttons, horizontal scrolling on mobile, and a floating Add Task button for quick scheduling.
 
 ## Next Steps
 
