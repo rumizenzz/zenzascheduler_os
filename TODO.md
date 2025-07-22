@@ -8,6 +8,8 @@ This file tracks project progress and upcoming tasks.
 - Added `netlify.toml` to configure build settings and SPA redirects.
 
 ## Latest Updates
+- Added script `update:upcoming` to sync Supabase upcoming releases into `UPCOMING_RELEASES.md`.
+- Added hidden upcoming releases admin accessed by a wood log icon in Settings. Requires the secret code "ZENZALIFE" and saves entries to Supabase.
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
 - Tracked and displayed each user's last login time.
 - Last login now records after the dreamlike entrance completes.

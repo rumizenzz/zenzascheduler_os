@@ -8,6 +8,7 @@ import { useNotifications } from '@/hooks/useNotifications'
 import { useInstallPrompt } from '@/hooks/useInstallPrompt'
 import { useAlarmChannel } from '@/hooks/useAlarmChannel'
 import { AlarmModal } from '../alerts/AlarmModal'
+import { UpcomingReleasesModal } from '../admin/UpcomingReleasesModal'
 
 type SettingsTab = 'profile' | 'audio' | 'notifications' | 'appearance' | 'privacy' | 'help'
 
@@ -63,6 +64,10 @@ export function SettingsModule() {
   const { playEntranceSound, playAudio } = useAudio()
   const { requestPermission, testAlarm } = useNotifications()
   const [showTestAlarm, setShowTestAlarm] = useState(false)
+  const [showUpcomingModal, setShowUpcomingModal] = useState(false)
+  const [showSecretPrompt, setShowSecretPrompt] = useState(false)
+  const [secretInput, setSecretInput] = useState('')
+  const [releaseAccess, setReleaseAccess] = useState(false)
   const { postMessage } = useAlarmChannel(msg => {
     if (msg.type === 'dismiss') {
       setShowTestAlarm(false)
@@ -89,6 +94,10 @@ export function SettingsModule() {
     localStorage.setItem('defaultAlarmSound', audioSettings.default_alarm)
     localStorage.setItem('customAlarmSounds', JSON.stringify(audioSettings.custom_alarms))
   }, [audioSettings.default_alarm, audioSettings.custom_alarms])
+
+  useEffect(() => {
+    setReleaseAccess(localStorage.getItem('releaseAccess') === 'true')
+  }, [])
 
   const saveProfile = async () => {
     if (!user) return
@@ -193,6 +202,25 @@ export function SettingsModule() {
       toast.success('Data exported successfully!')
     } catch (error: any) {
       toast.error('Failed to export data: ' + error.message)
+    }
+  }
+
+  const handleLogClick = () => {
+    if (releaseAccess) {
+      setShowUpcomingModal(true)
+    } else {
+      setShowSecretPrompt(true)
+    }
+  }
+
+  const checkCode = () => {
+    if (secretInput === 'ZENZALIFE') {
+      setReleaseAccess(true)
+      localStorage.setItem('releaseAccess', 'true')
+      setShowSecretPrompt(false)
+      setShowUpcomingModal(true)
+    } else {
+      toast.error('Incorrect code')
     }
   }
 
@@ -626,6 +654,38 @@ export function SettingsModule() {
       <div className="card-floating p-6">
         {renderTabContent()}
       </div>
+      <div className="text-center mt-4">
+        <span
+          onClick={handleLogClick}
+          className="cursor-pointer text-2xl select-none"
+          title="logs"
+        >
+          🪵
+        </span>
+      </div>
+      {showSecretPrompt && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 space-y-4 max-w-xs w-full">
+            <p className="text-center">What is the secret code?</p>
+            <input
+              className="border p-1 w-full"
+              value={secretInput}
+              onChange={(e) => setSecretInput(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <button className="btn-dreamy text-sm" onClick={() => setShowSecretPrompt(false)}>
+                Cancel
+              </button>
+              <button className="btn-dreamy-primary text-sm" onClick={checkCode}>
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showUpcomingModal && (
+        <UpcomingReleasesModal onClose={() => setShowUpcomingModal(false)} />
+      )}
       {showTestAlarm && (
         <AlarmModal
           eventTitle="Test Alarm"
