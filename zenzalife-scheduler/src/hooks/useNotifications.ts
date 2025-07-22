@@ -32,6 +32,18 @@ export function useNotifications() {
     []
   )
 
+  const scheduleNotificationAt = useCallback(
+    async (title: string, options: NotificationOptions, time: number) => {
+      const delay = time - Date.now()
+      if (delay <= 0) {
+        scheduleNotification(title, options, 0)
+      } else {
+        scheduleNotification(title, options, delay)
+      }
+    },
+    [scheduleNotification]
+  )
+
   const testAlarm = useCallback(() => {
     scheduleNotification(
       'Test Alarm',
@@ -40,5 +52,5 @@ export function useNotifications() {
     )
   }, [scheduleNotification])
 
-  return { requestPermission, scheduleNotification, testAlarm }
+  return { requestPermission, scheduleNotification, scheduleNotificationAt, testAlarm }
 }
