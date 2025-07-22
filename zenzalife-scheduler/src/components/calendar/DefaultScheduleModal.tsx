@@ -1,11 +1,14 @@
-import React, { useState, useRef } from 'react'
-import { X, Clock, Calendar, CheckCircle } from 'lucide-react'
+import React, { useState, useRef, useEffect } from 'react'
+import { X, Clock, Calendar, CheckCircle, GripVertical } from 'lucide-react'
 import dayjs from 'dayjs'
 import {
   defaultScheduleTemplate,
   DefaultScheduleItem,
 } from '@/data/defaultSchedule'
 import { categories, getCategoryColor } from '@/data/categories'
+import { useAuth } from '@/contexts/AuthContext'
+import { supabase } from '@/lib/supabase'
+import { destroyPullToRefresh, initPullToRefresh } from '@/hooks/usePullToRefresh'
 
 interface DefaultScheduleModalProps {
   isOpen: boolean
@@ -15,6 +18,7 @@ interface DefaultScheduleModalProps {
 
 
 export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultScheduleModalProps) {
+  const { user } = useAuth()
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [applying, setApplying] = useState(false)
   const [items, setItems] = useState<DefaultScheduleItem[]>(defaultScheduleTemplate)
@@ -22,6 +26,41 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
   const [dragIndex, setDragIndex] = useState<number | null>(null)
   const [reorderEnabled, setReorderEnabled] = useState(false)
 
+  useEffect(() => {
+    if (!isOpen || !user) return
+    ;(async () => {
+      const { data, error } = await supabase
+        .from('task_templates')
+        .select('tasks')
+        .eq('user_id', user.id)
+        .eq('name', 'default')
+        .maybeSingle()
+
+      if (!error && data?.tasks) {
+        setItems(data.tasks as DefaultScheduleItem[])
+      }
+    })()
+    destroyPullToRefresh()
+    return () => {
+      initPullToRefresh()
+    }
+  }, [isOpen, user])
+
+  useEffect(() => {
+    if (!user) return
+    supabase
+      .from('task_templates')
+      .upsert(
+        {
+          user_id: user.id,
+          name: 'default',
+          tasks: items,
+          updated_at: new Date().toISOString()
+        },
+        { onConflict: 'user_id,name' }
+      )
+      .catch((e) => console.error('Failed to save template', e))
+  }, [items, user])
 
   const updateItem = (index: number, changes: Partial<DefaultScheduleItem>) => {
     setItems((prev) => prev.map((it, i) => (i === index ? { ...it, ...changes } : it)))
@@ -149,19 +188,8 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
               {items.map((item, index) => (
                 <div
                   key={index}
-                  className={`flex items-center gap-4 p-3 bg-white/50 rounded-xl border border-white/50 ${
-                    reorderEnabled ? 'select-none cursor-grab active:cursor-grabbing' : ''
-                  }`}
-                  draggable={
-                    reorderEnabled &&
-                    typeof window !== 'undefined' &&
-                    !('ontouchstart' in window)
-                  }
-                  onDragStart={(e) => {
-                    if (!reorderEnabled) return
-                    if (e.shiftKey || dragIndex !== null) setDragIndex(index)
-                    else e.preventDefault()
-                  }}
+                  className="flex items-center gap-4 p-3 bg-white/50 rounded-xl border border-white/50"
+                  style={{ touchAction: reorderEnabled ? 'none' : 'auto' }}
                   onDragOver={(e) => reorderEnabled && e.preventDefault()}
                   onDrop={() => {
                     if (!reorderEnabled) return
@@ -169,22 +197,6 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
                       reorderItems(dragIndex, index)
                     }
                     setDragIndex(null)
-                  }}
-                  onDragEnd={() => {
-                    if (!reorderEnabled) return
-                    setDragIndex(null)
-                    if (holdTimer.current) {
-                      clearTimeout(holdTimer.current)
-                      holdTimer.current = null
-                    }
-                  }}
-                  onPointerDown={(e) => {
-                    if (!reorderEnabled) return
-                    if (e.shiftKey) {
-                      setDragIndex(index)
-                    } else {
-                      holdTimer.current = setTimeout(() => setDragIndex(index), 300)
-                    }
                   }}
                   onPointerEnter={() => {
                     if (!reorderEnabled || dragIndex === null || dragIndex === index) return
@@ -197,16 +209,40 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
                       holdTimer.current = null
                     }
                   }}
-                  onPointerUp={() => {
-                    if (holdTimer.current) {
-                      clearTimeout(holdTimer.current)
-                      holdTimer.current = null
-                    }
-                    if (dragIndex !== null) {
-                      setDragIndex(null)
-                    }
-                  }}
                 >
+                  {reorderEnabled && (
+                    <div
+                      className="mr-1 p-1 cursor-grab active:cursor-grabbing touch-none"
+                      draggable={
+                        reorderEnabled &&
+                        typeof window !== 'undefined' &&
+                        !('ontouchstart' in window)
+                      }
+                      onDragStart={(e) => {
+                        if (!reorderEnabled) return
+                        setDragIndex(index)
+                      }}
+                      onDragEnd={() => {
+                        if (!reorderEnabled) return
+                        setDragIndex(null)
+                      }}
+                      onPointerDown={() => {
+                        if (!reorderEnabled) return
+                        holdTimer.current = setTimeout(() => setDragIndex(index), 300)
+                      }}
+                      onPointerUp={() => {
+                        if (holdTimer.current) {
+                          clearTimeout(holdTimer.current)
+                          holdTimer.current = null
+                        }
+                        if (dragIndex !== null) {
+                          setDragIndex(null)
+                        }
+                      }}
+                    >
+                      <GripVertical className="w-4 h-4 text-gray-500" />
+                    </div>
+                  )}
                   <div
                     className="w-3 h-3 rounded-full flex-shrink-0"
                     style={{ backgroundColor: getCategoryColor(item.category) }}
