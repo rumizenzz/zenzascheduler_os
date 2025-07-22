@@ -28,3 +28,4 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - ChangeLogButton now stores the last seen timestamp in Supabase instead of
   relying on cookies or localStorage.
 - Added `type` column to the `addresses` table so Life Logistics items save correctly. (2025-07-22 23:09:24 UTC)
+- Documented how to add the missing `type` column in `supabase/README.md`. (2025-07-22 23:22:55 UTC)
