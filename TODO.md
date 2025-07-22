@@ -8,6 +8,7 @@ This file tracks project progress and upcoming tasks.
 - Added `netlify.toml` to configure build settings and SPA redirects.
 
 ## Latest Updates
+- Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
 
 - Fixed default schedule reordering on mobile with touch-friendly drag.
 - Reworked schedule template drag-and-drop with a dedicated handle, desktop
