@@ -24,6 +24,7 @@ export type User = {
   growth_identity?: string
   family_id?: string
   bio?: string
+  last_login?: string
   created_at?: string
   updated_at?: string
 }

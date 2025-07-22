@@ -10,6 +10,7 @@ CREATE TABLE users (
     growth_identity TEXT,
     family_id UUID,
     bio TEXT,
+    last_login TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

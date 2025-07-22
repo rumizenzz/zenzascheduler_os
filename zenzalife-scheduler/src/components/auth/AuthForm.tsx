@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from 'react-hot-toast'
+import dayjs from 'dayjs'
 import { Eye, EyeOff, Mail, Lock, User, Heart } from 'lucide-react'
 import { InstallGuide } from '../onboarding/InstallGuide'
 
@@ -37,9 +38,12 @@ export function AuthForm({ mode, onModeChange }: AuthFormProps) {
 
     try {
       if (mode === 'signin') {
-        const { error } = await signIn(email, password)
+        const { error, previousLogin } = await signIn(email, password)
         if (error) throw error
-        toast.success('Welcome back to ZenzaLife!')
+        const last = previousLogin
+          ? ` Last login: ${dayjs(previousLogin).format('MMM D, YYYY h:mm A')}`
+          : ''
+        toast.success(`Welcome back to ZenzaLife!${last}`)
       } else {
         const { error } = await signUp(email, password, displayName, relationshipRole)
         if (error) throw error
