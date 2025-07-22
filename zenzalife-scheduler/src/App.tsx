@@ -11,7 +11,7 @@ import './globals.css'
 const queryClient = new QueryClient()
 
 function AppContent() {
-  const { user, loading } = useAuth()
+  const { user, loading, recordLogin } = useAuth()
   const [showEntrance, setShowEntrance] = useState(true)
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin')
 
@@ -41,7 +41,12 @@ function AppContent() {
   // Show dreamlike entrance experience first
   if (showEntrance) {
     return (
-      <DreamlikeEntrance onComplete={() => setShowEntrance(false)}>
+      <DreamlikeEntrance
+        onComplete={() => {
+          recordLogin()
+          setShowEntrance(false)
+        }}
+      >
         <Dashboard />
       </DreamlikeEntrance>
     )
