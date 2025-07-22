@@ -24,7 +24,11 @@ export function AlarmModal({ eventTitle, eventTime, soundUrl, onDismiss, onSnooz
     playAudio(soundUrl, 1, true);
     return () => {
       stopAudio();
-      wakeLockRef.current?.release().catch(() => {});
+      if (wakeLockRef.current) {
+        wakeLockRef.current.release().catch((err) => {
+          console.error('Wake lock release failed', err);
+        });
+      }
     };
   }, [soundUrl, playAudio, stopAudio]);
 
