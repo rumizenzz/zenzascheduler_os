@@ -37,17 +37,24 @@ final class TimeSensitiveNotificationManager: NSObject, UNUserNotificationCenter
 
     /// Schedules a notification to appear within 10 seconds using the `.timeSensitive` interruption level.
     private func scheduleTimeSensitiveNotification() {
+        scheduleNotification(title: "Time Sensitive Reminder",
+                              body: "This needs your attention right away!",
+                              at: Date().addingTimeInterval(10))
+    }
+
+    /// Schedule a time-sensitive notification for a specific date.
+    func scheduleNotification(title: String, body: String, at date: Date) {
         let content = UNMutableNotificationContent()
-        content.title = "Time Sensitive Reminder"
-        content.body = "This needs your attention right away!"
+        content.title = title
+        content.body = body
         content.sound = UNNotificationSound.default
         if #available(iOS 15.0, *) {
             content.interruptionLevel = .timeSensitive
         }
 
-        // Trigger after 10 seconds
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
-        let request = UNNotificationRequest(identifier: "timeSensitiveExample", content: content, trigger: trigger)
+        let interval = max(date.timeIntervalSinceNow, 1)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
                 print("Scheduling error: \(error.localizedDescription)")
