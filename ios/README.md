@@ -1,6 +1,8 @@
 # iOS Time-Sensitive Notification Example
 
-This directory provides a Swift snippet demonstrating how to request notification permissions with the `timeSensitive` option and schedule a local notification that fires within 10 seconds.
+This directory provides a Swift snippet demonstrating how to request notification permissions with the `timeSensitive` option and schedule time-sensitive local notifications.
+
+The `TimeSensitiveNotificationManager` now exposes `scheduleNotification(title:body:at:)` so you can trigger alarms at any future `Date`.
 
 ## Info.plist / Entitlement Keys
 
@@ -35,6 +37,10 @@ Set the notification center delegate so the banner appears while the app is acti
 ```swift
 let manager = TimeSensitiveNotificationManager()
 manager.requestAuthorization()
+// Schedule a reminder for a specific time
+manager.scheduleNotification(title: "Upcoming Task",
+                             body: "Don't forget your event",
+                             at: Date().addingTimeInterval(3600))
 ```
 
 The manager implements `UNUserNotificationCenterDelegate` and calls `completionHandler([.banner, .list, .sound])` so alerts display even when your app is in the foreground.
