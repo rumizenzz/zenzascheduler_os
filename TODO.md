@@ -207,6 +207,8 @@ This file tracks project progress and upcoming tasks.
   changelog.
 - Fixed ChangeLogButton to store the last seen timestamp in Supabase instead of
   localStorage or cookies.
+- Protected `/admin/changelog` behind a secret code prompt so only those with
+  the code "ZENZALIFE" can add releases.
 
 ## Next Steps
 
