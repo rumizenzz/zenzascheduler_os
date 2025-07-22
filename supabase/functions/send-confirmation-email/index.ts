@@ -65,31 +65,6 @@ Deno.serve(async (req) => {
     const replyTo = Deno.env.get('MAIL_REPLY_TO') || fromEmail
     const listUnsubEmail = Deno.env.get('LIST_UNSUBSCRIBE_EMAIL')
     const listUnsubUrl = Deno.env.get('LIST_UNSUBSCRIBE_URL')
-    const companyAddress = Deno.env.get('COMPANY_ADDRESS') || ''
-    const companyContact = Deno.env.get('COMPANY_CONTACT_EMAIL') || ''
-
-    const html = `<!doctype html>
-    <html>
-      <body style="font-family:Arial,sans-serif;background:#f8fafc;padding:40px;">
-        <table style="max-width:600px;margin:auto;background:#ffffff;border-radius:8px;overflow:hidden;">
-          <tr>
-            <td style="padding:40px;text-align:center;">
-              <h1 style="font-weight:normal;color:#333;">Confirm your email</h1>
-              <p style="color:#555;">Hi ${displayName || ''}, welcome to ZenzaLife Scheduler! Please confirm your email address to start your dreamlike journey.</p>
-              <p><a href="${actionLink}" style="display:inline-block;background:#7c3aed;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;">Confirm Email</a></p>
-              <p style="color:#555;font-size:14px;">If the button doesn't work, copy and paste this link: <br/><a href="${actionLink}">${actionLink}</a></p>
-            </td>
-          </tr>
-          <tr>
-            <td style="background:#f1f5f9;padding:20px;text-align:center;font-size:12px;color:#666;">
-              ${companyAddress ? `<p style=\"margin:0;\">${companyAddress}</p>` : ''}
-              ${companyContact ? `<p style=\"margin:0;\">${companyContact}</p>` : ''}
-              ${listUnsubUrl ? `<p style=\"margin-top:8px;\"><a href=\"${listUnsubUrl}\" style=\"color:#7c3aed;text-decoration:underline;\">Unsubscribe</a></p>` : ''}
-            </td>
-          </tr>
-        </table>
-      </body>
-    </html>`
 
     await sendMail({
       hostname: host,
@@ -103,8 +78,7 @@ Deno.serve(async (req) => {
       } : undefined,
       to: email,
       subject: 'Confirm your ZenzaLife account',
-      content: `Hello ${displayName || ''},\n\nPlease confirm your email by visiting: ${actionLink}\n\nThank you!`,
-      html
+      content: `Hello ${displayName || ''},\n\nPlease confirm your email by visiting: ${actionLink}\n\nThank you!`
     })
 
     return new Response(JSON.stringify({ success: true }), {

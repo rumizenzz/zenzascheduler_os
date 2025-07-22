@@ -91,10 +91,6 @@ Configure these variables in **Site settings → Environment variables** so the 
 - `IMAP_PASS` – IMAP password
 - `UNSUBSCRIBE_WARNING_TEXT` – text displayed on the unsubscribe page
 
-The confirmation email automatically includes an elegant footer showing
-`COMPANY_ADDRESS`, `COMPANY_CONTACT_EMAIL`, and a direct unsubscribe link using
-`LIST_UNSUBSCRIBE_URL`.
-
 Legacy variables `IONOS_HOST`, `IONOS_PORT`, `IONOS_USER`, `IONOS_PASS`, `IONOS_USERNAME`, and `IONOS_PASSWORD` are supported for compatibility but `SMTP_*` variables are preferred.
 
 > **Note**
