@@ -10,6 +10,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, displayName: string, relationshipRole?: string) => Promise<any>
   signOut: () => Promise<void>
   refreshProfile: () => Promise<void>
+  recordLogin: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -95,17 +96,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
         .eq('id', userId)
         .maybeSingle()
 
-      await supabase
-        .from('users')
-        .update({
-          last_login: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', userId)
-
       return { ...result, previousLogin: existing?.last_login as string | null }
     }
     return result
+  }
+
+  async function recordLogin() {
+    if (!user) return
+    await supabase
+      .from('users')
+      .update({
+        last_login: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', user.id)
   }
 
   async function signUp(email: string, password: string, displayName: string, relationshipRole?: string) {
@@ -168,7 +172,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     signIn,
     signUp,
     signOut,
-    refreshProfile
+    refreshProfile,
+    recordLogin
   }
 
   return (
