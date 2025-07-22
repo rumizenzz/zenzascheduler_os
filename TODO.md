@@ -4,8 +4,13 @@ This file tracks project progress and upcoming tasks.
 
 ## Completed
 
+- Documented world-class agentic workflow and synced TODO tracker (2025-07-22).
+- Reflection: automate checks so `AGENTS.md` and this file stay current.
 - Documented Netlify deployment instructions and required environment variables.
 - Added `netlify.toml` to configure build settings and SPA redirects.
+
+## In Progress
+(None at the moment)
 
 ## Latest Updates
 - Added script `update:upcoming` to sync Supabase upcoming releases into `UPCOMING_RELEASES.md`.
@@ -238,5 +243,6 @@ This file tracks project progress and upcoming tasks.
 - Added per-task notes history with timestamps and a modal to review past thoughts.
 
 ## Improvement Ideas
+- Add CI pipeline to verify documentation sync and run lint/tests.
 
 (add any new ideas here)

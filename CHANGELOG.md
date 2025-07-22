@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Documented world-class agentic workflow in `AGENTS.md` and expanded `TODO.md` tracker. (2025-07-22 20:34:18 UTC)
 - Script `update:upcoming` exports Supabase upcoming releases to `UPCOMING_RELEASES.md`.
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
