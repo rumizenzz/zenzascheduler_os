@@ -82,6 +82,7 @@ This file tracks project progress and upcoming tasks.
 - Fixed Life Logistics forms to use column names from the database schema.
 - Removed obsolete `is_primary` field from Life Logistics address forms.
 - Added missing `type` column to the `addresses` table so Logistics entries save.
+- Documented fix for "Could not find the 'type' column of 'addresses' in the schema cache" error.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
