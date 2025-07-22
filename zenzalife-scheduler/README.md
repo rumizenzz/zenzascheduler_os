@@ -93,6 +93,9 @@ Configure these variables in **Site settings → Environment variables** so the 
 
 Legacy variables `IONOS_HOST`, `IONOS_PORT`, `IONOS_USER`, and `IONOS_PASS` are supported for compatibility but `SMTP_*` variables are preferred.
 
+> **Note**
+> Nodemailer may print a `DEP0040` warning about the built‑in `punycode` module when Netlify runs the confirmation email function. This is only a deprecation notice and does not prevent messages from sending. If emails fail, double‑check that all SMTP variables above are defined correctly.
+
 ### Mailing list table
 
 Create the table referenced by `SUPABASE_TABLE` inside your Supabase project:
