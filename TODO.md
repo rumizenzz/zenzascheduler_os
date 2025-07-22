@@ -12,6 +12,7 @@ This file tracks project progress and upcoming tasks.
 - Fixed default schedule reordering on mobile with touch-friendly drag.
 - Reworked schedule template drag-and-drop with a dedicated handle, desktop
   mouse support, and Supabase persistence.
+- Fixed TypeScript error when saving the default schedule template so Netlify builds succeed.
 - Added task template and completed tasks tracking with a collapsible checklist.
 - Fixed Netlify deployment error caused by stray JSX in `Dashboard.tsx`.
 

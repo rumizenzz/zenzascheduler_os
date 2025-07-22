@@ -48,18 +48,23 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
 
   useEffect(() => {
     if (!user) return
-    supabase
-      .from('task_templates')
-      .upsert(
-        {
-          user_id: user.id,
-          name: 'default',
-          tasks: items,
-          updated_at: new Date().toISOString()
-        },
-        { onConflict: 'user_id,name' }
-      )
-      .catch((e) => console.error('Failed to save template', e))
+    const save = async () => {
+      const { error } = await supabase
+        .from('task_templates')
+        .upsert(
+          {
+            user_id: user.id,
+            name: 'default',
+            tasks: items,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: 'user_id,name' }
+        )
+      if (error) {
+        console.error('Failed to save template', error)
+      }
+    }
+    save()
   }, [items, user])
 
   const updateItem = (index: number, changes: Partial<DefaultScheduleItem>) => {
