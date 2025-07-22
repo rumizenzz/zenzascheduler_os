@@ -20,15 +20,17 @@ const handler: Handler = async (event) => {
     'Content-Type': 'application/json'
   }
 
-  const required = [
-    'SUPABASE_URL',
-    'SUPABASE_SERVICE_KEY',
-    'SMTP_HOST',
-    'SMTP_USER',
-    'SMTP_PASS',
-    'MAIL_FROM_EMAIL'
+  const groups = [
+    ['SUPABASE_URL'],
+    ['SUPABASE_SERVICE_KEY'],
+    ['SMTP_HOST', 'IONOS_HOST'],
+    ['SMTP_USER', 'IONOS_USER', 'IONOS_USERNAME'],
+    ['SMTP_PASS', 'IONOS_PASS', 'IONOS_PASSWORD'],
+    ['MAIL_FROM_EMAIL', 'EMAIL_FROM']
   ]
-  const missing = required.filter((name) => !process.env[name])
+  const missing = groups
+    .filter((vars) => !vars.some((v) => process.env[v]))
+    .map((vars) => vars[0])
   if (missing.length) {
     console.error('Missing env vars:', missing.join(', '))
     return {
