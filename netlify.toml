@@ -9,8 +9,7 @@
   # relative path so Netlify can locate the serverless functions stored
   # at the repository root.
   directory = "../netlify/functions"
-  # Exclude large dependencies from the bundle and install them at runtime
-  external_node_modules = ["@supabase/supabase-js", "nodemailer"]
+  # Bundle all dependencies with the functions to avoid missing modules
 
 [[redirects]]
   from = "/*"
