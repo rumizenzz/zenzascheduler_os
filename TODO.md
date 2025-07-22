@@ -26,6 +26,7 @@ This file tracks project progress and upcoming tasks.
 - Fixed functions path in `netlify.toml` so confirmation emails deploy properly.
 - Added root `package.json` and Netlify build step to install serverless dependencies.
 - Added `package.json` inside `netlify/functions` so dependencies install at runtime.
+- Fixed promise handling for confirmation and unsubscribe pages.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.

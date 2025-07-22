@@ -6,25 +6,34 @@ export function ConfirmPage() {
 
   useEffect(() => {
     const confirm = async () => {
-      const params = new URLSearchParams(window.location.search)
-      const code = params.get('code')
-      if (code) {
-        const { error } = await supabase.auth.exchangeCodeForSession(code)
-        if (error) {
-          setStatus('error')
-          return
+      try {
+        const params = new URLSearchParams(window.location.search)
+        const code = params.get('code')
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code)
+          if (error) {
+            setStatus('error')
+            return
+          }
         }
+        const {
+          data: { user }
+        } = await supabase.auth.getUser()
+        if (user?.email) {
+          await supabase
+            .from('mailing_list')
+            .update({
+              confirmed: true,
+              confirmed_at: new Date().toISOString()
+            })
+            .eq('email', user.email)
+        }
+        setStatus('success')
+      } catch (err) {
+        setStatus('error')
       }
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user?.email) {
-        await supabase
-          .from('mailing_list')
-          .update({ confirmed: true, confirmed_at: new Date().toISOString() })
-          .eq('email', user.email)
-      }
-      setStatus('success')
     }
-    confirm().catch(() => setStatus('error'))
+    confirm()
   }, [])
 
   if (status === 'loading') {
