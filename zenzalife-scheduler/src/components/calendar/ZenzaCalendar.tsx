@@ -27,6 +27,7 @@ import { MoveScheduleModal } from "./MoveScheduleModal";
 import { DayScheduleModal } from "./DayScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
 import { useAlarmChannel } from "@/hooks/useAlarmChannel";
+import { useNotifications } from "@/hooks/useNotifications";
 import { DragHint } from "./DragHint";
 
 interface CalendarEvent {
@@ -112,6 +113,8 @@ export function ZenzaCalendar() {
   const triggeredRef = useRef<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
   const snoozeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const scheduledRef = useRef<Set<string>>(new Set())
+  const { scheduleNotificationAt } = useNotifications()
   const { postMessage } = useAlarmChannel(msg => {
     if (msg.type === 'dismiss') {
       setActiveAlarm(null)
@@ -185,6 +188,26 @@ export function ZenzaCalendar() {
     }, 30000);
     return () => clearInterval(interval);
   }, [events]);
+
+  useEffect(() => {
+    const now = Date.now();
+    // remove past notifications
+    scheduledRef.current.forEach(id => {
+      const ev = events.find(e => e.id === id);
+      if (!ev || new Date(ev.start).getTime() <= now) {
+        scheduledRef.current.delete(id);
+      }
+    });
+
+    events.forEach(ev => {
+      if (!ev.extendedProps?.alarm) return;
+      const start = new Date(ev.start).getTime();
+      if (start > now && !scheduledRef.current.has(ev.id)) {
+        scheduleNotificationAt(ev.title, { body: dayjs(ev.start).format('h:mm A') }, start);
+        scheduledRef.current.add(ev.id);
+      }
+    });
+  }, [events, scheduleNotificationAt]);
 
   useEffect(() => {
     if (showMoveSuccess) {
