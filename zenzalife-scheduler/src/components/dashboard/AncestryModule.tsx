@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { supabase, Ancestor } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import { TreePine, Plus, Check } from 'lucide-react'
+import { FamilyTreeMindMap } from './FamilyTreeMindMap'
 
 export function AncestryModule() {
   const { profile } = useAuth()
@@ -36,7 +37,12 @@ export function AncestryModule() {
     }
   }
 
-  const addAncestor = async (name: string, relation: string, birthYear?: number) => {
+  const addAncestor = async (
+    name: string,
+    relation: string,
+    birthYear?: number,
+    deathYear?: number
+  ) => {
     if (!profile?.family_id) return
     try {
       const { data, error } = await supabase
@@ -46,6 +52,7 @@ export function AncestryModule() {
           name,
           relation,
           birth_year: birthYear,
+          death_year: deathYear,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
@@ -110,8 +117,18 @@ export function AncestryModule() {
                     <span className="text-sm text-gray-500">({ancestor.relation})</span>
                   )}
                 </p>
-                {ancestor.birth_year && (
-                  <p className="text-xs text-gray-500">Born {ancestor.birth_year}</p>
+                {(ancestor.birth_year || ancestor.death_year) && (
+                  <p className="text-xs text-gray-500">
+                    {ancestor.birth_year
+                      ? `${ancestor.birth_year} - ${
+                          ancestor.death_year !== undefined && ancestor.death_year !== null
+                            ? ancestor.death_year
+                            : 'Present'
+                        }`
+                      : ancestor.death_year !== undefined && ancestor.death_year !== null
+                      ? `Died ${ancestor.death_year}`
+                      : null}
+                  </p>
                 )}
               </div>
               <button
@@ -135,6 +152,8 @@ export function AncestryModule() {
         <p className="text-gray-600">No ancestors added yet.</p>
       )}
 
+      <FamilyTreeMindMap />
+
       {showAddModal && (
         <AddAncestorModal
           isOpen={showAddModal}
@@ -149,13 +168,19 @@ export function AncestryModule() {
 interface AddAncestorModalProps {
   isOpen: boolean
   onClose: () => void
-  onAdd: (name: string, relation: string, birthYear?: number) => void
+  onAdd: (
+    name: string,
+    relation: string,
+    birthYear?: number,
+    deathYear?: number
+  ) => void
 }
 
 function AddAncestorModal({ isOpen, onClose, onAdd }: AddAncestorModalProps) {
   const [name, setName] = useState('')
   const [relation, setRelation] = useState('')
   const [birthYear, setBirthYear] = useState('')
+  const [deathYear, setDeathYear] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -163,7 +188,12 @@ function AddAncestorModal({ isOpen, onClose, onAdd }: AddAncestorModalProps) {
       toast.error('Please enter a name')
       return
     }
-    onAdd(name.trim(), relation.trim(), birthYear ? parseInt(birthYear) : undefined)
+    onAdd(
+      name.trim(),
+      relation.trim(),
+      birthYear ? parseInt(birthYear) : undefined,
+      deathYear ? parseInt(deathYear) : undefined
+    )
   }
 
   if (!isOpen) return null
@@ -200,6 +230,15 @@ function AddAncestorModal({ isOpen, onClose, onAdd }: AddAncestorModalProps) {
                 type="number"
                 value={birthYear}
                 onChange={(e) => setBirthYear(e.target.value)}
+                className="input-dreamy w-full"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Death Year (optional)</label>
+              <input
+                type="number"
+                value={deathYear}
+                onChange={(e) => setDeathYear(e.target.value)}
                 className="input-dreamy w-full"
               />
             </div>

@@ -5,20 +5,29 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import dayjs from "dayjs";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase, Task, User } from "@/lib/supabase";
+import { supabase, Task, User, TaskHistory } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
 import {
   Plus,
+  Undo2,
+  Redo2,
   Clock,
   Users,
   Target,
   Calendar as CalendarIcon,
   CheckCircle,
+  MoveRight,
+  Trash,
+  Menu,
 } from "lucide-react";
 import { TaskModal } from "./TaskModal";
 import { DefaultScheduleModal } from "./DefaultScheduleModal";
+import { DefaultScheduleItem } from "@/data/defaultSchedule";
+import { MoveScheduleModal } from "./MoveScheduleModal";
+import { DayScheduleModal } from "./DayScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
 import { useAlarmChannel } from "@/hooks/useAlarmChannel";
+import { DragHint } from "./DragHint";
 
 interface CalendarEvent {
   id: string;
@@ -45,13 +54,20 @@ interface FamilySelectModalProps {
   onSelect: (member: User) => void;
 }
 
-function FamilySelectModal({ isOpen, onClose, members, onSelect }: FamilySelectModalProps) {
+function FamilySelectModal({
+  isOpen,
+  onClose,
+  members,
+  onSelect,
+}: FamilySelectModalProps) {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md mx-4">
         <div className="p-6 space-y-4">
-          <h2 className="text-2xl font-light text-gray-800">Select Family Member</h2>
+          <h2 className="text-2xl font-light text-gray-800">
+            Select Family Member
+          </h2>
           <ul className="space-y-2">
             {members.map((m) => (
               <li key={m.id}>
@@ -83,6 +99,8 @@ export function ZenzaCalendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showDefaultSchedule, setShowDefaultSchedule] = useState(false);
+  const [showMoveSchedule, setShowMoveSchedule] = useState(false);
+  const [moveFromDate, setMoveFromDate] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [calendarView, setCalendarView] = useState("timeGridDay");
   const calendarRef = useRef<FullCalendar>(null);
@@ -114,6 +132,18 @@ export function ZenzaCalendar() {
       }
     }
   })
+  const [showActionMenu, setShowActionMenu] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [swipeEnabled, setSwipeEnabled] = useState(false);
+  const [showMoveSuccess, setShowMoveSuccess] = useState(false);
+  const [history, setHistory] = useState<TaskHistory[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(0);
+  const [dayModalEvents, setDayModalEvents] = useState<CalendarEvent[]>([]);
+  const [dayModalDate, setDayModalDate] = useState<string>("");
+  const [showDayModal, setShowDayModal] = useState(false);
+  const [currentDate, setCurrentDate] = useState(dayjs().format('YYYY-MM-DD'));
+  const [showCompleted, setShowCompleted] = useState(false);
+  const [modalShowCompleted, setModalShowCompleted] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -123,8 +153,13 @@ export function ZenzaCalendar() {
   }, []);
 
   useEffect(() => {
+    if (!isMobile) setShowActionMenu(false);
+  }, [isMobile]);
+
+  useEffect(() => {
     if (user) {
       loadTasks();
+      loadHistory();
     }
   }, [user, viewUser]);
 
@@ -138,7 +173,8 @@ export function ZenzaCalendar() {
     const interval = setInterval(() => {
       const now = Date.now();
       const upcoming = events.find((ev) => {
-        if (!ev.extendedProps?.alarm || triggeredRef.current.has(ev.id)) return false;
+        if (!ev.extendedProps?.alarm || triggeredRef.current.has(ev.id))
+          return false;
         const start = new Date(ev.start).getTime();
         return start <= now && now - start < 60000;
       });
@@ -150,8 +186,15 @@ export function ZenzaCalendar() {
     return () => clearInterval(interval);
   }, [events]);
 
-  const loadTasks = async () => {
-    if (!user) return;
+  useEffect(() => {
+    if (showMoveSuccess) {
+      const timer = setTimeout(() => setShowMoveSuccess(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showMoveSuccess]);
+
+  const loadTasks = async (): Promise<Task[]> => {
+    if (!user) return [];
     const targetId = viewUser ? viewUser.id : user.id;
 
     setLoading(true);
@@ -164,10 +207,21 @@ export function ZenzaCalendar() {
 
       if (error) throw error;
 
-      setTasks(data || []);
-      setEvents(convertTasksToEvents(data || []));
+      const uniqueMap = new Map<string, Task>();
+      for (const t of data || []) {
+        const key = `${t.title}-${t.start_time}-${t.end_time}-${t.user_id}`;
+        if (!uniqueMap.has(key)) {
+          uniqueMap.set(key, t);
+        }
+      }
+      const deduped = Array.from(uniqueMap.values());
+
+      setTasks(deduped);
+      setEvents(convertTasksToEvents(deduped));
+      return deduped;
     } catch (error: any) {
       toast.error("Failed to load tasks: " + error.message);
+      return [];
     } finally {
       setLoading(false);
     }
@@ -177,15 +231,38 @@ export function ZenzaCalendar() {
     if (!profile?.family_id) return;
     try {
       const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('family_id', profile.family_id)
-        .order('created_at', { ascending: true });
+        .from("users")
+        .select("*")
+        .eq("family_id", profile.family_id)
+        .order("created_at", { ascending: true });
       if (error) throw error;
       setFamilyMembers(data || []);
     } catch (error: any) {
-      toast.error('Failed to load family members: ' + error.message);
+      toast.error("Failed to load family members: " + error.message);
     }
+  };
+
+  const loadHistory = async () => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from("task_history")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
+    if (!error && data) {
+      setHistory(data as TaskHistory[]);
+      setHistoryIndex(0);
+    }
+  };
+
+  const saveHistory = async (snapshot: Task[]) => {
+    if (!user) return;
+    await supabase.from("task_history").insert({
+      user_id: user.id,
+      task_data: snapshot,
+      created_at: new Date().toISOString(),
+    });
+    await loadHistory();
   };
 
   const convertTasksToEvents = (tasks: Task[]): CalendarEvent[] => {
@@ -211,10 +288,14 @@ export function ZenzaCalendar() {
   const getAlarmSound = (ev: CalendarEvent) => {
     return (
       ev.extendedProps?.custom_sound_path ||
-      localStorage.getItem('defaultAlarmSound') ||
-      '/alarms/lucid-skybell.mp3'
+      localStorage.getItem("defaultAlarmSound") ||
+      "/alarms/lucid-skybell.mp3"
     );
   };
+
+  const tasksForToday = tasks.filter((t) =>
+    dayjs(t.start_time).isSame(currentDate, 'day'),
+  );
 
   // Only DoorDash, Uber Eats, and Olive Garden use icons in the calendar
   const getCategoryColor = (category?: string, border = false) => {
@@ -242,6 +323,21 @@ export function ZenzaCalendar() {
     setSelectedDate(selectInfo.startStr);
     setSelectedTask(null);
     setShowTaskModal(true);
+  };
+
+  const openDayModal = (date: Date) => {
+    const dayEvents = events.filter((ev) =>
+      dayjs(ev.start).isSame(date, "day"),
+    );
+    setDayModalDate(dayjs(date).format("YYYY-MM-DD"));
+    setDayModalEvents(dayEvents);
+    setShowDayModal(true);
+  };
+
+  const handleDateClick = (info: any) => {
+    if (calendarView === "dayGridMonth" || calendarView === "timeGridWeek") {
+      openDayModal(info.date);
+    }
   };
 
   const handleEventClick = (clickInfo: any) => {
@@ -280,7 +376,8 @@ export function ZenzaCalendar() {
         toast.success("Task created successfully!");
       }
 
-      await loadTasks();
+      const updated = await loadTasks();
+      await saveHistory(updated);
       setShowTaskModal(false);
       setSelectedTask(null);
       setSelectedDate(null);
@@ -297,7 +394,8 @@ export function ZenzaCalendar() {
       if (error) throw error;
 
       toast.success("Task deleted successfully!");
-      await loadTasks();
+      const updated = await loadTasks();
+      await saveHistory(updated);
       setShowTaskModal(false);
       setSelectedTask(null);
     } catch (error: any) {
@@ -305,85 +403,91 @@ export function ZenzaCalendar() {
     }
   };
 
-  const applyDefaultSchedule = async (date: string) => {
+  const toggleTaskCompleted = async (task: Task, completed: boolean) => {
+    if (!user || !isOwnCalendar) return;
+    await supabase
+      .from('tasks')
+      .update({ completed, updated_at: new Date().toISOString() })
+      .eq('id', task.id);
+    if (completed) {
+      await supabase.from('completed_tasks').insert({
+        user_id: user.id,
+        task_id: task.id,
+        title: task.title,
+        completed_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+    } else {
+      await supabase.from('completed_tasks').delete().eq('task_id', task.id);
+    }
+    const updated = await loadTasks();
+    await saveHistory(updated);
+  };
+
+  const handleEventDrop = async (info: any) => {
+    if (!user || !isOwnCalendar) return;
+    const id = info.event.id;
+    const start = dayjs(info.event.start).format("YYYY-MM-DDTHH:mm:ssZ");
+    const end = info.event.end
+      ? dayjs(info.event.end).format("YYYY-MM-DDTHH:mm:ssZ")
+      : null;
+    const { error } = await supabase
+      .from("tasks")
+      .update({
+        start_time: start,
+        end_time: end,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", id);
+    if (error) {
+      toast.error("Failed to move task: " + error.message);
+      info.revert();
+      return;
+    }
+    const updated = await loadTasks();
+    await saveHistory(updated);
+  };
+
+  const handleEventResize = async (info: any) => {
+    if (!user || !isOwnCalendar) return;
+    const id = info.event.id;
+    const start = dayjs(info.event.start).format("YYYY-MM-DDTHH:mm:ssZ");
+    const end = info.event.end
+      ? dayjs(info.event.end).format("YYYY-MM-DDTHH:mm:ssZ")
+      : null;
+    const { error } = await supabase
+      .from("tasks")
+      .update({
+        start_time: start,
+        end_time: end,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", id);
+    if (error) {
+      toast.error("Failed to resize task: " + error.message);
+      info.revert();
+      return;
+    }
+    const updated = await loadTasks();
+    await saveHistory(updated);
+  };
+
+  const applyDefaultSchedule = async (date: string, items: DefaultScheduleItem[]) => {
     if (!user || !isOwnCalendar) return;
 
-    const defaultTasks = [
-      {
-        title: "Wake up, brush teeth, floss, exfoliate",
-        category: "hygiene",
-        start_time: dayjs(`${date}T06:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T07:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        alarm: true,
-      },
-      {
-        title: "Jog/Exercise",
-        category: "exercise",
-        start_time: dayjs(`${date}T07:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T08:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        alarm: true,
-      },
-      {
-        title: "Shower, hygiene",
-        category: "hygiene",
-        start_time: dayjs(`${date}T08:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T08:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-      },
-      {
-        title: "Make/eat breakfast, grace, dishes",
-        category: "meal",
-        start_time: dayjs(`${date}T08:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T09:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-      },
-      {
-        title: "Business cold calls",
-        category: "work",
-        start_time: dayjs(`${date}T09:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T11:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-      },
-      {
-        title: "GED math study",
-        category: "study",
-        start_time: dayjs(`${date}T11:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T17:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-      },
-      {
-        title: "Scripture & prayer",
-        category: "spiritual",
-        start_time: dayjs(`${date}T17:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T18:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-      },
-      {
-        title: "Dinner + dishes + kitchen cleanup",
-        category: "meal",
-        start_time: dayjs(`${date}T18:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T19:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-      },
-      {
-        title: "Personal development book reading",
-        category: "personal",
-        start_time: dayjs(`${date}T19:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T20:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-      },
-      {
-        title: "Cooking video training",
-        category: "personal",
-        start_time: dayjs(`${date}T20:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T21:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-      },
-      {
-        title: "PM hygiene",
-        category: "hygiene",
-        start_time: dayjs(`${date}T21:00:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T21:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-      },
-      {
-        title: "Final prayer",
-        category: "spiritual",
-        start_time: dayjs(`${date}T21:30:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-        end_time: dayjs(`${date}T21:45:00`).format('YYYY-MM-DDTHH:mm:ssZ'),
-      },
-    ];
+    const defaultTasks = items.map((item) => {
+      const start = dayjs(`${date}T${item.start}`)
+      let end = dayjs(`${date}T${item.end}`)
+      if (end.isBefore(start)) end = end.add(1, "day")
+      return {
+        title: item.title,
+        category: item.category,
+        start_time: start.format("YYYY-MM-DDTHH:mm:ssZ"),
+        end_time: end.format("YYYY-MM-DDTHH:mm:ssZ"),
+        alarm: item.alarm,
+      }
+    })
 
     try {
       const { data: existing, error: fetchError } = await supabase
@@ -396,7 +500,9 @@ export function ZenzaCalendar() {
       if (fetchError) throw fetchError;
 
       const existingTimes = new Set(
-        existing?.map((t) => dayjs(t.start_time).format('YYYY-MM-DDTHH:mm:ssZ'))
+        existing?.map((t) =>
+          dayjs(t.start_time).format("YYYY-MM-DDTHH:mm:ssZ"),
+        ),
       );
 
       const tasksToInsert = defaultTasks
@@ -420,10 +526,161 @@ export function ZenzaCalendar() {
       if (error) throw error;
 
       toast.success("Default schedule applied successfully!");
-      await loadTasks();
+      const updated = await loadTasks();
+      await saveHistory(updated);
     } catch (error: any) {
       toast.error("Failed to apply default schedule: " + error.message);
     }
+  };
+
+  const moveSchedule = async (toDate: string) => {
+    if (!user || !isOwnCalendar || !moveFromDate) return;
+    try {
+      const dayTasks = tasks.filter(
+        (t) => dayjs(t.start_time).format("YYYY-MM-DD") === moveFromDate,
+      );
+      for (const t of dayTasks) {
+        const newStart = dayjs(
+          toDate + dayjs(t.start_time!).format("THH:mm:ssZ"),
+        ).format("YYYY-MM-DDTHH:mm:ssZ");
+        const newEnd = t.end_time
+          ? dayjs(toDate + dayjs(t.end_time).format("THH:mm:ssZ")).format(
+              "YYYY-MM-DDTHH:mm:ssZ",
+            )
+          : null;
+        const { error } = await supabase
+          .from("tasks")
+          .update({
+            start_time: newStart,
+            end_time: newEnd,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", t.id);
+        if (error) throw error;
+      }
+      toast.success("Schedule moved!");
+      setShowMoveSuccess(true);
+      await loadTasks();
+    } catch (error: any) {
+      toast.error("Failed to move schedule: " + error.message);
+    }
+  };
+
+  const shiftDaySchedule = async (date: string, newStart: string) => {
+    if (!user || !isOwnCalendar) return;
+
+    try {
+      const { data, error } = await supabase
+        .from("tasks")
+        .select("*")
+        .eq("user_id", user.id)
+        .gte("start_time", `${date}T00:00:00`)
+        .lt("start_time", `${date}T23:59:59`)
+        .order("start_time", { ascending: true });
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        toast("No tasks found for this date", { icon: "ℹ️" });
+        return;
+      }
+
+      const oldStart = dayjs(data[0].start_time);
+      const newStartTime = dayjs(`${date}T${newStart}`);
+      const diff = newStartTime.diff(oldStart, "minute");
+
+      await Promise.all(
+        data.map((t) =>
+          supabase
+            .from("tasks")
+            .update({
+              start_time: dayjs(t.start_time)
+                .add(diff, "minute")
+                .format("YYYY-MM-DDTHH:mm:ssZ"),
+              end_time: t.end_time
+                ? dayjs(t.end_time)
+                    .add(diff, "minute")
+                    .format("YYYY-MM-DDTHH:mm:ssZ")
+                : null,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", t.id),
+        ),
+      );
+
+      toast.success("Schedule shifted successfully!");
+      const updated = await loadTasks();
+      await saveHistory(updated);
+    } catch (err: any) {
+      toast.error("Failed to shift schedule: " + err.message);
+    }
+  };
+
+  const deleteDaySchedule = async (date: string) => {
+    if (!user || !isOwnCalendar) return;
+    const confirmText = prompt(
+      "Type DELETE-ALL-TASKS to remove all tasks for this day",
+    );
+    if (confirmText !== "DELETE-ALL-TASKS") {
+      toast("Deletion cancelled");
+      return;
+    }
+    await supabase
+      .from("tasks")
+      .delete()
+      .eq("user_id", user.id)
+      .gte("start_time", `${date}T00:00:00`)
+      .lt("start_time", `${date}T23:59:59`);
+    const updated = await loadTasks();
+    await saveHistory(updated);
+    toast.success("All tasks deleted");
+  };
+
+  const undo = async () => {
+    if (historyIndex >= history.length - 1) {
+      toast("Nothing to undo");
+      return;
+    }
+    const snapshot = history[historyIndex + 1];
+    await supabase.from("tasks").delete().eq("user_id", user!.id);
+    if (snapshot.task_data.length) {
+      await supabase.from("tasks").insert(snapshot.task_data);
+    }
+    setHistoryIndex(historyIndex + 1);
+    await loadTasks();
+  };
+
+  const redo = async () => {
+    if (historyIndex === 0) {
+      toast("Nothing to redo");
+      return;
+    }
+    const snapshot = history[historyIndex - 1];
+    await supabase.from("tasks").delete().eq("user_id", user!.id);
+    if (snapshot.task_data.length) {
+      await supabase.from("tasks").insert(snapshot.task_data);
+    }
+    setHistoryIndex(historyIndex - 1);
+    await loadTasks();
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!isMobile || !swipeEnabled) return;
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isMobile || touchStartX === null || !swipeEnabled) return;
+    const diffX = e.changedTouches[0].clientX - touchStartX;
+    const threshold = 50;
+    const api = calendarRef.current?.getApi();
+    if (!api) return;
+    if (diffX > threshold) {
+      api.next();
+    } else if (diffX < -threshold) {
+      api.prev();
+    }
+    setTouchStartX(null);
   };
 
   if (loading) {
@@ -437,11 +694,13 @@ export function ZenzaCalendar() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4">
         <div>
           <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
             <CalendarIcon className="w-8 h-8 text-blue-400" />
-            {isOwnCalendar ? 'Life Calendar' : `${viewUser?.display_name}'s Calendar`}
+            {isOwnCalendar
+              ? "Life Calendar"
+              : `${viewUser?.display_name}'s Calendar`}
           </h1>
           <p className="text-gray-600/80 font-light mt-1">
             {isOwnCalendar
@@ -450,44 +709,177 @@ export function ZenzaCalendar() {
           </p>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 w-full sm:w-auto pb-2 sm:pb-0">
           {isOwnCalendar ? (
-            <>
-              <button
-                onClick={() => setShowDefaultSchedule(true)}
-                className="btn-dreamy flex items-center gap-2"
-              >
-                <Clock className="w-4 h-4" />
-                Apply Default Schedule
-              </button>
+            isMobile ? (
+              <div className="relative w-full">
+                <button
+                  onClick={() => setShowActionMenu(!showActionMenu)}
+                  className="btn-dreamy flex items-center gap-2 w-full justify-center"
+                  aria-label="Calendar actions"
+                >
+                  <Menu className="w-4 h-4" />
+                  Actions
+                </button>
+                {showActionMenu && (
+                  <div className="absolute left-0 right-0 top-full mt-2 bg-white/95 backdrop-blur-lg rounded-xl shadow-xl p-3 space-y-2 z-40">
+                    <button
+                      onClick={() => {
+                        setShowActionMenu(false);
+                        setShowDefaultSchedule(true);
+                      }}
+                      className="btn-dreamy flex items-center gap-2 w-full justify-start"
+                    >
+                      <Clock className="w-4 h-4" />
+                      Apply Default Schedule
+                    </button>
+                    <button
+                      onClick={() => {
+                        const api = calendarRef.current?.getApi();
+                        const current = api
+                          ? dayjs(api.getDate()).format('YYYY-MM-DD')
+                          : dayjs().format('YYYY-MM-DD');
+                        setMoveFromDate(current);
+                        setShowMoveSchedule(true);
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy flex items-center gap-2 w-full justify-start"
+                    >
+                      <MoveRight className="w-4 h-4" />
+                      Move Day
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedTask(null);
+                        setSelectedDate(dayjs().format('YYYY-MM-DD'));
+                        setShowTaskModal(true);
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy-primary flex items-center gap-2 w-full justify-start"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add Task
+                    </button>
+                    <button
+                      onClick={() => {
+                        undo();
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy flex items-center gap-2 w-full justify-start"
+                    >
+                      <Undo2 className="w-4 h-4" />
+                      Undo
+                    </button>
+                    <button
+                      onClick={() => {
+                        redo();
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy flex items-center gap-2 w-full justify-start"
+                    >
+                      <Redo2 className="w-4 h-4" />
+                      Redo
+                    </button>
+                    <button
+                      onClick={() => {
+                        deleteDaySchedule(dayjs().format('YYYY-MM-DD'));
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy text-red-600 border-red-200 hover:bg-red-50 flex items-center gap-2 w-full justify-start"
+                    >
+                      <Trash className="w-4 h-4" />
+                      Delete Today
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowFamilySelect(true);
+                        setShowActionMenu(false);
+                      }}
+                      className="btn-dreamy flex items-center gap-2 w-full justify-start"
+                    >
+                      <Users className="w-4 h-4" />
+                      See Family Member's Calendar
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => setShowDefaultSchedule(true)}
+                  className="btn-dreamy flex items-center gap-2 flex-shrink-0"
+                >
+                  <Clock className="w-4 h-4" />
+                  Apply Default Schedule
+                </button>
 
-              <button
-                onClick={() => {
-                  setSelectedTask(null);
-                  setSelectedDate(dayjs().format('YYYY-MM-DD'));
-                  setShowTaskModal(true);
-                }}
-                className="btn-dreamy-primary flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                Add Task
-              </button>
+                <button
+                  onClick={() => {
+                    const api = calendarRef.current?.getApi();
+                    const current = api
+                      ? dayjs(api.getDate()).format('YYYY-MM-DD')
+                      : dayjs().format('YYYY-MM-DD');
+                    setMoveFromDate(current);
+                    setShowMoveSchedule(true);
+                  }}
+                  className="btn-dreamy flex items-center gap-2 flex-shrink-0"
+                >
+                  <MoveRight className="w-4 h-4" />
+                  Move Day
+                </button>
 
-              <button
-                onClick={() => setShowFamilySelect(true)}
-                className="btn-dreamy flex items-center gap-2"
-              >
-                <Users className="w-4 h-4" />
-                See Family Member's Calendar
-              </button>
-            </>
+                <button
+                  onClick={() => {
+                    setSelectedTask(null);
+                    setSelectedDate(dayjs().format('YYYY-MM-DD'));
+                    setShowTaskModal(true);
+                  }}
+                  className="btn-dreamy-primary flex items-center gap-2 flex-shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Task
+                </button>
+
+                <button
+                  onClick={undo}
+                  className="btn-dreamy flex items-center gap-2 flex-shrink-0"
+                >
+                  <Undo2 className="w-4 h-4" />
+                  Undo
+                </button>
+
+                <button
+                  onClick={redo}
+                  className="btn-dreamy flex items-center gap-2 flex-shrink-0"
+                >
+                  <Redo2 className="w-4 h-4" />
+                  Redo
+                </button>
+
+                <button
+                  onClick={() => deleteDaySchedule(dayjs().format('YYYY-MM-DD'))}
+                  className="btn-dreamy text-red-600 border-red-200 hover:bg-red-50 flex items-center gap-2 flex-shrink-0"
+                >
+                  <Trash className="w-4 h-4" />
+                  Delete Today
+                </button>
+
+                <button
+                  onClick={() => setShowFamilySelect(true)}
+                  className="btn-dreamy flex items-center gap-2 flex-shrink-0"
+                >
+                  <Users className="w-4 h-4" />
+                  See Family Member's Calendar
+                </button>
+              </>
+            )
           ) : (
             <button
               onClick={() => {
                 setViewUser(null);
                 setSelectedTask(null);
               }}
-              className="btn-dreamy"
+              className="btn-dreamy flex-shrink-0"
             >
               Back to Your Calendar
             </button>
@@ -496,82 +888,208 @@ export function ZenzaCalendar() {
       </div>
 
       {/* Calendar */}
-      <div className="card-floating p-2 sm:p-6">
+      {(calendarView === "dayGridMonth" || calendarView === "timeGridDay") && (
+        <div className="text-center my-2">
+          {swipeEnabled ? (
+            <button
+              onClick={() => setSwipeEnabled(false)}
+              className="btn-dreamy"
+            >
+              Disable Swipe
+            </button>
+          ) : (
+            <button
+              onClick={() => setSwipeEnabled(true)}
+              className="btn-dreamy-primary"
+            >
+              {calendarView === "dayGridMonth"
+                ? "Click to Enable Swipe for Month"
+                : "Click to Enable Swipe for Day"}
+            </button>
+          )}
+        </div>
+      )}
+      <div
+        className="card-floating p-2 sm:p-6"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: isMobile
-              ? "dayGridMonth,timeGridDay"
-              : "dayGridMonth,timeGridWeek,timeGridDay",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
           timeZone="local"
           initialView={calendarView}
+          datesSet={(arg) => {
+            setCalendarView(arg.view.type);
+            setCurrentDate(dayjs(arg.start).format('YYYY-MM-DD'));
+          }}
           editable={isOwnCalendar}
           selectable={isOwnCalendar}
           selectMirror={true}
           dayMaxEvents={true}
           weekends={true}
           events={events}
+          dayCellContent={(arg) => {
+            if (calendarView === "dayGridMonth" || calendarView === "timeGridWeek") {
+              const dayEvents = events.filter((ev) =>
+                dayjs(ev.start).isSame(arg.date, "day"),
+              );
+              const previews = dayEvents.slice(0, 2);
+              return (
+                <div className="flex flex-col items-start">
+                  <span className="fc-daygrid-day-number">{arg.dayNumberText}</span>
+                  {previews.map((ev) => (
+                    <span
+                      key={ev.id}
+                      className="event-preview"
+                      style={{
+                        backgroundColor: ev.backgroundColor,
+                        border: `1px solid ${ev.borderColor}`,
+                        color: ev.textColor || "#374151",
+                      }}
+                    >
+                      {ev.title}
+                    </span>
+                  ))}
+                  {dayEvents.length > previews.length && (
+                    <button
+                      className="text-[10px] text-blue-600 underline"
+                      onClick={() => openDayModal(arg.date)}
+                    >
+                      View Schedules
+                    </button>
+                  )}
+                </div>
+              );
+            }
+            return <span className="fc-daygrid-day-number">{arg.dayNumberText}</span>;
+          }}
+          dateClick={handleDateClick}
           select={handleDateSelect}
           eventClick={handleEventClick}
-          eventContent={(arg) => (
-            <div
-              className="relative px-2 py-1 rounded-lg text-xs font-medium shadow"
-              style={{
-                backgroundColor: arg.event.backgroundColor,
-                border: `1px solid ${arg.event.borderColor}`,
-                color: arg.event.textColor,
-              }}
-            >
-              {arg.event.extendedProps?.completed && (
-                <div className="absolute -top-1 -right-1 flex items-center gap-1 bg-white/80 rounded-full px-1 text-green-600">
-                  <CheckCircle className="w-3 h-3" />
-                  <span className="text-[10px]">Completed</span>
-                </div>
-              )}
-              <span>{arg.timeText}</span>
-              <div className="flex items-center gap-1">
-                {arg.event.extendedProps?.category === 'doordash' && (
+          eventDrop={handleEventDrop}
+          eventResize={handleEventResize}
+          eventContent={(arg) => {
+            if (calendarView !== "timeGridDay") return null;
+            const start = dayjs(arg.event.start!).format("h:mm A");
+            const end = arg.event.end
+              ? dayjs(arg.event.end).format("h:mm A")
+              : undefined;
+            return (
+              <div
+                className="calendar-event"
+                style={{
+                  backgroundColor: arg.event.backgroundColor,
+                  border: `1px solid ${arg.event.borderColor}`,
+                  color: arg.event.textColor,
+                }}
+              >
+                {arg.event.extendedProps?.completed && (
+                  <div className="absolute -top-1 -right-1 flex items-center gap-1 bg-white/80 rounded-full px-1 text-green-600">
+                    <CheckCircle className="w-3 h-3" />
+                  </div>
+                )}
+                {arg.event.extendedProps?.category === "doordash" && (
                   <img
                     src="/icons/doordash.svg"
                     alt="DoorDash"
                     className="w-4 h-4"
                   />
                 )}
-                {arg.event.extendedProps?.category === 'ubereats' && (
+                {arg.event.extendedProps?.category === "ubereats" && (
                   <img
                     src="/icons/ubereats.svg"
                     alt="Uber Eats"
                     className="w-4 h-4"
                   />
                 )}
-                {arg.event.extendedProps?.category === 'olivegarden' && (
+                {arg.event.extendedProps?.category === "olivegarden" && (
                   <img
                     src="/icons/olivegarden.svg"
                     alt="Olive Garden"
                     className="w-4 h-4"
                   />
                 )}
-                <span>{arg.event.title}</span>
+                <span className="flex-1 truncate">{arg.event.title}</span>
+                <span className="ml-auto">
+                  {end ? `${start} - ${end}` : start}
+                </span>
               </div>
-            </div>
-          )}
-          height={isMobile ? 'auto' : '650px'}
-          slotMinTime="05:00:00"
-          /* allow tasks that run past midnight */
-          slotMaxTime="29:00:00"
+            );
+          }}
+          height={isMobile ? "auto" : "650px"}
+          /* show full overnight tasks */
+          slotMinTime="00:00:00"
+          slotMaxTime="32:00:00"
           slotDuration="00:30:00"
           scrollTime="06:00:00"
-          eventDisplay="block"
+          eventDisplay={calendarView === "timeGridDay" ? "block" : "none"}
           eventBackgroundColor="transparent"
           eventBorderColor="transparent"
           displayEventTime={true}
           allDaySlot={false}
         />
       </div>
+
+      <DragHint isMobile={isMobile} />
+
+      {isOwnCalendar && (
+        <div className="mt-6 space-y-2">
+          <button
+            onClick={() => setShowCompleted(!showCompleted)}
+            className="btn-dreamy flex items-center gap-2"
+          >
+            <CheckCircle className="w-4 h-4" />
+            Tasks Completed ({tasksForToday.filter(t => t.completed).length}/{tasksForToday.length})
+          </button>
+          {showCompleted && (
+            <div className="space-y-2 p-4 bg-white/80 rounded-xl">
+              {tasksForToday.map(t => (
+                <label key={t.id} className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={!!t.completed}
+                    onChange={(e) => toggleTaskCompleted(t, e.target.checked)}
+                    className="rounded border-gray-300 text-green-500 focus:ring-green-500"
+                  />
+                  <span className={t.completed ? 'line-through' : ''}>{t.title}</span>
+                </label>
+              ))}
+              <button
+                onClick={() => {
+                  setSelectedTask(null);
+                  setSelectedDate(currentDate);
+                  setModalShowCompleted(true);
+                  setShowTaskModal(true);
+                }}
+                className="btn-dreamy-primary mt-2"
+              >
+                Add Completed Task
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {isOwnCalendar && (
+        <button
+          onClick={() => {
+            setSelectedTask(null);
+            setSelectedDate(dayjs().format("YYYY-MM-DD"));
+            setModalShowCompleted(false);
+            setShowTaskModal(true);
+          }}
+          className="fab-add-task"
+          aria-label="Add Task"
+        >
+          <Plus className="w-6 h-6" />
+        </button>
+      )}
 
       {/* Task Modal */}
       {showTaskModal && (
@@ -581,6 +1099,7 @@ export function ZenzaCalendar() {
             setShowTaskModal(false);
             setSelectedTask(null);
             setSelectedDate(null);
+            setModalShowCompleted(false);
           }}
           onSave={handleTaskSave}
           onDelete={
@@ -588,6 +1107,8 @@ export function ZenzaCalendar() {
           }
           task={selectedTask}
           initialDate={selectedDate}
+          showCompletedToggle={modalShowCompleted}
+          initialCompleted={modalShowCompleted}
         />
       )}
 
@@ -597,6 +1118,15 @@ export function ZenzaCalendar() {
           isOpen={showDefaultSchedule}
           onClose={() => setShowDefaultSchedule(false)}
           onApply={applyDefaultSchedule}
+        />
+      )}
+
+      {showMoveSchedule && moveFromDate && (
+        <MoveScheduleModal
+          isOpen={showMoveSchedule}
+          onClose={() => setShowMoveSchedule(false)}
+          fromDate={moveFromDate}
+          onMove={moveSchedule}
         />
       )}
 
@@ -616,7 +1146,7 @@ export function ZenzaCalendar() {
       {activeAlarm && (
         <AlarmModal
           eventTitle={activeAlarm.title}
-          eventTime={dayjs(activeAlarm.start).format('h:mm A')}
+          eventTime={dayjs(activeAlarm.start).format("h:mm A")}
           soundUrl={getAlarmSound(activeAlarm)}
           onDismiss={() => {
             setActiveAlarm(null)
@@ -633,6 +1163,21 @@ export function ZenzaCalendar() {
             }, 300000)
           }}
         />
+      )}
+
+      {showDayModal && (
+        <DayScheduleModal
+          isOpen={showDayModal}
+          onClose={() => setShowDayModal(false)}
+          date={dayModalDate}
+          events={dayModalEvents}
+        />
+      )}
+
+      {showMoveSuccess && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg animate-bounce z-50">
+          Schedule moved!
+        </div>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useAudio } from '@/hooks/useAudio'
 import { Cloud, Sparkles, X } from 'lucide-react'
+import { ConstellationFamily } from './ConstellationFamily'
 
 interface DreamlikeEntranceProps {
   onComplete: () => void
@@ -54,7 +55,7 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
 
   if (!started) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         <button
           onClick={() => setStarted(true)}
           className="px-4 py-3 sm:px-6 sm:py-4 text-base sm:text-lg font-semibold bg-white/70 backdrop-blur-md rounded-lg shadow-lg hover:bg-white transition"
@@ -77,9 +78,9 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100 animate-pulse" />
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-gray-800 animate-pulse" />
       {/* Swirling overlay */}
-      <div className="absolute inset-0 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-blue-100 via-purple-200 to-blue-100 opacity-20 animate-slow-swirl" />
+      <div className="absolute inset-0 bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-indigo-900 via-purple-900 to-indigo-900 opacity-40 animate-slow-swirl" />
       
       {/* Animated Cloud Layers */}
       <div className="absolute inset-0">
@@ -96,6 +97,9 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
           <Cloud className="w-56 h-56 text-white/30" />
         </div>
       </div>
+
+      {/* Constellation Family */}
+      <ConstellationFamily />
 
       {/* Floating Particles */}
       <div className="absolute inset-0">
@@ -156,12 +160,13 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
 
       {/* Bottom Message */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in-delayed-3">
-        <p className="text-xs text-gray-400/80 font-light">
-          Preparing your elevated life management experience...
+        <p className="text-sm sm:text-base text-white font-light text-center drop-shadow">
+          Made with ❤️ for my fiancée (soon to be wife) Khen Shantel Zappalorti.
+          <br />Gihigugma tika sa tibuok nakong kasingkasing, baby ko.
         </p>
       </div>
     </div>
   )
 }
 
-// Custom animation styles will be added to globals.css
+// Custom animation styles for this component live in globals.css

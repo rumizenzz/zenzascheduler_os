@@ -9,6 +9,11 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 
+- Fixed default schedule reordering on mobile with touch-friendly drag.
+- Reworked schedule template drag-and-drop with a dedicated handle, desktop
+  mouse support, and Supabase persistence.
+- Fixed TypeScript error when saving the default schedule template so Netlify builds succeed.
+- Added task template and completed tasks tracking with a collapsible checklist.
 - Fixed Netlify deployment error caused by stray JSX in `Dashboard.tsx`.
 
 - Introduced a world-class multi-timer module with flexible countdowns saved to Supabase.
@@ -18,10 +23,13 @@ This file tracks project progress and upcoming tasks.
 - Added income entry modal with automatic totals for a complete tracker.
 - Clarified Netlify environment variables in the README.
 - Introduced Netlify configuration file for easier setup.
+- Fixed functions path in `netlify.toml` so confirmation emails deploy properly.
+- Added root `package.json` and Netlify build step to install serverless dependencies.
+- Added `package.json` inside `netlify/functions` so dependencies install at runtime.
 - Added runtime check for missing Supabase environment variables.
 - Removed placeholder Supabase variables from `netlify.toml` to allow Netlify
   site credentials to pass through.
- - Added custom confirmation email Netlify function using IONOS and confirmation
+- Added custom confirmation email Netlify function using IONOS and confirmation
 - Added custom confirmation email Netlify function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.
@@ -30,8 +38,14 @@ This file tracks project progress and upcoming tasks.
 - Confirmation email edge function now stores new sign ups in the mailing list table.
 - Unsubscribe page includes instructions for re-subscribing.
 - Added login prompt asking users to join the mailing list if they aren't subscribed.
+- Replaced the popup with a persistent "Mailing List" button so it no longer appears on every login.
 - Refined mailing list prompt wording to remove explicit baby references.
+- Added unsubscribe option in the mailing list prompt so users can re-subscribe from the same window.
 - Added SQL snippet in the README explaining how to create the mailing list table.
+- Confirmation page now auto-updates the mailing list when the user verifies their email.
+- Signups are throttled using a `signup_attempts` table to block abuse.
+- Renamed `SUPABASE_SERVICE_ROLE_KEY` to `SUPABASE_SERVICE_KEY` and clarified
+  timestamp with time zone columns for the mailing list tables.
 - Fixed Netlify configuration parsing error by cleaning up netlify.toml
 - Fixed TypeScript syntax issue in `Dashboard.tsx` that broke Netlify build
 - Addressed additional parsing error in `Dashboard.tsx` for the sidebar toggle
@@ -44,6 +58,9 @@ This file tracks project progress and upcoming tasks.
 - Times now store the user's timezone offset to prevent 4 hour shift after saving.
 - Calendar events now convert timestamps to Date objects and FullCalendar uses
   explicit `timeZone="local"` to ensure no offset issues.
+- Fixed minute drift for tasks by saving timestamps in ISO UTC and converting
+  back to local time when editing.
+- Extended dayjs with the UTC plugin so `.local()` works and Netlify builds pass.
 - Updated calendar event types to accept `Date` objects, resolving TypeScript build error.
 - Added modal forms to Life Logistics so addresses, vehicles, jobs, and businesses can be added and edited.
 - Fixed Life Logistics forms to use column names from the database schema.
@@ -117,6 +134,7 @@ This file tracks project progress and upcoming tasks.
 - Display a "What did you learn today:" label before scripture and conference notes so they're not mistaken for scripture text.
 - Added book and version fields for scriptures with dropdown selection and sample Book of Mormon verses.
 - Hid version selector when the Book of Mormon is chosen since no editions exist.
+- Version dropdown now only appears for the Bible, since other books have no editions.
 - Enabled pull-to-refresh on mobile with a "Swipe down to refresh" onboarding tip.
 - Refined calendar responsiveness with dynamic height and streamlined toolbar for flawless mobile viewing.
 - Added DoorDash and Uber Eats task categories with brand colors and SVG icons on the calendar.
@@ -131,11 +149,36 @@ This file tracks project progress and upcoming tasks.
 - Restored category icons and calendar icon mapping to resolve build failures.
 - Added Olive Garden task category with brand colors and SVG icon.
 - Extended calendar view to 5am so tasks can span past midnight.
+- Widened calendar hours to show midnight through 8am so overnight tasks display accurately.
+- Displayed exact start times for overnight tasks across day views.
 - Resolved TypeScript syntax errors in `Dashboard.tsx` and `main.tsx`.
+- Added Move Schedule modal to shift an entire day of tasks to a new date.
+- Added shift-drag rescheduling with animated hint and mobile long-press support.
 - Added Android install instructions and unknown apps onboarding guide.
 - Dismissing or snoozing an alarm now closes it across all open tabs.
 - Snoozed alarms reopen across tabs after five minutes.
 - Fixed TypeScript build error in `useAlarmChannel` so Netlify deploys succeed.
+- Added undo/redo history for the calendar with Supabase snapshots.
+- Secure delete button wipes a day's schedule only after typing "DELETE-ALL-TASKS".
+- Fixed JSX closing tags in ZenzaCalendar so Netlify builds succeed.
+- Verified calendar build succeeds with midnight hours and manual time display.
+- Fixed drag-and-drop edits so moving or resizing tasks now updates history for undo/redo.
+- Fixed stray braces in `ZenzaCalendar.tsx` and undefined variable in `OnboardingModal.tsx` that broke the Netlify build.
+- Fixed unclosed JSX in `ZenzaCalendar.tsx` after a merge mishap so Netlify builds succeed.
+- Prevented duplicate tasks from appearing by deduplicating schedules when loading the calendar.
+- Improved calendar toolbar with sticky action buttons, horizontal scrolling on mobile, and a floating Add Task button for quick scheduling.
+- Added mobile action dropup so toolbar options open in a sticky menu with descriptive buttons.
+- Enabled swipe gestures on mobile to switch days or months in the calendar.
+
+- Polished calendar styling with ZenzaLife branding for headers, day cells, and events.
+- Enhanced month/week view with boxed event layout and a day schedule modal to review all tasks on mobile.
+- Added tiny daily previews in month and week views to quickly see each day's tasks.
+
+- Mobile calendar now shows the Week button for easier navigation.
+- Added optional swipe toggle and clean day links so month and week views stay tidy.
+
+- Added personalized splash screen and footer message dedicated to Khen Shantel Zappalorti.
+- Enhanced dedication with dark starry entrance and constellation overlay celebrating the future family.
 
 ## Next Steps
 
@@ -154,7 +197,13 @@ This file tracks project progress and upcoming tasks.
 - 1% growth dashboard and analytics
 
 - Added Supabase tables and dashboard module for ancestor and temple work tracking.
+- Ancestor entries now support optional death year, displaying "1963-Present" when no death year is provided.
+- Added ability to edit the default schedule template before applying.
+- Default schedule now supports adding tasks and rearranging them with times auto-adjusting.
+- Categories are editable and a reorder mode toggle makes moving items easier.
+- Redesigned calendar UI with polished ZenzaLife branding and responsive styles.
+- Added mind map style FamilyTree component to visualize ancestors.
+
 ## Improvement Ideas
 
 (add any new ideas here)
-

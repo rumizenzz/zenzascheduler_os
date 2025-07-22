@@ -55,8 +55,11 @@ export default tseslint.config({
 2. Sign in to [Netlify](https://www.netlify.com/) and choose **New site from Git**.
 3. Select this repository and configure the following build settings:
    - **Base directory**: `zenzalife-scheduler`
-   - **Build command**: `pnpm run build`
+   - **Build command**: `pnpm --dir .. install && pnpm run build`
    - **Publish directory**: `dist`
+   - **Functions directory**: `../netlify/functions` (defined in `netlify.toml`)
+   - The repo root contains a `package.json` with serverless dependencies so
+     Netlify installs them before bundling.
 4. Before deploying, run `pnpm run lint` and `pnpm run test` locally to catch errors early.
 5. Click **Deploy site** and wait for the build to complete.
 6. After deployment, Netlify provides a public URL which can be customized in the site settings.
@@ -69,7 +72,7 @@ Configure these variables in **Site settings → Environment variables** so the 
 - `VITE_SUPABASE_URL` – your Supabase project URL
 - `VITE_SUPABASE_ANON_KEY` – Supabase anon public key
 - `SUPABASE_URL` – same as `VITE_SUPABASE_URL` for Netlify functions
-- `SUPABASE_SERVICE_ROLE_KEY` – service role key for Netlify functions
+- `SUPABASE_SERVICE_KEY` – service role key for Netlify functions
 - `SUPABASE_TABLE` – table storing mailing list emails (e.g. `mailing_list`)
 - `COMPANY_ADDRESS` – physical business address for CAN-SPAM compliance
 - `COMPANY_CONTACT_EMAIL` – contact email shown in footers
@@ -96,9 +99,19 @@ Create the table referenced by `SUPABASE_TABLE` inside your Supabase project:
 
 ```sql
 create table if not exists mailing_list (
-  id uuid default uuid_generate_v4() primary key,
+  id uuid primary key default uuid_generate_v4(),
   email text unique not null,
+  confirmed boolean default false,
   unsubscribed boolean default false,
+  created_at timestamp with time zone default now(),
+  confirmed_at timestamp with time zone,
+  unsubscribed_at timestamp with time zone
+);
+
+create table if not exists signup_attempts (
+  id uuid primary key default uuid_generate_v4(),
+  email text,
+  ip text,
   created_at timestamp with time zone default now()
 );
 ```

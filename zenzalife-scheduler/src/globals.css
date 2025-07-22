@@ -56,16 +56,24 @@
   body {
     @apply bg-background text-foreground;
     font-family: "Inter", sans-serif;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: "Playfair Display", serif;
   }
 }
 
 /* Dreamlike Entrance Animations */
 @keyframes float-slow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
   33% {
@@ -77,7 +85,8 @@
 }
 
 @keyframes float-medium {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
   50% {
@@ -86,7 +95,8 @@
 }
 
 @keyframes float-slower {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
   25% {
@@ -98,7 +108,8 @@
 }
 
 @keyframes float-particle {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) scale(1) rotate(0deg);
     opacity: 0.4;
   }
@@ -133,11 +144,14 @@
 }
 
 @keyframes text-shimmer {
-  0%, 100% {
+  0%,
+  100% {
     text-shadow: 0 0 20px rgba(147, 197, 253, 0.3);
   }
   50% {
-    text-shadow: 0 0 30px rgba(196, 181, 253, 0.4), 0 0 40px rgba(147, 197, 253, 0.2);
+    text-shadow:
+      0 0 30px rgba(196, 181, 253, 0.4),
+      0 0 40px rgba(147, 197, 253, 0.2);
   }
 }
 
@@ -260,4 +274,58 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(147, 197, 253, 0.5);
+}
+/* Calendar toolbar improvements */
+.fc-header-toolbar {
+  @apply sticky top-0 z-20 bg-white/70 backdrop-blur-md p-2 rounded-b-xl shadow flex flex-wrap items-center gap-2;
+}
+.fc-header-toolbar .fc-button {
+  @apply px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-primary to-secondary text-white hover:from-primary/80 hover:to-secondary/80 active:scale-95 transition-all m-1;
+}
+
+/* Floating action button */
+.fab-add-task {
+  @apply fixed bottom-24 right-4 sm:bottom-6 sm:right-6 z-40 p-4 rounded-full bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 text-white shadow-xl hover:shadow-2xl active:scale-95 transition-transform;
+}
+
+/* ZenzaLife calendar polish */
+.fc-toolbar-title {
+  @apply font-serif font-light text-gray-700 text-lg sm:text-2xl;
+}
+
+.fc-daygrid-day-number {
+  @apply font-semibold text-gray-700;
+}
+
+.fc .fc-button-primary {
+  @apply bg-gradient-to-r from-primary to-secondary border-none text-white shadow hover:from-primary/80 hover:to-secondary/80;
+}
+
+.fc-event {
+  @apply rounded-xl border border-white/60 overflow-hidden shadow-sm backdrop-blur-sm transition-shadow hover:shadow-md;
+}
+
+.calendar-event {
+  @apply relative flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium shadow border backdrop-blur-sm;
+}
+
+.event-preview {
+  @apply mt-0.5 w-full overflow-hidden whitespace-nowrap text-[10px] rounded px-1;
+}
+
+/* Grid layout for month/week events */
+.fc-daygrid-day-events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.fc-daygrid-event-harness {
+  flex: 1 1 calc(50% - 4px);
+}
+
+@media (max-width: 640px) {
+  .fc-daygrid-event-harness {
+    flex-basis: 100%;
+  }
 }

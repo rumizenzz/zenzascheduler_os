@@ -3,6 +3,10 @@ import { Task } from '@/lib/supabase'
 import { useAudio } from '@/hooks/useAudio'
 import { X, Clock, Tag, Bell, Users, Target, Trash2, CheckCircle } from 'lucide-react'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import { categories } from '@/data/categories'
+
+dayjs.extend(utc)
 
 interface TaskModalProps {
   isOpen: boolean
@@ -11,22 +15,10 @@ interface TaskModalProps {
   onDelete?: () => void
   task?: Task | null
   initialDate?: string | null
+  showCompletedToggle?: boolean
+  initialCompleted?: boolean
 }
 
-const categories = [
-  { value: 'exercise', label: 'Exercise', color: '#f59e0b', icon: '🏃' },
-  { value: 'study', label: 'Study', color: '#3b82f6', icon: '📚' },
-  { value: 'spiritual', label: 'Spiritual', color: '#ec4899', icon: '🙏' },
-  { value: 'work', label: 'Work', color: '#10b981', icon: '💼' },
-  { value: 'personal', label: 'Personal', color: '#6366f1', icon: '🌟' },
-  { value: 'family', label: 'Family', color: '#ef4444', icon: '👪' },
-  { value: 'hygiene', label: 'Hygiene', color: '#0ea5e9', icon: '🛁' },
-  { value: 'meal', label: 'Meal', color: '#65a30d', icon: '🍽️' },
-  { value: 'doordash', label: 'DoorDash', color: '#ee2723', icon: '🍔' },
-  { value: 'ubereats', label: 'Uber Eats', color: '#06c167', icon: '🍕' },
-  { value: 'olivegarden', label: 'Olive Garden', color: '#6c9321', icon: '🥗' },
-  { value: 'other', label: 'Other', color: '#6b7280', icon: '📌' },
-];
 
 const repeatPatterns = [
   { value: 'none', label: 'No Repeat' },
@@ -51,7 +43,7 @@ const builtinAlarms = [
   { name: 'Surreal Ringtone', url: '/alarms/surreal-ringtone.mp3' }
 ]
 
-export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate }: TaskModalProps) {
+export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate, showCompletedToggle = false, initialCompleted = false }: TaskModalProps) {
   const [formData, setFormData] = useState({
     title: '',
     category: 'other',
@@ -62,7 +54,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
     visibility: 'private',
     notes: '',
-    completed: false
+    completed: initialCompleted
   })
   const { playAudio } = useAudio()
 
@@ -71,8 +63,12 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
       setFormData({
         title: task.title || '',
         category: task.category || 'other',
-        start_time: task.start_time ? dayjs(task.start_time).format('YYYY-MM-DDTHH:mm') : '',
-        end_time: task.end_time ? dayjs(task.end_time).format('YYYY-MM-DDTHH:mm') : '',
+        start_time: task.start_time
+          ? dayjs(task.start_time).local().format('YYYY-MM-DDTHH:mm')
+          : '',
+        end_time: task.end_time
+          ? dayjs(task.end_time).local().format('YYYY-MM-DDTHH:mm')
+          : '',
         repeat_pattern: task.repeat_pattern || 'none',
         alarm: task.alarm || false,
         custom_sound_path: task.custom_sound_path || localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
@@ -115,8 +111,8 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     onSave({
       title: formData.title.trim(),
       category: formData.category,
-      start_time: dayjs(formData.start_time).format('YYYY-MM-DDTHH:mm:ssZ'),
-      end_time: formData.end_time ? dayjs(formData.end_time).format('YYYY-MM-DDTHH:mm:ssZ') : null,
+      start_time: dayjs(formData.start_time).toISOString(),
+      end_time: formData.end_time ? dayjs(formData.end_time).toISOString() : null,
       repeat_pattern: formData.repeat_pattern,
       alarm: formData.alarm,
       custom_sound_path: formData.custom_sound_path,
@@ -326,7 +322,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                 </div>
               )}
 
-              {task && (
+              {(task || showCompletedToggle) && (
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
