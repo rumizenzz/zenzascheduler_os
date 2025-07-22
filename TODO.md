@@ -10,6 +10,9 @@ This file tracks project progress and upcoming tasks.
 ## Latest Updates
 
 - Fixed default schedule reordering on mobile with touch-friendly drag.
+- Reworked schedule template drag-and-drop with a dedicated handle, desktop
+  mouse support, and Supabase persistence.
+- Fixed TypeScript error when saving the default schedule template so Netlify builds succeed.
 - Added task template and completed tasks tracking with a collapsible checklist.
 - Fixed Netlify deployment error caused by stray JSX in `Dashboard.tsx`.
 
@@ -154,6 +157,9 @@ This file tracks project progress and upcoming tasks.
 - Added Move Schedule modal to shift an entire day of tasks to a new date.
 - Added shift-drag rescheduling with animated hint and mobile long-press support.
 - Added Android install instructions and unknown apps onboarding guide.
+- Dismissing or snoozing an alarm now closes it across all open tabs.
+- Snoozed alarms reopen across tabs after five minutes.
+- Fixed TypeScript build error in `useAlarmChannel` so Netlify deploys succeed.
 - Added undo/redo history for the calendar with Supabase snapshots.
 - Secure delete button wipes a day's schedule only after typing "DELETE-ALL-TASKS".
 - Fixed JSX closing tags in ZenzaCalendar so Netlify builds succeed.
