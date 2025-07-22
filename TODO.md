@@ -9,6 +9,8 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 
+- Added year input to calendar header for quick navigation to any year.
+
 - Fixed default schedule reordering on mobile with touch-friendly drag.
 - Reworked schedule template drag-and-drop with a dedicated handle, desktop
   mouse support, and Supabase persistence.
