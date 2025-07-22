@@ -20,6 +20,24 @@ const handler: Handler = async (event) => {
     'Content-Type': 'application/json'
   }
 
+  const required = [
+    'SUPABASE_URL',
+    'SUPABASE_SERVICE_KEY',
+    'SMTP_HOST',
+    'SMTP_USER',
+    'SMTP_PASS',
+    'MAIL_FROM_EMAIL'
+  ]
+  const missing = required.filter((name) => !process.env[name])
+  if (missing.length) {
+    console.error('Missing env vars:', missing.join(', '))
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({ error: 'Server configuration error' })
+    }
+  }
+
   try {
     const { email, displayName } = JSON.parse(event.body || '{}')
     if (!email) {
