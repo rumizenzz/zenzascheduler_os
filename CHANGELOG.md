@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Script `update:upcoming` exports Supabase upcoming releases to `UPCOMING_RELEASES.md`.
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
 - Users see a "What's new" toast when new updates are published.
@@ -12,6 +13,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Supabase schema updated with additional fields and a reactions table.
 - Added `changelog_views` table to track when each user last viewed the
   changelog.
+- Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires code "ZENZALIFE" and stores entries in Supabase.
 
 ### Changed
 - Documented that every update must include a professional changelog entry.
