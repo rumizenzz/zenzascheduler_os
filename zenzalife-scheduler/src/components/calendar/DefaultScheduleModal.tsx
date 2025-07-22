@@ -22,6 +22,7 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [applying, setApplying] = useState(false)
   const [items, setItems] = useState<DefaultScheduleItem[]>(defaultScheduleTemplate)
+  const [dayStart, setDayStart] = useState(defaultScheduleTemplate[0].start)
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [dragIndex, setDragIndex] = useState<number | null>(null)
   const [reorderEnabled, setReorderEnabled] = useState(false)
@@ -38,6 +39,8 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
 
       if (!error && data?.tasks) {
         setItems(data.tasks as DefaultScheduleItem[])
+        const first = (data.tasks as DefaultScheduleItem[])[0]
+        if (first) setDayStart(first.start)
       }
     })()
     destroyPullToRefresh()
@@ -87,6 +90,35 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
         },
       ]
     })
+  }
+
+  const shiftAllTimes = (diff: number) => {
+    setItems((prev) =>
+      prev.map((it) => {
+        const s = dayjs(`1970-01-01T${it.start}`)
+        let e = dayjs(`1970-01-01T${it.end}`)
+        if (e.isBefore(s)) e = e.add(1, 'day')
+        const newS = s.add(diff, 'minute')
+        const newE = e.add(diff, 'minute')
+        return {
+          ...it,
+          start: newS.format('HH:mm'),
+          end: newE.format('HH:mm'),
+        }
+      }),
+    )
+  }
+
+  const handleDayStartChange = (val: string) => {
+    const first = items[0]
+    if (first) {
+      const diff = dayjs(`1970-01-01T${val}`).diff(
+        dayjs(`1970-01-01T${first.start}`),
+        'minute',
+      )
+      shiftAllTimes(diff)
+    }
+    setDayStart(val)
   }
 
   const reorderItems = (from: number, to: number) => {
@@ -151,6 +183,20 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
             <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <X className="w-5 h-5" />
             </button>
+          </div>
+
+          {/* Day Start Time */}
+          <div className="mb-6">
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-2">
+              <Clock className="w-4 h-4" />
+              When did your day start?
+            </label>
+            <input
+              type="time"
+              value={dayStart}
+              onChange={(e) => handleDayStartChange(e.target.value)}
+              className="input-dreamy w-full max-w-xs"
+            />
           </div>
 
           {/* Date Selection */}

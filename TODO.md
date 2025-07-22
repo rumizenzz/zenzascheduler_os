@@ -207,6 +207,7 @@ This file tracks project progress and upcoming tasks.
   changelog.
 - Fixed ChangeLogButton to store the last seen timestamp in Supabase instead of
   localStorage or cookies.
+- Default Schedule modal asks when your day started and shifts tasks to match.
 - Protected `/admin/changelog` behind a secret code prompt so only those with
   the correct code can add releases.
 - Removed the secret code value from the changelog for security. (2025-07-22 17:33:44 UTC)
