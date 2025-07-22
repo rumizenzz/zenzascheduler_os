@@ -14,6 +14,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Added `changelog_views` table to track when each user last viewed the
   changelog.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires code "ZENZALIFE" and stores entries in Supabase.
+- Default Schedule modal now asks when your day started and shifts all tasks to match the chosen time.
 
 ### Changed
 - Documented that every update must include a professional changelog entry.

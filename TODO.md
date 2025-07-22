@@ -207,6 +207,7 @@ This file tracks project progress and upcoming tasks.
   changelog.
 - Fixed ChangeLogButton to store the last seen timestamp in Supabase instead of
   localStorage or cookies.
+- Default Schedule modal asks when your day started and shifts tasks to match.
 
 ## Next Steps
 
