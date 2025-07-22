@@ -4,4 +4,6 @@ CREATE TABLE change_log (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 INSERT INTO change_log (message) VALUES ('Added year selector to the calendar toolbar that saves the chosen year in Supabase.');
+INSERT INTO change_log (message) VALUES ('Documented the requirement to log all future changes in CHANGELOG.md.');
+INSERT INTO change_log (message) VALUES ('Clarified professional changelog policy and enforced it in AGENT instructions.');
 

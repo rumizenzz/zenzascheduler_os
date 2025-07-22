@@ -5,6 +5,7 @@ import { List } from 'lucide-react'
 export function ChangeLogButton() {
   const [open, setOpen] = useState(false)
   const [entries, setEntries] = useState<ChangeLogEntry[]>([])
+  const [changelogText, setChangelogText] = useState('')
 
   useEffect(() => {
     if (!open) return
@@ -17,7 +18,19 @@ export function ChangeLogButton() {
         setEntries(data as ChangeLogEntry[])
       }
     }
+    const fetchChangelog = async () => {
+      try {
+        const res = await fetch('/CHANGELOG.md')
+        if (res.ok) {
+          const text = await res.text()
+          setChangelogText(text)
+        }
+      } catch (err) {
+        console.error('Error loading CHANGELOG:', err)
+      }
+    }
     fetchEntries()
+    fetchChangelog()
   }, [open])
 
   return (
@@ -51,6 +64,11 @@ export function ChangeLogButton() {
                 <li className="text-gray-600 text-sm">No updates yet.</li>
               )}
             </ul>
+            {changelogText && (
+              <pre className="text-xs whitespace-pre-wrap max-h-64 overflow-y-auto border-t pt-2">
+                {changelogText}
+              </pre>
+            )}
             <div className="text-center">
               <button onClick={() => setOpen(false)} className="btn-dreamy-primary px-8">
                 Close
