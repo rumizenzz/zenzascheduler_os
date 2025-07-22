@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Task } from '@/lib/supabase'
 import { useAudio } from '@/hooks/useAudio'
 import { X, Clock, Tag, Bell, Users, Target, Trash2, CheckCircle } from 'lucide-react'
+import { TaskNotes } from './TaskNotes'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { categories } from '@/data/categories'
@@ -278,6 +279,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                 className="input-dreamy w-full h-20 resize-none"
                 placeholder="Additional details or what was accomplished"
               />
+              {task && <TaskNotes taskId={task.id} />}
             </div>
 
             {/* Checkboxes */}

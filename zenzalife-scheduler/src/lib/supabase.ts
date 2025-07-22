@@ -154,6 +154,15 @@ export type CompletedTask = {
   updated_at?: string
 }
 
+export type TaskComment = {
+  id: string
+  task_id: string
+  author_id: string
+  content: string
+  created_at?: string
+  updated_at?: string
+}
+
 export type TaskTemplate = {
   id: string
   user_id: string

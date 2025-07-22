@@ -207,6 +207,7 @@ This file tracks project progress and upcoming tasks.
 - Categories are editable and a reorder mode toggle makes moving items easier.
 - Redesigned calendar UI with polished ZenzaLife branding and responsive styles.
 - Added mind map style FamilyTree component to visualize ancestors.
+- Added per-task notes history with timestamps and a modal to review past thoughts.
 
 ## Improvement Ideas
 
