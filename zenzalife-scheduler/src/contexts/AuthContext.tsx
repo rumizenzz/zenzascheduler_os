@@ -86,7 +86,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Auth methods
   async function signIn(email: string, password: string) {
-    return await supabase.auth.signInWithPassword({ email, password })
+    const result = await supabase.auth.signInWithPassword({ email, password })
+    if (!result.error && result.data?.user) {
+      const userId = result.data.user.id
+      const { data: existing } = await supabase
+        .from('users')
+        .select('last_login')
+        .eq('id', userId)
+        .maybeSingle()
+
+      await supabase
+        .from('users')
+        .update({
+          last_login: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId)
+
+      return { ...result, previousLogin: existing?.last_login as string | null }
+    }
+    return result
   }
 
   async function signUp(email: string, password: string, displayName: string, relationshipRole?: string) {
