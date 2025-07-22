@@ -8,6 +8,8 @@ This file tracks project progress and upcoming tasks.
 - Added `netlify.toml` to configure build settings and SPA redirects.
 
 ## Latest Updates
+- Added script `update:upcoming` to sync Supabase upcoming releases into `UPCOMING_RELEASES.md`.
+- Added hidden upcoming releases admin accessed by a wood log icon in Settings. Requires the secret code "ZENZALIFE" and saves entries to Supabase.
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
 - Tracked and displayed each user's last login time.
 - Last login now records after the dreamlike entrance completes.
@@ -192,6 +194,19 @@ This file tracks project progress and upcoming tasks.
 - Added Supabase-backed Change Log modal with a top-right button for the latest updates.
 - Added year selector to the calendar toolbar that saves the chosen year in Supabase.
 - Created `calendar_preferences` table to persist the selected calendar year for each user.
+- Documented the requirement to log all future changes in `CHANGELOG.md`.
+- ChangeLogButton now displays `CHANGELOG.md` contents in the modal.
+- Strengthened AGENT instructions to require a professional changelog entry for
+  every update.
+- Polished the changelog with Keep a Changelog sections and copied it to the
+  public folder so the Change Log button shows the latest notes.
+- Added versioned changelog entries with tags and icon support.
+- Implemented search and toast notifications for new releases.
+- Created AdminChangelogPage and updated Supabase schema with reactions table.
+- Added `changelog_views` table and logic to track when each user last saw the
+  changelog.
+- Fixed ChangeLogButton to store the last seen timestamp in Supabase instead of
+  localStorage or cookies.
 
 ## Next Steps
 

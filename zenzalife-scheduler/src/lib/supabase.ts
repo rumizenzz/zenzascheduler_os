@@ -206,8 +206,21 @@ export type CalendarPreference = {
 
 export type ChangeLogEntry = {
   id: string
-  message: string
+  version: string
+  title: string
+  message?: string
+  tags?: string[]
+  author?: string
+  icon_url?: string
+  media_url?: string
   created_at?: string
+}
+
+export type ChangeLogView = {
+  user_id: string
+  last_seen: string
+  created_at?: string
+  updated_at?: string
 }
 
 // Helper functions
@@ -274,4 +287,29 @@ export async function updateUserProfile(userId: string, updates: Partial<User>) 
   }
 
   return data
+}
+
+export async function getLastSeenChangelog(userId: string) {
+  const { data, error } = await supabase
+    .from('changelog_views')
+    .select('last_seen')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  if (error) {
+    console.error('Error fetching changelog view:', error)
+    return null
+  }
+
+  return data?.last_seen || null
+}
+
+export async function updateLastSeenChangelog(userId: string, timestamp: string) {
+  const { error } = await supabase
+    .from('changelog_views')
+    .upsert({ user_id: userId, last_seen: timestamp }, { onConflict: 'user_id' })
+
+  if (error) {
+    console.error('Error updating changelog view:', error)
+  }
 }
