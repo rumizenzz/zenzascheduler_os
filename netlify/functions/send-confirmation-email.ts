@@ -110,8 +110,6 @@ const handler: Handler = async (event) => {
     const replyTo = process.env.MAIL_REPLY_TO || fromEmail
     const listUnsubEmail = process.env.LIST_UNSUBSCRIBE_EMAIL
     const listUnsubUrl = process.env.LIST_UNSUBSCRIBE_URL
-    const companyAddress = process.env.COMPANY_ADDRESS || ''
-    const companyContact = process.env.COMPANY_CONTACT_EMAIL || ''
 
     const transporter = nodemailer.createTransport({
       host,
@@ -119,29 +117,6 @@ const handler: Handler = async (event) => {
       secure: true,
       auth: { user: user as string, pass: pass as string }
     })
-
-    const html = `<!doctype html>
-    <html>
-      <body style="font-family:Arial,sans-serif;background:#f8fafc;padding:40px;">
-        <table style="max-width:600px;margin:auto;background:#ffffff;border-radius:8px;overflow:hidden;">
-          <tr>
-            <td style="padding:40px;text-align:center;">
-              <h1 style="font-weight:normal;color:#333;">Confirm your email</h1>
-              <p style="color:#555;">Hi ${displayName || ''}, welcome to ZenzaLife Scheduler! Please confirm your email address to start your dreamlike journey.</p>
-              <p><a href="${actionLink}" style="display:inline-block;background:#7c3aed;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;">Confirm Email</a></p>
-              <p style="color:#555;font-size:14px;">If the button doesn't work, copy and paste this link: <br/><a href="${actionLink}">${actionLink}</a></p>
-            </td>
-          </tr>
-          <tr>
-            <td style="background:#f1f5f9;padding:20px;text-align:center;font-size:12px;color:#666;">
-              ${companyAddress ? `<p style=\"margin:0;\">${companyAddress}</p>` : ''}
-              ${companyContact ? `<p style=\"margin:0;\">${companyContact}</p>` : ''}
-              ${listUnsubUrl ? `<p style=\"margin-top:8px;\"><a href=\"${listUnsubUrl}\" style=\"color:#7c3aed;text-decoration:underline;\">Unsubscribe</a></p>` : ''}
-            </td>
-          </tr>
-        </table>
-      </body>
-    </html>`
 
     await transporter.sendMail({
       from: fromName ? `${fromName} <${fromEmail}>` : fromEmail,
@@ -151,8 +126,7 @@ const handler: Handler = async (event) => {
         'List-Unsubscribe': [listUnsubEmail, listUnsubUrl].filter(Boolean).join(', ')
       } : undefined,
       subject: 'Confirm your ZenzaLife account',
-      text: `Hello ${displayName || ''},\n\nPlease confirm your email by visiting: ${actionLink}\n\nThank you!`,
-      html
+      text: `Hello ${displayName || ''},\n\nPlease confirm your email by visiting: ${actionLink}\n\nThank you!`
     })
 
     return {
