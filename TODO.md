@@ -190,6 +190,8 @@ This file tracks project progress and upcoming tasks.
 - Enhanced dedication with dark starry entrance and constellation overlay celebrating the future family.
 - Android alarms now trigger system notifications using the service worker.
 - Added Supabase-backed Change Log modal with a top-right button for the latest updates.
+- Added year selector to the calendar toolbar that saves the chosen year in Supabase.
+- Created `calendar_preferences` table to persist the selected calendar year for each user.
 
 ## Next Steps
 
