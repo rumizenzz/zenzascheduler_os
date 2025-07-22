@@ -8,6 +8,9 @@ This file tracks project progress and upcoming tasks.
 - Added `netlify.toml` to configure build settings and SPA redirects.
 
 ## Latest Updates
+- Confirmation email now links to the `/confirmed` page and instantly updates
+  the mailing list when clicked, with a stylish footer showing the company
+  address, contact email and an unsubscribe link.
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
 - Tracked and displayed each user's last login time.
 - Documented that the Netlify function's `DEP0040` punycode warning is harmless and to verify SMTP variables if mail doesn't send.
