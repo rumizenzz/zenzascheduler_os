@@ -27,7 +27,12 @@ export function UnsubscribePage() {
       }
 
       if (!res.ok) {
-        const data = await res.json().catch(() => null)
+        let data: any = null
+        try {
+          data = await res.json()
+        } catch (err) {
+          console.error('Failed to parse error response', err)
+        }
         setError(data?.error || 'Request failed')
         return
       }
