@@ -7,7 +7,17 @@ final class TimeSensitiveNotificationManager: NSObject, UNUserNotificationCenter
     override init() {
         super.init()
         // Set the delegate so we can show alerts while the app is in the foreground
-        UNUserNotificationCenter.current().delegate = self
+        let center = UNUserNotificationCenter.current()
+        center.delegate = self
+
+        // Register a category that allows Siri announcement
+        let category = UNNotificationCategory(
+            identifier: "TIME_SENSITIVE",
+            actions: [],
+            intentIdentifiers: [],
+            options: [.allowAnnouncement]
+        )
+        center.setNotificationCategories([category])
     }
 
     /// Requests notification permissions including the `timeSensitive` option.
@@ -44,6 +54,7 @@ final class TimeSensitiveNotificationManager: NSObject, UNUserNotificationCenter
         if #available(iOS 15.0, *) {
             content.interruptionLevel = .timeSensitive
         }
+        content.categoryIdentifier = "TIME_SENSITIVE"
 
         // Trigger after 10 seconds
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
