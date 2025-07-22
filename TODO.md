@@ -9,6 +9,9 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
+- Documented that the Netlify function's `DEP0040` punycode warning is harmless and to verify SMTP variables if mail doesn't send.
+- Documented legacy `IONOS_USERNAME` and `IONOS_PASSWORD` variables and updated
+  the confirmation email function to accept them.
 
 - Fixed default schedule reordering on mobile with touch-friendly drag.
 - Reworked schedule template drag-and-drop with a dedicated handle, desktop
