@@ -189,6 +189,7 @@ This file tracks project progress and upcoming tasks.
 - Added personalized splash screen and footer message dedicated to Khen Shantel Zappalorti.
 - Enhanced dedication with dark starry entrance and constellation overlay celebrating the future family.
 - Android alarms now trigger system notifications using the service worker.
+- Added Supabase-backed Change Log modal with a top-right button for the latest updates.
 
 ## Next Steps
 
