@@ -1,3 +1,21 @@
+import React, { useState, useEffect } from "react";
+import { Task } from "@/lib/supabase";
+import { parseNaturalTask } from "@/lib/nlp";
+import { useAudio } from "@/hooks/useAudio";
+import { useSpeechInput } from "@/hooks/useSpeechInput";
+import {
+  X,
+  Clock,
+  Tag,
+  Bell,
+  Users,
+  Target,
+  Trash2,
+  CheckCircle,
+  Mic,
+} from "lucide-react";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import React, { useState, useEffect } from 'react'
 import { Task } from '@/lib/supabase'
 import { useAudio } from '@/hooks/useAudio'
@@ -6,134 +24,179 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { categories } from '@/data/categories'
 
-dayjs.extend(utc)
+dayjs.extend(utc);
 
 interface TaskModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onSave: (taskData: any) => void
-  onDelete?: () => void
-  task?: Task | null
-  initialDate?: string | null
-  showCompletedToggle?: boolean
-  initialCompleted?: boolean
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (taskData: any) => void;
+  onDelete?: () => void;
+  task?: Task | null;
+  initialDate?: string | null;
+  showCompletedToggle?: boolean;
+  initialCompleted?: boolean;
 }
 
 
 const repeatPatterns = [
-  { value: 'none', label: 'No Repeat' },
-  { value: 'daily', label: 'Daily' },
-  { value: 'weekly', label: 'Weekly' },
-  { value: 'monthly', label: 'Monthly' },
-  { value: 'weekdays', label: 'Weekdays Only' },
-  { value: 'weekends', label: 'Weekends Only' }
-]
+  { value: "none", label: "No Repeat" },
+  { value: "daily", label: "Daily" },
+  { value: "weekly", label: "Weekly" },
+  { value: "monthly", label: "Monthly" },
+  { value: "weekdays", label: "Weekdays Only" },
+  { value: "weekends", label: "Weekends Only" },
+];
 
 const visibilityOptions = [
-  { value: 'private', label: 'Private' },
-  { value: 'family', label: 'Family' },
-  { value: 'public', label: 'Public' }
-]
+  { value: "private", label: "Private" },
+  { value: "family", label: "Family" },
+  { value: "public", label: "Public" },
+];
 
 const builtinAlarms = [
-  { name: 'Lucid Skybell', url: '/alarms/lucid-skybell.mp3' },
-  { name: 'Dream Siren', url: '/alarms/dream-siren.mp3' },
-  { name: 'Vanilla Alert', url: '/alarms/vanilla-alert.mp3' },
-  { name: 'Echo Pulse', url: '/alarms/echo-pulse.mp3' },
-  { name: 'Surreal Ringtone', url: '/alarms/surreal-ringtone.mp3' }
-]
+  { name: "Lucid Skybell", url: "/alarms/lucid-skybell.mp3" },
+  { name: "Dream Siren", url: "/alarms/dream-siren.mp3" },
+  { name: "Vanilla Alert", url: "/alarms/vanilla-alert.mp3" },
+  { name: "Echo Pulse", url: "/alarms/echo-pulse.mp3" },
+  { name: "Surreal Ringtone", url: "/alarms/surreal-ringtone.mp3" },
+];
 
-export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate, showCompletedToggle = false, initialCompleted = false }: TaskModalProps) {
+export function TaskModal({
+  isOpen,
+  onClose,
+  onSave,
+  onDelete,
+  task,
+  initialDate,
+  showCompletedToggle = false,
+  initialCompleted = false,
+}: TaskModalProps) {
   const [formData, setFormData] = useState({
-    title: '',
-    category: 'other',
-    start_time: '',
-    end_time: '',
-    repeat_pattern: 'none',
+    title: "",
+    category: "other",
+    start_time: "",
+    end_time: "",
+    repeat_pattern: "none",
     alarm: false,
-    custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
-    visibility: 'private',
-    notes: '',
-    completed: initialCompleted
-  })
-  const { playAudio } = useAudio()
+    custom_sound_path:
+      localStorage.getItem("defaultAlarmSound") || builtinAlarms[0].url,
+    visibility: "private",
+    notes: "",
+    completed: initialCompleted,
+  });
+  const { playAudio } = useAudio();
 
   useEffect(() => {
     if (task) {
       setFormData({
-        title: task.title || '',
-        category: task.category || 'other',
+        title: task.title || "",
+        category: task.category || "other",
         start_time: task.start_time
-          ? dayjs(task.start_time).local().format('YYYY-MM-DDTHH:mm')
-          : '',
+          ? dayjs(task.start_time).local().format("YYYY-MM-DDTHH:mm")
+          : "",
         end_time: task.end_time
-          ? dayjs(task.end_time).local().format('YYYY-MM-DDTHH:mm')
-          : '',
-        repeat_pattern: task.repeat_pattern || 'none',
+          ? dayjs(task.end_time).local().format("YYYY-MM-DDTHH:mm")
+          : "",
+        repeat_pattern: task.repeat_pattern || "none",
         alarm: task.alarm || false,
-        custom_sound_path: task.custom_sound_path || localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
-        visibility: task.visibility || 'private',
-        notes: task.notes || '',
-        completed: task.completed || false
-      })
+        custom_sound_path:
+          task.custom_sound_path ||
+          localStorage.getItem("defaultAlarmSound") ||
+          builtinAlarms[0].url,
+        visibility: task.visibility || "private",
+        notes: task.notes || "",
+        completed: task.completed || false,
+      });
     } else if (initialDate) {
-      const startTime = dayjs(initialDate).hour(9).minute(0).format('YYYY-MM-DDTHH:mm')
-      const endTime = dayjs(initialDate).hour(10).minute(0).format('YYYY-MM-DDTHH:mm')
-      
+      const startTime = dayjs(initialDate)
+        .hour(9)
+        .minute(0)
+        .format("YYYY-MM-DDTHH:mm");
+      const endTime = dayjs(initialDate)
+        .hour(10)
+        .minute(0)
+        .format("YYYY-MM-DDTHH:mm");
+
       setFormData({
-        title: '',
-        category: 'other',
+        title: "",
+        category: "other",
         start_time: startTime,
         end_time: endTime,
-        repeat_pattern: 'none',
+        repeat_pattern: "none",
         alarm: false,
-        custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
-        visibility: 'private',
-        notes: '',
-        completed: false
-      })
+        custom_sound_path:
+          localStorage.getItem("defaultAlarmSound") || builtinAlarms[0].url,
+        visibility: "private",
+        notes: "",
+        completed: false,
+      });
     }
-  }, [task, initialDate])
+  }, [task, initialDate]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!formData.title.trim()) {
-      alert('Please enter a task title')
-      return
+      alert("Please enter a task title");
+      return;
     }
-    
+
     if (!formData.start_time) {
-      alert('Please select a start time')
-      return
+      alert("Please select a start time");
+      return;
     }
-    
+
     onSave({
       title: formData.title.trim(),
       category: formData.category,
       start_time: dayjs(formData.start_time).toISOString(),
-      end_time: formData.end_time ? dayjs(formData.end_time).toISOString() : null,
+      end_time: formData.end_time
+        ? dayjs(formData.end_time).toISOString()
+        : null,
       repeat_pattern: formData.repeat_pattern,
       alarm: formData.alarm,
       custom_sound_path: formData.custom_sound_path,
       visibility: formData.visibility,
       notes: formData.notes.trim() || null,
-      completed: formData.completed
-    })
-  }
+      completed: formData.completed,
+    });
+  };
 
   const handleChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const autoSetEndTime = () => {
     if (formData.start_time) {
-      const endTime = dayjs(formData.start_time).add(1, 'hour').format('YYYY-MM-DDTHH:mm')
-      handleChange('end_time', endTime)
+      const endTime = dayjs(formData.start_time)
+        .add(1, "hour")
+        .format("YYYY-MM-DDTHH:mm");
+      handleChange("end_time", endTime);
     }
-  }
+  };
 
-  if (!isOpen) return null
+  const [quickInput, setQuickInput] = useState("");
+  const { listening, transcript, start, stop } = useSpeechInput();
+
+  useEffect(() => {
+    if (transcript) setQuickInput(transcript);
+  }, [transcript]);
+
+  const handleParseQuick = () => {
+    const parsed = parseNaturalTask(quickInput);
+    if (parsed) {
+      setFormData((prev) => ({
+        ...prev,
+        title: parsed.title,
+        start_time: dayjs(parsed.start).format("YYYY-MM-DDTHH:mm"),
+        end_time: parsed.end
+          ? dayjs(parsed.end).format("YYYY-MM-DDTHH:mm")
+          : "",
+      }));
+    }
+  };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
@@ -142,7 +205,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-light text-gray-800">
-              {task ? 'Edit Task' : 'Create New Task'}
+              {task ? "Edit Task" : "Create New Task"}
             </h2>
             <button
               onClick={onClose}
@@ -159,13 +222,51 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Quick Entry */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">
+                Quick Task Entry
+              </label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  value={quickInput}
+                  onChange={(e) => setQuickInput(e.target.value)}
+                  className="input-dreamy w-full"
+                  placeholder="Dentist at 2pm Friday"
+                />
+                <button
+                  type="button"
+                  onClick={handleParseQuick}
+                  className="btn-dreamy"
+                >
+                  Parse
+                </button>
+                <button
+                  type="button"
+                  onClick={listening ? stop : start}
+                  className={
+                    "p-2 rounded-full border " +
+                    (listening
+                      ? "bg-blue-100 border-blue-300 animate-pulse"
+                      : "bg-white border-gray-300 hover:bg-gray-100")
+                  }
+                  title="Voice input"
+                >
+                  <Mic className="w-5 h-5 text-gray-700" />
+                </button>
+              </div>
+            </div>
+
             {/* Title */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Task Title</label>
+              <label className="text-sm font-medium text-gray-700">
+                Task Title
+              </label>
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => handleChange('title', e.target.value)}
+                onChange={(e) => handleChange("title", e.target.value)}
                 className="input-dreamy w-full"
                 placeholder="What needs to be done?"
                 required
@@ -181,7 +282,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                 </label>
                 <select
                   value={formData.category}
-                  onChange={(e) => handleChange('category', e.target.value)}
+                  onChange={(e) => handleChange("category", e.target.value)}
                   className="input-dreamy w-full"
                 >
                   {categories.map((cat) => (
@@ -200,10 +301,10 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                 </label>
                 <select
                   value={formData.visibility}
-                  onChange={(e) => handleChange('visibility', e.target.value)}
+                  onChange={(e) => handleChange("visibility", e.target.value)}
                   className="input-dreamy w-full"
                 >
-                  {visibilityOptions.map(option => (
+                  {visibilityOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -222,7 +323,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                 <input
                   type="datetime-local"
                   value={formData.start_time}
-                  onChange={(e) => handleChange('start_time', e.target.value)}
+                  onChange={(e) => handleChange("start_time", e.target.value)}
                   className="input-dreamy w-full"
                   required
                 />
@@ -244,7 +345,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                 <input
                   type="datetime-local"
                   value={formData.end_time}
-                  onChange={(e) => handleChange('end_time', e.target.value)}
+                  onChange={(e) => handleChange("end_time", e.target.value)}
                   className="input-dreamy w-full"
                 />
               </div>
@@ -258,10 +359,10 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
               </label>
               <select
                 value={formData.repeat_pattern}
-                onChange={(e) => handleChange('repeat_pattern', e.target.value)}
+                onChange={(e) => handleChange("repeat_pattern", e.target.value)}
                 className="input-dreamy w-full"
               >
-                {repeatPatterns.map(pattern => (
+                {repeatPatterns.map((pattern) => (
                   <option key={pattern.value} value={pattern.value}>
                     {pattern.label}
                   </option>
@@ -274,7 +375,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
               <label className="text-sm font-medium text-gray-700">Notes</label>
               <textarea
                 value={formData.notes}
-                onChange={(e) => handleChange('notes', e.target.value)}
+                onChange={(e) => handleChange("notes", e.target.value)}
                 className="input-dreamy w-full h-20 resize-none"
                 placeholder="Additional details or what was accomplished"
               />
@@ -286,7 +387,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                 <input
                   type="checkbox"
                   checked={formData.alarm}
-                  onChange={(e) => handleChange('alarm', e.target.checked)}
+                  onChange={(e) => handleChange("alarm", e.target.checked)}
                   className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-700 flex items-center gap-2">
@@ -300,12 +401,16 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   <label className="text-sm text-gray-700">Alarm Sound</label>
                   <select
                     value={formData.custom_sound_path}
-                    onChange={(e) => handleChange('custom_sound_path', e.target.value)}
+                    onChange={(e) =>
+                      handleChange("custom_sound_path", e.target.value)
+                    }
                     className="input-dreamy w-full"
                   >
                     {[
                       ...builtinAlarms,
-                      ...JSON.parse(localStorage.getItem('customAlarmSounds') || '[]')
+                      ...JSON.parse(
+                        localStorage.getItem("customAlarmSounds") || "[]",
+                      ),
                     ].map((alarm: any) => (
                       <option key={alarm.url} value={alarm.url}>
                         {alarm.name}
@@ -327,7 +432,9 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   <input
                     type="checkbox"
                     checked={formData.completed}
-                    onChange={(e) => handleChange('completed', e.target.checked)}
+                    onChange={(e) =>
+                      handleChange("completed", e.target.checked)
+                    }
                     className="rounded border-gray-300 text-green-500 focus:ring-green-500"
                   />
                   <span className="text-sm text-gray-700">
@@ -351,20 +458,13 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   </button>
                 )}
               </div>
-              
+
               <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="btn-dreamy"
-                >
+                <button type="button" onClick={onClose} className="btn-dreamy">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="btn-dreamy-primary"
-                >
-                  {task ? 'Update Task' : 'Create Task'}
+                <button type="submit" className="btn-dreamy-primary">
+                  {task ? "Update Task" : "Create Task"}
                 </button>
               </div>
             </div>
@@ -372,5 +472,5 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         </div>
       </div>
     </div>
-  )
+  );
 }
