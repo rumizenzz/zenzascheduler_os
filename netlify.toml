@@ -1,10 +1,16 @@
 [build]
   base = "zenzalife-scheduler"
-  command = "pnpm run build"
+  # Install root dependencies so functions have their node modules
+  command = "pnpm --dir .. install && pnpm run build"
   publish = "dist"
 
 [functions]
-  directory = "netlify/functions"
+  # The build runs from the `zenzalife-scheduler` subdirectory. Use a
+  # relative path so Netlify can locate the serverless functions stored
+  # at the repository root.
+  directory = "../netlify/functions"
+  # Exclude large dependencies from the bundle and install them at runtime
+  external_node_modules = ["@supabase/supabase-js", "nodemailer"]
 
 [[redirects]]
   from = "/*"
