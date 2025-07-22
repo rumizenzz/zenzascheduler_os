@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Documented world-class agentic workflow in `AGENTS.md` and expanded `TODO.md` tracker. (2025-07-22 20:34:18 UTC)
 - Script `update:upcoming` exports Supabase upcoming releases to `UPCOMING_RELEASES.md`.
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
@@ -13,7 +14,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Supabase schema updated with additional fields and a reactions table.
 - Added `changelog_views` table to track when each user last viewed the
   changelog.
-- Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires secret code and stores entries in Supabase.
+- Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires code "ZENZALIFE" and stores entries in Supabase.
 - Default Schedule modal now asks when your day started and shifts all tasks to match the chosen time.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires a secret code and stores entries in Supabase.
 - Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
