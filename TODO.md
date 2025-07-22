@@ -218,6 +218,9 @@ This file tracks project progress and upcoming tasks.
   the correct code can add releases.
 - Removed the secret code value from the changelog for security. (2025-07-22 17:33:44 UTC)
 
+- Added a dreamlike Family Legacy constellation view with animated stars
+  walking across the sky.
+
 ## Next Steps
 
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
