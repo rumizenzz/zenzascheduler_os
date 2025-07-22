@@ -9,7 +9,7 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Added script `update:upcoming` to sync Supabase upcoming releases into `UPCOMING_RELEASES.md`.
-- Added hidden upcoming releases admin accessed by a wood log icon in Settings. Requires the secret code "ZENZALIFE" and saves entries to Supabase.
+- Added hidden upcoming releases admin accessed by a wood log icon in Settings. Requires a secret code and saves entries to Supabase.
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
 - Tracked and displayed each user's last login time.
 - Last login now records after the dreamlike entrance completes.
@@ -207,6 +207,9 @@ This file tracks project progress and upcoming tasks.
   changelog.
 - Fixed ChangeLogButton to store the last seen timestamp in Supabase instead of
   localStorage or cookies.
+- Protected `/admin/changelog` behind a secret code prompt so only those with
+  the correct code can add releases.
+- Removed the secret code value from the changelog for security. (2025-07-22 17:33:44 UTC)
 
 ## Next Steps
 

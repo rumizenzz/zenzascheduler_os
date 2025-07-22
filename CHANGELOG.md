@@ -13,11 +13,13 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Supabase schema updated with additional fields and a reactions table.
 - Added `changelog_views` table to track when each user last viewed the
   changelog.
-- Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires code "ZENZALIFE" and stores entries in Supabase.
+- Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires a secret code and stores entries in Supabase.
+- Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
 
 ### Changed
 - Documented that every update must include a professional changelog entry.
 - Clarified the policy in `AGENTS.md`.
+- Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
 
 ### Fixed
 - ChangeLogButton now stores the last seen timestamp in Supabase instead of
