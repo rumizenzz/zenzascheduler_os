@@ -193,6 +193,7 @@ This file tracks project progress and upcoming tasks.
 - Android alarms now trigger system notifications using the service worker.
 - Added Supabase-backed Change Log modal with a top-right button for the latest updates.
 - Added year selector to the calendar toolbar that saves the chosen year in Supabase.
+- Created `calendar_preferences` table to persist the selected calendar year for each user.
 - Documented the requirement to log all future changes in `CHANGELOG.md`.
 - ChangeLogButton now displays `CHANGELOG.md` contents in the modal.
 - Strengthened AGENT instructions to require a professional changelog entry for

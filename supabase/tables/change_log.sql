@@ -9,6 +9,8 @@ CREATE TABLE change_log (
     media_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+INSERT INTO change_log (message) VALUES ('Added year selector to the calendar toolbar that saves the chosen year in Supabase.');
+INSERT INTO change_log (message) VALUES ('Created calendar_preferences table to store each user's preferred calendar year.');
 INSERT INTO change_log (version, title, message, tags, author, icon_url)
 VALUES (
   '0.1.0',
