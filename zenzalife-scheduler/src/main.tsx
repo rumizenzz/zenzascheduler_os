@@ -4,6 +4,7 @@ import App from './App.tsx'
 import { registerSW } from 'virtual:pwa-register'
 import { ConfirmPage } from '@/components/auth/ConfirmPage'
 import { UnsubscribePage } from '@/components/auth/UnsubscribePage'
+import { AdminChangelogPage } from '@/components/admin/AdminChangelogPage'
 import './globals.css'
 
 const root = document.getElementById('root')!
@@ -16,6 +17,8 @@ ReactDOM.createRoot(root).render(
       <ConfirmPage />
     ) : path === '/unsubscribe' ? (
       <UnsubscribePage />
+    ) : path === '/admin/changelog' ? (
+      <AdminChangelogPage />
     ) : (
       <App />
     )}
