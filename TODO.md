@@ -191,6 +191,19 @@ This file tracks project progress and upcoming tasks.
 - Android alarms now trigger system notifications using the service worker.
 - Added Supabase-backed Change Log modal with a top-right button for the latest updates.
 - Added year selector to the calendar toolbar that saves the chosen year in Supabase.
+- Documented the requirement to log all future changes in `CHANGELOG.md`.
+- ChangeLogButton now displays `CHANGELOG.md` contents in the modal.
+- Strengthened AGENT instructions to require a professional changelog entry for
+  every update.
+- Polished the changelog with Keep a Changelog sections and copied it to the
+  public folder so the Change Log button shows the latest notes.
+- Added versioned changelog entries with tags and icon support.
+- Implemented search and toast notifications for new releases.
+- Created AdminChangelogPage and updated Supabase schema with reactions table.
+- Added `changelog_views` table and logic to track when each user last saw the
+  changelog.
+- Fixed ChangeLogButton to store the last seen timestamp in Supabase instead of
+  localStorage or cookies.
 
 ## Next Steps
 
