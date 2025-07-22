@@ -197,6 +197,12 @@ export type Timer = {
   updated_at?: string
 }
 
+export type ChangeLogEntry = {
+  id: string
+  message: string
+  created_at?: string
+}
+
 // Helper functions
 export async function getCurrentUser() {
   const {
