@@ -683,6 +683,14 @@ export function ZenzaCalendar() {
     setTouchStartX(null);
   };
 
+  const handleYearChange = (year: number) => {
+    if (!calendarRef.current || !year) return;
+    const api = calendarRef.current.getApi();
+    const newDate = dayjs(currentDate).year(year).format('YYYY-MM-DD');
+    setCurrentDate(newDate);
+    api.gotoDate(newDate);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -800,6 +808,15 @@ export function ZenzaCalendar() {
                       <Users className="w-4 h-4" />
                       See Family Member's Calendar
                     </button>
+                    <input
+                      type="number"
+                      className="input-dreamy w-full"
+                      value={dayjs(currentDate).year()}
+                      min={1900}
+                      max={2100}
+                      onChange={(e) => handleYearChange(parseInt(e.target.value))}
+                      aria-label="Jump to year"
+                    />
                   </div>
                 )}
               </div>
@@ -871,6 +888,15 @@ export function ZenzaCalendar() {
                   <Users className="w-4 h-4" />
                   See Family Member's Calendar
                 </button>
+                <input
+                  type="number"
+                  className="input-dreamy w-20 flex-shrink-0"
+                  value={dayjs(currentDate).year()}
+                  min={1900}
+                  max={2100}
+                  onChange={(e) => handleYearChange(parseInt(e.target.value))}
+                  aria-label="Jump to year"
+                />
               </>
             )
           ) : (
