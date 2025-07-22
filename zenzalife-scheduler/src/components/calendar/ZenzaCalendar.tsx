@@ -147,6 +147,7 @@ export function ZenzaCalendar() {
   const [currentDate, setCurrentDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [showCompleted, setShowCompleted] = useState(false);
   const [modalShowCompleted, setModalShowCompleted] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(dayjs().year());
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -165,6 +166,23 @@ export function ZenzaCalendar() {
       loadHistory();
     }
   }, [user, viewUser]);
+
+  useEffect(() => {
+    const loadYear = async () => {
+      if (!user) return;
+      const { data } = await supabase
+        .from('calendar_preferences')
+        .select('selected_year')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (data?.selected_year) {
+        setSelectedYear(data.selected_year);
+        const api = calendarRef.current?.getApi();
+        api?.gotoDate(dayjs().year(data.selected_year).toDate());
+      }
+    };
+    loadYear();
+  }, [user]);
 
   useEffect(() => {
     if (profile?.family_id) {
@@ -286,6 +304,17 @@ export function ZenzaCalendar() {
       created_at: new Date().toISOString(),
     });
     await loadHistory();
+  };
+
+  const saveCalendarYear = async (year: number) => {
+    if (!user) return;
+    await supabase
+      .from('calendar_preferences')
+      .upsert({
+        user_id: user.id,
+        selected_year: year,
+        updated_at: new Date().toISOString(),
+      });
   };
 
   const convertTasksToEvents = (tasks: Task[]): CalendarEvent[] => {
@@ -732,7 +761,26 @@ export function ZenzaCalendar() {
           </p>
         </div>
 
-        <div className="flex gap-3 w-full sm:w-auto pb-2 sm:pb-0">
+        <div className="flex gap-3 w-full sm:w-auto pb-2 sm:pb-0 items-center">
+          <select
+            value={selectedYear}
+            onChange={(e) => {
+              const year = parseInt(e.target.value, 10);
+              setSelectedYear(year);
+              const api = calendarRef.current?.getApi();
+              api?.gotoDate(dayjs().year(year).toDate());
+              saveCalendarYear(year);
+            }}
+            className="input-dreamy text-sm"
+          >
+            {Array.from({ length: 5 }, (_, i) => dayjs().year() - 2 + i).map(
+              (y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ),
+            )}
+          </select>
           {isOwnCalendar ? (
             isMobile ? (
               <div className="relative w-full">
@@ -950,6 +998,11 @@ export function ZenzaCalendar() {
           datesSet={(arg) => {
             setCalendarView(arg.view.type);
             setCurrentDate(dayjs(arg.start).format('YYYY-MM-DD'));
+            const year = dayjs(arg.start).year();
+            if (year !== selectedYear) {
+              setSelectedYear(year);
+              saveCalendarYear(year);
+            }
           }}
           editable={isOwnCalendar}
           selectable={isOwnCalendar}

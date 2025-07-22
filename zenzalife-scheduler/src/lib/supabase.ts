@@ -197,6 +197,13 @@ export type Timer = {
   updated_at?: string
 }
 
+export type CalendarPreference = {
+  user_id: string
+  selected_year: number
+  created_at?: string
+  updated_at?: string
+}
+
 export type ChangeLogEntry = {
   id: string
   message: string
