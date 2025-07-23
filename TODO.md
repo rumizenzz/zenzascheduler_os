@@ -18,6 +18,7 @@ This file tracks project progress and upcoming tasks.
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
 - Tracked and displayed each user's last login time.
 - Last login now records after the dreamlike entrance completes.
+- Added Grace Prayer module with audio recording saved to Supabase (2025-07-23 15:08:27 UTC).
 - Documented that the Netlify function's `DEP0040` punycode warning is harmless and to verify SMTP variables if mail doesn't send.
 - Documented legacy `IONOS_USERNAME` and `IONOS_PASSWORD` variables and updated
   the confirmation email function to accept them.
