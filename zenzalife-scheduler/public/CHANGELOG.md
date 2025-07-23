@@ -18,6 +18,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Default Schedule modal now asks when your day started and shifts all tasks to match the chosen time.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires a secret code and stores entries in Supabase.
 - Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
+- Grace Prayer module records audio and stores start time with Supabase (2025-07-23 15:08:27 UTC)
 
 ### Changed
 - Documented that every update must include a professional changelog entry.
