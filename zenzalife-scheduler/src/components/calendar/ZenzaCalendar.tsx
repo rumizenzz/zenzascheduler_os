@@ -26,6 +26,8 @@ import { DefaultScheduleItem } from "@/data/defaultSchedule";
 import { MoveScheduleModal } from "./MoveScheduleModal";
 import { DayScheduleModal } from "./DayScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
+import { MorningPrayerModal } from "../alerts/MorningPrayerModal";
+import { NightPrayerModal } from "../alerts/NightPrayerModal";
 import { useAlarmChannel } from "@/hooks/useAlarmChannel";
 import { useNotifications } from "@/hooks/useNotifications";
 import { DragHint } from "./DragHint";
@@ -144,6 +146,8 @@ export function ZenzaCalendar() {
   const [dayModalEvents, setDayModalEvents] = useState<CalendarEvent[]>([]);
   const [dayModalDate, setDayModalDate] = useState<string>("");
   const [showDayModal, setShowDayModal] = useState(false);
+  const [showMorningPrayerModal, setShowMorningPrayerModal] = useState(false);
+  const [showNightPrayerModal, setShowNightPrayerModal] = useState(false);
   const [currentDate, setCurrentDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [showCompleted, setShowCompleted] = useState(false);
   const [modalShowCompleted, setModalShowCompleted] = useState(false);
@@ -1227,6 +1231,12 @@ export function ZenzaCalendar() {
           onDismiss={() => {
             setActiveAlarm(null)
             postMessage({ type: 'dismiss' })
+            const hour = dayjs().hour()
+            if (hour < 12) {
+              setShowMorningPrayerModal(true)
+            } else if (hour >= 18) {
+              setShowNightPrayerModal(true)
+            }
           }}
           onSnooze={() => {
             const event = activeAlarm
@@ -1247,6 +1257,20 @@ export function ZenzaCalendar() {
           onClose={() => setShowDayModal(false)}
           date={dayModalDate}
           events={dayModalEvents}
+        />
+      )}
+
+      {showMorningPrayerModal && (
+        <MorningPrayerModal
+          isOpen={showMorningPrayerModal}
+          onClose={() => setShowMorningPrayerModal(false)}
+        />
+      )}
+
+      {showNightPrayerModal && (
+        <NightPrayerModal
+          isOpen={showNightPrayerModal}
+          onClose={() => setShowNightPrayerModal(false)}
         />
       )}
 
