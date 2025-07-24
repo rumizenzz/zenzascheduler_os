@@ -179,10 +179,6 @@ export function VerseOfTheDay() {
           onChange={e => setNotes(e.target.value)}
         />
       )}
-      </div>
-      <div className="card-floating p-4 min-h-[4rem]">
-        {loading ? 'Loading...' : verse}
-      </div>
     </div>
   )
 }
