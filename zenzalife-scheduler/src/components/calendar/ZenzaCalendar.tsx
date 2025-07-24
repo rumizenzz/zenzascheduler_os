@@ -26,6 +26,7 @@ import { DefaultScheduleItem } from "@/data/defaultSchedule";
 import { MoveScheduleModal } from "./MoveScheduleModal";
 import { DayScheduleModal } from "./DayScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
+import { PrayerAlarmModal } from "../alerts/PrayerAlarmModal";
 import { useAlarmChannel } from "@/hooks/useAlarmChannel";
 import { useNotifications } from "@/hooks/useNotifications";
 import { DragHint } from "./DragHint";
@@ -1219,27 +1220,45 @@ export function ZenzaCalendar() {
         />
       )}
 
-      {activeAlarm && (
-        <AlarmModal
-          eventTitle={activeAlarm.title}
-          eventTime={dayjs(activeAlarm.start).format("h:mm A")}
-          soundUrl={getAlarmSound(activeAlarm)}
-          onDismiss={() => {
-            setActiveAlarm(null)
-            postMessage({ type: 'dismiss' })
-          }}
-          onSnooze={() => {
-            const event = activeAlarm
-            setActiveAlarm(null)
-            postMessage({ type: 'snooze', payload: event })
-            if (snoozeTimeout.current) clearTimeout(snoozeTimeout.current)
-            snoozeTimeout.current = setTimeout(() => {
-              setActiveAlarm(event)
-              snoozeTimeout.current = null
-            }, 300000)
-          }}
-        />
-      )}
+      {activeAlarm && (() => {
+        const title = activeAlarm.title.toLowerCase()
+        const isWake = title.includes('wake up')
+        const isSleep = title.includes('sleep')
+        if (isWake || isSleep) {
+          return (
+            <PrayerAlarmModal
+              category={isWake ? 'wake_up' : 'sleep'}
+              date={dayjs(activeAlarm.start).format('YYYY-MM-DD')}
+              soundUrl={getAlarmSound(activeAlarm)}
+              onDismiss={() => {
+                setActiveAlarm(null)
+                postMessage({ type: 'dismiss' })
+              }}
+            />
+          )
+        }
+        return (
+          <AlarmModal
+            eventTitle={activeAlarm.title}
+            eventTime={dayjs(activeAlarm.start).format("h:mm A")}
+            soundUrl={getAlarmSound(activeAlarm)}
+            onDismiss={() => {
+              setActiveAlarm(null)
+              postMessage({ type: 'dismiss' })
+            }}
+            onSnooze={() => {
+              const event = activeAlarm
+              setActiveAlarm(null)
+              postMessage({ type: 'snooze', payload: event })
+              if (snoozeTimeout.current) clearTimeout(snoozeTimeout.current)
+              snoozeTimeout.current = setTimeout(() => {
+                setActiveAlarm(event)
+                snoozeTimeout.current = null
+              }, 300000)
+            }}
+          />
+        )
+      })()}
 
       {showDayModal && (
         <DayScheduleModal
