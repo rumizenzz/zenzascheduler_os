@@ -10,14 +10,22 @@ This file tracks project progress and upcoming tasks.
 - Added `netlify.toml` to configure build settings and SPA redirects.
 
 ## In Progress
+
 (None at the moment)
 
 ## Latest Updates
+
 - Added script `update:upcoming` to sync Supabase upcoming releases into `UPCOMING_RELEASES.md`.
 - Added hidden upcoming releases admin accessed by a wood log icon in Settings. Requires a secret code and saves entries to Supabase.
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
 - Tracked and displayed each user's last login time.
 - Last login now records after the dreamlike entrance completes.
+- Added Grace Prayer module with audio recording saved to Supabase (2025-07-23 15:08:27 UTC).
+- Fixed null error when uploading Grace Prayer audio that crashed the module (2025-07-23 15:25:07 UTC).
+- Improved Grace Prayer upload error handling to avoid duplicate messages (2025-07-23 15:50:08 UTC).
+- Fixed Grace Prayer module so audio uploads correctly to Supabase storage (2025-07-23 15:57:23 UTC).
+- Grace Prayer audio now saves to a dedicated Supabase bucket (2025-07-24 12:23:16 UTC).
+- Grace Prayer page lists recordings by date with a calendar picker (2025-07-24 12:37:42 UTC).
 - Documented that the Netlify function's `DEP0040` punycode warning is harmless and to verify SMTP variables if mail doesn't send.
 - Documented legacy `IONOS_USERNAME` and `IONOS_PASSWORD` variables and updated
   the confirmation email function to accept them.
@@ -244,6 +252,7 @@ This file tracks project progress and upcoming tasks.
 - Added per-task notes history with timestamps and a modal to review past thoughts.
 
 ## Improvement Ideas
+
 - Add CI pipeline to verify documentation sync and run lint/tests.
 
 (add any new ideas here)
