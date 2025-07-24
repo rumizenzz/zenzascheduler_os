@@ -8,6 +8,7 @@ CREATE TABLE addresses (
     state VARCHAR(50) NOT NULL,
     zip VARCHAR(20) NOT NULL,
     country VARCHAR(100) DEFAULT 'USA',
+    is_primary BOOLEAN DEFAULT false,
     provider VARCHAR(50),
     ics_url TEXT,
     start_date DATE,

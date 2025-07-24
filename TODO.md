@@ -29,6 +29,8 @@ This file tracks project progress and upcoming tasks.
   the confirmation email function to accept them.
 - Upcoming releases are now mirrored into the changelog whenever `update:upcoming`
   runs.
+- Added Primary Address support and ICS upload for garbage schedules (2025-07-24 15:00 UTC).
+- Enabled provider selection for addresses and auto-synced garbage schedules when the primary address changes (2025-07-24 18:00 UTC).
 
 - Fixed default schedule reordering on mobile with touch-friendly drag.
 - Reworked schedule template drag-and-drop with a dedicated handle, desktop

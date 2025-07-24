@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { userId, addressId, provider = 'republic', icsUrl } = await req.json()
+    const { userId, addressId, provider = 'republic', icsUrl, icsData } = await req.json()
     if (!userId) {
       throw new Error('userId is required')
     }
@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
     const prov = providers[activeProvider]
     if (!prov) throw new Error('Unsupported provider')
 
-    const raw = await prov.fetchSchedule(url || { zip: address.zip })
+    const raw = icsData || await prov.fetchSchedule(url || { zip: address.zip })
     const events = prov.parseEvents(raw)
     let upserted = 0
 
@@ -77,7 +77,7 @@ Deno.serve(async (req) => {
       user_id: userId,
       address_id: addressId || null,
       provider: activeProvider,
-      ics_url: url || (address ? `https://www.republicservices.com/schedule/ics/${address.zip}` : ''),
+      ics_url: url || (address ? `https://www.${activeProvider}.com/schedule/ics/${address.zip}` : ''),
       total_events: events.length,
       upserted_events: upserted,
       created_at: new Date().toISOString()
