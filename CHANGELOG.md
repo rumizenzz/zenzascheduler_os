@@ -24,6 +24,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day can now be saved to Spiritual Study and favorited (2025-07-24 01:30:00 UTC)
 - Verse of the Day entries now support notes directly from the module (2025-07-24 02:00:00 UTC)
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
+- Introduced Grace Prayer Audio Scheduler with calendar view and recording features (2025-07-24 13:00:00 UTC)
+- Grace Prayer module now lets users select a date and listen back to each meal time's recording (2025-07-24 18:00:00 UTC)
 
 ### Changed
 - Documented that every update must include a professional changelog entry.
