@@ -19,6 +19,8 @@ This file tracks project progress and upcoming tasks.
 - Tracked and displayed each user's last login time.
 - Last login now records after the dreamlike entrance completes.
 - Added Grace Prayer module with audio recording saved to Supabase (2025-07-23 15:08:27 UTC).
+- Added Verse of the Day module pulling from Book of Mormon and Bible APIs (2025-07-23 20:09:46 UTC).
+- Verse of the Day can now be saved to Spiritual Study and favorited in Supabase (2025-07-24 01:30:00 UTC).
 - Documented that the Netlify function's `DEP0040` punycode warning is harmless and to verify SMTP variables if mail doesn't send.
 - Documented legacy `IONOS_USERNAME` and `IONOS_PASSWORD` variables and updated
   the confirmation email function to accept them.
