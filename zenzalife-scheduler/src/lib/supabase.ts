@@ -12,6 +12,8 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+export const GRACE_PRAYER_BUCKET = 'grace-prayers'
+
 export type User = {
   id: string
   display_name: string
@@ -134,6 +136,16 @@ export type DiscipleshipNote = {
   user_id: string
   date: string
   content: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type GracePrayer = {
+  id: string
+  user_id: string
+  meal_time: string
+  audio_url: string
+  started_at: string
   created_at?: string
   updated_at?: string
 }
