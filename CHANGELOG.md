@@ -8,6 +8,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Script `update:upcoming` exports Supabase upcoming releases to `UPCOMING_RELEASES.md`.
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
+- `update:upcoming` now mirrors upcoming releases into an **Upcoming Releases** section of the changelog. (2025-07-24 01:06:50 UTC)
 - Users see a "What's new" toast when new updates are published.
 - Change Log modal supports searching by text or tag.
 - Admin page `/admin/changelog` allows creating new releases.
