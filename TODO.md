@@ -26,6 +26,8 @@ This file tracks project progress and upcoming tasks.
 - Documented that the Netlify function's `DEP0040` punycode warning is harmless and to verify SMTP variables if mail doesn't send.
 - Documented legacy `IONOS_USERNAME` and `IONOS_PASSWORD` variables and updated
   the confirmation email function to accept them.
+- Upcoming releases are now mirrored into the changelog whenever `update:upcoming`
+  runs.
 
 - Fixed default schedule reordering on mobile with touch-friendly drag.
 - Reworked schedule template drag-and-drop with a dedicated handle, desktop
@@ -88,6 +90,8 @@ This file tracks project progress and upcoming tasks.
 - Removed obsolete `is_primary` field from Life Logistics address forms.
 - Added missing `type` column to the `addresses` table so Logistics entries save.
 - Documented fix for "Could not find the 'type' column of 'addresses' in the schema cache" error.
+- Added README in `supabase/` explaining how to add the missing `type` column.
+- Fixed date field save errors by converting blank strings to null during Life Logistics saves.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
 - Documented IONOS SMTP/IMAP environment variables for spam-free confirmation emails.

@@ -189,10 +189,16 @@ export function LifeLogistics() {
     const table = activeTab
     const timestamp = new Date().toISOString()
 
+    const sanitizePayload = (input: Record<string, any>) =>
+      Object.fromEntries(
+        Object.entries(input).map(([k, v]) => [k, v === '' ? null : v])
+      )
+
     try {
+      const base = sanitizePayload(data)
       const payload = editingItem
-        ? { ...data, updated_at: timestamp }
-        : { ...data, user_id: user.id, created_at: timestamp, updated_at: timestamp }
+        ? { ...base, updated_at: timestamp }
+        : { ...base, user_id: user.id, created_at: timestamp, updated_at: timestamp }
 
       const query = editingItem
         ? supabase.from(table).update(payload).eq('id', editingItem.id)

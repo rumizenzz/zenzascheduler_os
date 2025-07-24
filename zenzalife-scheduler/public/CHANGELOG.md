@@ -8,6 +8,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Script `update:upcoming` exports Supabase upcoming releases to `UPCOMING_RELEASES.md`.
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
+- `update:upcoming` now mirrors upcoming releases into an **Upcoming Releases** section of the changelog. (2025-07-24 01:06:50 UTC)
 - Users see a "What's new" toast when new updates are published.
 - Change Log modal supports searching by text or tag.
 - Admin page `/admin/changelog` allows creating new releases.
@@ -33,3 +34,5 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - ChangeLogButton now stores the last seen timestamp in Supabase instead of
   relying on cookies or localStorage.
 - Added `type` column to the `addresses` table so Life Logistics items save correctly. (2025-07-22 23:09:24 UTC)
+- Documented how to add the missing `type` column in `supabase/README.md`. (2025-07-22 23:22:55 UTC)
+- Fixed "invalid input syntax for type date" when saving Logistics items by converting blank date fields to null. (2025-07-22 23:31:41 UTC)
