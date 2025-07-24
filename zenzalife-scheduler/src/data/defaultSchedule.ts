@@ -18,6 +18,6 @@ export const defaultScheduleTemplate: DefaultScheduleItem[] = [
   { title: 'Personal development book reading', category: 'personal', start: '19:00', end: '20:00' },
   { title: 'Cooking video training', category: 'personal', start: '20:00', end: '21:00' },
   { title: 'PM hygiene', category: 'hygiene', start: '21:00', end: '21:30' },
-  { title: 'Final prayer', category: 'spiritual', start: '21:30', end: '21:45' },
-  { title: 'Sleep', category: 'other', start: '21:45', end: '06:30' },
+  { title: 'Final prayer', category: 'spiritual', start: '21:30', end: '21:45', alarm: true },
+  { title: 'Sleep', category: 'other', start: '21:45', end: '06:30', alarm: true },
 ];
