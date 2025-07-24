@@ -149,6 +149,17 @@ export type GracePrayer = {
   updated_at?: string
 }
 
+export type PrayerAudio = {
+  id: string
+  user_id: string
+  date: string
+  category: string
+  audio_url: string
+  duration: number
+  created_at?: string
+  updated_at?: string
+}
+
 export type TaskHistory = {
   id: string
   user_id: string
