@@ -11,6 +11,7 @@ import { GarbageModule } from "./GarbageModule";
 import { SettingsModule } from "./SettingsModule";
 import { SpiritualModule } from "./SpiritualModule";
 import { TimerModule } from "./TimerModule";
+import { GracePrayerModule } from "./GracePrayerModule";
 import {
   Calendar,
   TrendingUp,
@@ -25,6 +26,7 @@ import {
   TreePine,
   Menu,
   BookOpen,
+  Mic,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -42,6 +44,7 @@ type DashboardTab =
   | "logistics"
   | "garbage"
   | "spiritual"
+  | "grace"
   | "settings";
 
 const navigationItems = [
@@ -54,6 +57,7 @@ const navigationItems = [
   { id: "logistics", label: "Life Logistics", icon: MapPin, color: "text-orange-500" },
   { id: "garbage", label: "Garbage/Recycling", icon: Trash2, color: "text-gray-500" },
   { id: "spiritual", label: "Spiritual Study", icon: BookOpen, color: "text-purple-500" },
+  { id: "grace", label: "Grace Prayer", icon: Mic, color: "text-purple-500" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
 
@@ -103,6 +107,8 @@ export function Dashboard() {
         return <GarbageModule />;
       case "spiritual":
         return <SpiritualModule />;
+      case "grace":
+        return <GracePrayerModule />;
       case "settings":
         return <SettingsModule />;
       default:
