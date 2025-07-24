@@ -73,3 +73,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Fixed a misplaced closing tag in `VerseOfTheDay.tsx` so the favorite star renders correctly.
 - Ran `pnpm run lint` to verify the component compiles without errors.
 
+### Codex Agent Reflection (2025-07-24 16:31 UTC)
+- Implemented primary address checkbox and ICS upload for garbage pickup schedules.
+- Added waste management provider and manual ICS parsing support.
+

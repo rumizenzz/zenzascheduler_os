@@ -1,16 +1,12 @@
 import * as ICAL from 'https://esm.sh/ical.js@2.2.0'
 import type { GarbageProvider, AddressInfo, GarbageEvent } from './mod.ts'
 
-export const RepublicServicesProvider: GarbageProvider = {
+export const WasteManagementProvider: GarbageProvider = {
   async fetchSchedule(addressOrUrl: AddressInfo | string): Promise<string> {
     const url = typeof addressOrUrl === 'string'
       ? addressOrUrl
-      : `https://www.republicservices.com/schedule/ics/${addressOrUrl.zip}`
-    const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'ZenzaLife Scheduler Bot'
-      }
-    })
+      : `https://www.wm.com/schedule/ics/${addressOrUrl.zip}`
+    const res = await fetch(url, { headers: { 'User-Agent': 'ZenzaLife Scheduler Bot' } })
     if (!res.ok) {
       throw new Error('Failed to fetch schedule')
     }
