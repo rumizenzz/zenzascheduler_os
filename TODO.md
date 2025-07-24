@@ -23,6 +23,7 @@ This file tracks project progress and upcoming tasks.
 - Verse of the Day can now be saved to Spiritual Study and favorited in Supabase (2025-07-24 01:30:00 UTC).
 - Verse of the Day entries now support notes directly in the module (2025-07-24 02:00:00 UTC).
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC).
+- Fixed missing favorite icon due to stray closing tag in Verse of the Day module (2025-07-24 12:52 UTC).
 - Documented that the Netlify function's `DEP0040` punycode warning is harmless and to verify SMTP variables if mail doesn't send.
 - Documented legacy `IONOS_USERNAME` and `IONOS_PASSWORD` variables and updated
   the confirmation email function to accept them.
