@@ -11,7 +11,7 @@ import {
 } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import dayjs from 'dayjs'
-import { BookOpen, Video, Music, Heart, Sparkles } from 'lucide-react'
+import { BookOpen, Video, Music, Heart, Sparkles, Star } from 'lucide-react'
 import { bookOfMormonScriptures } from '@/data/bookOfMormon'
 
 interface FamilySelectModalProps {
@@ -202,6 +202,28 @@ export function SpiritualModule() {
     }
   }
 
+  const toggleFavoriteScripture = async (
+    noteId: string,
+    isFavorite: boolean
+  ) => {
+    try {
+      const { error } = await supabase
+        .from('scripture_notes')
+        .update({ is_favorite: !isFavorite, updated_at: new Date().toISOString() })
+        .eq('id', noteId)
+      if (error) throw error
+      setScriptureNotes((prev) =>
+        prev.map((n) => (n.id === noteId ? { ...n, is_favorite: !isFavorite } : n))
+      )
+      if (todayScripture && todayScripture.id === noteId) {
+        setTodayScripture({ ...todayScripture, is_favorite: !isFavorite })
+      }
+      toast.success(!isFavorite ? 'Marked favorite' : 'Removed favorite')
+    } catch (e: any) {
+      toast.error('Failed to update favorite: ' + e.message)
+    }
+  }
+
   const saveConference = async (
     speaker: string,
     topic: string,
@@ -375,7 +397,19 @@ export function SpiritualModule() {
 
         {todayScripture ? (
           <div className="card-floating p-4 space-y-4">
-            <h3 className="font-medium text-gray-800">{todayScripture.scripture}</h3>
+            <div className="flex items-start justify-between">
+              <h3 className="font-medium text-gray-800">{todayScripture.scripture}</h3>
+              {isOwnNotes && (
+                <button
+                  onClick={() => toggleFavoriteScripture(todayScripture.id, todayScripture.is_favorite || false)}
+                  className={`p-1 rounded-full transition-colors ${
+                    todayScripture.is_favorite ? 'text-yellow-500 hover:text-yellow-600' : 'text-gray-400 hover:text-yellow-500'
+                  }`}
+                >
+                  <Star className={`w-4 h-4 ${todayScripture.is_favorite ? 'fill-current' : ''}`} />
+                </button>
+              )}
+            </div>
             {todayScripture.full_text && (
               <blockquote className="scripture-scroll whitespace-pre-line">
                 {todayScripture.full_text}
@@ -402,8 +436,20 @@ export function SpiritualModule() {
             <div className="space-y-4">
               {scriptureNotes.map(note => (
                 <div key={note.id} className="p-3 bg-gray-50 rounded-xl">
-                  <div className="text-sm text-gray-600 mb-1">
-                    {dayjs(note.date).format('MMM D, YYYY')}
+                  <div className="flex items-start justify-between mb-1">
+                    <span className="text-sm text-gray-600">
+                      {dayjs(note.date).format('MMM D, YYYY')}
+                    </span>
+                    {isOwnNotes && (
+                      <button
+                        onClick={() => toggleFavoriteScripture(note.id, note.is_favorite || false)}
+                        className={`p-1 rounded-full transition-colors ${
+                          note.is_favorite ? 'text-yellow-500 hover:text-yellow-600' : 'text-gray-400 hover:text-yellow-500'
+                        }`}
+                      >
+                        <Star className={`w-4 h-4 ${note.is_favorite ? 'fill-current' : ''}`} />
+                      </button>
+                    )}
                   </div>
                   <h4 className="font-medium text-gray-800">{note.scripture}</h4>
                   {note.full_text && (
