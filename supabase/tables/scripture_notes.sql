@@ -7,6 +7,7 @@ CREATE TABLE scripture_notes (
     version VARCHAR(50),
     full_text TEXT,
     notes TEXT,
+    is_favorite BOOLEAN DEFAULT false,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
