@@ -217,12 +217,19 @@ This file tracks project progress and upcoming tasks.
 - Protected `/admin/changelog` behind a secret code prompt so only those with
   the correct code can add releases.
 - Removed the secret code value from the changelog for security. (2025-07-22 17:33:44 UTC)
+- Added Morning Prayer modal that records audio with a timer after dismissing an alarm.
+- Added Night Prayer modal and uploading of prayer recordings to Supabase.
+- Added Sleep and Wake Up categories and limited prayer modals to those alarms.
+- Prayer recordings now upload directly to a Supabase Storage bucket.
+- Removed SQL script to create `zenzalife-assets` storage bucket because the bucket already exists.
+- Prayer modals now display recording duration after stopping.
+- Custom alarm uploads use Supabase storage directly to fix "Upload failed" errors.
 
 ## Next Steps
 
 - [ ] STEP 1: Setup Supabase authentication and obtain credentials.
 - [ ] STEP 2: Design database schema and create initial tables.
-- [ ] STEP 3: Configure Supabase storage bucket for uploads.
+- [x] STEP 3: Configure Supabase storage bucket for uploads.
 - [ ] STEP 4: Build the React front‑end with the dreamlike entrance experience.
 - [ ] STEP 5: Add backend logic via Supabase Edge Functions.
 - [ ] STEP 6: Deploy the app publicly and verify all features.

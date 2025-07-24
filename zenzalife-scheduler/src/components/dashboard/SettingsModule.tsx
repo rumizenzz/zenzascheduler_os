@@ -126,45 +126,36 @@ export function SettingsModule() {
     
     setLoading(true)
     try {
-      // Convert file to base64
-      const reader = new FileReader()
-      reader.onloadend = async () => {
-        try {
-          const base64Data = reader.result as string
-          
-          const { data, error } = await supabase.functions.invoke('audio-upload', {
-            body: {
-              audioData: base64Data,
-              fileName: `alarm-${Date.now()}-${audioSettings.custom_alarm_file!.name}`,
-              userId: user.id
-            }
-          })
-          
-          if (error) throw error
-          
-          if (data?.publicUrl) {
-            const newList = [
-              ...audioSettings.custom_alarms,
-              { name: audioSettings.custom_alarm_name || audioSettings.custom_alarm_file!.name, url: data.publicUrl }
-            ]
-            localStorage.setItem('customAlarmSounds', JSON.stringify(newList))
-            setAudioSettings(prev => ({
-              ...prev,
-              custom_alarm_file: null,
-              custom_alarm_name: '',
-              custom_alarms: newList
-            }))
-          }
-          toast.success('Custom alarm uploaded successfully!')
-        } catch (error: any) {
-          toast.error('Failed to upload alarm: ' + error.message)
-        } finally {
-          setLoading(false)
-        }
-      }
-      reader.readAsDataURL(audioSettings.custom_alarm_file)
+      const file = audioSettings.custom_alarm_file
+      const filePath = `alarms/${user.id}/${Date.now()}-${file!.name}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('zenzalife-assets')
+        .upload(filePath, file!, { upsert: true, contentType: file!.type })
+
+      if (uploadError) throw uploadError
+
+      const { data: urlData } = supabase.storage
+        .from('zenzalife-assets')
+        .getPublicUrl(filePath)
+
+      const publicUrl = urlData.publicUrl
+
+      const newList = [
+        ...audioSettings.custom_alarms,
+        { name: audioSettings.custom_alarm_name || file!.name, url: publicUrl }
+      ]
+      localStorage.setItem('customAlarmSounds', JSON.stringify(newList))
+      setAudioSettings(prev => ({
+        ...prev,
+        custom_alarm_file: null,
+        custom_alarm_name: '',
+        custom_alarms: newList
+      }))
+      toast.success('Custom alarm uploaded successfully!')
     } catch (error: any) {
-      toast.error('Failed to process file: ' + error.message)
+      toast.error('Failed to upload alarm: ' + error.message)
+    } finally {
       setLoading(false)
     }
   }
