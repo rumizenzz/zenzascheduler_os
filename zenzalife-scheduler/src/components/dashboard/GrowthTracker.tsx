@@ -73,14 +73,11 @@ export function GrowthTracker() {
   const fetchAnalytics = async () => {
     if (!user) return
     try {
-      const res = await fetch('/functions/v1/task-analytics', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id })
+      const { data, error } = await supabase.functions.invoke('task-analytics', {
+        body: { userId: user.id }
       })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error?.message || 'Failed')
-      setStats(json.data)
+      if (error) throw new Error(error.message)
+      setStats(data)
     } catch (e: any) {
       console.error('Analytics error', e)
       // fallback to client calculation

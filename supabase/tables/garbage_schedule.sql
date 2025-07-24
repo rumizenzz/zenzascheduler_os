@@ -8,6 +8,7 @@ CREATE TABLE garbage_schedule (
     collection_time VARCHAR(20),
     frequency VARCHAR(20) NOT NULL,
     next_collection DATE,
+    collection_year INTEGER,
     auto_reminder BOOLEAN DEFAULT false,
     notes TEXT,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

@@ -16,6 +16,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Added `changelog_views` table to track when each user last viewed the
   changelog.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires code "ZENZALIFE" and stores entries in Supabase.
+- Primary Address support with ICS upload and sync for garbage schedules. (2025-07-24 15:00 UTC)
+- Provider field now lets users choose Republic or Waste Management, and primary address changes automatically sync garbage schedules. (2025-07-24 18:00 UTC)
+- Garbage schedules now parse ICS recurrences, saving notes and collection_year up to the next year. (2025-07-24 19:00 UTC)
+- Fixed TypeScript error for the `is_primary` field in LifeLogistics so Netlify builds succeed. (2025-07-24 20:30 UTC)
 - Default Schedule modal now asks when your day started and shifts all tasks to match the chosen time.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires a secret code and stores entries in Supabase.
 - Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
@@ -37,3 +41,5 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Documented how to add the missing `type` column in `supabase/README.md`. (2025-07-22 23:22:55 UTC)
 - Fixed "invalid input syntax for type date" when saving Logistics items by converting blank date fields to null. (2025-07-22 23:31:41 UTC)
 - Fixed missing favorite star due to stray closing tag in `VerseOfTheDay.tsx`. (2025-07-24 12:52:00 UTC)
+- Fixed 404 errors when syncing garbage schedules by invoking Supabase edge
+  functions through the client library. (2025-07-24 21:00 UTC)

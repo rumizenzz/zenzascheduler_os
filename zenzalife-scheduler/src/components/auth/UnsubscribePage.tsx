@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { supabase } from '@/lib/supabase'
 
 export function UnsubscribePage() {
   const params = new URLSearchParams(window.location.search)
@@ -15,25 +16,16 @@ export function UnsubscribePage() {
     setError(null)
 
     try {
-      const res = await fetch('/functions/v1/unsubscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+      const { error, data } = await supabase.functions.invoke('unsubscribe', {
+        body: { email }
       })
 
-      if (res.status === 404) {
-        setError(notFoundMsg)
-        return
-      }
-
-      if (!res.ok) {
-        let data: any = null
-        try {
-          data = await res.json()
-        } catch (err) {
-          console.error('Failed to parse error response', err)
+      if (error) {
+        if (error.status === 404) {
+          setError(notFoundMsg)
+        } else {
+          setError(error.message)
         }
-        setError(data?.error || 'Request failed')
         return
       }
 
