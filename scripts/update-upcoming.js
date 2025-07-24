@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 import path from 'path'
 
 const supabaseUrl = process.env.SUPABASE_URL
@@ -30,6 +30,34 @@ async function main() {
   const filePath = path.resolve('UPCOMING_RELEASES.md')
   await writeFile(filePath, lines.join('\n'))
   console.log(`Updated ${filePath}`)
+
+  // Update CHANGELOG with an Upcoming Releases section under [Unreleased]
+  const changelogPath = path.resolve('CHANGELOG.md')
+  let changelog = await readFile(changelogPath, 'utf8')
+  const unreleasedMatch = changelog.match(/## \[Unreleased\][\s\S]*?(?=\n## |$)/)
+  if (unreleasedMatch) {
+    const unreleased = unreleasedMatch[0]
+    const upcomingIndex = unreleased.indexOf('### Upcoming Releases')
+    let replacement = '## [Unreleased]\n\n### Upcoming Releases\n'
+    const upcomingLines = data
+      ? data.map(r => {
+          const date = r.planned_date ? ` (planned ${r.planned_date})` : ''
+          const desc = r.description ? ` - ${r.description}` : ''
+          return `- ${r.version} - ${r.title}${date}${desc}`
+        })
+      : []
+    replacement += upcomingLines.join('\n')
+    if (upcomingLines.length) replacement += '\n'
+    // Keep the rest of the unreleased section after existing Upcoming Releases
+    const rest =
+      upcomingIndex >= 0
+        ? unreleased.slice(unreleased.indexOf('### Upcoming Releases')).split(/\n/).slice(1).join('\n')
+        : unreleased.replace(/^## \[Unreleased\]\n/, '')
+    replacement += rest.startsWith('\n') ? rest : `\n${rest}`
+    changelog = changelog.replace(unreleasedMatch[0], replacement)
+    await writeFile(changelogPath, changelog)
+    console.log(`Updated ${changelogPath}`)
+  }
 }
 
 main().catch(err => {

@@ -10,6 +10,8 @@ These guidelines apply to the entire repository.
   Copy the updated file to `zenzalife-scheduler/public/CHANGELOG.md` so the
   Change Log button shows the latest notes. No update is complete until this
   professional entry is added.
+  Whenever `UPCOMING_RELEASES.md` is modified, mirror the list under a
+  **Upcoming Releases** section within the `Unreleased` portion of the changelog.
   Each entry should note the release version and exact timestamp.
 - Run `pnpm run lint` inside `zenzalife-scheduler` before committing changes.
 - Commit with clear messages.
