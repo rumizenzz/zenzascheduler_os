@@ -217,6 +217,9 @@ This file tracks project progress and upcoming tasks.
 - Protected `/admin/changelog` behind a secret code prompt so only those with
   the correct code can add releases.
 - Removed the secret code value from the changelog for security. (2025-07-22 17:33:44 UTC)
+- Added Morning Prayer modal that records audio with a timer after dismissing an alarm.
+- Added Night Prayer modal and uploading of prayer recordings to Supabase.
+- Added Sleep and Wake Up categories and limited prayer modals to those alarms.
 
 ## Next Steps
 

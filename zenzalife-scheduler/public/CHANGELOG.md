@@ -18,6 +18,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Default Schedule modal now asks when your day started and shifts all tasks to match the chosen time.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires a secret code and stores entries in Supabase.
 - Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
+- Morning Prayer modal records audio with a timer when an alarm is dismissed. (2025-07-22 23:59:59 UTC)
+- Night Prayer modal records audio after evening alarms and both prayers upload recordings to Supabase. (2025-07-23 15:09:38 UTC)
+- Added "Sleep" and "Wake Up" task categories and updated the default schedule.
+- Morning and night prayer modals now open only when alarms for those categories are dismissed. (2025-07-23 15:23:39 UTC)
 
 ### Changed
 - Documented that every update must include a professional changelog entry.

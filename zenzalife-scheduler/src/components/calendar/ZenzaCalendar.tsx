@@ -26,6 +26,8 @@ import { DefaultScheduleItem } from "@/data/defaultSchedule";
 import { MoveScheduleModal } from "./MoveScheduleModal";
 import { DayScheduleModal } from "./DayScheduleModal";
 import { AlarmModal } from "../alerts/AlarmModal";
+import { MorningPrayerModal } from "../alerts/MorningPrayerModal";
+import { NightPrayerModal } from "../alerts/NightPrayerModal";
 import { useAlarmChannel } from "@/hooks/useAlarmChannel";
 import { useNotifications } from "@/hooks/useNotifications";
 import { DragHint } from "./DragHint";
@@ -144,6 +146,8 @@ export function ZenzaCalendar() {
   const [dayModalEvents, setDayModalEvents] = useState<CalendarEvent[]>([]);
   const [dayModalDate, setDayModalDate] = useState<string>("");
   const [showDayModal, setShowDayModal] = useState(false);
+  const [showMorningPrayerModal, setShowMorningPrayerModal] = useState(false);
+  const [showNightPrayerModal, setShowNightPrayerModal] = useState(false);
   const [currentDate, setCurrentDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [showCompleted, setShowCompleted] = useState(false);
   const [modalShowCompleted, setModalShowCompleted] = useState(false);
@@ -359,7 +363,9 @@ export function ZenzaCalendar() {
       personal: { bg: "#e0e7ff", border: "#6366f1" },
       family: { bg: "#fed7d7", border: "#ef4444" },
       hygiene: { bg: "#f0f9ff", border: "#0ea5e9" },
+      wake: { bg: "#f5f3ff", border: "#7c3aed" },
       meal: { bg: "#f7fee7", border: "#65a30d" },
+      sleep: { bg: "#e0e7ff", border: "#1e3a8a" },
       doordash: { bg: "#fee2e2", border: "#ee2723" },
       ubereats: { bg: "#dcfce7", border: "#06c167" },
       olivegarden: { bg: "#f0f9e0", border: "#6c9321" },
@@ -1227,6 +1233,12 @@ export function ZenzaCalendar() {
           onDismiss={() => {
             setActiveAlarm(null)
             postMessage({ type: 'dismiss' })
+            const cat = activeAlarm.extendedProps?.category
+            if (cat === 'wake') {
+              setShowMorningPrayerModal(true)
+            } else if (cat === 'sleep') {
+              setShowNightPrayerModal(true)
+            }
           }}
           onSnooze={() => {
             const event = activeAlarm
@@ -1247,6 +1259,20 @@ export function ZenzaCalendar() {
           onClose={() => setShowDayModal(false)}
           date={dayModalDate}
           events={dayModalEvents}
+        />
+      )}
+
+      {showMorningPrayerModal && (
+        <MorningPrayerModal
+          isOpen={showMorningPrayerModal}
+          onClose={() => setShowMorningPrayerModal(false)}
+        />
+      )}
+
+      {showNightPrayerModal && (
+        <NightPrayerModal
+          isOpen={showNightPrayerModal}
+          onClose={() => setShowNightPrayerModal(false)}
         />
       )}
 
