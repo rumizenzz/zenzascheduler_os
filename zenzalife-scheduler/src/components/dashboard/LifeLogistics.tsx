@@ -6,6 +6,12 @@ import { MapPin, Plus, Home, Car, Briefcase, Building, DollarSign, Edit, Trash2 
 import { IncomeTracker } from './IncomeTracker'
 import dayjs from 'dayjs'
 
+const providerOptions = [
+  { value: 'republic', label: 'Republic Services' },
+  { value: 'wm', label: 'Waste Management' },
+  { value: 'manual', label: 'Custom/Other' }
+]
+
 type LogisticsTab = 'addresses' | 'vehicles' | 'jobs' | 'businesses' | 'income'
 
 interface Address {
@@ -18,6 +24,7 @@ interface Address {
   state: string
   zip: string
   country: string
+  is_primary?: boolean
   provider?: string
   ics_url?: string
   start_date?: string
@@ -200,13 +207,42 @@ export function LifeLogistics() {
         ? { ...base, updated_at: timestamp }
         : { ...base, user_id: user.id, created_at: timestamp, updated_at: timestamp }
 
-      const query = editingItem
-        ? supabase.from(table).update(payload).eq('id', editingItem.id)
-        : supabase.from(table).insert(payload)
+      let inserted
+      if (editingItem) {
+        const { error } = await supabase
+          .from(table)
+          .update(payload)
+          .eq('id', editingItem.id)
+        if (error) throw error
+        inserted = { id: editingItem.id, ...payload }
+      } else {
+        const { data: ins, error } = await supabase
+          .from(table)
+          .insert(payload)
+          .select()
+          .single()
+        if (error) throw error
+        inserted = ins
+      }
 
-      const { error } = await query
-
-      if (error) throw error
+      if (activeTab === 'addresses' && payload.is_primary) {
+        await supabase
+          .from('addresses')
+          .update({ is_primary: false })
+          .neq('id', editingItem ? editingItem.id : inserted.id)
+          .eq('user_id', user.id)
+        // Trigger garbage schedule sync for the new primary address
+        await fetch('/functions/v1/auto-garbage-schedule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user.id,
+            addressId: inserted.id,
+            provider: inserted.provider || 'republic',
+            icsUrl: inserted.ics_url || undefined
+          })
+        })
+      }
 
       toast.success(`Item ${editingItem ? 'updated' : 'added'} successfully!`)
       setShowModal(false)
@@ -227,6 +263,9 @@ export function LifeLogistics() {
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-gray-800 capitalize">{address.type}</span>
+                    {address.is_primary && (
+                      <span className="text-xs text-blue-500 font-medium">Primary</span>
+                    )}
                   </div>
                   <div className="flex gap-2">
                     <button onClick={() => handleEdit(address)} className="p-1 text-gray-500 hover:text-blue-500">
@@ -242,6 +281,9 @@ export function LifeLogistics() {
                   {address.address_line2 && <p>{address.address_line2}</p>}
                   <p>{address.city}, {address.state} {address.zip}</p>
                   <p>{address.country}</p>
+                  {address.provider && (
+                    <p className="text-gray-500 text-xs mt-1">Provider: {address.provider}</p>
+                  )}
                 </div>
               </div>
             ))}
@@ -464,6 +506,7 @@ function LogisticsModal({ tab, item, onClose, onSave }: LogisticsModalProps) {
           state: item?.state || '',
           zip: item?.zip || '',
           country: item?.country || '',
+          is_primary: item?.is_primary || false,
           provider: item?.provider || '',
           ics_url: item?.ics_url || '',
           start_date: item?.start_date || '',
@@ -589,6 +632,45 @@ function LogisticsModal({ tab, item, onClose, onSave }: LogisticsModalProps) {
                   onChange={e => handleChange('country', e.target.value)}
                   className="input-dreamy w-full"
                   required
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-3 mt-2">
+              <input
+                type="checkbox"
+                id="isPrimary"
+                checked={formData.is_primary}
+                onChange={e => handleChange('is_primary', e.target.checked)}
+                className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              />
+              <label htmlFor="isPrimary" className="text-sm text-gray-700">
+                Primary Address
+              </label>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Provider</label>
+                <select
+                  value={formData.provider}
+                  onChange={e => handleChange('provider', e.target.value)}
+                  className="input-dreamy w-full"
+                >
+                  <option value="">Select...</option>
+                  {providerOptions.map(p => (
+                    <option key={p.value} value={p.value}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">ICS URL</label>
+                <input
+                  type="text"
+                  value={formData.ics_url}
+                  onChange={e => handleChange('ics_url', e.target.value)}
+                  className="input-dreamy w-full"
                 />
               </div>
             </div>
