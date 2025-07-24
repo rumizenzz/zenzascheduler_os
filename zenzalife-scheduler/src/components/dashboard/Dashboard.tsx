@@ -12,6 +12,7 @@ import { SettingsModule } from "./SettingsModule";
 import { SpiritualModule } from "./SpiritualModule";
 import { TimerModule } from "./TimerModule";
 import { GracePrayerModule } from "./GracePrayerModule";
+import { PrayerScheduler } from "./PrayerScheduler";
 import { VerseOfTheDay } from "./VerseOfTheDay";
 import {
   Calendar,
@@ -47,6 +48,7 @@ type DashboardTab =
   | "verse"
   | "spiritual"
   | "grace"
+  | "prayerScheduler"
   | "settings";
 
 const navigationItems = [
@@ -61,6 +63,7 @@ const navigationItems = [
   { id: "verse", label: "Verse of the Day", icon: Sparkles, color: "text-indigo-500" },
   { id: "spiritual", label: "Spiritual Study", icon: BookOpen, color: "text-purple-500" },
   { id: "grace", label: "Grace Prayer", icon: Mic, color: "text-purple-500" },
+  { id: "prayerScheduler", label: "Prayer Scheduler", icon: Calendar, color: "text-purple-500" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
 
@@ -114,6 +117,8 @@ export function Dashboard() {
         return <SpiritualModule />;
       case "grace":
         return <GracePrayerModule />;
+      case "prayerScheduler":
+        return <PrayerScheduler />;
       case "settings":
         return <SettingsModule />;
       default:
