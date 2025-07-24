@@ -12,6 +12,7 @@ import { SettingsModule } from "./SettingsModule";
 import { SpiritualModule } from "./SpiritualModule";
 import { TimerModule } from "./TimerModule";
 import { GracePrayerModule } from "./GracePrayerModule";
+import { VerseOfTheDay } from "./VerseOfTheDay";
 import {
   Calendar,
   TrendingUp,
@@ -43,6 +44,7 @@ type DashboardTab =
   | "ancestry"
   | "logistics"
   | "garbage"
+  | "verse"
   | "spiritual"
   | "grace"
   | "settings";
@@ -56,6 +58,7 @@ const navigationItems = [
   { id: "ancestry", label: "Ancestry", icon: TreePine, color: "text-green-600" },
   { id: "logistics", label: "Life Logistics", icon: MapPin, color: "text-orange-500" },
   { id: "garbage", label: "Garbage/Recycling", icon: Trash2, color: "text-gray-500" },
+  { id: "verse", label: "Verse of the Day", icon: Sparkles, color: "text-indigo-500" },
   { id: "spiritual", label: "Spiritual Study", icon: BookOpen, color: "text-purple-500" },
   { id: "grace", label: "Grace Prayer", icon: Mic, color: "text-purple-500" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
@@ -105,6 +108,8 @@ export function Dashboard() {
         return <LifeLogistics />;
       case "garbage":
         return <GarbageModule />;
+      case "verse":
+        return <VerseOfTheDay />;
       case "spiritual":
         return <SpiritualModule />;
       case "grace":
