@@ -23,6 +23,12 @@ This file tracks project progress and upcoming tasks.
 - Verse of the Day can now be saved to Spiritual Study and favorited in Supabase (2025-07-24 01:30:00 UTC).
 - Verse of the Day entries now support notes directly in the module (2025-07-24 02:00:00 UTC).
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC).
+- Introduced Grace Prayer Audio Scheduler with calendar view and recording features (2025-07-24 13:00:00 UTC).
+- Grace Prayer module now lets users select a date and listen back to each meal time's recording (2025-07-24 18:00:00 UTC).
+- Morning and night prayers now trigger an overlay to play or record today's prayer (2025-07-24 18:10:00 UTC).
+- Grace Prayer module supports attaching a meal photo with each recording (2025-07-24 19:00:00 UTC).
+- Alarm overlay now checks for 'wake_up' or 'sleep' schedule categories instead of event titles (2025-07-25 04:08:36 UTC).
+- Meal photos now upload to the zenzalife-assets storage bucket when saving Grace Prayers (2025-07-25 04:22:25 UTC).
 - Fixed missing favorite icon due to stray closing tag in Verse of the Day module (2025-07-24 12:52 UTC).
 - Documented that the Netlify function's `DEP0040` punycode warning is harmless and to verify SMTP variables if mail doesn't send.
 - Documented legacy `IONOS_USERNAME` and `IONOS_PASSWORD` variables and updated
