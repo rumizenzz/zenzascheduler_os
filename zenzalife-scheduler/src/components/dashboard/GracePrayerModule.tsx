@@ -7,11 +7,21 @@ import { Mic, StopCircle } from 'lucide-react'
 
 type MealTime = 'morning' | 'afternoon' | 'evening' | 'night'
 
+function fileToDataURL(file: Blob) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result as string)
+    reader.onerror = () => reject(new Error('Failed to read file'))
+    reader.readAsDataURL(file)
+  })
+}
+
 export function GracePrayerModule() {
   const { user } = useAuth()
   const [mealTime, setMealTime] = useState<MealTime>('morning')
   const [recording, setRecording] = useState(false)
   const [startTime, setStartTime] = useState<Date | null>(null)
+  const [photoFile, setPhotoFile] = useState<File | null>(null)
   const mediaRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
 
@@ -35,30 +45,43 @@ export function GracePrayerModule() {
   }
 
   const handleStop = async () => {
-    const blob = new Blob(chunksRef.current, { type: 'audio/webm' })
-    const reader = new FileReader()
-    reader.onloadend = async () => {
-      try {
-        const base64Data = reader.result as string
-        const fileName = `grace-${mealTime}-${Date.now()}.webm`
-        const { data, error } = await supabase.functions.invoke('audio-upload', {
-          body: { audioData: base64Data, fileName, userId: user!.id }
+    const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' })
+    try {
+      const audioData = await fileToDataURL(audioBlob)
+      const fileName = `grace-${mealTime}-${Date.now()}.webm`
+      const { data, error } = await supabase.functions.invoke('audio-upload', {
+        body: { audioData, fileName, userId: user!.id }
+      })
+      if (error || !data?.publicUrl) throw error
+
+      let photoUrl: string | null = null
+      if (photoFile) {
+        const imgData = await fileToDataURL(photoFile)
+        const imgRes = await supabase.functions.invoke('image-upload', {
+          body: {
+            imageData: imgData,
+            fileName: `grace-photo-${Date.now()}-${photoFile.name}`,
+            userId: user!.id
+          }
         })
-        if (error || !data?.publicUrl) throw error
-        await supabase.from('grace_prayers').insert({
-          user_id: user!.id,
-          meal_time: mealTime,
-          audio_url: data.publicUrl,
-          started_at: startTime?.toISOString()
-        })
-        toast.success('Grace prayer saved')
-      } catch (err: any) {
-        toast.error('Upload failed: ' + err.message)
-      } finally {
-        setRecording(false)
+        if (imgRes.error || !imgRes.data?.publicUrl) throw imgRes.error
+        photoUrl = imgRes.data.publicUrl
       }
+
+      await supabase.from('grace_prayers').insert({
+        user_id: user!.id,
+        meal_time: mealTime,
+        audio_url: data.publicUrl,
+        photo_url: photoUrl,
+        started_at: startTime?.toISOString()
+      })
+      toast.success('Grace prayer saved')
+    } catch (err: any) {
+      toast.error('Upload failed: ' + err.message)
+    } finally {
+      setRecording(false)
+      setPhotoFile(null)
     }
-    reader.readAsDataURL(blob)
   }
 
   const stopRecording = () => {
@@ -81,6 +104,13 @@ export function GracePrayerModule() {
           <option value="evening">Evening</option>
           <option value="night">Night</option>
         </select>
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={e => setPhotoFile(e.target.files?.[0] || null)}
+          className="text-sm"
+        />
         {!recording ? (
           <button onClick={startRecording} className="btn-dreamy-primary flex items-center gap-2">
             <Mic className="w-4 h-4" /> Start
