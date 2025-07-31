@@ -197,6 +197,22 @@ export type Ancestor = {
   updated_at?: string
 }
 
+export type MathProblem = {
+  id: string
+  user_id: string
+  name: string
+  data: any
+  created_at?: string
+  updated_at?: string
+}
+
+export type MathProblemVersion = {
+  id: string
+  problem_id: string
+  data: any
+  created_at?: string
+}
+
 export type Timer = {
   id: string
   user_id: string

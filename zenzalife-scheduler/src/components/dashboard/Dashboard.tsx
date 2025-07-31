@@ -13,6 +13,7 @@ import { SpiritualModule } from "./SpiritualModule";
 import { TimerModule } from "./TimerModule";
 import { GracePrayerModule } from "./GracePrayerModule";
 import { VerseOfTheDay } from "./VerseOfTheDay";
+import { MathNotebookModule } from "./MathNotebookModule";
 import {
   Calendar,
   TrendingUp,
@@ -28,6 +29,7 @@ import {
   Menu,
   BookOpen,
   Mic,
+  Pencil,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -47,6 +49,7 @@ type DashboardTab =
   | "verse"
   | "spiritual"
   | "grace"
+  | "math"
   | "settings";
 
 const navigationItems = [
@@ -61,6 +64,7 @@ const navigationItems = [
   { id: "verse", label: "Verse of the Day", icon: Sparkles, color: "text-indigo-500" },
   { id: "spiritual", label: "Spiritual Study", icon: BookOpen, color: "text-purple-500" },
   { id: "grace", label: "Grace Prayer", icon: Mic, color: "text-purple-500" },
+  { id: "math", label: "Math Notebook", icon: Pencil, color: "text-blue-600" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
 
@@ -114,6 +118,8 @@ export function Dashboard() {
         return <SpiritualModule />;
       case "grace":
         return <GracePrayerModule />;
+      case "math":
+        return <MathNotebookModule />;
       case "settings":
         return <SettingsModule />;
       default:
