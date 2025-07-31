@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Added dreamy context menu with editable text history for Math Notebook sketches (2025-07-31 21:47:24 UTC)
 - Auto-called `beforeinstallprompt.prompt()` and suppressed errors so the PWA banner shows without console warnings (2025-07-31 21:35:00 UTC).
 - Memoized Math Notebook change handler to stop React error 185 and infinite updates (2025-07-31 21:35:00 UTC).
 - Install prompt now triggers only after user interaction to satisfy browser gesture requirements (2025-07-31 21:23:15 UTC).

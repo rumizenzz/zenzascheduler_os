@@ -1,10 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
 import { PlusCircle, History } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
+import type {
+  AppState,
+  ExcalidrawImperativeAPI,
+} from '@excalidraw/excalidraw/types'
 import type { AppState } from '@excalidraw/excalidraw/types'
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/element/types'
 
@@ -24,6 +28,20 @@ export function MathNotebookModule() {
   const { user } = useAuth()
   const [tabs, setTabs] = useState<TabData[]>([])
   const [activeTabId, setActiveTabId] = useState<string>('')
+  const excalidrawRef = useRef<ExcalidrawImperativeAPI>(null)
+  const [contextMenu, setContextMenu] = useState<{
+    x: number
+    y: number
+    elementId: string
+  } | null>(null)
+  const [editing, setEditing] = useState<{
+    elementId: string
+    text: string
+  } | null>(null)
+  const [historyModal, setHistoryModal] = useState<string | null>(null)
+  const [textHistories, setTextHistories] = useState<Record<string, string[]>>({})
+  const prevElements = useRef<readonly ExcalidrawElement[]>([])
+  const ExcalidrawLib = Excalidraw as any
 
   useEffect(() => {
     if (!user) return
@@ -122,22 +140,34 @@ export function MathNotebookModule() {
     setActiveTabId(newTab.id)
   }
 
-    const updateTabData = useCallback(
-      async (elements: readonly ExcalidrawElement[], appState: AppState) => {
-        const { collaborators, ...cleanAppState } = appState
-        const newData = { elements, appState: cleanAppState }
-        setTabs((prev) =>
-          prev.map((tab) => (tab.id === activeTabId ? { ...tab, data: newData } : tab))
-        )
-        if (activeTabId) {
-          await supabase
-            .from('math_problems')
-            .update({ data: newData, updated_at: new Date().toISOString() })
-            .eq('id', activeTabId)
+  const updateTabData = useCallback(
+    async (elements: readonly ExcalidrawElement[], appState: AppState) => {
+      elements.forEach((el) => {
+        if (el.type === 'text') {
+          const prev = prevElements.current.find((p) => p.id === el.id)
+          if (prev && prev.type === 'text' && prev.text !== el.text) {
+            setTextHistories((h) => {
+              const history = h[el.id] || []
+              return { ...h, [el.id]: [...history, prev.text] }
+            })
+          }
         }
-      },
-      [activeTabId]
-    )
+      })
+      prevElements.current = elements
+      const { collaborators, ...cleanAppState } = appState
+      const newData = { elements, appState: cleanAppState }
+      setTabs((prev) =>
+        prev.map((tab) => (tab.id === activeTabId ? { ...tab, data: newData } : tab)),
+      )
+      if (activeTabId) {
+        await supabase
+          .from('math_problems')
+          .update({ data: newData, updated_at: new Date().toISOString() })
+          .eq('id', activeTabId)
+      }
+    },
+    [activeTabId],
+  )
 
   const saveVersion = async () => {
     const tab = tabs.find((t) => t.id === activeTabId)
@@ -183,6 +213,57 @@ export function MathNotebookModule() {
   }
 
   const activeTab = tabs.find((t) => t.id === activeTabId)
+
+  useEffect(() => {
+    if (activeTab) {
+      prevElements.current = activeTab.data.elements
+    }
+  }, [activeTab])
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault()
+    const api = excalidrawRef.current
+    if (!api) return
+    const ids = Object.keys(api.getAppState().selectedElementIds)
+    if (ids.length === 1) {
+      const el = api.getSceneElements().find((el) => el.id === ids[0])
+      if (el && el.type === 'text') {
+        setContextMenu({ x: e.clientX, y: e.clientY, elementId: el.id })
+      }
+    }
+  }
+
+  const startEdit = () => {
+    if (!contextMenu) return
+    const api = excalidrawRef.current
+    const el = api?.getSceneElements().find((e) => e.id === contextMenu.elementId)
+    if (el && el.type === 'text') {
+      setEditing({ elementId: el.id, text: el.text })
+    }
+    setContextMenu(null)
+  }
+
+  const openHistory = () => {
+    if (contextMenu) {
+      setHistoryModal(contextMenu.elementId)
+      setContextMenu(null)
+    }
+  }
+
+  const saveEdit = () => {
+    if (!editing) return
+    const api = excalidrawRef.current
+    if (!api) return
+    const elements = api
+      .getSceneElements()
+      .map((el) =>
+        el.id === editing.elementId && el.type === 'text'
+          ? { ...el, text: editing.text }
+          : el,
+      ) as readonly ExcalidrawElement[]
+    api.updateScene({ elements })
+    setEditing(null)
+  }
 
   return (
     <div className="space-y-4">
@@ -234,15 +315,86 @@ export function MathNotebookModule() {
           <History className="w-5 h-5 text-gray-700" />
         </button>
       </div>
-      <div className="border rounded-lg h-[600px] bg-white">
+      <div
+        className="border rounded-lg h-[600px] bg-white"
+        onContextMenu={handleContextMenu}
+      >
         {activeTab && (
-          <Excalidraw
+          <ExcalidrawLib
+            ref={excalidrawRef}
             key={activeTab.id}
             initialData={activeTab.data}
             onChange={updateTabData}
           />
         )}
       </div>
+      {contextMenu && (
+        <div
+          className="fixed z-50 rounded-lg shadow-lg backdrop-blur-md bg-gradient-to-br from-pink-500/90 to-purple-500/90 text-white"
+          style={{ top: contextMenu.y, left: contextMenu.x }}
+        >
+          <button
+            className="block w-full text-left px-4 py-2 hover:bg-white/20"
+            onClick={startEdit}
+          >
+            Edit
+          </button>
+          <button
+            className="block w-full text-left px-4 py-2 hover:bg-white/20"
+            onClick={openHistory}
+          >
+            History
+          </button>
+        </div>
+      )}
+      {editing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white/80 rounded-lg p-4 shadow-xl w-72">
+            <textarea
+              className="w-full border rounded p-2 text-gray-800"
+              value={editing.text}
+              onChange={(e) => setEditing({ ...editing, text: e.target.value })}
+              autoFocus
+            />
+            <div className="mt-2 flex justify-end gap-2">
+              <button
+                className="px-3 py-1 rounded bg-gray-200"
+                onClick={() => setEditing(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-3 py-1 rounded bg-blue-500 text-white"
+                onClick={saveEdit}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {historyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white/80 rounded-lg p-4 shadow-xl w-72">
+            <h3 className="font-semibold mb-2">Edit History</h3>
+            <ul className="max-h-48 overflow-y-auto space-y-1">
+              {(textHistories[historyModal] || []).map((t, i) => (
+                <li key={i} className="p-1 rounded bg-gray-100 text-gray-800">
+                  {t}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-2 flex justify-end">
+              <button
+                className="px-3 py-1 rounded bg-blue-500 text-white"
+                onClick={() => setHistoryModal(null)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
