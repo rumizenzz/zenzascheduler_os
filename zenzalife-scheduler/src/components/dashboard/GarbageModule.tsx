@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
-import { Trash2, Plus, Calendar, MapPin, Clock, Bell, Edit, Trash, History } from 'lucide-react'
+import { Trash2, Plus, Calendar, MapPin, Clock, Bell, Edit, Trash, History, Upload } from 'lucide-react'
+import IcsUploadModal from './IcsUploadModal'
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 
 interface GarbageSchedule {
   id: string
@@ -14,6 +17,7 @@ interface GarbageSchedule {
   collection_time?: string
   frequency: string
   next_collection: string
+  collection_year?: number
   auto_reminder: boolean
   notes?: string
   created_at: string
@@ -65,9 +69,11 @@ export function GarbageModule() {
   const [addresses, setAddresses] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
+  const [showIcsModal, setShowIcsModal] = useState(false)
   const [editingSchedule, setEditingSchedule] = useState<GarbageSchedule | null>(null)
   const [upcomingCollections, setUpcomingCollections] = useState<GarbageSchedule[]>([])
   const [updateLogs, setUpdateLogs] = useState<GarbageUpdateLog[]>([])
+  const [lastSynced, setLastSynced] = useState<string | null>(null)
 
   useEffect(() => {
     if (user) {
@@ -114,6 +120,7 @@ export function GarbageModule() {
         .limit(5)
       if (logError) throw logError
       setUpdateLogs(logData || [])
+      setLastSynced(logData && logData.length > 0 ? logData[0].created_at : null)
     } catch (error: any) {
       toast.error('Failed to load garbage schedules: ' + error.message)
     } finally {
@@ -244,14 +251,15 @@ export function GarbageModule() {
   const autoUpdate = async () => {
     if (!user) return
     try {
+      const primary = addresses.find(a => a.is_primary) || addresses[0]
       const res = await fetch('/functions/v1/auto-garbage-schedule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: user.id,
-          addressId: addresses[0]?.id,
-          provider: 'republic',
-          icsUrl: DEFAULT_ICS_URL
+          addressId: primary?.id,
+          provider: primary?.provider || 'republic',
+          icsUrl: primary?.ics_url || DEFAULT_ICS_URL
         })
       })
       const data = await res.json()
@@ -307,6 +315,18 @@ export function GarbageModule() {
             <span className="w-4 h-4">↻</span>
             Auto Update
           </button>
+          <button
+            onClick={() => setShowIcsModal(true)}
+            className="btn-dreamy flex items-center gap-2"
+          >
+            <Upload className="w-4 h-4" />
+            Upload ICS
+          </button>
+          {lastSynced && (
+            <span className="text-xs text-gray-500 self-center">
+              Last Synced {dayjs(lastSynced).fromNow()}
+            </span>
+          )}
         </div>
       </div>
 
@@ -469,6 +489,15 @@ export function GarbageModule() {
           onSave={saveSchedule}
           schedule={editingSchedule}
           addresses={addresses}
+        />
+      )}
+
+      {showIcsModal && (
+        <IcsUploadModal
+          isOpen={showIcsModal}
+          onClose={() => setShowIcsModal(false)}
+          addressId={(addresses.find(a => a.is_primary) || addresses[0])?.id}
+          provider={(addresses.find(a => a.is_primary) || addresses[0])?.provider}
         />
       )}
     </div>
