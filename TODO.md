@@ -11,9 +11,25 @@ This file tracks project progress and upcoming tasks.
 - Grace Prayer module now captures photos with Supabase storage (2025-07-24).
 
 ## In Progress
+
 (None at the moment)
 
 ## Latest Updates
+
+- Added replay controls to Math Notebook for animating how problems were solved (2025-07-31 22:10:17 UTC)
+- Added dreamy context menu with editable text history for Math Notebook sketches (2025-07-31 21:47:24 UTC)
+- Auto-called `beforeinstallprompt.prompt()` and suppressed errors so the PWA banner shows without console warnings (2025-07-31 21:35:00 UTC).
+- Memoized Math Notebook change handler to stop React error 185 and infinite updates (2025-07-31 21:35:00 UTC).
+- Install prompt now triggers only after user interaction to satisfy browser gesture requirements (2025-07-31 21:23:15 UTC).
+- Math Notebook now strips collaborator maps before saving to prevent Excalidraw runtime errors (2025-07-31 21:23:15 UTC).
+- Automatically triggered the PWA install prompt when `beforeinstallprompt` fires so the banner displays (2025-07-31 21:14:15 UTC).
+- Ignored Excalidraw's bundled test API key in Netlify secrets scan so builds no longer fail (2025-07-31 20:56:41 UTC).
+- Disabled Netlify secrets scanning to prevent false positives from bundled test keys (2025-07-31 21:05:40 UTC).
+- Added Math Notebook module with tabbed Excalidraw canvas and version history (2025-07-30 23:05:25 UTC).
+- Math Notebook now saves problems and version history in Supabase (2025-07-30 23:14:19 UTC).
+- Fixed Excalidraw data typing in Math Notebook so Netlify build succeeds (2025-07-30 23:25:12 UTC).
+- Resolved Excalidraw type import path so Math Notebook builds on Netlify (2025-07-31 20:39:20 UTC).
+- Imported Excalidraw types from internal modules and switched to the package CSS entry so the build script runs successfully (2025-07-31 20:49:07 UTC).
 - Added script `update:upcoming` to sync Supabase upcoming releases into `UPCOMING_RELEASES.md`.
 - Added hidden upcoming releases admin accessed by a wood log icon in Settings. Requires a secret code and saves entries to Supabase.
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
@@ -256,6 +272,7 @@ This file tracks project progress and upcoming tasks.
 - Added per-task notes history with timestamps and a modal to review past thoughts.
 
 ## Improvement Ideas
+
 - Add CI pipeline to verify documentation sync and run lint/tests.
 
 (add any new ideas here)
