@@ -187,7 +187,7 @@ export function MathNotebookModule() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap flex-1">
+        <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap flex-1 pr-32 sm:pr-0">
           {tabs.map((tab) => (
             <button
               key={tab.id}
