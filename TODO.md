@@ -16,6 +16,8 @@ This file tracks project progress and upcoming tasks.
 ## Latest Updates
 - Fixed Excalidraw ref typing in Math Notebook so Netlify builds succeed (2025-07-31 22:49:30 UTC).
 - Math Notebook text edit history now persists to Supabase (2025-07-31 22:38:52 UTC).
+- Added mobile padding for Math Notebook tabs so Change Log and Subscribe buttons no longer obscure them (2025-07-31 22:53:28 UTC).
+- Optimized Math Notebook for mobile and desktop with responsive canvas and scrollable tabs (2025-07-31 22:34:46 UTC).
 - Auto-called `beforeinstallprompt.prompt()` and suppressed errors so the PWA banner shows without console warnings (2025-07-31 21:35:00 UTC).
 - Memoized Math Notebook change handler to stop React error 185 and infinite updates (2025-07-31 21:35:00 UTC).
 - Install prompt now triggers only after user interaction to satisfy browser gesture requirements (2025-07-31 21:23:15 UTC).

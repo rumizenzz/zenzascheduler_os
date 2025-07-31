@@ -288,29 +288,31 @@ export function MathNotebookModule() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        {tabs.map((tab) => (
+        <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap flex-1 pr-32 sm:pr-0">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTabId(tab.id)}
+              className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                tab.id === activeTabId
+                  ? 'bg-blue-500 text-white border-blue-500'
+                  : 'bg-white/70 text-gray-700 border-gray-300 hover:bg-white'
+              }`}
+            >
+              {tab.name}
+            </button>
+          ))}
           <button
-            key={tab.id}
-            onClick={() => setActiveTabId(tab.id)}
-            className={`px-3 py-1 rounded-full text-sm border transition-colors ${
-              tab.id === activeTabId
-                ? 'bg-blue-500 text-white border-blue-500'
-                : 'bg-white/70 text-gray-700 border-gray-300 hover:bg-white'
-            }`}
+            onClick={addTab}
+            className="p-1 rounded-full border border-gray-300 hover:bg-white flex-shrink-0"
+            title="New Tab"
           >
-            {tab.name}
+            <PlusCircle className="w-5 h-5 text-gray-700" />
           </button>
-        ))}
-        <button
-          onClick={addTab}
-          className="p-1 rounded-full border border-gray-300 hover:bg-white"
-          title="New Tab"
-        >
-          <PlusCircle className="w-5 h-5 text-gray-700" />
-        </button>
+        </div>
         {activeTab && activeTab.history.length > 0 && (
           <select
-            className="ml-auto input-dreamy max-w-xs"
+            className="input-dreamy max-w-xs ml-2 flex-shrink-0"
             onChange={(e) => restoreVersion(e.target.value)}
             defaultValue=""
           >
@@ -329,7 +331,7 @@ export function MathNotebookModule() {
         )}
         <button
           onClick={saveVersion}
-          className="p-1 rounded-full border border-gray-300 hover:bg-white"
+          className="p-1 rounded-full border border-gray-300 hover:bg-white flex-shrink-0"
           title="Save Version"
         >
           <History className="w-5 h-5 text-gray-700" />
