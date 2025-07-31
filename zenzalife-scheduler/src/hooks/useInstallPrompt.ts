@@ -20,6 +20,7 @@ export function useInstallPrompt() {
     const handleBefore = (e: BeforeInstallPromptEvent) => {
       e.preventDefault()
       setDeferredPrompt(e)
+      e.prompt().catch(() => {})
     }
     window.addEventListener('beforeinstallprompt', handleBefore)
     window.addEventListener('appinstalled', () => {
