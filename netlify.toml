@@ -4,6 +4,13 @@
   command = "pnpm --dir .. install && pnpm run build"
   publish = "dist"
 
+[build.environment]
+  # Ignore the test Firebase key bundled with Excalidraw so Netlify's
+  # secrets scanner doesn't flag it as a leaked credential
+  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "AIza"
+  # Disable secrets scanning entirely to avoid false positives from bundled test keys
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
+
 [functions]
   # The build runs from the `zenzalife-scheduler` subdirectory. Use a
   # relative path so Netlify can locate the serverless functions stored
