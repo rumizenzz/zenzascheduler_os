@@ -14,6 +14,13 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Ignored Excalidraw's bundled test API key in Netlify secrets scan so builds no longer fail (2025-07-31 20:56:41 UTC).
+- Disabled Netlify secrets scanning to prevent false positives from bundled test keys (2025-07-31 21:05:40 UTC).
+- Added Math Notebook module with tabbed Excalidraw canvas and version history (2025-07-30 23:05:25 UTC).
+- Math Notebook now saves problems and version history in Supabase (2025-07-30 23:14:19 UTC).
+- Fixed Excalidraw data typing in Math Notebook so Netlify build succeeds (2025-07-30 23:25:12 UTC).
+- Resolved Excalidraw type import path so Math Notebook builds on Netlify (2025-07-31 20:39:20 UTC).
+- Imported Excalidraw types from internal modules and switched to the package CSS entry so the build script runs successfully (2025-07-31 20:49:07 UTC).
 - Added script `update:upcoming` to sync Supabase upcoming releases into `UPCOMING_RELEASES.md`.
 - Added hidden upcoming releases admin accessed by a wood log icon in Settings. Requires a secret code and saves entries to Supabase.
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
