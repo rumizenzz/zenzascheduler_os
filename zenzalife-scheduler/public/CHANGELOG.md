@@ -31,6 +31,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Text edit history in Math Notebook persists to Supabase (2025-07-31 22:38:52 UTC)
 
 ### Changed
+- Optimized Math Notebook with responsive height and scrollable tabs for mobile and desktop (2025-07-31 22:34:46 UTC)
 - Documented that every update must include a professional changelog entry.
 - Clarified the policy in `AGENTS.md`.
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
