@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Fixed Excalidraw ref typing in Math Notebook so Netlify builds succeed (2025-07-31 22:49:30 UTC).
+- Math Notebook text edit history now persists to Supabase (2025-07-31 22:38:52 UTC).
 - Added mobile padding for Math Notebook tabs so Change Log and Subscribe buttons no longer obscure them (2025-07-31 22:53:28 UTC).
 - Optimized Math Notebook for mobile and desktop with responsive canvas and scrollable tabs (2025-07-31 22:34:46 UTC).
 - Auto-called `beforeinstallprompt.prompt()` and suppressed errors so the PWA banner shows without console warnings (2025-07-31 21:35:00 UTC).
@@ -28,6 +30,7 @@ This file tracks project progress and upcoming tasks.
 - Fixed Excalidraw data typing in Math Notebook so Netlify build succeeds (2025-07-30 23:25:12 UTC).
 - Resolved Excalidraw type import path so Math Notebook builds on Netlify (2025-07-31 20:39:20 UTC).
 - Imported Excalidraw types from internal modules and switched to the package CSS entry so the build script runs successfully (2025-07-31 20:49:07 UTC).
+- Added dreamlike right-click menu for Math Notebook text with edit history (2025-07-31 22:26:50 UTC).
 - Added script `update:upcoming` to sync Supabase upcoming releases into `UPCOMING_RELEASES.md`.
 - Added hidden upcoming releases admin accessed by a wood log icon in Settings. Requires a secret code and saves entries to Supabase.
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.
