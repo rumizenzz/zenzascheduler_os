@@ -29,11 +29,13 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Optimized Math Notebook with responsive height and scrollable tabs for mobile and desktop (2025-07-31 22:34:46 UTC)
 - Documented that every update must include a professional changelog entry.
 - Clarified the policy in `AGENTS.md`.
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
 
 ### Fixed
+- Math Notebook tabs no longer hide beneath Change Log and Subscribe buttons on mobile (2025-07-31 22:53:28 UTC)
 - PWA install prompt now waits for a user gesture, preventing `NotAllowedError` on modern browsers (2025-07-31 21:23:15 UTC)
 - Stripped collaborator maps from saved Excalidraw app state so Math Notebook sketches no longer throw runtime errors (2025-07-31 21:23:15 UTC)
 - ChangeLogButton now stores the last seen timestamp in Supabase instead of
