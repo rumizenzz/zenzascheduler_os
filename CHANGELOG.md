@@ -27,6 +27,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day can now be saved to Spiritual Study and favorited (2025-07-24 01:30:00 UTC)
 - Verse of the Day entries now support notes directly from the module (2025-07-24 02:00:00 UTC)
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
+- Dreamlike right-click menu for Math Notebook text elements with edit history (2025-07-31 22:26:50 UTC)
+- Text edit history in Math Notebook persists to Supabase (2025-07-31 22:38:52 UTC)
 
 ### Changed
 - Documented that every update must include a professional changelog entry.
@@ -34,6 +36,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
 
 ### Fixed
+- Typed Excalidraw component with forwardRef so Netlify builds succeed (2025-07-31 22:49:30 UTC)
 - PWA install prompt now waits for a user gesture, preventing `NotAllowedError` on modern browsers (2025-07-31 21:23:15 UTC)
 - Stripped collaborator maps from saved Excalidraw app state so Math Notebook sketches no longer throw runtime errors (2025-07-31 21:23:15 UTC)
 - ChangeLogButton now stores the last seen timestamp in Supabase instead of
