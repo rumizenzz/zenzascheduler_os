@@ -26,6 +26,7 @@ This file tracks project progress and upcoming tasks.
 - Fixed Excalidraw data typing in Math Notebook so Netlify build succeeds (2025-07-30 23:25:12 UTC).
 - Resolved Excalidraw type import path so Math Notebook builds on Netlify (2025-07-31 20:39:20 UTC).
 - Imported Excalidraw types from internal modules and switched to the package CSS entry so the build script runs successfully (2025-07-31 20:49:07 UTC).
+- Added dreamlike right-click menu for Math Notebook text with edit history (2025-07-31 22:26:50 UTC).
 - Added script `update:upcoming` to sync Supabase upcoming releases into `UPCOMING_RELEASES.md`.
 - Added hidden upcoming releases admin accessed by a wood log icon in Settings. Requires a secret code and saves entries to Supabase.
 - Added early environment variable validation in send-confirmation-email function to prevent 502 errors when credentials are missing.

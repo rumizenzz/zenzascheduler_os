@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
 import { PlusCircle, History } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
-import type { AppState } from '@excalidraw/excalidraw/types'
+import type { AppState, ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/element/types'
 
 type ExcalidrawData = {
@@ -24,6 +24,17 @@ export function MathNotebookModule() {
   const { user } = useAuth()
   const [tabs, setTabs] = useState<TabData[]>([])
   const [activeTabId, setActiveTabId] = useState<string>('')
+  const excalidrawRef = useRef<ExcalidrawImperativeAPI | null>(null)
+  const [contextMenu, setContextMenu] = useState<
+    { x: number; y: number; elementId: string } | null
+  >(null)
+  const [editing, setEditing] = useState<
+    { id: string; text: string; original: string } | null
+  >(null)
+  const [textHistories, setTextHistories] = useState<
+    Record<string, { text: string; editedAt: string }[]>
+  >({})
+  const [historyView, setHistoryView] = useState<{ id: string } | null>(null)
 
   useEffect(() => {
     if (!user) return
@@ -182,6 +193,55 @@ export function MathNotebookModule() {
       .eq('id', tab.id)
   }
 
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault()
+    const api = excalidrawRef.current
+    if (!api) return
+    const ids = api.getAppState().selectedElementIds
+    const elements = api.getSceneElements()
+    const selected = elements.find((el) => ids[el.id])
+    if (selected && selected.type === 'text') {
+      setContextMenu({ x: e.clientX, y: e.clientY, elementId: selected.id })
+    } else {
+      setContextMenu(null)
+    }
+  }
+
+  const startEdit = () => {
+    if (!contextMenu || !excalidrawRef.current) return
+    const el = excalidrawRef.current
+      .getSceneElements()
+      .find((e) => e.id === contextMenu.elementId)
+    if (!el || el.type !== 'text') return
+    setEditing({ id: el.id, text: el.text, original: el.text })
+    setContextMenu(null)
+  }
+
+  const saveEdit = () => {
+    if (!editing || !excalidrawRef.current) return
+    const api = excalidrawRef.current
+    const elements = api.getSceneElements().map((el) =>
+      el.id === editing.id && el.type === 'text'
+        ? { ...el, text: editing.text }
+        : el,
+    )
+    api.updateScene({ elements })
+    setTextHistories((prev) => ({
+      ...prev,
+      [editing.id]: [
+        ...(prev[editing.id] || []),
+        { text: editing.original, editedAt: new Date().toISOString() },
+      ],
+    }))
+    setEditing(null)
+  }
+
+  const openHistory = () => {
+    if (!contextMenu) return
+    setHistoryView({ id: contextMenu.elementId })
+    setContextMenu(null)
+  }
+
   const activeTab = tabs.find((t) => t.id === activeTabId)
 
   return (
@@ -234,13 +294,89 @@ export function MathNotebookModule() {
           <History className="w-5 h-5 text-gray-700" />
         </button>
       </div>
-      <div className="border rounded-lg h-[600px] bg-white">
+      <div
+        className="relative h-[600px] rounded-lg border bg-white"
+        onContextMenu={handleContextMenu}
+        onClick={() => setContextMenu(null)}
+      >
         {activeTab && (
           <Excalidraw
+            ref={excalidrawRef}
             key={activeTab.id}
             initialData={activeTab.data}
             onChange={updateTabData}
           />
+        )}
+        {contextMenu && (
+          <div
+            style={{ top: contextMenu.y, left: contextMenu.x }}
+            className="fixed z-50 rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-2 text-white shadow-lg animate-pulse"
+          >
+            <button
+              className="block w-full rounded px-2 py-1 text-left hover:bg-white/20"
+              onClick={startEdit}
+            >
+              Edit
+            </button>
+            {textHistories[contextMenu.elementId]?.length ? (
+              <button
+                className="mt-1 block w-full rounded px-2 py-1 text-left hover:bg-white/20"
+                onClick={openHistory}
+              >
+                History
+              </button>
+            ) : null}
+          </div>
+        )}
+        {editing && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="w-80 space-y-2 rounded-xl bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4 text-white shadow-xl">
+              <textarea
+                className="w-full rounded p-2 text-black"
+                value={editing.text}
+                onChange={(e) =>
+                  setEditing({ ...editing, text: e.target.value })
+                }
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setEditing(null)}
+                  className="rounded bg-white/20 px-3 py-1 hover:bg-white/30"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={saveEdit}
+                  className="rounded bg-white px-3 py-1 text-gray-800 hover:bg-gray-100"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {historyView && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="max-h-[80vh] w-80 overflow-auto rounded-xl bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4 text-white shadow-xl">
+              <h3 className="mb-2 text-lg font-bold">Edit History</h3>
+              <ul className="space-y-1">
+                {textHistories[historyView.id]?.map((h, i) => (
+                  <li key={i} className="rounded bg-white/20 p-2">
+                    <div className="mb-1 text-xs">
+                      {new Date(h.editedAt).toLocaleString()}
+                    </div>
+                    <div className="whitespace-pre-wrap">{h.text}</div>
+                  </li>
+                )) || <li className="rounded bg-white/20 p-2">No history</li>}
+              </ul>
+              <button
+                onClick={() => setHistoryView(null)}
+                className="mt-2 rounded bg-white px-3 py-1 text-gray-800 hover:bg-gray-100"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>
