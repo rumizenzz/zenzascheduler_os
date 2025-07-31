@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Added Harold and the Purple Crayon-style replay to Math Notebook with speed controls and Supabase storage (2025-07-31 23:17:57 UTC).
 - Added mobile padding for Math Notebook tabs so Change Log and Subscribe buttons no longer obscure them (2025-07-31 22:53:28 UTC).
 - Optimized Math Notebook for mobile and desktop with responsive canvas and scrollable tabs (2025-07-31 22:34:46 UTC).
 - Auto-called `beforeinstallprompt.prompt()` and suppressed errors so the PWA banner shows without console warnings (2025-07-31 21:35:00 UTC).

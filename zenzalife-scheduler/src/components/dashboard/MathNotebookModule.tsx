@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
-import { PlusCircle, History } from 'lucide-react'
+import { PlusCircle, History, Play, Rewind, Save } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
@@ -13,17 +13,27 @@ type ExcalidrawData = {
   appState: Partial<AppState>
 }
 
+interface ReplayStep {
+  data: ExcalidrawData
+  timestamp: number
+}
+
 interface TabData {
   id: string
   name: string
   data: ExcalidrawData
   history: { id: string; created_at: string; data: ExcalidrawData }[]
+  replaySteps: ReplayStep[]
 }
 
 export function MathNotebookModule() {
   const { user } = useAuth()
   const [tabs, setTabs] = useState<TabData[]>([])
   const [activeTabId, setActiveTabId] = useState<string>('')
+  const [recordedSteps, setRecordedSteps] = useState<ReplayStep[]>([])
+  const [speed, setSpeed] = useState(1)
+  const [isReplaying, setIsReplaying] = useState(false)
+  const playbackTimeout = useRef<number | null>(null)
 
   useEffect(() => {
     if (!user) return
@@ -31,7 +41,9 @@ export function MathNotebookModule() {
     const load = async () => {
       const { data, error } = await supabase
         .from('math_problems')
-        .select('id, name, data, math_problem_versions(id, data, created_at)')
+        .select(
+          'id, name, data, math_problem_versions(id, data, created_at), math_problem_replays(steps)'
+        )
         .eq('user_id', user.id)
         .order('created_at')
 
@@ -56,7 +68,8 @@ export function MathNotebookModule() {
                   created_at: v.created_at,
                   data: { elements: v.data?.elements || [], appState: vAppState }
                 }
-              }) || []
+              }) || [],
+            replaySteps: p.math_problem_replays?.[0]?.steps || []
           }
         })
         setTabs(formatted)
@@ -83,7 +96,8 @@ export function MathNotebookModule() {
           id: inserted.id,
           name: inserted.name,
           data: { elements: inserted.data?.elements || [], appState },
-          history: []
+          history: [],
+          replaySteps: []
         }
         setTabs([newTab])
         setActiveTabId(newTab.id)
@@ -92,6 +106,16 @@ export function MathNotebookModule() {
 
     load()
   }, [user])
+
+  useEffect(() => {
+    setRecordedSteps([])
+  }, [activeTabId])
+
+  useEffect(() => {
+    return () => {
+      if (playbackTimeout.current) clearTimeout(playbackTimeout.current)
+    }
+  }, [])
 
   const addTab = async () => {
     if (!user) return
@@ -116,28 +140,31 @@ export function MathNotebookModule() {
       id: data.id,
       name: data.name,
       data: { elements: data.data?.elements || [], appState },
-      history: []
+      history: [],
+      replaySteps: []
     }
     setTabs([...tabs, newTab])
     setActiveTabId(newTab.id)
   }
 
-    const updateTabData = useCallback(
-      async (elements: readonly ExcalidrawElement[], appState: AppState) => {
-        const { collaborators, ...cleanAppState } = appState
-        const newData = { elements, appState: cleanAppState }
-        setTabs((prev) =>
-          prev.map((tab) => (tab.id === activeTabId ? { ...tab, data: newData } : tab))
-        )
-        if (activeTabId) {
-          await supabase
-            .from('math_problems')
-            .update({ data: newData, updated_at: new Date().toISOString() })
-            .eq('id', activeTabId)
-        }
-      },
-      [activeTabId]
-    )
+  const updateTabData = useCallback(
+    async (elements: readonly ExcalidrawElement[], appState: AppState) => {
+      if (isReplaying) return
+      const { collaborators, ...cleanAppState } = appState
+      const newData = { elements, appState: cleanAppState }
+      setTabs((prev) =>
+        prev.map((tab) => (tab.id === activeTabId ? { ...tab, data: newData } : tab))
+      )
+      setRecordedSteps((prev) => [...prev, { data: newData, timestamp: Date.now() }])
+      if (activeTabId) {
+        await supabase
+          .from('math_problems')
+          .update({ data: newData, updated_at: new Date().toISOString() })
+          .eq('id', activeTabId)
+      }
+    },
+    [activeTabId, isReplaying]
+  )
 
   const saveVersion = async () => {
     const tab = tabs.find((t) => t.id === activeTabId)
@@ -162,6 +189,59 @@ export function MathNotebookModule() {
       t.id === tab.id ? { ...t, history: [...t.history, newVersion] } : t
     )
     setTabs(newTabs)
+  }
+
+  const saveReplay = async () => {
+    const tab = tabs.find((t) => t.id === activeTabId)
+    if (!tab || recordedSteps.length === 0) return
+    const { error } = await supabase
+      .from('math_problem_replays')
+      .insert({ problem_id: tab.id, steps: recordedSteps })
+    if (error) {
+      console.error('Failed to save replay:', error)
+      toast.error('Failed to save replay')
+      return
+    }
+    setTabs((prev) =>
+      prev.map((t) => (t.id === tab.id ? { ...t, replaySteps: recordedSteps } : t))
+    )
+    setRecordedSteps([])
+    toast.success('Replay saved')
+  }
+
+  const rewind = () => {
+    const tab = tabs.find((t) => t.id === activeTabId)
+    const steps = recordedSteps.length > 0 ? recordedSteps : tab?.replaySteps || []
+    if (!tab || steps.length === 0) return
+    setTabs((prev) =>
+      prev.map((t) => (t.id === tab.id ? { ...t, data: steps[0].data } : t))
+    )
+  }
+
+  const replay = () => {
+    const tab = tabs.find((t) => t.id === activeTabId)
+    const steps = recordedSteps.length > 0 ? recordedSteps : tab?.replaySteps || []
+    if (!tab || steps.length === 0) return
+    if (playbackTimeout.current) {
+      clearTimeout(playbackTimeout.current)
+    }
+    setIsReplaying(true)
+    let i = 0
+    const play = () => {
+      setTabs((prev) =>
+        prev.map((t) => (t.id === tab.id ? { ...t, data: steps[i].data } : t))
+      )
+      if (i < steps.length - 1) {
+        const delay = steps[i + 1].timestamp - steps[i].timestamp
+        playbackTimeout.current = window.setTimeout(() => {
+          i++
+          play()
+        }, delay / speed)
+      } else {
+        setIsReplaying(false)
+      }
+    }
+    play()
   }
 
   const restoreVersion = async (versionId: string) => {
@@ -234,6 +314,37 @@ export function MathNotebookModule() {
           title="Save Version"
         >
           <History className="w-5 h-5 text-gray-700" />
+        </button>
+        <select
+          className="input-dreamy w-20 ml-2 flex-shrink-0"
+          value={speed}
+          onChange={(e) => setSpeed(Number(e.target.value))}
+        >
+          <option value={0.5}>0.5x</option>
+          <option value={1}>1x</option>
+          <option value={1.5}>1.5x</option>
+          <option value={2}>2x</option>
+        </select>
+        <button
+          onClick={rewind}
+          className="p-1 rounded-full border border-gray-300 hover:bg-white flex-shrink-0"
+          title="Rewind"
+        >
+          <Rewind className="w-5 h-5 text-gray-700" />
+        </button>
+        <button
+          onClick={replay}
+          className="p-1 rounded-full border border-gray-300 hover:bg-white flex-shrink-0"
+          title="Replay"
+        >
+          <Play className="w-5 h-5 text-gray-700" />
+        </button>
+        <button
+          onClick={saveReplay}
+          className="p-1 rounded-full border border-gray-300 hover:bg-white flex-shrink-0"
+          title="Save Replay"
+        >
+          <Save className="w-5 h-5 text-gray-700" />
         </button>
       </div>
       <div className="border rounded-lg bg-white h-[70vh] sm:h-[600px]">
