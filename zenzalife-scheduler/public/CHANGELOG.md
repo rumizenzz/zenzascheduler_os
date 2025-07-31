@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Math Notebook can replay drawings with adjustable speed and saves sessions to Supabase (2025-07-31 23:21:28 UTC)
 - Added Math Notebook module with tabbed Excalidraw canvas for solving math problems (2025-07-30 23:05:25 UTC)
 - Math Notebook now saves problems and version history in Supabase (2025-07-30 23:14:19 UTC)
 - Documented world-class agentic workflow in `AGENTS.md` and expanded `TODO.md` tracker. (2025-07-22 20:34:18 UTC)

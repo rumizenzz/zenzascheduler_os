@@ -1,11 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
-import { PlusCircle, History } from 'lucide-react'
+import { PlusCircle, History, Play, RotateCcw } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
-import type { AppState } from '@excalidraw/excalidraw/types'
+import type {
+  AppState,
+  ExcalidrawImperativeAPI
+} from '@excalidraw/excalidraw/types'
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/element/types'
 
 type ExcalidrawData = {
@@ -18,12 +21,31 @@ interface TabData {
   name: string
   data: ExcalidrawData
   history: { id: string; created_at: string; data: ExcalidrawData }[]
+  replay: {
+    elements: readonly ExcalidrawElement[]
+    appState: Partial<AppState>
+    timestamp: number
+  }[]
 }
 
 export function MathNotebookModule() {
   const { user } = useAuth()
   const [tabs, setTabs] = useState<TabData[]>([])
   const [activeTabId, setActiveTabId] = useState<string>('')
+  const excalidrawRef = useRef<ExcalidrawImperativeAPI>(null)
+  const recordingRef = useRef<
+    Record<
+      string,
+      {
+        elements: readonly ExcalidrawElement[]
+        appState: Partial<AppState>
+        timestamp: number
+      }[]
+    >
+  >({})
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [isReplaying, setIsReplaying] = useState(false)
+  const [playbackSpeed, setPlaybackSpeed] = useState(1)
 
   useEffect(() => {
     if (!user) return
@@ -31,7 +53,9 @@ export function MathNotebookModule() {
     const load = async () => {
       const { data, error } = await supabase
         .from('math_problems')
-        .select('id, name, data, math_problem_versions(id, data, created_at)')
+        .select(
+          'id, name, data, math_problem_versions(id, data, created_at), math_problem_replays(data)'
+        )
         .eq('user_id', user.id)
         .order('created_at')
 
@@ -56,7 +80,8 @@ export function MathNotebookModule() {
                   created_at: v.created_at,
                   data: { elements: v.data?.elements || [], appState: vAppState }
                 }
-              }) || []
+              }) || [],
+            replay: p.math_problem_replays?.[0]?.data || []
           }
         })
         setTabs(formatted)
@@ -83,7 +108,8 @@ export function MathNotebookModule() {
           id: inserted.id,
           name: inserted.name,
           data: { elements: inserted.data?.elements || [], appState },
-          history: []
+          history: [],
+          replay: []
         }
         setTabs([newTab])
         setActiveTabId(newTab.id)
@@ -116,28 +142,36 @@ export function MathNotebookModule() {
       id: data.id,
       name: data.name,
       data: { elements: data.data?.elements || [], appState },
-      history: []
+      history: [],
+      replay: []
     }
     setTabs([...tabs, newTab])
     setActiveTabId(newTab.id)
   }
 
-    const updateTabData = useCallback(
-      async (elements: readonly ExcalidrawElement[], appState: AppState) => {
-        const { collaborators, ...cleanAppState } = appState
-        const newData = { elements, appState: cleanAppState }
-        setTabs((prev) =>
-          prev.map((tab) => (tab.id === activeTabId ? { ...tab, data: newData } : tab))
-        )
-        if (activeTabId) {
-          await supabase
-            .from('math_problems')
-            .update({ data: newData, updated_at: new Date().toISOString() })
-            .eq('id', activeTabId)
-        }
-      },
-      [activeTabId]
-    )
+  const updateTabData = useCallback(
+    async (elements: readonly ExcalidrawElement[], appState: AppState) => {
+      if (isReplaying) return
+      const { collaborators, ...cleanAppState } = appState
+      const newData = { elements, appState: cleanAppState }
+      setTabs((prev) =>
+        prev.map((tab) => (tab.id === activeTabId ? { ...tab, data: newData } : tab))
+      )
+      if (!recordingRef.current[activeTabId]) recordingRef.current[activeTabId] = []
+      recordingRef.current[activeTabId].push({
+        elements,
+        appState: cleanAppState,
+        timestamp: Date.now()
+      })
+      if (activeTabId) {
+        await supabase
+          .from('math_problems')
+          .update({ data: newData, updated_at: new Date().toISOString() })
+          .eq('id', activeTabId)
+      }
+    },
+    [activeTabId, isReplaying]
+  )
 
   const saveVersion = async () => {
     const tab = tabs.find((t) => t.id === activeTabId)
@@ -158,10 +192,17 @@ export function MathNotebookModule() {
     }
 
     const newVersion = { id: data.id, created_at: data.created_at, data: versionData }
+    const steps = recordingRef.current[tab.id] || []
+    await supabase
+      .from('math_problem_replays')
+      .upsert({ problem_id: tab.id, data: steps })
     const newTabs = tabs.map((t) =>
-      t.id === tab.id ? { ...t, history: [...t.history, newVersion] } : t
+      t.id === tab.id
+        ? { ...t, history: [...t.history, newVersion], replay: steps }
+        : t
     )
     setTabs(newTabs)
+    recordingRef.current[tab.id] = []
   }
 
   const restoreVersion = async (versionId: string) => {
@@ -181,6 +222,48 @@ export function MathNotebookModule() {
       .update({ data: versionData, updated_at: new Date().toISOString() })
       .eq('id', tab.id)
   }
+
+  const startReplay = useCallback(() => {
+    const tab = tabs.find((t) => t.id === activeTabId)
+    if (!tab || tab.replay.length === 0 || !excalidrawRef.current) return
+    setIsReplaying(true)
+    const steps = tab.replay
+    let i = 0
+    const play = () => {
+      if (!excalidrawRef.current) return
+      if (i >= steps.length) {
+        setIsReplaying(false)
+        excalidrawRef.current.updateScene(tab.data)
+        return
+      }
+      const { elements, appState } = steps[i]
+      excalidrawRef.current.updateScene({ elements, appState })
+      i++
+      timeoutRef.current = setTimeout(play, 500 / playbackSpeed)
+    }
+    play()
+  }, [activeTabId, tabs, playbackSpeed])
+
+  const rewindReplay = useCallback(() => {
+    const tab = tabs.find((t) => t.id === activeTabId)
+    if (!tab || tab.replay.length === 0 || !excalidrawRef.current) return
+    setIsReplaying(true)
+    const steps = tab.replay
+    let i = steps.length - 1
+    const play = () => {
+      if (!excalidrawRef.current) return
+      if (i < 0) {
+        setIsReplaying(false)
+        excalidrawRef.current.updateScene(tab.data)
+        return
+      }
+      const { elements, appState } = steps[i]
+      excalidrawRef.current.updateScene({ elements, appState })
+      i--
+      timeoutRef.current = setTimeout(play, 500 / playbackSpeed)
+    }
+    play()
+  }, [activeTabId, tabs, playbackSpeed])
 
   const activeTab = tabs.find((t) => t.id === activeTabId)
 
@@ -235,11 +318,38 @@ export function MathNotebookModule() {
         >
           <History className="w-5 h-5 text-gray-700" />
         </button>
+        <button
+          onClick={startReplay}
+          className="p-1 rounded-full border border-gray-300 hover:bg-white flex-shrink-0"
+          title="Replay"
+          disabled={isReplaying}
+        >
+          <Play className="w-5 h-5 text-gray-700" />
+        </button>
+        <button
+          onClick={rewindReplay}
+          className="p-1 rounded-full border border-gray-300 hover:bg-white flex-shrink-0"
+          title="Rewind"
+          disabled={isReplaying}
+        >
+          <RotateCcw className="w-5 h-5 text-gray-700" />
+        </button>
+        <select
+          className="input-dreamy max-w-[80px] ml-2 flex-shrink-0"
+          value={playbackSpeed}
+          onChange={(e) => setPlaybackSpeed(parseFloat(e.target.value))}
+        >
+          <option value={0.5}>0.5x</option>
+          <option value={1}>1x</option>
+          <option value={1.5}>1.5x</option>
+          <option value={2}>2x</option>
+        </select>
       </div>
       <div className="border rounded-lg bg-white h-[70vh] sm:h-[600px]">
         {activeTab && (
           <Excalidraw
             key={activeTab.id}
+            ref={excalidrawRef}
             initialData={activeTab.data}
             onChange={updateTabData}
           />
