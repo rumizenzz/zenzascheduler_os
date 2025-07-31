@@ -36,6 +36,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Fixed
 - Math Notebook tabs no longer hide beneath Change Log and Subscribe buttons on mobile (2025-07-31 22:53:28 UTC)
+- History dropdown and save buttons no longer cover Math Notebook tabs (2025-07-31 23:14:31 UTC)
 - PWA install prompt now waits for a user gesture, preventing `NotAllowedError` on modern browsers (2025-07-31 21:23:15 UTC)
 - Stripped collaborator maps from saved Excalidraw app state so Math Notebook sketches no longer throw runtime errors (2025-07-31 21:23:15 UTC)
 - ChangeLogButton now stores the last seen timestamp in Supabase instead of
