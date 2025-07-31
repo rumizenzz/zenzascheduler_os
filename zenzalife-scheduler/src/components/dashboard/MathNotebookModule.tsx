@@ -9,6 +9,7 @@ import type {
   AppState,
   ExcalidrawImperativeAPI,
 } from '@excalidraw/excalidraw/types'
+import type { AppState } from '@excalidraw/excalidraw/types'
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/element/types'
 
 type ExcalidrawData = {
