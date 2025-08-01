@@ -13,7 +13,7 @@ A **Tools** button (wrench icon) floats on the right edge of every dashboard tab
 
 ### Built-in IDE
 
-Select **IDE** from the Tools menu or go straight to `/ide` to launch the Monaco-powered diff editor. Accept Current, Accept Incoming, Accept Both Changes, and Compare Changes controls let you merge files without leaving the scheduler.
+Select **IDE** from the Tools menu to launch the Monaco-powered diff editor in a Harold and the Purple Crayon & Vanilla Sky overlay. Accept Current, Accept Incoming, Accept Both Changes, and Compare Changes controls let you merge files without leaving the scheduler.
 
 ## Expanding the ESLint configuration
 

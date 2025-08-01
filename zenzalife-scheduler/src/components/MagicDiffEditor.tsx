@@ -64,7 +64,7 @@ export default function MagicDiffEditor() {
   return (
     <div className="space-y-4 rounded-lg bg-gradient-to-br from-purple-800 to-sky-600 p-4 text-sm text-white">
       <DiffEditor
-        height="40vh"
+        height="70vh"
         theme="vs-dark"
         language="typescript"
         original=""
