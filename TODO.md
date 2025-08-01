@@ -3,6 +3,8 @@
 All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in this file. This project follows [Semantic Versioning](https://semver.org/) and the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
+### Added
+- Right-clicking a World Clock time zone opens a Harold and the Purple Crayon & Vanilla Sky menu with a Remove Time Zone option (2025-08-01 23:39 UTC)
 ### Changed
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
@@ -38,6 +40,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Right-clicking a World Clock time zone opens a Harold and the Purple Crayon & Vanilla Sky menu with a Remove Time Zone option (2025-08-01 23:39:07 UTC)
 - Movable World Clock widgets can be pinned, repositioned, and opened via a Harold and the Purple Crayon & Vanilla Sky context menu with Supabase persistence (2025-08-01 23:24:00 UTC)
 - World Clock timezone selector now offers a Harold and the Purple Crayon & Vanilla Sky dropdown with Asia/Cebu option and a safe top-right overlay (2025-08-01 23:14:00 UTC)
 - World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59:00 UTC)
