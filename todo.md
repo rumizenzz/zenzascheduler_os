@@ -72,4 +72,6 @@
 - Collaborative commenting and family engagement features
 - Custom alarms with upload capability
 - Growth dashboards and progress visualization
+- Monthly first-Sunday fasting and prayer reminder for LDS tradition with customizable duration, water options, and a live countdown timer saved to Supabase
+- Fixed active fast lookup to include user ID so builds compile without TypeScript errors
 - Template system for schedule management
