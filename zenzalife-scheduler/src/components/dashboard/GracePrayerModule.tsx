@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import dayjs from 'dayjs'
 import { useAuth } from '@/contexts/AuthContext'
-import { supabase } from '@/lib/supabase'
+import { supabase, GracePrayer } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import { Mic, StopCircle } from 'lucide-react'
 
@@ -22,8 +22,23 @@ export function GracePrayerModule() {
   const [recording, setRecording] = useState(false)
   const [startTime, setStartTime] = useState<Date | null>(null)
   const [photoFile, setPhotoFile] = useState<File | null>(null)
+  const [prayers, setPrayers] = useState<GracePrayer[]>([])
   const mediaRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
+
+  const fetchPrayers = async () => {
+    if (!user) return
+    const { data, error } = await supabase
+      .from('grace_prayers')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('started_at', { ascending: false })
+    if (!error && data) setPrayers(data)
+  }
+
+  useEffect(() => {
+    fetchPrayers()
+  }, [user])
 
   const startRecording = async () => {
     if (!user) return toast.error('You must be signed in')
@@ -76,6 +91,7 @@ export function GracePrayerModule() {
         started_at: startTime?.toISOString()
       })
       toast.success('Grace prayer saved')
+      fetchPrayers()
     } catch (err: any) {
       toast.error('Upload failed: ' + err.message)
     } finally {
@@ -124,6 +140,28 @@ export function GracePrayerModule() {
       {startTime && recording && (
         <p className="text-sm text-gray-500">Started at {dayjs(startTime).format('h:mm:ss A')}</p>
       )}
+      <div className="space-y-2">
+        <h2 className="text-xl font-medium text-gray-800">Past Grace Prayers</h2>
+        {prayers.map(p => (
+          <div key={p.id} className="p-3 bg-white/50 rounded-lg border space-y-1">
+            <p className="text-sm text-gray-700 capitalize">
+              {p.meal_time} - {dayjs(p.started_at).format('MMM D, YYYY h:mm A')}
+            </p>
+            <audio controls src={p.audio_url} className="w-full" />
+            {p.photo_url && (
+              <button
+                onClick={() => window.open(p.photo_url!, '_blank')}
+                className="btn-dreamy mt-1 text-sm"
+              >
+                See Dish
+              </button>
+            )}
+          </div>
+        ))}
+        {prayers.length === 0 && (
+          <p className="text-sm text-gray-500">No grace prayers yet.</p>
+        )}
+      </div>
     </div>
   )
 }

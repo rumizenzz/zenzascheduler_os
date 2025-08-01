@@ -7,11 +7,20 @@ interface AlarmModalProps {
   soundUrl: string
   onDismiss: () => void
   onSnooze?: () => void
+  eventCategory?: string
 }
 
-export function AlarmModal({ eventTitle, eventTime, soundUrl, onDismiss, onSnooze }: AlarmModalProps) {
+export function AlarmModal({ eventTitle, eventTime, soundUrl, onDismiss, onSnooze, eventCategory }: AlarmModalProps) {
   const { playAudio, stopAudio } = useAudio();
   const wakeLockRef = React.useRef<WakeLockSentinel | null>(null);
+  const lowerCat = eventCategory?.toLowerCase();
+  const isPrayerCategory = lowerCat === 'wake up' || lowerCat === 'sleep';
+
+  const handleStartPrayer = () => {
+    const type = lowerCat === 'wake up' ? 'morning' : 'night';
+    window.open(`/?tab=prayers&type=${type}`, '_blank');
+    onDismiss();
+  };
   React.useEffect(() => {
     const requestWake = async () => {
       try {
@@ -39,7 +48,12 @@ export function AlarmModal({ eventTitle, eventTime, soundUrl, onDismiss, onSnooz
         <p className="text-lg text-gray-800">{eventTitle}</p>
         <p className="text-sm text-gray-500">{eventTime}</p>
         <div className="flex gap-3 pt-2">
-          <button onClick={onDismiss} className="btn-dreamy-primary flex-1">
+          {isPrayerCategory && (
+            <button onClick={handleStartPrayer} className="btn-dreamy-primary flex-1">
+              Start Prayer
+            </button>
+          )}
+          <button onClick={onDismiss} className="btn-dreamy flex-1">
             Dismiss
           </button>
           {onSnooze && (
