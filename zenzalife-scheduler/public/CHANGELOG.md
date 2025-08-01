@@ -9,6 +9,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Fixed
 - Switching dashboard sections now resets scroll position so content starts at the top (2025-08-01 17:09:52 UTC)
 ### Added
+- Tasks can now be marked as all-day to schedule full-day events (2025-08-01 17:33:19 UTC)
 - Life Logistics address form now offers free OpenStreetMap Nominatim search suggestions for quick entry (2025-08-01 16:58:29 UTC)
 - Entrance animation duration can now be customized in Settings (2025-08-01 16:47:48 UTC)
 - Settings now allow disabling the dreamlike entrance and its sound via a Save Changes button; unsaved changes trigger a Harold and the Purple Crayon & Vanilla Sky warning window (2025-08-01 16:13:28 UTC)
