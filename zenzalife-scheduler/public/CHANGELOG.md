@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Report Bug button and hidden bug list accessible in Settings via secret code (2025-08-01 15:38:34 UTC)
 - Fasting reminder now displays upcoming fast date and days remaining before the first Sunday (2025-08-01 15:09:18 UTC)
 - Monthly fasting reminder now triggers on the first Sunday of each month with a top-right toast (2025-08-01 14:56:08 UTC)
 - Fasting plan now shows a live countdown timer once started so users can track remaining time (2025-08-01 13:50:28 UTC)
@@ -59,6 +60,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Bug list access code updated to ZENZASECRETS for monthly report view (2025-08-01 15:50:22 UTC)
 - Math Notebook search now scans canvas text so results match drawings and notes (2025-08-01 15:21:54 UTC)
 - Fasting reminder no longer falls back to localStorage, relying solely on Supabase (2025-08-01 13:39:47 UTC)
 - Task Notes history search bar redesigned with a clear icon for easier filtering (2025-08-01 13:34:42 UTC)

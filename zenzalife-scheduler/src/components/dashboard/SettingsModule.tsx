@@ -68,6 +68,11 @@ export function SettingsModule() {
   const [showSecretPrompt, setShowSecretPrompt] = useState(false)
   const [secretInput, setSecretInput] = useState('')
   const [releaseAccess, setReleaseAccess] = useState(false)
+  const [showBugSecretPrompt, setShowBugSecretPrompt] = useState(false)
+  const [bugSecretInput, setBugSecretInput] = useState('')
+  const [bugAccess, setBugAccess] = useState(false)
+  const [bugListOpen, setBugListOpen] = useState(false)
+  const [bugReports, setBugReports] = useState<{ id: number; description: string; created_at: string }[]>([])
   const { postMessage } = useAlarmChannel(msg => {
     if (msg.type === 'dismiss') {
       setShowTestAlarm(false)
@@ -98,6 +103,20 @@ export function SettingsModule() {
   useEffect(() => {
     setReleaseAccess(localStorage.getItem('releaseAccess') === 'true')
   }, [])
+
+  useEffect(() => {
+    setBugAccess(localStorage.getItem('bugAccess') === 'true')
+  }, [])
+
+  useEffect(() => {
+    if (bugListOpen) {
+      supabase
+        .from('bugs')
+        .select('id, description, created_at')
+        .order('created_at', { ascending: false })
+        .then(({ data }) => setBugReports((data as any) || []))
+    }
+  }, [bugListOpen])
 
   const saveProfile = async () => {
     if (!user) return
@@ -200,8 +219,27 @@ export function SettingsModule() {
       URL.revokeObjectURL(url)
       
       toast.success('Data exported successfully!')
-    } catch (error: any) {
-      toast.error('Failed to export data: ' + error.message)
+  } catch (error: any) {
+    toast.error('Failed to export data: ' + error.message)
+  }
+}
+
+  const handleBugClick = () => {
+    if (bugAccess) {
+      setBugListOpen(true)
+    } else {
+      setShowBugSecretPrompt(true)
+    }
+  }
+
+  const checkBugCode = () => {
+    if (bugSecretInput === 'ZENZASECRETS') {
+      setBugAccess(true)
+      localStorage.setItem('bugAccess', 'true')
+      setShowBugSecretPrompt(false)
+      setBugListOpen(true)
+    } else {
+      toast.error('Incorrect code')
     }
   }
 
@@ -608,6 +646,19 @@ export function SettingsModule() {
     }
   }
 
+  const groupedReports = bugReports.reduce((acc, r) => {
+    const date = new Date(r.created_at).toISOString().split('T')[0]
+    ;(acc[date] = acc[date] || []).push(r)
+    return acc
+  }, {} as Record<string, typeof bugReports>)
+
+  const now = new Date()
+  const startOfWeek = new Date(now)
+  startOfWeek.setDate(now.getDate() - now.getDay())
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+  const bugsThisWeek = bugReports.filter(r => new Date(r.created_at) >= startOfWeek).length
+  const bugsThisMonth = bugReports.filter(r => new Date(r.created_at) >= startOfMonth).length
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -663,6 +714,15 @@ export function SettingsModule() {
           🪵
         </span>
       </div>
+      <div className="text-center mt-2">
+        <span
+          onClick={handleBugClick}
+          className="cursor-pointer text-2xl text-purple-500 rotate-180 select-none"
+          title="See Bugs for the Month"
+        >
+          ✕
+        </span>
+      </div>
       {showSecretPrompt && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 space-y-4 max-w-xs w-full">
@@ -678,6 +738,58 @@ export function SettingsModule() {
               </button>
               <button className="btn-dreamy-primary text-sm" onClick={checkCode}>
                 Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showBugSecretPrompt && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 space-y-4 max-w-xs w-full">
+            <p className="text-center">Enter bug access code</p>
+            <input
+              className="border p-1 w-full"
+              value={bugSecretInput}
+              onChange={(e) => setBugSecretInput(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <button className="btn-dreamy text-sm" onClick={() => setShowBugSecretPrompt(false)}>
+                Cancel
+              </button>
+              <button className="btn-dreamy-primary text-sm" onClick={checkBugCode}>
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {bugListOpen && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 space-y-4 max-w-md w-full">
+            <h2 className="text-xl font-light text-center">Bugs for the Month</h2>
+            <p className="text-sm text-center">
+              This week: {bugsThisWeek} | This month: {bugsThisMonth}
+            </p>
+            <ul className="space-y-2 max-h-64 overflow-y-auto text-left">
+              {Object.entries(groupedReports).map(([date, reports]) => (
+                <li key={date}>
+                  <strong>{date} ({reports.length})</strong>
+                  <ul className="ml-4 list-disc">
+                    {reports.map((r) => (
+                      <li key={r.id} className="text-sm">
+                        {r.description}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+              {!bugReports.length && (
+                <li className="text-sm text-gray-600">No reports</li>
+              )}
+            </ul>
+            <div className="text-center">
+              <button className="btn-dreamy-primary px-4" onClick={() => setBugListOpen(false)}>
+                Close
               </button>
             </div>
           </div>
