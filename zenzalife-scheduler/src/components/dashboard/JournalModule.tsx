@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase, JournalEntry } from '@/lib/supabase'
 import dayjs from 'dayjs'
-import { Plus, NotebookPen } from 'lucide-react'
+import { Plus, NotebookPen, Pencil, Trash2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
 export function JournalModule() {
@@ -11,6 +11,8 @@ export function JournalModule() {
   const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
   const [content, setContent] = useState('')
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editContent, setEditContent] = useState('')
 
   useEffect(() => {
     if (user) {
@@ -52,6 +54,43 @@ export function JournalModule() {
     }
   }
 
+  const startEdit = (entry: JournalEntry) => {
+    setEditingId(entry.id)
+    setEditContent(entry.content)
+  }
+
+  const updateEntry = async () => {
+    if (!editingId || !user || !editContent.trim()) return
+    const { error } = await supabase
+      .from('journal_entries')
+      .update({ content: editContent.trim(), updated_at: new Date().toISOString() })
+      .eq('id', editingId)
+      .eq('user_id', user.id)
+    if (error) {
+      toast.error('Failed to update entry: ' + error.message)
+    } else {
+      setEditingId(null)
+      setEditContent('')
+      await loadEntries()
+      toast.success('Journal entry updated')
+    }
+  }
+
+  const deleteEntry = async (id: string) => {
+    if (!user) return
+    const { error } = await supabase
+      .from('journal_entries')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', user.id)
+    if (error) {
+      toast.error('Failed to delete entry: ' + error.message)
+    } else {
+      await loadEntries()
+      toast.success('Journal entry deleted')
+    }
+  }
+
   const grouped = entries.reduce<Record<string, JournalEntry[]>>((acc, entry) => {
     const date = dayjs(entry.created_at).format('YYYY-MM-DD')
     acc[date] = acc[date] || []
@@ -60,7 +99,7 @@ export function JournalModule() {
   }, {})
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-24">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-light text-purple-200 flex items-center gap-3">
           <NotebookPen className="w-8 h-8" />
@@ -102,14 +141,52 @@ export function JournalModule() {
       ) : (
         <div className="space-y-8">
           {Object.entries(grouped).map(([date, items]) => (
-            <div key={date} className="bg-gradient-to-br from-purple-800 via-purple-700 to-pink-600 p-6 rounded-lg shadow-lg text-white font-serif">
+            <div
+              key={date}
+              className="bg-gradient-to-br from-purple-800 via-purple-700 to-pink-600 p-6 rounded-lg shadow-lg text-white font-serif"
+            >
               <h2 className="text-xl mb-4 border-b border-white/20 pb-2">
                 {dayjs(date).format('MMMM D, YYYY')}
               </h2>
               <div className="space-y-4">
                 {items.map((entry) => (
-                  <div key={entry.id} className="bg-white/10 p-4 rounded-lg whitespace-pre-wrap">
-                    {entry.content}
+                  <div key={entry.id} className="bg-white/10 p-4 rounded-lg whitespace-pre-wrap space-y-2">
+                    {editingId === entry.id ? (
+                      <>
+                        <textarea
+                          className="w-full p-2 rounded text-black"
+                          rows={5}
+                          value={editContent}
+                          onChange={(e) => setEditContent(e.target.value)}
+                        />
+                        <div className="flex gap-2 justify-end">
+                          <button className="btn-secondary" onClick={() => setEditingId(null)}>
+                            Cancel
+                          </button>
+                          <button className="btn-dreamy-primary" onClick={updateEntry}>
+                            Save
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div>{entry.content}</div>
+                        <div className="flex gap-2 justify-end text-sm">
+                          <button
+                            className="flex items-center gap-1 hover:text-purple-200"
+                            onClick={() => startEdit(entry)}
+                          >
+                            <Pencil className="w-4 h-4" /> Edit
+                          </button>
+                          <button
+                            className="flex items-center gap-1 hover:text-purple-200"
+                            onClick={() => deleteEntry(entry.id)}
+                          >
+                            <Trash2 className="w-4 h-4" /> Delete
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
