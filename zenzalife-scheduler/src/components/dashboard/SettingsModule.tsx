@@ -233,7 +233,7 @@ export function SettingsModule() {
   }
 
   const checkBugCode = () => {
-    if (bugSecretInput === 'ZENBUGS') {
+    if (bugSecretInput === 'ZENZASECRETS') {
       setBugAccess(true)
       localStorage.setItem('bugAccess', 'true')
       setShowBugSecretPrompt(false)
