@@ -22,6 +22,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Magical purple Journal and Lucid Dream Journal modules save daily entries with lucidity tracking (2025-08-01 20:12 UTC)
 - Monthsary and Anniversary tasks now sparkle with affectionate hover animations (2025-08-01 19:03 UTC)
 - Timers can be deleted from the Clock module with a new Remove control (2025-08-01 18:30 UTC)
 - Dashboard restores the last visited tab on load using a Supabase-backed preference (2025-08-01 18:30 UTC)

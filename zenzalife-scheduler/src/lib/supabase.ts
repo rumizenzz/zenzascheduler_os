@@ -155,6 +155,24 @@ export type DiscipleshipNote = {
   updated_at?: string
 }
 
+export type JournalEntry = {
+  id: string
+  user_id: string
+  created_at: string
+  content: string
+  updated_at?: string
+}
+
+export type DreamJournalEntry = {
+  id: string
+  user_id: string
+  created_at: string
+  description: string
+  achieved_lucidity: boolean
+  lucidity_level?: number
+  updated_at?: string
+}
+
 export type GracePrayer = {
   id: string
   user_id: string
