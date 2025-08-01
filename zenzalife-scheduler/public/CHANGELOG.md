@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Math Solver history opens in a Harold and the Purple Crayon & Vanilla Sky themed window via a History button (2025-08-01 13:30:00 UTC)
 - Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC)
 - Spiritual study supports multiple verse entries per day with an Add Verse Entry button and per-verse edit controls (2025-08-01 12:56:35 UTC)
 - Math Notebook solver history now saves to Supabase for cross-device sync (2025-08-01 12:54:40 UTC)
