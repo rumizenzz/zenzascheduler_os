@@ -64,7 +64,8 @@ export function SpiritualModule() {
   const [showHymnModal, setShowHymnModal] = useState(false)
   const [showGratitudeModal, setShowGratitudeModal] = useState(false)
   const [showDiscipleshipModal, setShowDiscipleshipModal] = useState(false)
-  const [todayScripture, setTodayScripture] = useState<ScriptureNote | null>(
+  const [todayScriptures, setTodayScriptures] = useState<ScriptureNote[]>([])
+  const [editingScripture, setEditingScripture] = useState<ScriptureNote | null>(
     null
   )
   const [todayConference, setTodayConference] = useState<ConferenceNote | null>(
@@ -106,7 +107,7 @@ export function SpiritualModule() {
         .order('date', { ascending: false })
       setScriptureNotes(scriptures || [])
       const today = dayjs().format('YYYY-MM-DD')
-      setTodayScripture(scriptures?.find(s => s.date === today) || null)
+      setTodayScriptures((scriptures || []).filter(s => s.date === today))
 
       const { data: conferences } = await supabase
         .from('conference_notes')
@@ -166,13 +167,14 @@ export function SpiritualModule() {
     fullText: string,
     notes: string,
     book: string,
-    version: string
+    version: string,
+    id?: string
   ) => {
     if (!user || !isOwnNotes) return
     const today = dayjs().format('YYYY-MM-DD')
     const payload = {
       user_id: user.id,
-      date: today,
+      date: id && editingScripture ? editingScripture.date : today,
       scripture: scripture.trim(),
       book: book.trim() || null,
       version: version.trim() || null,
@@ -181,11 +183,11 @@ export function SpiritualModule() {
       updated_at: new Date().toISOString()
     }
     try {
-      if (todayScripture) {
+      if (id) {
         const { error } = await supabase
           .from('scripture_notes')
           .update(payload)
-          .eq('id', todayScripture.id)
+          .eq('id', id)
         if (error) throw error
         toast.success('Scripture updated')
       } else {
@@ -197,6 +199,7 @@ export function SpiritualModule() {
       }
       await loadNotes()
       setShowScriptureModal(false)
+      setEditingScripture(null)
     } catch (e: any) {
       toast.error('Failed to save scripture: ' + e.message)
     }
@@ -215,9 +218,9 @@ export function SpiritualModule() {
       setScriptureNotes((prev) =>
         prev.map((n) => (n.id === noteId ? { ...n, is_favorite: !isFavorite } : n))
       )
-      if (todayScripture && todayScripture.id === noteId) {
-        setTodayScripture({ ...todayScripture, is_favorite: !isFavorite })
-      }
+      setTodayScriptures((prev) =>
+        prev.map((n) => (n.id === noteId ? { ...n, is_favorite: !isFavorite } : n))
+      )
       toast.success(!isFavorite ? 'Marked favorite' : 'Removed favorite')
     } catch (e: any) {
       toast.error('Failed to update favorite: ' + e.message)
@@ -375,10 +378,13 @@ export function SpiritualModule() {
             {isOwnNotes ? (
               <>
                 <button
-                  onClick={() => setShowScriptureModal(true)}
+                  onClick={() => {
+                    setEditingScripture(null)
+                    setShowScriptureModal(true)
+                  }}
                   className="btn-dreamy-primary"
                 >
-                  {todayScripture ? 'Update Today' : 'Add Today'}
+                  Add Verse Entry
                 </button>
                 <button
                   onClick={() => setShowFamilySelect(true)}
@@ -395,59 +401,21 @@ export function SpiritualModule() {
           </div>
         </div>
 
-        {todayScripture ? (
-          <div className="card-floating p-4 space-y-4">
-            <div className="flex items-start justify-between">
-              <h3 className="font-medium text-gray-800">
-                {todayScripture.scripture}
-                {todayScripture.version
-                  ? ` (${todayScripture.version})`
-                  : todayScripture.book
-                  ? ` (${todayScripture.book})`
-                  : ''}
-              </h3>
-              {isOwnNotes && (
-                <button
-                  onClick={() => toggleFavoriteScripture(todayScripture.id, todayScripture.is_favorite || false)}
-                  className={`p-1 rounded-full transition-colors ${
-                    todayScripture.is_favorite ? 'text-yellow-500 hover:text-yellow-600' : 'text-gray-400 hover:text-yellow-500'
-                  }`}
-                >
-                  <Star className={`w-4 h-4 ${todayScripture.is_favorite ? 'fill-current' : ''}`} />
-                </button>
-              )}
-            </div>
-            {todayScripture.full_text && (
-              <blockquote className="scripture-scroll whitespace-pre-line">
-                {todayScripture.full_text}
-              </blockquote>
-            )}
-            {todayScripture.notes && (
-              <p className="text-gray-700 whitespace-pre-line">
-                <span className="font-medium">What did you learn today:</span>{' '}
-                {todayScripture.notes}
-              </p>
-            )}
-          </div>
-        ) : (
-          <div className="card-floating p-4 text-center">
-            <p className="text-gray-600">No scripture logged for today</p>
-          </div>
-        )}
-
-        {scriptureNotes.length > 0 && (
-          <div className="card-floating p-4">
-            <h3 className="text-lg font-medium text-gray-800 mb-4">
-              Past Scriptures
-            </h3>
-            <div className="space-y-4">
-              {scriptureNotes.map(note => (
-                <div key={note.id} className="p-3 bg-gray-50 rounded-xl">
-                  <div className="flex items-start justify-between mb-1">
-                    <span className="text-sm text-gray-600">
-                      {dayjs(note.date).format('MMM D, YYYY')}
-                    </span>
-                    {isOwnNotes && (
+        {todayScriptures.length > 0 ? (
+          <div className="space-y-4">
+            {todayScriptures.map(note => (
+              <div key={note.id} className="card-floating p-4 space-y-4">
+                <div className="flex items-start justify-between">
+                  <h3 className="font-medium text-gray-800">
+                    {note.scripture}
+                    {note.version
+                      ? ` (${note.version})`
+                      : note.book
+                      ? ` (${note.book})`
+                      : ''}
+                  </h3>
+                  {isOwnNotes && (
+                    <div className="flex items-center gap-2">
                       <button
                         onClick={() => toggleFavoriteScripture(note.id, note.is_favorite || false)}
                         className={`p-1 rounded-full transition-colors ${
@@ -456,25 +424,91 @@ export function SpiritualModule() {
                       >
                         <Star className={`w-4 h-4 ${note.is_favorite ? 'fill-current' : ''}`} />
                       </button>
-                    )}
-                  </div>
-                  <h4 className="font-medium text-gray-800">
-                    {note.scripture}
-                    {note.version ? ` (${note.version})` : note.book ? ` (${note.book})` : ''}
-                  </h4>
-                  {note.full_text && (
-                    <blockquote className="scripture-scroll mt-2 whitespace-pre-line">
-                      {note.full_text}
-                    </blockquote>
-                  )}
-                  {note.notes && (
-                    <p className="text-gray-700 mt-1 whitespace-pre-line">
-                      <span className="font-medium">What did you learn:</span>{' '}
-                      {note.notes}
-                    </p>
+                      <button
+                        onClick={() => {
+                          setEditingScripture(note)
+                          setShowScriptureModal(true)
+                        }}
+                        className="text-sm text-blue-600 hover:underline"
+                      >
+                        Edit Verse Entry
+                      </button>
+                    </div>
                   )}
                 </div>
-              ))}
+                {note.full_text && (
+                  <blockquote className="scripture-scroll whitespace-pre-line">
+                    {note.full_text}
+                  </blockquote>
+                )}
+                {note.notes && (
+                  <p className="text-gray-700 whitespace-pre-line">
+                    <span className="font-medium">What did you learn today:</span>{' '}
+                    {note.notes}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="card-floating p-4 text-center">
+            <p className="text-gray-600">No scripture logged for today</p>
+          </div>
+        )}
+
+        {scriptureNotes.filter(n => n.date !== dayjs().format('YYYY-MM-DD')).length > 0 && (
+          <div className="card-floating p-4">
+            <h3 className="text-lg font-medium text-gray-800 mb-4">
+              Past Scriptures
+            </h3>
+            <div className="space-y-4">
+              {scriptureNotes
+                .filter(n => n.date !== dayjs().format('YYYY-MM-DD'))
+                .map(note => (
+                  <div key={note.id} className="p-3 bg-gray-50 rounded-xl">
+                    <div className="flex items-start justify-between mb-1">
+                      <span className="text-sm text-gray-600">
+                        {dayjs(note.date).format('MMM D, YYYY')}
+                      </span>
+                      {isOwnNotes && (
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => toggleFavoriteScripture(note.id, note.is_favorite || false)}
+                            className={`p-1 rounded-full transition-colors ${
+                              note.is_favorite ? 'text-yellow-500 hover:text-yellow-600' : 'text-gray-400 hover:text-yellow-500'
+                            }`}
+                          >
+                            <Star className={`w-4 h-4 ${note.is_favorite ? 'fill-current' : ''}`} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditingScripture(note)
+                              setShowScriptureModal(true)
+                            }}
+                            className="text-xs text-blue-600 hover:underline"
+                          >
+                            Edit Verse Entry
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <h4 className="font-medium text-gray-800">
+                      {note.scripture}
+                      {note.version ? ` (${note.version})` : note.book ? ` (${note.book})` : ''}
+                    </h4>
+                    {note.full_text && (
+                      <blockquote className="scripture-scroll mt-2 whitespace-pre-line">
+                        {note.full_text}
+                      </blockquote>
+                    )}
+                    {note.notes && (
+                      <p className="text-gray-700 mt-1 whitespace-pre-line">
+                        <span className="font-medium">What did you learn:</span>{' '}
+                        {note.notes}
+                      </p>
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
         )}
@@ -664,9 +698,12 @@ export function SpiritualModule() {
       {showScriptureModal && (
         <ScriptureModal
           isOpen={showScriptureModal}
-          onClose={() => setShowScriptureModal(false)}
+          onClose={() => {
+            setShowScriptureModal(false)
+            setEditingScripture(null)
+          }}
           onSave={saveScripture}
-          existing={todayScripture}
+          existing={editingScripture}
         />
       )}
 
@@ -729,7 +766,8 @@ interface ScriptureModalProps {
     fullText: string,
     notes: string,
     book: string,
-    version: string
+    version: string,
+    id?: string
   ) => void
   existing?: ScriptureNote | null
 }
@@ -775,7 +813,14 @@ function ScriptureModal({
       toast.error('Enter book name')
       return
     }
-    onSave(scripture, fullText, notes, book === 'Other' ? customBook : book, version)
+    onSave(
+      scripture,
+      fullText,
+      notes,
+      book === 'Other' ? customBook : book,
+      version,
+      existing?.id
+    )
   }
 
   return (
@@ -783,7 +828,7 @@ function ScriptureModal({
       <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6 space-y-6">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-medium text-gray-800">
-            {existing ? 'Update' : 'Add'} Today's Scripture
+            {existing ? 'Edit' : 'Add'} Verse Entry
           </h2>
           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-full">
             ×

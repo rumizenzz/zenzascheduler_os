@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Spiritual study supports multiple verse entries per day with an Add Verse Entry button and per-verse edit controls (2025-08-01 12:56:35 UTC)
 - Math Notebook solver history now saves to Supabase for cross-device sync (2025-08-01 12:54:40 UTC)
 - Math Notebook solver now remembers previously solved problems with persistent history (2025-08-01 12:48:12 UTC)
 - Added a top-right Refresh button to manually reload the app (2025-08-01 11:52:14 UTC)
