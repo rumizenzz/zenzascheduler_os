@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
-import { PlusCircle, History } from 'lucide-react'
+import { PlusCircle, History, X } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
@@ -24,6 +24,8 @@ export function MathNotebookModule() {
   const { user } = useAuth()
   const [tabs, setTabs] = useState<TabData[]>([])
   const [activeTabId, setActiveTabId] = useState<string>('')
+  const [closedTabs, setClosedTabs] = useState<TabData[]>([])
+  const [closingTab, setClosingTab] = useState<TabData | null>(null)
 
   useEffect(() => {
     if (!user) return
@@ -122,6 +124,71 @@ export function MathNotebookModule() {
     setActiveTabId(newTab.id)
   }
 
+  const handleCloseTab = (id: string) => {
+    const tab = tabs.find((t) => t.id === id)
+    if (!tab) return
+    setClosingTab(tab)
+  }
+
+  const finalizeCloseTab = async (save: boolean) => {
+    if (!closingTab) return
+    const id = closingTab.id
+    if (save) {
+      const { collaborators, ...cleanAppState } = closingTab.data.appState || {}
+      const newData = { elements: closingTab.data.elements, appState: cleanAppState }
+      await supabase
+        .from('math_problems')
+        .update({ data: newData, updated_at: new Date().toISOString() })
+        .eq('id', id)
+    }
+    setTabs((prev) => prev.filter((t) => t.id !== id))
+    setClosedTabs((prev) => [...prev, closingTab])
+    if (activeTabId === id) {
+      const remaining = tabs.filter((t) => t.id !== id)
+      setActiveTabId(remaining[0]?.id || '')
+    }
+    setClosingTab(null)
+  }
+
+  const reopenTab = (id: string) => {
+    const tab = closedTabs.find((t) => t.id === id)
+    if (!tab) return
+    setClosedTabs((prev) => prev.filter((t) => t.id !== id))
+    setTabs((prev) => [...prev, tab])
+    setActiveTabId(tab.id)
+  }
+
+  const renameTab = async (id: string) => {
+    const tab = tabs.find((t) => t.id === id)
+    if (!tab) return
+    const newName = prompt('Enter new tab name', tab.name)
+    if (!newName || newName === tab.name) return
+    setTabs((prev) => prev.map((t) => (t.id === id ? { ...t, name: newName } : t)))
+    await supabase.from('math_problems').update({ name: newName }).eq('id', id)
+  }
+
+  useEffect(() => {
+    if (!activeTabId) return
+    const interval = setInterval(async () => {
+      const { data } = await supabase
+        .from('math_problems')
+        .select('data')
+        .eq('id', activeTabId)
+        .single()
+      if (data) {
+        const { collaborators, ...appState } = data.data?.appState || {}
+        setTabs((prev) =>
+          prev.map((t) =>
+            t.id === activeTabId
+              ? { ...t, data: { elements: data.data?.elements || [], appState } }
+              : t,
+          ),
+        )
+      }
+    }, 10000)
+    return () => clearInterval(interval)
+  }, [activeTabId])
+
     const updateTabData = useCallback(
       async (elements: readonly ExcalidrawElement[], appState: AppState) => {
         const { collaborators, ...cleanAppState } = appState
@@ -189,17 +256,26 @@ export function MathNotebookModule() {
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap flex-1 pr-32 sm:pr-0">
           {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTabId(tab.id)}
-              className={`px-3 py-1 rounded-full text-sm border transition-colors ${
-                tab.id === activeTabId
-                  ? 'bg-blue-500 text-white border-blue-500'
-                  : 'bg-white/70 text-gray-700 border-gray-300 hover:bg-white'
-              }`}
-            >
-              {tab.name}
-            </button>
+            <div key={tab.id} className="flex items-center">
+              <button
+                onClick={() => setActiveTabId(tab.id)}
+                onDoubleClick={() => renameTab(tab.id)}
+                className={`px-3 py-1 rounded-full text-sm border transition-colors mr-1 ${
+                  tab.id === activeTabId
+                    ? 'bg-blue-500 text-white border-blue-500'
+                    : 'bg-white/70 text-gray-700 border-gray-300 hover:bg-white'
+                }`}
+              >
+                {tab.name}
+              </button>
+              <button
+                onClick={() => handleCloseTab(tab.id)}
+                className="p-1 rounded-full border border-gray-300 hover:bg-white mr-2"
+                title="Close Tab"
+              >
+                <X className="w-4 h-4 text-gray-700" />
+              </button>
+            </div>
           ))}
           <button
             onClick={addTab}
@@ -208,6 +284,22 @@ export function MathNotebookModule() {
           >
             <PlusCircle className="w-5 h-5 text-gray-700" />
           </button>
+          {closedTabs.length > 0 && (
+            <select
+              className="input-dreamy max-w-xs ml-2 flex-shrink-0"
+              onChange={(e) => reopenTab(e.target.value)}
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Reopen
+              </option>
+              {closedTabs.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
         {activeTab && activeTab.history.length > 0 && (
           <select
@@ -223,7 +315,14 @@ export function MathNotebookModule() {
               .reverse()
               .map((h) => (
                 <option key={h.id} value={h.id}>
-                  {new Date(h.created_at).toLocaleString()}
+                  {new Date(h.created_at).toLocaleString(undefined, {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                  })}
                 </option>
               ))}
           </select>
@@ -245,6 +344,38 @@ export function MathNotebookModule() {
           />
         )}
       </div>
+      {closingTab && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-purple-50 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center">
+            <h2 className="text-lg font-light text-purple-700">
+              Harold and the Purple Crayon
+            </h2>
+            <p className="text-sm text-purple-700">
+              Save <span className="font-semibold">{closingTab.name}</span> before closing?
+            </p>
+            <div className="space-y-2">
+              <button
+                onClick={() => finalizeCloseTab(true)}
+                className="btn-dreamy-primary w-full text-sm bg-purple-600 hover:bg-purple-700 border-purple-700"
+              >
+                Save & Close
+              </button>
+              <button
+                onClick={() => finalizeCloseTab(false)}
+                className="btn-dreamy w-full text-sm border-purple-400 text-purple-700 hover:bg-purple-100"
+              >
+                Close Without Saving
+              </button>
+              <button
+                onClick={() => setClosingTab(null)}
+                className="btn-dreamy w-full text-sm"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
