@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Math Notebook home highlights the most recently updated notebook with a "Most Recent" label (2025-08-01 11:17:01 UTC)
 - Math Notebook now detects math expressions and offers a Solve button to compute results (2025-08-01 02:07:51 UTC)
 - Math Notebook opens to a dashboard home for browsing old problems and creating new notebooks (2025-08-01 00:19:08 UTC)
 - Math Notebook dashboard greets users by name with a time-of-day message and Keep-style grid of notebooks (2025-08-01 00:31:23 UTC)
@@ -45,6 +46,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Fixed
 - Math Notebook solver reads canvas equations and treats `^` as exponent so results calculate correctly (2025-08-01 11:21:00 UTC)
+- Math Notebook previews now hide Excalidraw menus so note thumbnails show sketch content (2025-08-01 11:17:01 UTC)
 - Removed KaTeX from Vite's external bundle list so math solver scripts load and the app no longer white screens (2025-08-01 11:02:09 UTC)
 - Bundled KaTeX and raised Workbox cache limit so math solver scripts load without module errors (2025-08-01 03:33:51 UTC)
 - Externalized KaTeX in Vite build config to resolve Netlify deployment error (2025-08-01 02:16:25 UTC)

@@ -329,3 +329,8 @@
     flex-basis: 100%;
   }
 }
+
+/* Hide Excalidraw UI in note previews */
+.excalidraw-preview .layer-ui__wrapper {
+  display: none !important;
+}
