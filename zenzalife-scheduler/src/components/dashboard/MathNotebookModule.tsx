@@ -510,9 +510,16 @@ export function MathNotebookModule() {
       user?.email?.split('@')[0] ||
       'friend'
 
-    const filtered = problems.filter(p =>
-      p.name.toLowerCase().includes(search.toLowerCase()),
-    )
+    const lower = search.toLowerCase()
+    const filtered = problems.filter(p => {
+      const titleMatch = p.name.toLowerCase().includes(lower)
+      const contentMatch = p.data.elements.some(
+        (el: any) =>
+          el.type === 'text' &&
+          (el.text || '').toLowerCase().includes(lower),
+      )
+      return titleMatch || contentMatch
+    })
 
     return (
       <>
