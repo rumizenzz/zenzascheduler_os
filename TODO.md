@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Math Notebook tab close confirmation now appears above the canvas via a portal so it no longer hides under the drawing area (2025-08-01 13:55:07 UTC).
 - Math Notebook home now lets users search notebooks by title with a prominent search bar (2025-08-01 13:34:42 UTC).
 - Task Notes history search bar redesigned with a clear icon for easier filtering (2025-08-01 13:34:42 UTC).
 - Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC).

@@ -119,3 +119,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Added a History button that opens Math Solver history in a Harold and the Purple Crayon & Vanilla Sky window.
 - Verified the repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 13:55 UTC)
+- Routed Math Notebook tab close confirmation through a portal so the modal appears above the canvas.
+- Verified the repository passes lint with `pnpm run lint`.
+
