@@ -37,6 +37,11 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Movable World Clock widgets can be pinned, repositioned, and opened via a Harold and the Purple Crayon & Vanilla Sky context menu with Supabase persistence (2025-08-01 23:24:00 UTC)
+- World Clock timezone selector now offers a Harold and the Purple Crayon & Vanilla Sky dropdown with Asia/Cebu option and a safe top-right overlay (2025-08-01 23:14:00 UTC)
+- World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59:00 UTC)
+- World Clock section lets users search time zones and shows selected times in a top-right overlay (2025-08-01 22:48:00 UTC)
+- Journal and Dream Journal entries now display full timestamps down to seconds (2025-08-01 22:48:00 UTC)
 - Diff editor now uses Monaco for real-time side-by-side comparisons with spinning Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes controls (2025-08-01 22:10:00 UTC)
 - Prototype diff editor adds Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes with Harold and the Purple Crayon & Vanilla Sky spins (2025-08-01 21:48:45 UTC)
 - Pull-to-refresh indicator no longer pushes dashboard content below the app, so sections start at the top without scrolling (2025-08-01 22:55:00 UTC)
