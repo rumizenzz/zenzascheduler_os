@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
+import { cleanupOverlays } from "@/lib/utils";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
@@ -117,6 +118,7 @@ export function Dashboard() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    cleanupOverlays();
   }, [activeTab]);
 
   useEffect(() => {
@@ -146,6 +148,7 @@ export function Dashboard() {
     }
     scrollToTop();
     setActiveTab(id);
+    setSidebarCollapsed(true);
   };
 
   const renderContent = (): JSX.Element => {
@@ -306,7 +309,7 @@ export function Dashboard() {
 
       {/* Main Content */}
       <div
-        className={`transition-all duration-300 ml-0 ${
+        className={`relative z-0 transition-all duration-300 ml-0 ${
           sidebarCollapsed ? "md:ml-16" : "md:ml-64"
         }`}
       >
