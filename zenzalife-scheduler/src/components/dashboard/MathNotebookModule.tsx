@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
-import { PlusCircle, History, X } from 'lucide-react'
+import { PlusCircle, History, X, Home } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
@@ -21,11 +21,13 @@ interface TabData {
 }
 
 export function MathNotebookModule() {
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
+  const [problems, setProblems] = useState<TabData[]>([])
   const [tabs, setTabs] = useState<TabData[]>([])
   const [activeTabId, setActiveTabId] = useState<string>('')
   const [closedTabs, setClosedTabs] = useState<TabData[]>([])
   const [closingTab, setClosingTab] = useState<TabData | null>(null)
+  const [showHome, setShowHome] = useState(true)
 
   useEffect(() => {
     if (!user) return
@@ -43,7 +45,7 @@ export function MathNotebookModule() {
         return
       }
 
-      if (data && data.length > 0) {
+      if (data) {
         const formatted = data.map((p: any) => {
           const { collaborators, ...appState } = p.data?.appState || {}
           return {
@@ -61,39 +63,52 @@ export function MathNotebookModule() {
               }) || []
           }
         })
-        setTabs(formatted)
-        setActiveTabId(formatted[0].id)
-      } else {
-        const { data: inserted, error: insertError } = await supabase
-          .from('math_problems')
-          .insert({
-            user_id: user.id,
-            name: 'Problem 1',
-            data: { elements: [], appState: {} }
-          })
-          .select('id, name, data')
-          .single()
-
-        if (insertError) {
-          console.error('Failed to create math problem:', insertError)
-          toast.error('Failed to create math problem')
-          return
-        }
-
-        const { collaborators: _c, ...appState } = inserted.data?.appState || {}
-        const newTab: TabData = {
-          id: inserted.id,
-          name: inserted.name,
-          data: { elements: inserted.data?.elements || [], appState },
-          history: []
-        }
-        setTabs([newTab])
-        setActiveTabId(newTab.id)
+        setProblems(formatted)
       }
     }
 
     load()
   }, [user])
+
+  const openProblem = (id: string) => {
+    const problem = problems.find((p) => p.id === id)
+    if (!problem) return
+    setClosedTabs((prev) => prev.filter((t) => t.id !== id))
+    setTabs([problem])
+    setActiveTabId(problem.id)
+    setShowHome(false)
+  }
+
+  const createProblem = async () => {
+    if (!user) return
+    const { data, error } = await supabase
+      .from('math_problems')
+      .insert({
+        user_id: user.id,
+        name: `Problem ${problems.length + 1}`,
+        data: { elements: [], appState: {} }
+      })
+      .select('id, name, data')
+      .single()
+
+    if (error) {
+      console.error('Failed to create math problem:', error)
+      toast.error('Failed to create math problem')
+      return
+    }
+
+    const { collaborators: _c, ...appState } = data.data?.appState || {}
+    const newProblem: TabData = {
+      id: data.id,
+      name: data.name,
+      data: { elements: data.data?.elements || [], appState },
+      history: []
+    }
+    setProblems((prev) => [...prev, newProblem])
+    setTabs([newProblem])
+    setActiveTabId(newProblem.id)
+    setShowHome(false)
+  }
 
   const addTab = async () => {
     if (!user) return
@@ -101,7 +116,7 @@ export function MathNotebookModule() {
       .from('math_problems')
       .insert({
         user_id: user.id,
-        name: `Problem ${tabs.length + 1}`,
+        name: `Problem ${problems.length + 1}`,
         data: { elements: [], appState: {} }
       })
       .select('id, name, data')
@@ -120,8 +135,9 @@ export function MathNotebookModule() {
       data: { elements: data.data?.elements || [], appState },
       history: []
     }
-    setTabs([...tabs, newTab])
+    setTabs((prev) => [...prev, newTab])
     setActiveTabId(newTab.id)
+    setProblems((prev) => [...prev, newTab])
   }
 
   const handleCloseTab = (id: string) => {
@@ -140,6 +156,9 @@ export function MathNotebookModule() {
         .from('math_problems')
         .update({ data: newData, updated_at: new Date().toISOString() })
         .eq('id', id)
+      setProblems((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, data: newData } : p)),
+      )
     }
     setTabs((prev) => prev.filter((t) => t.id !== id))
     setClosedTabs((prev) => [...prev, closingTab])
@@ -164,6 +183,7 @@ export function MathNotebookModule() {
     const newName = prompt('Enter new tab name', tab.name)
     if (!newName || newName === tab.name) return
     setTabs((prev) => prev.map((t) => (t.id === id ? { ...t, name: newName } : t)))
+    setProblems((prev) => prev.map((p) => (p.id === id ? { ...p, name: newName } : p)))
     await supabase.from('math_problems').update({ name: newName }).eq('id', id)
   }
 
@@ -177,12 +197,12 @@ export function MathNotebookModule() {
         .single()
       if (data) {
         const { collaborators, ...appState } = data.data?.appState || {}
+        const fetched = { elements: data.data?.elements || [], appState }
         setTabs((prev) =>
-          prev.map((t) =>
-            t.id === activeTabId
-              ? { ...t, data: { elements: data.data?.elements || [], appState } }
-              : t,
-          ),
+          prev.map((t) => (t.id === activeTabId ? { ...t, data: fetched } : t)),
+        )
+        setProblems((prev) =>
+          prev.map((p) => (p.id === activeTabId ? { ...p, data: fetched } : p)),
         )
       }
     }, 10000)
@@ -194,7 +214,10 @@ export function MathNotebookModule() {
         const { collaborators, ...cleanAppState } = appState
         const newData = { elements, appState: cleanAppState }
         setTabs((prev) =>
-          prev.map((tab) => (tab.id === activeTabId ? { ...tab, data: newData } : tab))
+          prev.map((tab) => (tab.id === activeTabId ? { ...tab, data: newData } : tab)),
+        )
+        setProblems((prev) =>
+          prev.map((p) => (p.id === activeTabId ? { ...p, data: newData } : p)),
         )
         if (activeTabId) {
           await supabase
@@ -203,7 +226,7 @@ export function MathNotebookModule() {
             .eq('id', activeTabId)
         }
       },
-      [activeTabId]
+      [activeTabId],
     )
 
   const saveVersion = async () => {
@@ -226,9 +249,14 @@ export function MathNotebookModule() {
 
     const newVersion = { id: data.id, created_at: data.created_at, data: versionData }
     const newTabs = tabs.map((t) =>
-      t.id === tab.id ? { ...t, history: [...t.history, newVersion] } : t
+      t.id === tab.id ? { ...t, history: [...t.history, newVersion] } : t,
     )
     setTabs(newTabs)
+    setProblems((prev) =>
+      prev.map((p) =>
+        p.id === tab.id ? { ...p, history: [...p.history, newVersion] } : p,
+      ),
+    )
   }
 
   const restoreVersion = async (versionId: string) => {
@@ -240,9 +268,12 @@ export function MathNotebookModule() {
     const versionData = { elements: version.data.elements, appState: cleanAppState }
 
     const newTabs = tabs.map((t) =>
-      t.id === tab.id ? { ...t, data: versionData } : t
+      t.id === tab.id ? { ...t, data: versionData } : t,
     )
     setTabs(newTabs)
+    setProblems((prev) =>
+      prev.map((p) => (p.id === tab.id ? { ...p, data: versionData } : p)),
+    )
     await supabase
       .from('math_problems')
       .update({ data: versionData, updated_at: new Date().toISOString() })
@@ -251,9 +282,71 @@ export function MathNotebookModule() {
 
   const activeTab = tabs.find((t) => t.id === activeTabId)
 
+  if (showHome) {
+    const hour = new Date().getHours()
+    const timeOfDay =
+      hour < 12
+        ? 'morning'
+        : hour < 17
+        ? 'afternoon'
+        : hour < 22
+        ? 'evening'
+        : 'night'
+    const name =
+      profile?.display_name ||
+      (user?.user_metadata as any)?.name ||
+      user?.email?.split('@')[0] ||
+      'friend'
+
+    return (
+      <div className="space-y-6 w-full">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold">
+              Welcome, {name}. Good {timeOfDay}!
+            </h2>
+            <p className="text-sm text-gray-600">
+              Let's get writing notes or math, or anything else you want to write
+              down.
+            </p>
+          </div>
+          <button onClick={createProblem} className="btn-dreamy-primary text-sm">
+            Create New Notebook
+          </button>
+        </div>
+        {problems.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {problems.map((p) => (
+              <div
+                key={p.id}
+                onClick={() => openProblem(p.id)}
+                className="border rounded p-4 bg-white shadow-sm hover:shadow cursor-pointer transition"
+              >
+                <div className="text-sm font-medium">{p.name}</div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-gray-600">No notebooks yet.</p>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
+        <button
+          onClick={() => {
+            setShowHome(true)
+            setTabs([])
+            setActiveTabId('')
+          }}
+          className="p-1 rounded-full border border-gray-300 hover:bg-white"
+          title="Home"
+        >
+          <Home className="w-5 h-5 text-gray-700" />
+        </button>
         <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap flex-1 pr-32 sm:pr-0">
           {tabs.map((tab) => (
             <div key={tab.id} className="flex items-center">
