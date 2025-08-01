@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- GED calculator now pops above the Math Notebook canvas via a portal for clear visibility (2025-08-01 16:23:10 UTC).
+- Plus button in Math Notebook adds a new Notes tab without asking for a template (2025-08-01 16:23:10 UTC).
 - Garbage & Recycling schedule saves no longer fail when address is unspecified (2025-08-01 16:13:26 UTC).
 - Daily and grace prayer calendars now list all recordings for a date so users can log unlimited prayers (2025-08-01 16:13:41 UTC).
 - Math Solver history now stores entries only in Supabase, dropping localStorage (2025-08-01 16:12:04 UTC).
