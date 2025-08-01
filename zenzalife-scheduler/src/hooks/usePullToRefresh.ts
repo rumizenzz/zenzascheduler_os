@@ -30,6 +30,6 @@ export function usePullToRefresh(enabled = true) {
         destroyPullToRefresh()
       }
     }
-    return
+    destroyPullToRefresh()
   }, [enabled])
 }

@@ -77,7 +77,9 @@ export function OnboardingModal() {
       content: (
         <div className="space-y-3 text-center">
           <p className="text-sm text-gray-700">
-            Swipe down anywhere to refresh the app if something looks outdated.
+            Enable the Harold and the Purple Crayon/Vanilla Sky button for your
+            device, then swipe down anywhere to refresh the app if something looks
+            outdated.
           </p>
         </div>
       )
