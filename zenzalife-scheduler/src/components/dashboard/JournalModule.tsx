@@ -153,12 +153,15 @@ export function JournalModule() {
                   <div key={entry.id} className="bg-white/10 p-4 rounded-lg whitespace-pre-wrap space-y-2">
                     {editingId === entry.id ? (
                       <>
-                      <textarea
-                        className="textarea-dreamy w-full"
-                        rows={5}
-                        value={editContent}
-                        onChange={(e) => setEditContent(e.target.value)}
-                      />
+                        <div className="text-xs opacity-80">
+                          {dayjs(entry.created_at).format('YYYY-MM-DD HH:mm:ss')}
+                        </div>
+                        <textarea
+                          className="textarea-dreamy w-full"
+                          rows={5}
+                          value={editContent}
+                          onChange={(e) => setEditContent(e.target.value)}
+                        />
                         <div className="flex gap-2 justify-end">
                           <button className="btn-secondary" onClick={() => setEditingId(null)}>
                             Cancel
@@ -170,6 +173,9 @@ export function JournalModule() {
                       </>
                     ) : (
                       <>
+                        <div className="text-xs opacity-80">
+                          {dayjs(entry.created_at).format('YYYY-MM-DD HH:mm:ss')}
+                        </div>
                         <div>{entry.content}</div>
                         <div className="flex gap-2 justify-end text-sm">
                           <button

@@ -37,6 +37,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- World Clock section lets users search time zones and shows selected times in a top-right overlay (2025-08-01 22:48:00 UTC)
+- Journal and Dream Journal entries now display full timestamps down to seconds (2025-08-01 22:48:00 UTC)
 - Diff editor now uses Monaco for real-time side-by-side comparisons with spinning Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes controls (2025-08-01 22:10:00 UTC)
 - Prototype diff editor adds Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes with Harold and the Purple Crayon & Vanilla Sky spins (2025-08-01 21:48:45 UTC)
 - Pull-to-refresh indicator no longer pushes dashboard content below the app, so sections start at the top without scrolling (2025-08-01 22:55:00 UTC)
