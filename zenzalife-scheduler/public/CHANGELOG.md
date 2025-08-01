@@ -62,6 +62,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
 
 ### Fixed
+- Refresh button no longer obscured by Change Log and swipe refresh toggle (2025-08-01 13:47:46 UTC)
 - Math Notebook solver interprets `x` and `X` as multiplication and renders × in expressions (2025-08-01 13:21:25 UTC)
 - Calendar action toolbar now wraps on desktop so buttons never get cut off (2025-08-01 13:18:35 UTC)
 - Math Notebook solver reads canvas equations and treats `^` as exponent so results calculate correctly (2025-08-01 11:21:00 UTC)
