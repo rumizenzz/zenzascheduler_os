@@ -5,6 +5,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ## [Unreleased]
 ### Changed
 - World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59 UTC)
+- Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22 UTC)
 - Journal and Dream Journal entries now show full timestamps down to the second (2025-08-01 22:48 UTC)
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
