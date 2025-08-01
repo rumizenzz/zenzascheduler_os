@@ -6,6 +6,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Changed
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Added
+- Life Logistics address form now offers Mapbox-powered search suggestions for quick entry (2025-08-01 16:27:25 UTC)
 - Settings now allow disabling the dreamlike entrance and its sound via a Save Changes button; unsaved changes trigger a Harold and the Purple Crayon & Vanilla Sky warning window (2025-08-01 16:13:28 UTC)
 - Authentication email field now suggests common domains for faster typing (2025-08-01 16:29:03 UTC)
 - Daily and grace prayer calendars list every recording for a date so users can log unlimited prayers (2025-08-01 16:13:41 UTC)
@@ -47,6 +48,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
 
 ### Fixed
+- Restored missing brace in Math Solver history clear function so lint passes (2025-08-01 16:27:25 UTC)
 - Resolved missing brace in Math Solver causing lint parse error (2025-08-01 16:29:03 UTC)
 - Sanitized blank address IDs when saving garbage schedules so Supabase no longer rejects empty UUIDs (2025-08-01 16:13:26 UTC)
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
@@ -77,6 +79,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Address search component now uses typed Mapbox features and limits suggestions to five results (2025-08-01 16:38:58 UTC)
 - Plus button inside Math Notebook instantly opens a new Notes tab without a template prompt (2025-08-01 16:23:10 UTC)
 - Math Solver history now stores entries only in Supabase, dropping localStorage (2025-08-01 16:12:04 UTC)
 - Bug list access code updated to ZENZASECRETS for monthly report view (2025-08-01 15:50:22 UTC)

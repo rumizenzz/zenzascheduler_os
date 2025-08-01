@@ -14,6 +14,9 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Life Logistics address form now supports Mapbox-powered suggestions for quick address search (2025-08-01 16:27:25 UTC)
+- Address search component now uses typed Mapbox features and limits suggestions to five results (2025-08-01 16:38:58 UTC)
+- Fixed Math Solver history clear function so component parses correctly (2025-08-01 16:27:25 UTC)
 - Entrance animation and sound preferences now persist in Supabase instead of local storage (2025-08-01 16:26:53 UTC).
 - Settings now let users disable the dreamlike entrance and its sound with a Save Changes button that warns of unsaved changes (2025-08-01 16:13:28 UTC).
 - Authentication email field now suggests common domains for quick entry (2025-08-01 16:29:03 UTC).

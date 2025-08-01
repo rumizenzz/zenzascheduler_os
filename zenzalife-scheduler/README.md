@@ -89,6 +89,7 @@ Configure these variables in **Site settings → Environment variables** so the 
 - `IMAP_PORT` – IMAP port, typically `993`
 - `IMAP_USER` – IMAP username
 - `IMAP_PASS` – IMAP password
+- `VITE_MAPBOX_TOKEN` – Mapbox API token for address search suggestions
 - `UNSUBSCRIBE_WARNING_TEXT` – text displayed on the unsubscribe page
 
 Legacy variables `IONOS_HOST`, `IONOS_PORT`, `IONOS_USER`, `IONOS_PASS`, `IONOS_USERNAME`, and `IONOS_PASSWORD` are supported for compatibility but `SMTP_*` variables are preferred.
