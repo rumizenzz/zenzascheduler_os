@@ -5,11 +5,11 @@ export function RefreshButton() {
   return (
     <button
       onClick={() => window.location.reload()}
-      className="fixed top-4 right-4 z-40 btn-dreamy text-xs flex items-center gap-2"
+      className="fixed top-4 right-4 z-40 btn-dreamy flex items-center gap-2 px-3 py-2 text-sm sm:text-base"
       aria-label="Refresh"
     >
-      <RefreshCw className="w-4 h-4" />
-      <span className="hidden sm:inline">Refresh</span>
+      <RefreshCw className="w-5 h-5" />
+      <span>Refresh</span>
     </button>
   )
 }
