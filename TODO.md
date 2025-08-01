@@ -14,6 +14,9 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Garbage schedule creation drops blank fields before saving so UUID parsing errors no longer block new entries (2025-08-01 16:43:04 UTC).
+- Garbage schedule saves strip blank strings before upsert so Supabase UUID fields never receive empty values (2025-08-01 16:32:00 UTC).
+- Garbage & Recycling schedule saves no longer fail when address is unspecified (2025-08-01 16:13:26 UTC).
 - Pressing Enter on desktop now solves Math Notebook problems (2025-08-01 16:04:16 UTC).
 - Intermittent fasting reminder toast only captures clicks inside itself so calendar and bottom buttons remain visible (2025-08-01 15:55:20 UTC).
 - Intermittent fasting reminder now ignores pointer events so calendar and bottom buttons stay clickable (2025-08-01 15:47:02 UTC).
