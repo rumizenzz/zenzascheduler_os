@@ -3,8 +3,12 @@
   pointer-events: none;
   font-size: 0.85em;
   font-weight: bold;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   height: 0;
+  min-height: 0;
   transition: height 0.3s, min-height 0.3s;
   text-align: center;
   width: 100%;
