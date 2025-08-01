@@ -12,6 +12,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
 - Pull-to-refresh placeholder no longer pushes dashboard content below the app; sections now load at the top (2025-08-01 22:55 UTC)
+- Dashboard sections now appear beside the sidebar without needing to scroll down after switching tabs (2025-08-01 23:15 UTC)
 - Special occasion heart hover now shows in week and month views, and hovering a special day showers the whole calendar with floating hearts (2025-08-01 21:35 UTC)
 - Journal and Dream Journal selection fields now glow with Harold and the Purple Crayon & Vanilla Sky gradients instead of plain white (2025-08-01 21:50 UTC)
 - Resolved Netlify TypeScript build errors by removing duplicate variables in RemindersButton and ClockModule (2025-08-01 19:05 UTC)
