@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
 import { PlusCircle, History, X, Home } from 'lucide-react'
+import { MathSolver } from './MathSolver'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
@@ -438,6 +439,7 @@ export function MathNotebookModule() {
           />
         )}
       </div>
+      <MathSolver />
       {closingTab && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
