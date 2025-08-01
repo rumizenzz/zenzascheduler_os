@@ -72,33 +72,14 @@ export function VerseOfTheDay() {
       created_at: new Date().toISOString()
     }
     try {
-      const { data: existing } = await supabase
+      const { data, error } = await supabase
         .from('scripture_notes')
-        .select('id, is_favorite, notes')
-        .eq('user_id', user.id)
-        .eq('date', today)
+        .insert(payload)
+        .select('id')
         .maybeSingle()
-      if (existing) {
-        const { error } = await supabase
-          .from('scripture_notes')
-          .update({ ...payload, created_at: undefined })
-          .eq('id', existing.id)
-        if (error) throw error
-        setSavedId(existing.id)
-        setIsFavorite(existing.is_favorite || false)
-        setNotes(existing.notes || '')
-        toast.success('Verse updated')
-      } else {
-        const { data, error } = await supabase
-          .from('scripture_notes')
-          .insert(payload)
-          .select('id')
-          .maybeSingle()
-        if (error) throw error
-        if (data) setSavedId(data.id)
-        setNotes(notes)
-        toast.success('Verse saved to Spiritual Study')
-      }
+      if (error) throw error
+      if (data) setSavedId(data.id)
+      toast.success('Verse saved to Spiritual Study')
     } catch (e: any) {
       toast.error('Failed to save verse: ' + e.message)
     }
