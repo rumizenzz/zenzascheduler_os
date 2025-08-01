@@ -14,6 +14,15 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Added Supabase tables for stopwatch history and timer presets so saved sessions load without missing relation errors (2025-08-01 17:53:27 UTC)
+- Reminders now pull upcoming calendar tasks and create matching tasks for new reminders so scheduling stays in sync (2025-08-01 17:44:00 UTC)
+- Reminders modal now lists Intermittent Fasting & Prayer countdown so monthly fasts show alongside other tasks (2025-08-01 17:38:05 UTC)
+- Reminders now save to Supabase with an Add Reminder form for persistent countdowns (2025-08-01 17:30:21 UTC)
+- Monthsary and 1 Year Anniversary task categories with a Reminders button that counts down to upcoming tasks and celebrates special days (2025-08-01 17:20:29 UTC)
+- Tasks can now be marked as all-day to schedule full-day events (2025-08-01 17:33:19 UTC)
+- Life Logistics address form now offers free OpenStreetMap Nominatim search suggestions for quick entry (2025-08-01 16:58:29 UTC)
+- Clock module merges timers and a stopwatch with Harold and the Purple Crayon & Vanilla Sky styling (2025-08-01 17:16:12 UTC)
+- Stopwatch sessions now persist in Supabase and timers support reusable presets (2025-08-01 17:26:56 UTC)
 - Entrance animation duration can now be customized in Settings (2025-08-01 16:47:48 UTC)
 - Settings now allow disabling the dreamlike entrance and its sound via a Save Changes button; unsaved changes trigger a Harold and the Purple Crayon & Vanilla Sky warning window (2025-08-01 16:13:28 UTC)
 - Authentication email field now suggests common domains for faster typing (2025-08-01 16:29:03 UTC)
@@ -56,6 +65,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
 
 ### Fixed
+- Restored missing brace in Math Solver history clear function so lint passes (2025-08-01 16:27:25 UTC)
 - Saving garbage schedules now sets the required date field to prevent Supabase null constraint errors (2025-08-01 16:53:53 UTC)
 - Report Bug button no longer covers the Sign Out control and shifts beside the sidebar on desktop and mobile (2025-08-01 16:57:38 UTC)
 - Renaming a Math Notebook tab no longer shows duplicate windows; the rename modal now appears only once above the canvas (2025-08-01 16:50:04 UTC)
@@ -89,6 +99,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Address search component now uses the free OpenStreetMap Nominatim API and limits suggestions to five results (2025-08-01 16:58:29 UTC)
 - Plus button inside Math Notebook instantly opens a new Notes tab without a template prompt (2025-08-01 16:23:10 UTC)
 - Math Solver history now stores entries only in Supabase, dropping localStorage (2025-08-01 16:12:04 UTC)
 - Bug list access code updated to ZENZASECRETS for monthly report view (2025-08-01 15:50:22 UTC)

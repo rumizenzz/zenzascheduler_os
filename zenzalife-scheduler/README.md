@@ -91,6 +91,8 @@ Configure these variables in **Site settings → Environment variables** so the 
 - `IMAP_PASS` – IMAP password
 - `UNSUBSCRIBE_WARNING_TEXT` – text displayed on the unsubscribe page
 
+Address search suggestions use the free OpenStreetMap Nominatim service and require no API key.
+
 Legacy variables `IONOS_HOST`, `IONOS_PORT`, `IONOS_USER`, `IONOS_PASS`, `IONOS_USERNAME`, and `IONOS_PASSWORD` are supported for compatibility but `SMTP_*` variables are preferred.
 
 > **Note**
