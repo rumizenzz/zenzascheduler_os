@@ -29,6 +29,8 @@ export function MathNotebookModule() {
   const [closedTabs, setClosedTabs] = useState<TabData[]>([])
   const [closingTab, setClosingTab] = useState<TabData | null>(null)
   const [showHome, setShowHome] = useState(true)
+  const [renamingTab, setRenamingTab] = useState<TabData | null>(null)
+  const [newTabName, setNewTabName] = useState('')
 
   useEffect(() => {
     if (!user) return
@@ -178,14 +180,31 @@ export function MathNotebookModule() {
     setActiveTabId(tab.id)
   }
 
-  const renameTab = async (id: string) => {
+  const openRenameTab = (id: string) => {
     const tab = tabs.find((t) => t.id === id)
     if (!tab) return
-    const newName = prompt('Enter new tab name', tab.name)
-    if (!newName || newName === tab.name) return
-    setTabs((prev) => prev.map((t) => (t.id === id ? { ...t, name: newName } : t)))
-    setProblems((prev) => prev.map((p) => (p.id === id ? { ...p, name: newName } : p)))
-    await supabase.from('math_problems').update({ name: newName }).eq('id', id)
+    setRenamingTab(tab)
+    setNewTabName(tab.name)
+  }
+
+  const finalizeRenameTab = async () => {
+    if (!renamingTab) return
+    const newName = newTabName.trim()
+    if (!newName || newName === renamingTab.name) {
+      setRenamingTab(null)
+      return
+    }
+    setTabs((prev) =>
+      prev.map((t) => (t.id === renamingTab.id ? { ...t, name: newName } : t)),
+    )
+    setProblems((prev) =>
+      prev.map((p) => (p.id === renamingTab.id ? { ...p, name: newName } : p)),
+    )
+    await supabase
+      .from('math_problems')
+      .update({ name: newName })
+      .eq('id', renamingTab.id)
+    setRenamingTab(null)
   }
 
   useEffect(() => {
@@ -353,7 +372,7 @@ export function MathNotebookModule() {
             <div key={tab.id} className="flex items-center">
               <button
                 onClick={() => setActiveTabId(tab.id)}
-                onDoubleClick={() => renameTab(tab.id)}
+                onDoubleClick={() => openRenameTab(tab.id)}
                 className={`px-3 py-1 rounded-full text-sm border transition-colors mr-1 ${
                   tab.id === activeTabId
                     ? 'bg-purple-600 text-white border-purple-600'
@@ -440,6 +459,33 @@ export function MathNotebookModule() {
         )}
       </div>
       <MathSolver />
+      {renamingTab && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
+            <h2 className="text-lg font-light">Harold and the Purple Crayon Meets Vanilla Sky</h2>
+            <input
+              value={newTabName}
+              onChange={(e) => setNewTabName(e.target.value)}
+              className="input-dreamy w-full text-sm"
+              autoFocus
+            />
+            <div className="space-y-2">
+              <button
+                onClick={finalizeRenameTab}
+                className="btn-dreamy-primary w-full text-sm bg-purple-600 hover:bg-purple-700 border-purple-700 text-white"
+              >
+                Rename
+              </button>
+              <button
+                onClick={() => setRenamingTab(null)}
+                className="btn-dreamy w-full text-sm text-purple-100"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {closingTab && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
