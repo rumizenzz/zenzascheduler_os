@@ -42,6 +42,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
 
 ### Fixed
+- Bundled KaTeX and raised Workbox cache limit so math solver scripts load without module errors (2025-08-01 03:33:51 UTC)
 - Externalized KaTeX in Vite build config to resolve Netlify deployment error (2025-08-01 02:16:25 UTC)
 - Math Notebook tabs no longer hide beneath Change Log and Subscribe buttons on mobile (2025-07-31 22:53:28 UTC)
 - PWA install prompt now waits for a user gesture, preventing `NotAllowedError` on modern browsers (2025-07-31 21:23:15 UTC)
