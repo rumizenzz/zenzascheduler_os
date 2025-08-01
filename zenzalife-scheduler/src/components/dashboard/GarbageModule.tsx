@@ -13,6 +13,7 @@ interface GarbageSchedule {
   collection_day: string
   collection_time?: string
   frequency: string
+  date: string
   next_collection: string
   auto_reminder: boolean
   notes?: string
@@ -170,6 +171,7 @@ export function GarbageModule() {
         ...scheduleData,
         user_id: user.id,
         address_id: scheduleData.address_id || null,
+        date: nextCollection,
         next_collection: nextCollection,
         updated_at: new Date().toISOString()
       }
@@ -229,7 +231,8 @@ export function GarbageModule() {
       
       const { error } = await supabase
         .from('garbage_schedule')
-        .update({ 
+        .update({
+          date: nextCollection,
           next_collection: nextCollection,
           updated_at: new Date().toISOString()
         })

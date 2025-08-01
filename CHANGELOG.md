@@ -49,11 +49,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
 
 ### Fixed
-<<<<<<< codex/fix-ui-layout-for-side-sections-and-buttons
+- Saving garbage schedules now sets the required date field to prevent Supabase null constraint errors (2025-08-01 16:53:53 UTC)
 - Report Bug button no longer covers the Sign Out control and shifts beside the sidebar on desktop and mobile (2025-08-01 16:57:38 UTC)
-=======
 - Renaming a Math Notebook tab no longer shows duplicate windows; the rename modal now appears only once above the canvas (2025-08-01 16:50:04 UTC)
->>>>>>> main
 - Resolved missing brace in Math Solver causing lint parse error (2025-08-01 16:29:03 UTC)
 - Sanitized blank address IDs when saving garbage schedules so Supabase no longer rejects empty UUIDs (2025-08-01 16:13:26 UTC)
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
