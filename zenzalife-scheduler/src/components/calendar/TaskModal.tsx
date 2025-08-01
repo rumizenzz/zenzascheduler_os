@@ -66,7 +66,9 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         title: task.title || '',
         category: task.category || 'other',
         start_time: task.start_time
-          ? dayjs(task.start_time).local().format('YYYY-MM-DDTHH:mm')
+          ? dayjs(task.start_time)
+              .local()
+              .format(task.all_day ? 'YYYY-MM-DD' : 'YYYY-MM-DDTHH:mm')
           : '',
         end_time: task.end_time
           ? dayjs(task.end_time).local().format('YYYY-MM-DDTHH:mm')
@@ -74,7 +76,10 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         all_day: task.all_day || false,
         repeat_pattern: task.repeat_pattern || 'none',
         alarm: task.alarm || false,
-        custom_sound_path: task.custom_sound_path || localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
+        custom_sound_path:
+          task.custom_sound_path ||
+          localStorage.getItem('defaultAlarmSound') ||
+          builtinAlarms[0].url,
         visibility: task.visibility || 'private',
         notes: task.notes || '',
         completed: task.completed || false
@@ -136,7 +141,21 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
   }
 
   const handleChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+    if (field === 'all_day') {
+      if (value) {
+        const date = formData.start_time
+          ? dayjs(formData.start_time).format('YYYY-MM-DD')
+          : dayjs().format('YYYY-MM-DD')
+        setFormData(prev => ({ ...prev, all_day: true, start_time: date, end_time: '' }))
+      } else {
+        const start = formData.start_time
+          ? dayjs(formData.start_time).hour(9).minute(0)
+          : dayjs().hour(9).minute(0)
+        setFormData(prev => ({ ...prev, all_day: false, start_time: start.format('YYYY-MM-DDTHH:mm') }))
+      }
+    } else {
+      setFormData(prev => ({ ...prev, [field]: value }))
+    }
   }
 
   const autoSetEndTime = () => {
