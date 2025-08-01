@@ -14,6 +14,9 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Grace prayers now track live duration and can be replayed by date from a calendar view (2025-08-01 15:29:18 UTC).
+- Morning and night prayers now track live prayer duration and can be reviewed by date in a prayer calendar (2025-08-01 15:13:17 UTC).
+- Morning and night prayers now record audio from alarm Start Prayer button with organized playback, and grace prayers include viewable dish images (2025-08-01 13:14:57 UTC).
 - Added Report Bug button with secret bug list in Settings (2025-08-01 15:38:34 UTC).
 - Bug list secret code updated to ZENZASECRETS for viewing monthly reports (2025-08-01 15:50:22 UTC).
 - New Notebook template selector now uses Harold and the Purple Crayon & Vanilla Sky colors so options stand out (2025-08-01 15:21:33 UTC).

@@ -144,7 +144,20 @@ export type GracePrayer = {
   user_id: string
   meal_time: string
   audio_url: string
+  photo_url?: string
   started_at: string
+  duration_seconds: number
+  created_at?: string
+  updated_at?: string
+}
+
+export type DailyPrayer = {
+  id: string
+  user_id: string
+  prayer_type: string
+  audio_url: string
+  started_at: string
+  duration_seconds: number
   created_at?: string
   updated_at?: string
 }

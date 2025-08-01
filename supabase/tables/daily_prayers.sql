@@ -1,9 +1,8 @@
-CREATE TABLE grace_prayers (
+CREATE TABLE daily_prayers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
-    meal_time VARCHAR(20) NOT NULL,
+    prayer_type VARCHAR(20) NOT NULL,
     audio_url TEXT NOT NULL,
-    photo_url TEXT,
     started_at TIMESTAMP WITH TIME ZONE NOT NULL,
     duration_seconds INTEGER NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

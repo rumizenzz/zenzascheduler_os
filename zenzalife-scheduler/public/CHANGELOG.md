@@ -4,6 +4,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Morning and night prayers display a live timer, save duration, and can be replayed from a date-based prayer calendar (2025-08-01 15:13:17 UTC)
+- Alarm window offers a Start Prayer button for Wake Up and Sleep tasks, recording dated morning and night prayers and letting grace prayers show dish photos on demand (2025-08-01 13:14:57 UTC)
+- Grace prayers now show a live timer, store duration, and replay from a date-filtered calendar with optional dish photos (2025-08-01 15:29:18 UTC)
 - Report Bug button and hidden bug list accessible in Settings via secret code (2025-08-01 15:38:34 UTC)
 - Fasting reminder now displays upcoming fast date and days remaining before the first Sunday (2025-08-01 15:09:18 UTC)
 - Monthly fasting reminder now triggers on the first Sunday of each month with a top-right toast (2025-08-01 14:56:08 UTC)
