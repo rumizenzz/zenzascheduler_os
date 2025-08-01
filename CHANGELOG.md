@@ -8,6 +8,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
 - Switching dashboard sections now resets scroll position so content starts at the top (2025-08-01 17:09:52 UTC)
+- Manual garbage schedule saves now include a type value to satisfy Supabase not-null constraints (2025-08-01 18:15:30 UTC)
 ### Added
 - Added Supabase tables for stopwatch history and timer presets so saved sessions load without missing relation errors (2025-08-01 17:53:27 UTC)
 - Reminders now pull upcoming calendar tasks and create matching tasks for new reminders so scheduling stays in sync (2025-08-01 17:44:00 UTC)
