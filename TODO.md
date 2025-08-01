@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Swipe refresh now requires Harold and the Purple Crayon/Vanilla Sky toggle per device, disabled by default (2025-08-01 11:39:36 UTC).
 - Math Notebook last opened times now save in Supabase so the "Most Recent" label syncs across devices (2025-08-01 11:42:02 UTC).
 - Math Notebook home now orders notebooks by last opened time and keeps the "Most Recent" label until another notebook is opened (2025-08-01 11:34:40 UTC).
 - Math Notebook scans canvas text for equations, auto-filling the solver and supporting `^` exponents (2025-08-01 11:21:00 UTC).
