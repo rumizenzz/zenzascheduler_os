@@ -342,6 +342,9 @@ export function MathNotebookModule() {
                 onClick={() => openProblem(p.id)}
                 className="mb-6 break-inside-avoid rounded-xl p-4 bg-gradient-to-br from-purple-800/70 via-indigo-800/70 to-blue-800/70 border border-purple-500 shadow-lg hover:shadow-2xl cursor-pointer transition"
               >
+                <div className="h-32 mb-2 border border-purple-600 rounded bg-gray-900 pointer-events-none">
+                  <Excalidraw initialData={p.data} viewModeEnabled theme="dark" />
+                </div>
                 <div className="text-sm font-medium">{p.name}</div>
               </div>
             ))}
