@@ -4,8 +4,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Changed
+- Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Added
+- Entrance animation duration can now be customized in Settings (2025-08-01 16:47:48 UTC)
 - Settings now allow disabling the dreamlike entrance and its sound via a Save Changes button; unsaved changes trigger a Harold and the Purple Crayon & Vanilla Sky warning window (2025-08-01 16:13:28 UTC)
 - Authentication email field now suggests common domains for faster typing (2025-08-01 16:29:03 UTC)
 - Daily and grace prayer calendars list every recording for a date so users can log unlimited prayers (2025-08-01 16:13:41 UTC)
@@ -48,6 +50,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Fixed
 - Saving garbage schedules now sets the required date field to prevent Supabase null constraint errors (2025-08-01 16:53:53 UTC)
+- Report Bug button no longer covers the Sign Out control and shifts beside the sidebar on desktop and mobile (2025-08-01 16:57:38 UTC)
+- Renaming a Math Notebook tab no longer shows duplicate windows; the rename modal now appears only once above the canvas (2025-08-01 16:50:04 UTC)
 - Resolved missing brace in Math Solver causing lint parse error (2025-08-01 16:29:03 UTC)
 - Sanitized blank address IDs when saving garbage schedules so Supabase no longer rejects empty UUIDs (2025-08-01 16:13:26 UTC)
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.

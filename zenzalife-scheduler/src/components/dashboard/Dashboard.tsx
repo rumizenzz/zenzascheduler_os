@@ -179,11 +179,11 @@ export function Dashboard() {
       )}
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-full bg-white/80 backdrop-blur-lg border-r border-white/50 z-40 transform transition-transform duration-300 ${
+        className={`fixed left-0 top-0 h-full harold-sky bg-gradient-to-b from-indigo-950 via-purple-950 to-blue-900/90 backdrop-blur-lg border-r border-white/20 z-40 transform transition-transform duration-300 ${
           sidebarCollapsed
             ? "-translate-x-full md:translate-x-0 md:w-16 w-64"
             : "translate-x-0 w-64"
-        }`}
+        } flex flex-col`}
       >
         {/* Logo */}
         <div className="p-6 border-b border-white/30">
@@ -193,8 +193,8 @@ export function Dashboard() {
             </div>
             {!sidebarCollapsed && (
               <div>
-                <h1 className="text-lg font-light text-gray-800">ZenzaLife</h1>
-                <p className="text-xs text-gray-600/80">Scheduler</p>
+                <h1 className="text-lg font-light text-purple-100">ZenzaLife</h1>
+                <p className="text-xs text-purple-200/80">Scheduler</p>
               </div>
             )}
           </div>
@@ -210,10 +210,10 @@ export function Dashboard() {
             </div>
             {!sidebarCollapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-800 truncate">
+                <p className="text-sm font-medium text-purple-100 truncate">
                   {profile?.display_name || "User"}
                 </p>
-                <p className="text-xs text-gray-600/80 capitalize">
+                <p className="text-xs text-purple-200/80 capitalize">
                   {profile?.relationship_role || "Individual"}
                 </p>
               </div>
@@ -222,7 +222,7 @@ export function Dashboard() {
         </div>
 
         {/* Navigation */}
-        <nav className="p-4 space-y-2">
+        <nav className="flex-1 overflow-y-auto p-4 space-y-2">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -232,17 +232,15 @@ export function Dashboard() {
                 key={item.id}
                 onClick={() => handleTabClick(item.id as DashboardTab)}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 ${
-                  isActive ? "bg-white/70 shadow-sm" : "hover:bg-white/40"
+                  isActive ? "bg-white/20 shadow-sm" : "hover:bg-white/10"
                 }`}
                 title={sidebarCollapsed ? item.label : undefined}
               >
-                <Icon
-                  className={`w-5 h-5 ${isActive ? item.color : "text-gray-600"}`}
-                />
+                <Icon className={`w-5 h-5 ${isActive ? item.color : "text-purple-100"}`} />
                 {!sidebarCollapsed && (
                   <span
                     className={`text-sm font-medium ${
-                      isActive ? "text-gray-800" : "text-gray-600"
+                      isActive ? "text-white" : "text-purple-100"
                     }`}
                   >
                     {item.label}
@@ -254,10 +252,10 @@ export function Dashboard() {
         </nav>
 
         {/* Sign Out */}
-        <div className="absolute bottom-4 left-4 right-4">
+        <div className="p-4">
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/10 text-purple-100 hover:text-red-300 transition-colors"
             title={sidebarCollapsed ? "Sign Out" : undefined}
           >
             <LogOut className="w-5 h-5" />
@@ -297,7 +295,10 @@ export function Dashboard() {
         enabled={pullRefreshEnabled}
         toggle={() => setPullRefreshEnabled(!pullRefreshEnabled)}
       />
-      <ReportBugButton />
+      <ReportBugButton
+        sidebarCollapsed={sidebarCollapsed}
+        isMobile={isMobile}
+      />
       <ChangeLogButton />
       <Footer />
       {showUnsavedModal && (
