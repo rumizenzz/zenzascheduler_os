@@ -41,6 +41,7 @@ import { RefreshButton } from "../RefreshButton";
 import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
 import { FastingPrayerReminder } from "../FastingPrayerReminder";
 import { ReportBugButton } from "../ReportBugButton";
+import { RemindersButton } from "../RemindersButton";
 
 type DashboardTab =
   | "calendar"
@@ -95,6 +96,10 @@ export function Dashboard() {
   }, [pullRefreshEnabled, storageKey]);
 
   usePullToRefresh(pullRefreshEnabled);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [activeTab]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -290,6 +295,7 @@ export function Dashboard() {
       </div>
       <OnboardingModal />
       <MailingListPrompt />
+      <RemindersButton />
       <RefreshButton />
       <PullToRefreshToggleButton
         enabled={pullRefreshEnabled}

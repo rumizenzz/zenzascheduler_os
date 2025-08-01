@@ -6,8 +6,15 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Changed
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
+### Fixed
+- Switching dashboard sections now resets scroll position so content starts at the top (2025-08-01 17:09:52 UTC)
 ### Added
 - Added Supabase tables for stopwatch history and timer presets so saved sessions load without missing relation errors (2025-08-01 17:53:27 UTC)
+- Reminders now pull upcoming calendar tasks and create matching tasks for new reminders so scheduling stays in sync (2025-08-01 17:44:00 UTC)
+- Reminders modal now lists Intermittent Fasting & Prayer countdown so monthly fasts show alongside other tasks (2025-08-01 17:38:05 UTC)
+- Reminders now save to Supabase with an Add Reminder form for persistent countdowns (2025-08-01 17:30:21 UTC)
+- Monthsary and 1 Year Anniversary task categories with a Reminders button that counts down to upcoming tasks and celebrates special days (2025-08-01 17:20:29 UTC)
+- Tasks can now be marked as all-day to schedule full-day events (2025-08-01 17:33:19 UTC)
 - Life Logistics address form now offers free OpenStreetMap Nominatim search suggestions for quick entry (2025-08-01 16:58:29 UTC)
 - Clock module merges timers and a stopwatch with Harold and the Purple Crayon & Vanilla Sky styling (2025-08-01 17:16:12 UTC)
 - Stopwatch sessions now persist in Supabase and timers support reusable presets (2025-08-01 17:26:56 UTC)
