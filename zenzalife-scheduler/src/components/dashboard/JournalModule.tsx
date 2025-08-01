@@ -99,7 +99,7 @@ export function JournalModule() {
   }, {})
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-24">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-light text-purple-200 flex items-center gap-3">
           <NotebookPen className="w-8 h-8" />
@@ -117,7 +117,7 @@ export function JournalModule() {
       {showAdd && (
         <div className="card-floating bg-purple-900/80 text-white p-4 space-y-4">
           <textarea
-            className="w-full p-2 rounded text-black"
+            className="textarea-dreamy w-full"
             rows={5}
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -153,12 +153,12 @@ export function JournalModule() {
                   <div key={entry.id} className="bg-white/10 p-4 rounded-lg whitespace-pre-wrap space-y-2">
                     {editingId === entry.id ? (
                       <>
-                        <textarea
-                          className="w-full p-2 rounded text-black"
-                          rows={5}
-                          value={editContent}
-                          onChange={(e) => setEditContent(e.target.value)}
-                        />
+                      <textarea
+                        className="textarea-dreamy w-full"
+                        rows={5}
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                      />
                         <div className="flex gap-2 justify-end">
                           <button className="btn-secondary" onClick={() => setEditingId(null)}>
                             Cancel

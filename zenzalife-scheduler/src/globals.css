@@ -260,6 +260,13 @@
   @apply bg-purple-900 text-purple-100;
 }
 
+/* Textarea styles with Harold & Vanilla Sky vibe */
+.textarea-dreamy {
+  @apply bg-gradient-to-r from-purple-900/70 via-indigo-900/70 to-blue-900/70 text-purple-100;
+  @apply border-2 border-purple-400 rounded-xl px-4 py-3 backdrop-blur-sm;
+  @apply placeholder-purple-300 focus:border-purple-300 focus:bg-purple-900/80 focus:outline-none transition-all duration-300;
+}
+
 /* Glass morphism effect */
 .glass {
   @apply bg-white/20 backdrop-blur-md border border-white/30;
@@ -336,12 +343,14 @@
   cursor: pointer;
   transition: transform 0.3s ease;
   overflow: visible;
+  color: white !important;
+  background: linear-gradient(135deg, #ec4899, #fbbf24) !important;
+  box-shadow: 0 0 8px rgba(236, 72, 153, 0.4);
+  animation: love-pulse 3s ease-in-out infinite;
 }
 
 .special-occasion:hover {
   transform: scale(1.05);
-  color: white !important;
-  background: linear-gradient(135deg, #ec4899, #fbbf24) !important;
   box-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
   animation: love-pulse 1.5s ease-in-out infinite;
 }

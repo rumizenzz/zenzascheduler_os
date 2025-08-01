@@ -4,11 +4,15 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Changed
+- Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
 - Special occasion heart hover now shows in week and month views, and hovering a special day showers the whole calendar with floating hearts (2025-08-01 21:35 UTC)
+- Journal and Dream Journal selection fields now glow with Harold and the Purple Crayon & Vanilla Sky gradients instead of plain white (2025-08-01 21:50 UTC)
+- Resolved Netlify TypeScript build errors by removing duplicate variables in RemindersButton and ClockModule (2025-08-01 19:05 UTC)
+- Journal and Dream Journal Add buttons now sit above bottom controls so they remain clickable (2025-08-01 21:45 UTC)
 - Added missing Supabase tables for journal and dream journal entries to resolve relation errors (2025-08-01 21:08 UTC)
 - All-day task date input now uses a date-only value so browsers no longer warn about invalid format (2025-08-01 20:55 UTC)
 - Bundled pulltorefreshjs in Vite build so module specifier resolves during runtime (2025-08-01 20:14 UTC)
@@ -24,6 +28,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- See All Reminders now opens a Harold and the Purple Crayon & Vanilla Sky window above the current panel (2025-08-01 21:30 UTC)
+- Garbage & Recycling schedules now appear in Reminders so upcoming collection days are highlighted (2025-08-01 18:51 UTC)
 - Magical purple Journal and Lucid Dream Journal modules save daily entries with lucidity tracking (2025-08-01 20:12 UTC)
 - Journal and Dream Journal entries can be edited or deleted with Supabase syncing (2025-08-01 21:30 UTC)
 - Monthsary and Anniversary tasks now sparkle with affectionate hover animations (2025-08-01 19:03 UTC)

@@ -119,7 +119,7 @@ export function LucidDreamJournalModule() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-24">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-light text-purple-200 flex items-center gap-3">
           <MoonStar className="w-8 h-8" />
@@ -137,7 +137,7 @@ export function LucidDreamJournalModule() {
       {showAdd && (
         <div className="card-floating bg-indigo-900/80 text-white p-4 space-y-4">
           <textarea
-            className="w-full p-2 rounded text-black"
+            className="textarea-dreamy w-full"
             rows={5}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -153,7 +153,7 @@ export function LucidDreamJournalModule() {
           </label>
           {achieved && (
             <select
-              className="input-dreamy w-full"
+              className="select-dreamy w-full"
               value={level}
               onChange={(e) => setLevel(Number(e.target.value))}
             >
@@ -192,7 +192,7 @@ export function LucidDreamJournalModule() {
                     {dayjs(entry.created_at).format('MMMM D, YYYY')}
                   </div>
                   <textarea
-                    className="w-full p-2 rounded text-black"
+                    className="textarea-dreamy w-full"
                     rows={5}
                     value={editDescription}
                     onChange={(e) => setEditDescription(e.target.value)}
@@ -207,7 +207,7 @@ export function LucidDreamJournalModule() {
                   </label>
                   {editAchieved && (
                     <select
-                      className="input-dreamy w-full"
+                      className="select-dreamy w-full"
                       value={editLevel}
                       onChange={(e) => setEditLevel(Number(e.target.value))}
                     >
