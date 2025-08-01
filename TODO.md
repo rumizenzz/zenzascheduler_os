@@ -8,7 +8,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
+- Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22 UTC)
 ### Fixed
+- IDE overlay now renders via a portal with a sky-high z-index so the diff editor appears above all dashboard content (2025-08-01 23:46 UTC)
 - Pull-to-refresh placeholder no longer pushes dashboard content below the app; sections now load at the top (2025-08-01 22:55 UTC)
 - Special occasion heart hover now shows in week and month views, and hovering a special day showers the whole calendar with floating hearts (2025-08-01 21:35 UTC)
 - Journal and Dream Journal selection fields now glow with Harold and the Purple Crayon & Vanilla Sky gradients instead of plain white (2025-08-01 21:50 UTC)
@@ -38,6 +40,12 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - IDE diff editor now opens in a Harold and the Purple Crayon & Vanilla Sky overlay instead of a separate browser tab (2025-08-01 23:27:44 UTC)
+- IDE overlay now renders via a portal with a sky-high z-index so the diff editor appears above all dashboard content (2025-08-01 23:46:00 UTC)
+- IDE diff editor now opens in a Harold and the Purple Crayon & Vanilla Sky overlay instead of a separate browser tab (2025-08-01 23:27:44 UTC)
+- Movable World Clock widgets can be pinned, repositioned, and opened via a Harold and the Purple Crayon & Vanilla Sky context menu with Supabase persistence (2025-08-01 23:24:00 UTC)
+- World Clock timezone selector now offers a Harold and the Purple Crayon & Vanilla Sky dropdown with Asia/Cebu option and a safe top-right overlay (2025-08-01 23:14:00 UTC)
+- World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59:00 UTC)
+- Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22:52 UTC)
 - World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59:00 UTC)
 - Added a Tools button on the dashboard that opens the IDE diff editor from any tab (2025-08-01 23:00:00 UTC)
 - Added a Tools section to the README explaining where the wrench menu lives and how to open the diff editor or jump to `/ide` (2025-08-01 22:40:00 UTC)
