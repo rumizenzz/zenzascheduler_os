@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Manual garbage schedule saves now include a type value to satisfy Supabase not-null constraints (2025-08-01 18:15:30 UTC)
 - Clock module colors darkened so timers and presets are easy to read (2025-08-01 18:09:58 UTC)
 - Dashboard scroll reset now also targets the root element so modules never appear below the app (2025-08-01 18:13:13 UTC).
 - Calendar Add Task button floats above Refresh, Change Log, and swipe-toggle controls so it's never hidden (2025-08-01 17:48:34 UTC).

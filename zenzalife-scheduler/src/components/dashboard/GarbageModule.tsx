@@ -9,6 +9,7 @@ interface GarbageSchedule {
   id: string
   user_id?: string
   address_id?: string
+  type: string
   waste_type: string
   collection_day: string
   collection_time?: string
@@ -171,6 +172,7 @@ export function GarbageModule() {
         ...scheduleData,
         user_id: user.id,
         address_id: scheduleData.address_id || null,
+        type: scheduleData.type || 'manual',
         date: nextCollection,
         next_collection: nextCollection,
         updated_at: new Date().toISOString()
@@ -492,6 +494,7 @@ interface ScheduleModalProps {
 
 function ScheduleModal({ isOpen, onClose, onSave, schedule, addresses }: ScheduleModalProps) {
   const [formData, setFormData] = useState({
+    type: schedule?.type || 'manual',
     waste_type: schedule?.waste_type || 'trash',
     collection_day: schedule?.collection_day || 'monday',
     collection_time: schedule?.collection_time || '',
