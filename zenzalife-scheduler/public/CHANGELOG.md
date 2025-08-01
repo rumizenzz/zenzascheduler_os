@@ -3,10 +3,7 @@
 All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in this file. This project follows [Semantic Versioning](https://semver.org/) and the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
-
 ### Added
-
-- Report a Bug button anchors to the bottom-left with a custom Harold and the Purple Crayon & Vanilla Sky bug icon (2025-08-01 15:35:06 UTC)
 - Fasting reminder now displays upcoming fast date and days remaining before the first Sunday (2025-08-01 15:09:18 UTC)
 - Monthly fasting reminder now triggers on the first Sunday of each month with a top-right toast (2025-08-01 14:56:08 UTC)
 - Fasting plan now shows a live countdown timer once started so users can track remaining time (2025-08-01 13:50:28 UTC)
@@ -47,14 +44,11 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires code "ZENZALIFE" and stores entries in Supabase.
 - Default Schedule modal now asks when your day started and shifts all tasks to match the chosen time.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires a secret code and stores entries in Supabase.
-
 ### Fixed
-
 - Active fast lookup now includes user ID so Netlify builds succeed (2025-08-01 14:06:57 UTC)
 - Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
 
 ### Fixed
-
 - Math Notebook tab close confirmation now appears above the canvas instead of hiding beneath it (2025-08-01 13:55:07 UTC)
 - Refactored Math Notebook tab modals to render via portals outside the component, resolving Netlify JSX closing tag errors (2025-08-01 15:05:23 UTC)
 - Grace Prayer module records audio and stores start time with Supabase (2025-07-23 15:08:27 UTC)
@@ -65,7 +59,6 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
-
 - Math Notebook search now scans canvas text so results match drawings and notes (2025-08-01 15:21:54 UTC)
 - Fasting reminder no longer falls back to localStorage, relying solely on Supabase (2025-08-01 13:39:47 UTC)
 - Task Notes history search bar redesigned with a clear icon for easier filtering (2025-08-01 13:34:42 UTC)
@@ -83,7 +76,6 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
 
 ### Fixed
-
 - New Notebook template selector now shines with Harold and the Purple Crayon & Vanilla Sky colors for easy visibility (2025-08-01 15:21:33 UTC)
 - Refresh, Change Log, and swipe-refresh toggle buttons moved to the bottom-right so they no longer cover calendar actions (2025-08-01 15:19:23 UTC)
 - Create New Notebook modal opens on the dashboard instead of inside previously viewed notebooks (2025-08-01 15:06:49 UTC)
