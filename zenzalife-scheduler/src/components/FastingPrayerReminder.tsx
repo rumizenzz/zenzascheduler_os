@@ -92,7 +92,7 @@ export function FastingPrayerReminder() {
 
       toast.custom(
         t => (
-          <div className="pointer-events-none">
+          <div className="pointer-events-none mt-24">
             <div className="pointer-events-auto w-max flex items-center gap-4 bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-4">
               <span className="text-sm font-light text-gray-800">
                 Reminder: Time to do Intermittent Fasting and Prayer
@@ -147,7 +147,7 @@ export function FastingPrayerReminder() {
   return (
     <>
       {!activeFast && daysUntilFast > 0 && (
-        <div className="pointer-events-none fixed top-4 right-4 w-max bg-purple-600 text-white px-4 py-2 rounded-md shadow-lg z-50 text-sm">
+        <div className="pointer-events-none fixed top-24 right-4 w-max bg-purple-600 text-white px-4 py-2 rounded-md shadow-lg z-50 text-sm">
           <div className="font-semibold">
             Reminder: Intermittent Fasting and Prayer
           </div>
@@ -159,7 +159,7 @@ export function FastingPrayerReminder() {
         </div>
       )}
       {activeFast && (
-        <div className="pointer-events-none fixed top-4 right-4 w-max bg-blue-600 text-white px-4 py-2 rounded-md shadow-lg z-50">
+        <div className="pointer-events-none fixed top-24 right-4 w-max bg-blue-600 text-white px-4 py-2 rounded-md shadow-lg z-50">
           Fast ends in: {timeLeft}
         </div>
       )}
