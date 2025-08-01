@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Alarm window offers a Start Prayer button for Wake Up and Sleep tasks, recording dated morning and night prayers and letting grace prayers show dish photos on demand (2025-08-01 13:14:57 UTC)
 - Users can create notebooks from templates like Math, Notes, To-Do List, Journal, or Project Plan with custom names (2025-08-01 13:48:00 UTC)
 - Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC)
 - Math Notebook home now includes a search bar to filter notebooks by title (2025-08-01 13:34:42 UTC)
