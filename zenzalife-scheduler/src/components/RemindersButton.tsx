@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import dayjs from 'dayjs'
 import { Bell } from 'lucide-react'
 import {
@@ -8,6 +9,20 @@ import {
   getCurrentUser
 } from '@/lib/supabase'
 
+const wasteLabels: Record<string, string> = {
+  trash: 'Garbage',
+  recycling: 'Recycling',
+  yard_waste: 'Yard Waste',
+  bulk: 'Bulk Items',
+  hazardous: 'Hazardous Waste'
+}
+
+type GarbageSchedule = {
+  id: string
+  waste_type: string
+  next_collection: string
+}
+
 export function RemindersButton() {
   const [open, setOpen] = useState(false)
   const [reminders, setReminders] = useState<Reminder[]>([])
@@ -16,6 +31,7 @@ export function RemindersButton() {
   const [title, setTitle] = useState('')
   const [remindAt, setRemindAt] = useState('')
   const [category, setCategory] = useState('')
+  const [showAll, setShowAll] = useState(false)
 
   useEffect(() => {
     loadReminders()
@@ -53,6 +69,29 @@ export function RemindersButton() {
           title: t.title,
           category: (t as Task).category,
           remind_at: t.start_time
+        })
+      }
+    })
+
+    const todayIso = new Date().toISOString().slice(0, 10)
+    const { data: garbageData } = await supabase
+      .from('garbage_schedule')
+      .select('id,waste_type,next_collection')
+      .eq('user_id', user.id)
+      .gte('next_collection', todayIso)
+      .order('next_collection', { ascending: true })
+
+    ;(garbageData as GarbageSchedule[] | null)?.forEach(g => {
+      const dateIso = dayjs(g.next_collection).startOf('day').toISOString()
+      const title = wasteLabels[g.waste_type] || 'Garbage'
+      const key = `${title}-${dateIso}`
+      if (!map.has(key)) {
+        map.set(key, {
+          id: `garbage-${g.id}`,
+          user_id: user.id,
+          title,
+          category: g.waste_type,
+          remind_at: dateIso
         })
       }
     })
@@ -228,10 +267,7 @@ export function RemindersButton() {
                   <div className="text-center">
                     <button
                       className="underline text-sm"
-                      onClick={() => {
-                        setOpen(false)
-                        window.location.assign('?tab=calendar')
-                      }}
+                      onClick={() => setShowAll(true)}
                     >
                       See All Reminders
                     </button>
@@ -256,6 +292,36 @@ export function RemindersButton() {
           </div>
         </div>
       )}
+      {showAll &&
+        createPortal(
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60]">
+            <div className="harold-sky bg-purple-950 border-2 border-purple-400 rounded-lg p-4 w-full max-w-sm space-y-4 text-purple-100">
+              <h2 className="text-lg font-light text-center">All Reminders</h2>
+              <ul className="space-y-2 text-left max-h-72 overflow-y-auto">
+                {reminders.map(r => (
+                  <li key={r.id} className="border border-purple-400/30 rounded p-2 text-sm">
+                    <div className="font-medium">{r.title}</div>
+                    {r.remind_at && (
+                      <div className="text-purple-200">in {formatCountdown(r.remind_at)}</div>
+                    )}
+                  </li>
+                ))}
+                {!reminders.length && (
+                  <li className="text-sm">No upcoming reminders.</li>
+                )}
+              </ul>
+              <div className="text-center">
+                <button
+                  className="btn-dreamy-primary px-4 text-sm"
+                  onClick={() => setShowAll(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
     </>
   )
 }
