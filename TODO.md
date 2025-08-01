@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Bundled pulltorefreshjs in Vite build so module specifier resolves during runtime (2025-08-01 20:14:05 UTC)
 - Externalized pulltorefreshjs in Vite build to fix missing CSS module resolution (2025-08-01 20:00:18 UTC)
 - Monthsary and Anniversary tasks now sparkle with affectionate hover animations (2025-08-01 19:03:15 UTC)
 - Fixed duplicate Clock module editing state so Netlify build no longer hits TypeScript redeclaration errors (2025-08-01 18:53:59 UTC)
