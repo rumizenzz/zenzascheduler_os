@@ -15,6 +15,10 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Monthsary and Anniversary tasks now glow with a magical gradient even when idle so special days stand out (2025-08-01 21:38:10 UTC)
+- Journal and Dream Journal text fields now shimmer with Harold and the Purple Crayon & Vanilla Sky gradients so selection boxes are no longer white (2025-08-01 21:50:00 UTC)
+- "See All Reminders" button opens a Harold and the Purple Crayon & Vanilla Sky window above the existing panel (2025-08-01 21:30:00 UTC)
+- Fixed Netlify build failure by removing duplicate variables in Reminders and Clock modules (2025-08-01 19:05:00 UTC)
+- Garbage & Recycling schedules now appear in Reminders so upcoming collections are counted down (2025-08-01 18:51:54 UTC)
 - Journal and Dream Journal Add buttons now sit above bottom controls so they're never hidden (2025-08-01 21:45:00 UTC)
 - Journal and Dream Journal entries now support editing and deleting with Supabase persistence (2025-08-01 21:30:00 UTC)
 - Magical journal module and lucid dream tracker save entries with Vanilla Sky styling (2025-08-01 20:12:17 UTC)
