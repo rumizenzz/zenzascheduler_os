@@ -31,6 +31,9 @@ export function MathNotebookModule() {
   const [showHome, setShowHome] = useState(true)
   const [renamingTab, setRenamingTab] = useState<TabData | null>(null)
   const [newTabName, setNewTabName] = useState('')
+  const [mathExpression, setMathExpression] = useState<string | null>(null)
+
+  const isMathExpression = (text: string) => /^[0-9+\-*/().^\s]+$/.test(text)
 
   useEffect(() => {
     if (!user) return
@@ -239,6 +242,10 @@ export function MathNotebookModule() {
         setProblems((prev) =>
           prev.map((p) => (p.id === activeTabId ? { ...p, data: newData } : p)),
         )
+        const textEl = [...elements]
+          .reverse()
+          .find((el) => el.type === 'text' && isMathExpression((el as any).text?.trim() || '')) as any
+        setMathExpression(textEl ? textEl.text.trim() : null)
         if (activeTabId) {
           await supabase
             .from('math_problems')
@@ -461,7 +468,7 @@ export function MathNotebookModule() {
           />
         )}
       </div>
-      <MathSolver />
+      <MathSolver expression={mathExpression} />
       {renamingTab && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
