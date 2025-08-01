@@ -66,6 +66,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Changed
 
+- Math Notebook search now scans canvas text so results match drawings and notes (2025-08-01 15:21:54 UTC)
 - Fasting reminder no longer falls back to localStorage, relying solely on Supabase (2025-08-01 13:39:47 UTC)
 - Task Notes history search bar redesigned with a clear icon for easier filtering (2025-08-01 13:34:42 UTC)
 - Refresh button enlarged and always visible on mobile and desktop for easy reloading (2025-08-01 13:18:35 UTC)
@@ -83,6 +84,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Fixed
 
+- New Notebook template selector now shines with Harold and the Purple Crayon & Vanilla Sky colors for easy visibility (2025-08-01 15:21:33 UTC)
+- Refresh, Change Log, and swipe-refresh toggle buttons moved to the bottom-right so they no longer cover calendar actions (2025-08-01 15:19:23 UTC)
 - Create New Notebook modal opens on the dashboard instead of inside previously viewed notebooks (2025-08-01 15:06:49 UTC)
 - Refresh button no longer obscured by Change Log and swipe refresh toggle (2025-08-01 13:47:46 UTC)
 - Math Notebook solver interprets `x` and `X` as multiplication and renders × in expressions (2025-08-01 13:21:25 UTC)

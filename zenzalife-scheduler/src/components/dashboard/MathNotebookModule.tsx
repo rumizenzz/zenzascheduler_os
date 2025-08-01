@@ -65,10 +65,10 @@ export function MathNotebookModule() {
         <select
           value={newNotebookTemplate}
           onChange={(e) => setNewNotebookTemplate(e.target.value)}
-          className="input-dreamy w-full text-sm"
+          className="select-dreamy w-full text-sm"
         >
           {templates.map((t) => (
-            <option key={t.value} value={t.value}>
+            <option key={t.value} value={t.value} className="bg-purple-900 text-purple-100">
               {t.label}
             </option>
           ))}
@@ -510,9 +510,16 @@ export function MathNotebookModule() {
       user?.email?.split('@')[0] ||
       'friend'
 
-    const filtered = problems.filter(p =>
-      p.name.toLowerCase().includes(search.toLowerCase()),
-    )
+    const lower = search.toLowerCase()
+    const filtered = problems.filter(p => {
+      const titleMatch = p.name.toLowerCase().includes(lower)
+      const contentMatch = p.data.elements.some(
+        (el: any) =>
+          el.type === 'text' &&
+          (el.text || '').toLowerCase().includes(lower),
+      )
+      return titleMatch || contentMatch
+    })
 
     return (
       <>

@@ -19,6 +19,11 @@ This file tracks project progress and upcoming tasks.
 - Report Bug button now sits at the bottom-left with a Harold and the Purple Crayon & Vanilla Sky bug icon (2025-08-01 15:35:06 UTC)
 - Fasting reminder now shows upcoming fast date and days remaining before the first Sunday (2025-08-01 15:09:18 UTC)
 - Monthly fasting reminder now activates on the first Sunday of each month instead of the first day (2025-08-01 14:56:08 UTC)
+- New Notebook template selector now uses Harold and the Purple Crayon & Vanilla Sky colors so options stand out (2025-08-01 15:21:33 UTC).
+- Relocated Refresh, Change Log, and swipe-refresh toggle buttons to the bottom-right so calendar actions remain accessible (2025-08-01 15:19:23 UTC).
+- Math Notebook search now scans canvas text so notebooks can be found by their contents (2025-08-01 15:21:54 UTC).
+ - Fasting reminder now shows upcoming fast date and days remaining before the first Sunday (2025-08-01 15:09:18 UTC)
+ - Monthly fasting reminder now activates on the first Sunday of each month instead of the first day (2025-08-01 14:56:08 UTC)
 - Fixed active fast lookup to include user ID so TypeScript build succeeds (2025-08-01 14:06:31 UTC)
 - Fasting plan now displays a live countdown timer once started for clear tracking (2025-08-01 13:50:20 UTC)
 - Fasting reminder now relies solely on Supabase with no localStorage fallback (2025-08-01 13:39:47 UTC)
