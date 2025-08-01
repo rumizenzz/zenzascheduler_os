@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Math Notebook solver interprets `x` and `X` as multiplication and displays × in expressions (2025-08-01 13:21:25 UTC).
 - Refresh button is now larger and always visible on mobile and desktop for easy reloading (2025-08-01 13:18:35 UTC).
 - Calendar action buttons now wrap on desktop so no options are cut off (2025-08-01 13:18:35 UTC).
 - Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC).

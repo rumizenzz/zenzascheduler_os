@@ -47,11 +47,11 @@ export function MathSolver({ expression }: MathSolverProps) {
     }
   }, [expression])
 
-  const isMath = /^[0-9+\-*/().^\s]+$/.test(input)
+  const isMath = /^[0-9+\-*/xX().^\s]+$/.test(input)
 
   const handleSolve = async () => {
     try {
-      const prepared = input.replace(/\^/g, '**')
+      const prepared = input.replace(/\^/g, '**').replace(/[xX]/g, '*')
       // eslint-disable-next-line no-new-func
       const value = Function(`return (${prepared})`)()
       const stringValue = String(value)
@@ -86,7 +86,7 @@ export function MathSolver({ expression }: MathSolverProps) {
       />
       {isMath && input && (
         <div className="space-y-2">
-          <BlockMath math={input} />
+          <BlockMath math={input.replace(/[xX*]/g, '\\times')} />
           <button
             onClick={handleSolve}
             className="px-3 py-1 bg-blue-500 text-white rounded"
