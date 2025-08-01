@@ -14,7 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
-- Timer presets now editable so labels and durations can be updated (2025-08-01 18:26:51 UTC)
+- Clock presets now support editing so labels and durations can be updated (2025-08-01 18:29:58 UTC)
 - Manual garbage schedule saves now include a type value to satisfy Supabase not-null constraints (2025-08-01 18:15:30 UTC)
 - Clock module colors darkened so timers and presets are easy to read (2025-08-01 18:09:58 UTC)
 - Dashboard scroll reset now also targets the root element so modules never appear below the app (2025-08-01 18:13:13 UTC).
