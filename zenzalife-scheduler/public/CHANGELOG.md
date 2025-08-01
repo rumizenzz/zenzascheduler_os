@@ -8,6 +8,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
+- Resolved Netlify TypeScript build errors by removing duplicate variables in RemindersButton and ClockModule (2025-08-01 19:05 UTC)
 - Switching dashboard sections now resets scroll position so content starts at the top (2025-08-01 17:09:52 UTC)
 - Garbage schedule queries now include the signed-in user ID to prevent 400 errors from row-level security (2025-08-01 18:19:18 UTC)
 - Manual garbage schedule saves now include a type value to satisfy Supabase not-null constraints (2025-08-01 18:15:30 UTC)
@@ -17,6 +18,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Garbage & Recycling schedules now appear in Reminders so upcoming collection days are highlighted (2025-08-01 18:51 UTC)
 - Timers can be deleted from the Clock module with a new Remove control (2025-08-01 18:30 UTC)
 - Dashboard restores the last visited tab on load using a Supabase-backed preference (2025-08-01 18:30 UTC)
 - Timer presets can now be edited to update labels and durations (2025-08-01 18:29 UTC)
