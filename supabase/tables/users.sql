@@ -12,6 +12,7 @@ CREATE TABLE users (
     bio TEXT,
     entrance_sound_enabled BOOLEAN DEFAULT true,
     entrance_animation_enabled BOOLEAN DEFAULT true,
+    entrance_duration_seconds INTEGER DEFAULT 6,
     last_login TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
