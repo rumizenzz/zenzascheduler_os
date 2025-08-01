@@ -7,6 +7,14 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Tools
+
+The dashboard header includes a **Tools** menu (wrench icon, top‑right) for advanced utilities.
+
+### Diff Editor (IDE)
+
+Launch the Monaco-powered diff editor from **Tools → Diff Editor**, use the **IDE** button pinned to the right edge of every dashboard section, or go straight to `/ide`. Accept Current, Accept Incoming, Accept Both Changes, and Compare Changes controls let you merge files without leaving the scheduler.
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
