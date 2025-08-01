@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Authentication email field now suggests common domains for quick entry (2025-08-01 16:29:03 UTC).
 - GED calculator now pops above the Math Notebook canvas via a portal for clear visibility (2025-08-01 16:23:10 UTC).
 - Plus button in Math Notebook adds a new Notes tab without asking for a template (2025-08-01 16:23:10 UTC).
 - Garbage & Recycling schedule saves no longer fail when address is unspecified (2025-08-01 16:13:26 UTC).

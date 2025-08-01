@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from 'react-hot-toast'
 import dayjs from 'dayjs'
@@ -23,6 +23,15 @@ const relationshipRoles = [
   { value: 'individual', label: 'Individual' }
 ]
 
+const commonEmailDomains = [
+  'gmail.com',
+  'yahoo.com',
+  'outlook.com',
+  'hotmail.com',
+  'icloud.com',
+  'live.com'
+]
+
 export function AuthForm({ mode, onModeChange }: AuthFormProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -31,6 +40,17 @@ export function AuthForm({ mode, onModeChange }: AuthFormProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const { signIn, signUp } = useAuth()
+
+  const emailSuggestions = useMemo<string[]>(() => {
+    if (!email) return []
+    const [localPart, domainPart = ''] = email.split('@')
+    return commonEmailDomains
+      .filter((d) => d.startsWith(domainPart))
+      .map((d) => `${localPart}@${d}`)
+  }, [email])
+
+  const showSuggestions =
+    email.length > 0 && !emailSuggestions.includes(email) && emailSuggestions.length > 0
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -118,16 +138,32 @@ export function AuthForm({ mode, onModeChange }: AuthFormProps) {
               <Mail className="w-4 h-4" />
               Email
             </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="input-dreamy w-full"
-              placeholder="your@email.com"
-              required
-            />
+            <div className="relative">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-dreamy w-full"
+                placeholder="your@email.com"
+                required
+                autoComplete="off"
+              />
+              {showSuggestions && (
+                <ul className="absolute z-10 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-md">
+                  {emailSuggestions.map((s) => (
+                    <li
+                      key={s}
+                      className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                      onMouseDown={() => setEmail(s)}
+                    >
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
 
           <div className="space-y-2">
