@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
-import { PlusCircle, History, X, Home } from 'lucide-react'
+import { PlusCircle, History, X, Home, Search } from 'lucide-react'
 import { MathSolver } from './MathSolver'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
@@ -46,6 +46,7 @@ export function MathNotebookModule() {
     { value: 'journal', label: 'Journal' },
     { value: 'project', label: 'Project Plan' }
   ]
+  const [search, setSearch] = useState('')
 
   const isMathExpression = (text: string) => /^[0-9+\-*/xX().^\s]+$/.test(text)
 
@@ -403,6 +404,10 @@ export function MathNotebookModule() {
       user?.email?.split('@')[0] ||
       'friend'
 
+    const filtered = problems.filter(p =>
+      p.name.toLowerCase().includes(search.toLowerCase()),
+    )
+
     return (
       <div className="harold-sky w-full max-w-7xl mx-auto space-y-8 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-6 rounded-xl">
         <div className="flex items-center justify-between">
@@ -422,9 +427,20 @@ export function MathNotebookModule() {
             Create New Notebook
           </button>
         </div>
-        {problems.length > 0 ? (
+        <div className="relative max-w-sm">
+          <Search className="w-5 h-5 text-purple-300 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search notebooks..."
+            aria-label="Search notebooks"
+            className="input-dreamy w-full pl-10 rounded-full border-2 border-purple-500 bg-purple-900/30 text-purple-100 placeholder-purple-300 focus:border-purple-300"
+          />
+        </div>
+        {filtered.length > 0 ? (
           <div className="columns-1 sm:columns-2 lg:columns-4 gap-6 space-y-6">
-            {[...problems]
+            {[...filtered]
               .sort(
                 (a, b) =>
                   new Date(b.lastOpened).getTime() -
@@ -464,7 +480,7 @@ export function MathNotebookModule() {
               ))}
           </div>
         ) : (
-          <p className="text-sm text-purple-200/70">No notebooks yet.</p>
+          <p className="text-sm text-purple-200/70">No notebooks found.</p>
         )}
       </div>
     )

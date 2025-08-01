@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import { X } from 'lucide-react'
+import { X, Search } from 'lucide-react'
 import { supabase, getCurrentUser, TaskComment } from '@/lib/supabase'
 
 interface TaskNotesProps {
@@ -104,13 +104,17 @@ function NotesHistoryModal({ notes, onClose }: NotesHistoryModalProps) {
           </button>
         </div>
         <h3 className="text-xl font-light text-gray-800">Notes History</h3>
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search notes"
-          className="input-dreamy w-full"
-        />
+        <div className="relative">
+          <Search className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search notes..."
+            aria-label="Search notes"
+            className="input-dreamy w-full pl-9 rounded-full border-2 border-gray-300 focus:border-purple-500"
+          />
+        </div>
         <ul className="space-y-2">
           {filtered.map(n => (
             <li key={n.id} className="p-2 bg-white rounded-lg shadow">
