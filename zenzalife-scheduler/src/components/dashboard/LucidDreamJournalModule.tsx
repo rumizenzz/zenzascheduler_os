@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase, DreamJournalEntry } from '@/lib/supabase'
 import dayjs from 'dayjs'
-import { Plus, MoonStar } from 'lucide-react'
+import { Plus, MoonStar, Pencil, Trash2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
 const lucidityLevels = [
@@ -26,6 +26,10 @@ export function LucidDreamJournalModule() {
   const [description, setDescription] = useState('')
   const [achieved, setAchieved] = useState(false)
   const [level, setLevel] = useState(5)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editDescription, setEditDescription] = useState('')
+  const [editAchieved, setEditAchieved] = useState(false)
+  const [editLevel, setEditLevel] = useState(5)
 
   useEffect(() => {
     if (user) {
@@ -68,6 +72,49 @@ export function LucidDreamJournalModule() {
       setShowAdd(false)
       await loadEntries()
       toast.success('Dream saved')
+    }
+  }
+
+  const startEdit = (entry: DreamJournalEntry) => {
+    setEditingId(entry.id)
+    setEditDescription(entry.description)
+    setEditAchieved(entry.achieved_lucidity)
+    setEditLevel(entry.lucidity_level ?? 5)
+  }
+
+  const updateEntry = async () => {
+    if (!editingId || !user || !editDescription.trim()) return
+    const { error } = await supabase
+      .from('dream_journal_entries')
+      .update({
+        description: editDescription.trim(),
+        achieved_lucidity: editAchieved,
+        lucidity_level: editAchieved ? editLevel : null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', editingId)
+      .eq('user_id', user.id)
+    if (error) {
+      toast.error('Failed to update dream: ' + error.message)
+    } else {
+      setEditingId(null)
+      await loadEntries()
+      toast.success('Dream updated')
+    }
+  }
+
+  const deleteEntry = async (id: string) => {
+    if (!user) return
+    const { error } = await supabase
+      .from('dream_journal_entries')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', user.id)
+    if (error) {
+      toast.error('Failed to delete dream: ' + error.message)
+    } else {
+      await loadEntries()
+      toast.success('Dream deleted')
     }
   }
 
@@ -139,13 +186,72 @@ export function LucidDreamJournalModule() {
               key={entry.id}
               className="bg-gradient-to-br from-indigo-900 via-purple-800 to-fuchsia-600 p-6 rounded-lg shadow-lg text-white font-serif space-y-2"
             >
-              <div className="text-sm opacity-80">
-                {dayjs(entry.created_at).format('MMMM D, YYYY')}
-              </div>
-              <div className="whitespace-pre-wrap">{entry.description}</div>
-              <div className="text-sm mt-2">
-                Lucidity: {entry.achieved_lucidity ? entry.lucidity_level : 'None'}
-              </div>
+              {editingId === entry.id ? (
+                <>
+                  <div className="text-sm opacity-80">
+                    {dayjs(entry.created_at).format('MMMM D, YYYY')}
+                  </div>
+                  <textarea
+                    className="w-full p-2 rounded text-black"
+                    rows={5}
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                  />
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={editAchieved}
+                      onChange={(e) => setEditAchieved(e.target.checked)}
+                    />
+                    Did you achieve lucidity?
+                  </label>
+                  {editAchieved && (
+                    <select
+                      className="input-dreamy w-full"
+                      value={editLevel}
+                      onChange={(e) => setEditLevel(Number(e.target.value))}
+                    >
+                      {lucidityLevels.map((l) => (
+                        <option key={l.value} value={l.value}>
+                          {l.label}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  <div className="flex gap-2 justify-end mt-2">
+                    <button className="btn-secondary" onClick={() => setEditingId(null)}>
+                      Cancel
+                    </button>
+                    <button className="btn-dreamy-primary" onClick={updateEntry}>
+                      Save
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-sm opacity-80">
+                    {dayjs(entry.created_at).format('MMMM D, YYYY')}
+                  </div>
+                  <div className="whitespace-pre-wrap">{entry.description}</div>
+                  <div className="text-sm mt-2">
+                    Lucidity: {entry.achieved_lucidity ? entry.lucidity_level : 'None'}
+                  </div>
+                  <div className="flex gap-2 justify-end text-sm mt-2">
+                    <button
+                      className="flex items-center gap-1 hover:text-purple-200"
+                      onClick={() => startEdit(entry)}
+                    >
+                      <Pencil className="w-4 h-4" /> Edit
+                    </button>
+                    <button
+                      className="flex items-center gap-1 hover:text-purple-200"
+                      onClick={() => deleteEntry(entry.id)}
+                    >
+                      <Trash2 className="w-4 h-4" /> Delete
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           ))}
         </div>
