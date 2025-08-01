@@ -299,13 +299,13 @@ export function MathNotebookModule() {
       'friend'
 
     return (
-      <div className="space-y-6 w-full">
+      <div className="w-full max-w-7xl mx-auto space-y-8 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-6 rounded-xl">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold">
+            <h2 className="text-xl font-semibold text-purple-200">
               Welcome, {name}. Good {timeOfDay}!
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-purple-200/70">
               Let's get writing notes or math, or anything else you want to write
               down.
             </p>
@@ -315,26 +315,26 @@ export function MathNotebookModule() {
           </button>
         </div>
         {problems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="columns-1 sm:columns-2 lg:columns-4 gap-6 space-y-6">
             {problems.map((p) => (
               <div
                 key={p.id}
                 onClick={() => openProblem(p.id)}
-                className="border rounded p-4 bg-white shadow-sm hover:shadow cursor-pointer transition"
+                className="mb-6 break-inside-avoid rounded-xl p-4 bg-gradient-to-br from-purple-800/70 via-indigo-800/70 to-blue-800/70 border border-purple-500 shadow-lg hover:shadow-2xl cursor-pointer transition"
               >
                 <div className="text-sm font-medium">{p.name}</div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-gray-600">No notebooks yet.</p>
+          <p className="text-sm text-purple-200/70">No notebooks yet.</p>
         )}
       </div>
     )
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-4 sm:p-6 rounded-xl">
       <div className="flex items-center gap-2">
         <button
           onClick={() => {
@@ -342,10 +342,10 @@ export function MathNotebookModule() {
             setTabs([])
             setActiveTabId('')
           }}
-          className="p-1 rounded-full border border-gray-300 hover:bg-white"
+          className="p-1 rounded-full border border-purple-500 hover:bg-purple-700/20"
           title="Home"
         >
-          <Home className="w-5 h-5 text-gray-700" />
+          <Home className="w-5 h-5 text-purple-200" />
         </button>
         <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap flex-1 pr-32 sm:pr-0">
           {tabs.map((tab) => (
@@ -355,27 +355,27 @@ export function MathNotebookModule() {
                 onDoubleClick={() => renameTab(tab.id)}
                 className={`px-3 py-1 rounded-full text-sm border transition-colors mr-1 ${
                   tab.id === activeTabId
-                    ? 'bg-blue-500 text-white border-blue-500'
-                    : 'bg-white/70 text-gray-700 border-gray-300 hover:bg-white'
+                    ? 'bg-purple-600 text-white border-purple-600'
+                    : 'bg-gray-800 text-gray-200 border-gray-600 hover:bg-gray-700'
                 }`}
               >
                 {tab.name}
               </button>
               <button
                 onClick={() => handleCloseTab(tab.id)}
-                className="p-1 rounded-full border border-gray-300 hover:bg-white mr-2"
+                className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 mr-2"
                 title="Close Tab"
               >
-                <X className="w-4 h-4 text-gray-700" />
+                <X className="w-4 h-4 text-gray-200" />
               </button>
             </div>
           ))}
           <button
             onClick={addTab}
-            className="p-1 rounded-full border border-gray-300 hover:bg-white flex-shrink-0"
+            className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
             title="New Tab"
           >
-            <PlusCircle className="w-5 h-5 text-gray-700" />
+            <PlusCircle className="w-5 h-5 text-gray-200" />
           </button>
           {closedTabs.length > 0 && (
             <select
@@ -422,46 +422,45 @@ export function MathNotebookModule() {
         )}
         <button
           onClick={saveVersion}
-          className="p-1 rounded-full border border-gray-300 hover:bg-white flex-shrink-0"
+          className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
           title="Save Version"
         >
-          <History className="w-5 h-5 text-gray-700" />
+          <History className="w-5 h-5 text-gray-200" />
         </button>
       </div>
-      <div className="border rounded-lg bg-white h-[70vh] sm:h-[600px]">
+      <div className="border border-purple-700 rounded-lg bg-gray-900 h-[70vh] sm:h-[600px]">
         {activeTab && (
           <Excalidraw
             key={activeTab.id}
             initialData={activeTab.data}
             onChange={updateTabData}
+            theme="dark"
           />
         )}
       </div>
       {closingTab && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-purple-50 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center">
-            <h2 className="text-lg font-light text-purple-700">
-              Harold and the Purple Crayon
-            </h2>
-            <p className="text-sm text-purple-700">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
+            <h2 className="text-lg font-light">Harold and the Purple Crayon</h2>
+            <p className="text-sm">
               Save <span className="font-semibold">{closingTab.name}</span> before closing?
             </p>
             <div className="space-y-2">
               <button
                 onClick={() => finalizeCloseTab(true)}
-                className="btn-dreamy-primary w-full text-sm bg-purple-600 hover:bg-purple-700 border-purple-700"
+                className="btn-dreamy-primary w-full text-sm bg-purple-600 hover:bg-purple-700 border-purple-700 text-white"
               >
                 Save & Close
               </button>
               <button
                 onClick={() => finalizeCloseTab(false)}
-                className="btn-dreamy w-full text-sm border-purple-400 text-purple-700 hover:bg-purple-100"
+                className="btn-dreamy w-full text-sm border-purple-400 text-purple-100 hover:bg-purple-900/50"
               >
                 Close Without Saving
               </button>
               <button
                 onClick={() => setClosingTab(null)}
-                className="btn-dreamy w-full text-sm"
+                className="btn-dreamy w-full text-sm text-purple-100"
               >
                 Cancel
               </button>

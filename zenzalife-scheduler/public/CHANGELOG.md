@@ -33,6 +33,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Changed
 - Math Notebook home dashboard uses profile display name for greeting (2025-08-01 00:53:08 UTC)
+- Math Notebook home defaults to dark mode with a spacious Google Keep-style masonry layout and purple-sky palette (2025-08-01 02:13:08 UTC)
 - Optimized Math Notebook with responsive height and scrollable tabs for mobile and desktop (2025-07-31 22:34:46 UTC)
 - Math Notebook tab close confirmation now uses a Harold and the Purple Crayon themed modal with save option (2025-08-01 00:03:39 UTC)
 - Documented that every update must include a professional changelog entry.
