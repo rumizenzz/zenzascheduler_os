@@ -154,7 +154,7 @@ export function JournalModule() {
                     {editingId === entry.id ? (
                       <>
                         <div className="text-xs opacity-80">
-                          {dayjs(entry.created_at).format('YYYY-MM-DD hh:mm:ss A')}
+                          {dayjs(entry.created_at).format('YYYY-MM-DD HH:mm:ss')}
                         </div>
                         <textarea
                           className="textarea-dreamy w-full"
@@ -174,7 +174,7 @@ export function JournalModule() {
                     ) : (
                       <>
                         <div className="text-xs opacity-80">
-                          {dayjs(entry.created_at).format('YYYY-MM-DD hh:mm:ss A')}
+                          {dayjs(entry.created_at).format('YYYY-MM-DD HH:mm:ss')}
                         </div>
                         <div>{entry.content}</div>
                         <div className="flex gap-2 justify-end text-sm">

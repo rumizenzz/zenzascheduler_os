@@ -20,9 +20,13 @@ import {
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from 'react-hot-toast'
 
-const allTimeZones: string[] = (Intl as any).supportedValuesOf
+const baseTimeZones: string[] = (Intl as any).supportedValuesOf
   ? ((Intl as any).supportedValuesOf('timeZone') as string[])
   : []
+const zoneAlias: Record<string, string> = { 'Asia/Cebu': 'Asia/Manila' }
+const allTimeZones: string[] = Array.from(
+  new Set([...baseTimeZones, ...Object.keys(zoneAlias)])
+)
 
 export function ClockModule() {
   const { user } = useAuth()
@@ -42,9 +46,21 @@ export function ClockModule() {
   const [swLabel, setSwLabel] = useState('')
   const [swHistory, setSwHistory] = useState<StopwatchType[]>([])
   const [zoneInput, setZoneInput] = useState('')
+  const [showZoneList, setShowZoneList] = useState(false)
   const [worldZones, setWorldZones] = useState<WorldClockZone[]>([])
   const [now, setNow] = useState(new Date())
+  const [dragging, setDragging] = useState<
+    { id: string; offsetX: number; offsetY: number } | null
+  >(null)
+  const [contextMenu, setContextMenu] = useState({
+    x: 0,
+    y: 0,
+    visible: false
+  })
   const { playAudio } = useAudio()
+  const filteredZones = allTimeZones.filter(tz =>
+    tz.toLowerCase().includes(zoneInput.toLowerCase())
+  )
 
   useEffect(() => {
     if (user) {
@@ -157,6 +173,45 @@ export function ClockModule() {
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 1000)
     return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      if (!dragging) return
+      const newX = e.clientX - dragging.offsetX
+      const newY = e.clientY - dragging.offsetY
+      setWorldZones(zones =>
+        zones.map(z =>
+          z.id === dragging.id ? { ...z, pos_x: newX, pos_y: newY } : z
+        )
+      )
+    }
+    const handleUp = async () => {
+      if (!dragging) return
+      const zone = worldZones.find(z => z.id === dragging.id)
+      setDragging(null)
+      if (!zone || !user) return
+      await supabase
+        .from('world_clock_zones')
+        .update({
+          pos_x: zone.pos_x,
+          pos_y: zone.pos_y,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', zone.id)
+    }
+    window.addEventListener('mousemove', handleMove)
+    window.addEventListener('mouseup', handleUp)
+    return () => {
+      window.removeEventListener('mousemove', handleMove)
+      window.removeEventListener('mouseup', handleUp)
+    }
+  }, [dragging, worldZones, user])
+
+  useEffect(() => {
+    const hide = () => setContextMenu(cm => ({ ...cm, visible: false }))
+    window.addEventListener('click', hide)
+    return () => window.removeEventListener('click', hide)
   }, [])
 
   const createTimer = async (timerLabel: string, totalSeconds: number) => {
@@ -351,8 +406,13 @@ export function ClockModule() {
   }
 
   const addZone = async () => {
-    if (!zoneInput || worldZones.some(z => z.zone === zoneInput)) return
-    if (!allTimeZones.includes(zoneInput)) {
+    const actual = zoneAlias[zoneInput] || zoneInput
+    if (
+      !zoneInput ||
+      worldZones.some(z => (zoneAlias[z.zone] || z.zone) === actual)
+    )
+      return
+    if (!baseTimeZones.includes(actual)) {
       toast.error('Invalid time zone')
       return
     }
@@ -363,6 +423,9 @@ export function ClockModule() {
         .insert({
           user_id: user.id,
           zone: zoneInput,
+          show_widget: false,
+          pos_x: 0,
+          pos_y: 0,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
@@ -392,9 +455,49 @@ export function ClockModule() {
     }
   }
 
+  const toggleWidget = async (zone: WorldClockZone) => {
+    if (!user) return
+    const newValue = !zone.show_widget
+    const updates: Partial<WorldClockZone> = {
+      show_widget: newValue,
+      updated_at: new Date().toISOString()
+    }
+    if (newValue && (!zone.pos_x && !zone.pos_y)) {
+      updates.pos_x = window.innerWidth - 120
+      updates.pos_y = 80
+    }
+    const { error } = await supabase
+      .from('world_clock_zones')
+      .update(updates)
+      .eq('id', zone.id)
+    if (error) {
+      toast.error('Failed to update widget: ' + error.message)
+      return
+    }
+    setWorldZones(zones =>
+      zones.map(z => (z.id === zone.id ? { ...z, ...updates } : z))
+    )
+  }
+
+  const startDrag = (e: React.MouseEvent, id: string) => {
+    e.preventDefault()
+    const zone = worldZones.find(z => z.id === id)
+    if (!zone) return
+    setDragging({
+      id,
+      offsetX: e.clientX - (zone.pos_x || 0),
+      offsetY: e.clientY - (zone.pos_y || 0)
+    })
+  }
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setContextMenu({ x: e.clientX, y: e.clientY, visible: true })
+  }
+
   const formatZoneTime = (zone: string) =>
     now.toLocaleTimeString([], {
-      timeZone: zone,
+      timeZone: zoneAlias[zone] || zone,
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
@@ -402,16 +505,31 @@ export function ClockModule() {
 
   return (
     <>
-      <div className="fixed top-2 right-2 flex flex-col items-end gap-1 pointer-events-none z-50">
-        {worldZones.map(zone => (
+      {worldZones
+        .filter(z => z.show_widget)
+        .map(zone => (
           <div
             key={zone.id}
-            className="bg-black/50 text-white text-xs px-2 py-1 rounded"
+            className="fixed z-50 cursor-move bg-black/50 text-white text-xs px-2 py-1 rounded"
+            style={{ top: zone.pos_y, left: zone.pos_x }}
+            onMouseDown={e => startDrag(e, zone.id)}
           >
             {formatZoneTime(zone.zone)} {zone.zone}
           </div>
         ))}
-      </div>
+      {contextMenu.visible && (
+        <div
+          className="fixed z-50 p-4 rounded-xl harold-sky bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100 shadow-lg"
+          style={{ top: contextMenu.y, left: contextMenu.x }}
+        >
+          <div className="mb-4">World Clock Menu</div>
+          <div className="text-[10px] text-right text-purple-200 leading-snug">
+            Powered by ZenzaDae Group, Inspired by Harold and the Purple Crayon.
+            <br />
+            (Always draw what you think of and create anything you can imagine. - Rumi)
+          </div>
+        </div>
+      )}
       <div className="harold-sky space-y-6 p-6 rounded-xl bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100">
         <div className="flex justify-center mb-4">
           <div className="bg-white/10 rounded-full p-1 flex">
@@ -643,7 +761,7 @@ export function ClockModule() {
           )}
         </div>
       ) : (
-        <div className="space-y-6 text-center">
+        <div className="space-y-6 text-center relative" onContextMenu={handleContextMenu}>
           <div>
             <h1 className="text-2xl font-light flex items-center justify-center gap-2">
               <Globe2 className="w-6 h-6 text-blue-100" /> World Clock
@@ -651,19 +769,36 @@ export function ClockModule() {
             <p className="text-purple-100 font-light mt-1">Track time across zones</p>
           </div>
           <div className="flex justify-center gap-2">
-            <input
-              type="text"
-              list="timezone-options"
-              value={zoneInput}
-              onChange={e => setZoneInput(e.target.value)}
-              placeholder="Search timezone"
-              className="input-dreamy w-64"
-            />
-            <datalist id="timezone-options">
-              {allTimeZones.map(tz => (
-                <option key={tz} value={tz} />
-              ))}
-            </datalist>
+            <div className="relative w-64">
+              <input
+                type="text"
+                value={zoneInput}
+                onChange={e => setZoneInput(e.target.value)}
+                onFocus={() => setShowZoneList(true)}
+                onBlur={() => setTimeout(() => setShowZoneList(false), 100)}
+                placeholder="Search timezone"
+                className="input-dreamy w-full"
+              />
+              {showZoneList && zoneInput && (
+                <ul className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto card-floating bg-gradient-to-br from-purple-900/90 via-indigo-900/90 to-blue-900/90 text-purple-100 text-left">
+                  {filteredZones.map(tz => (
+                    <li
+                      key={tz}
+                      className="px-3 py-2 hover:bg-purple-700/50 cursor-pointer"
+                      onMouseDown={() => {
+                        setZoneInput(tz)
+                        setShowZoneList(false)
+                      }}
+                    >
+                      {tz}
+                    </li>
+                  ))}
+                  {filteredZones.length === 0 && (
+                    <li className="px-3 py-2 text-purple-300">No matches</li>
+                  )}
+                </ul>
+              )}
+            </div>
             <button onClick={addZone} className="btn-dreamy-primary flex items-center gap-1 px-3 py-1">
               <Plus className="w-4 h-4" /> Add
             </button>
@@ -676,6 +811,15 @@ export function ClockModule() {
                 <div key={zone.id} className="card-floating p-4 space-y-2 text-center">
                   <div className="text-lg font-medium text-gray-800">{zone.zone}</div>
                   <div className="text-3xl font-light text-blue-800">{formatZoneTime(zone.zone)}</div>
+                  <label className="flex items-center justify-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={!!zone.show_widget}
+                      onChange={() => toggleWidget(zone)}
+                      className="h-4 w-4"
+                    />
+                    Show widget
+                  </label>
                   <button
                     onClick={() => removeZone(zone.id)}
                     className="btn-dreamy-secondary px-3 py-1 flex items-center gap-1 mx-auto"

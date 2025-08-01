@@ -38,6 +38,9 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Movable World Clock widgets can be pinned, repositioned, and opened via a Harold and the Purple Crayon & Vanilla Sky context menu with Supabase persistence (2025-08-01 23:24:00 UTC)
+- World Clock timezone selector now offers a Harold and the Purple Crayon & Vanilla Sky dropdown with Asia/Cebu option and a safe top-right overlay (2025-08-01 23:14:00 UTC)
+- World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59:00 UTC)
 - Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22:52 UTC)
 - World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59:00 UTC)
 - Added a Tools button on the dashboard that opens the IDE diff editor from any tab (2025-08-01 23:00:00 UTC)
