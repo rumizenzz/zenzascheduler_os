@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Double-clicking a Math Notebook tab now opens a Harold and the Purple Crayon & Vanilla Sky rename modal (2025-08-01 03:22:44 UTC).
 - Bundled KaTeX and raised Workbox cache limit so math solver loads without module errors (2025-08-01 03:33:51 UTC).
 - Externalized KaTeX in build config to resolve Netlify build failure (2025-08-01 02:16:25 UTC).
 - Added math expression solver that detects equations and offers a Solve button in Math Notebook (2025-08-01 02:07:51 UTC).
