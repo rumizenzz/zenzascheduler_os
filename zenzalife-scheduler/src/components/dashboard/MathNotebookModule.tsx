@@ -19,10 +19,12 @@ interface TabData {
   name: string
   data: ExcalidrawData
   updated_at: string
+  lastOpened: string
   history: { id: string; created_at: string; data: ExcalidrawData }[]
 }
 
 export function MathNotebookModule() {
+  const LAST_OPENED_KEY = 'math_notebook_last_opened'
   const { user, profile } = useAuth()
   const [problems, setProblems] = useState<TabData[]>([])
   const [tabs, setTabs] = useState<TabData[]>([])
@@ -55,12 +57,16 @@ export function MathNotebookModule() {
       }
 
       if (data) {
+        const lastOpenedMap =
+          JSON.parse(localStorage.getItem(LAST_OPENED_KEY) || '{}') ||
+          {}
         const formatted = data.map((p: any) => {
           const { collaborators, ...appState } = p.data?.appState || {}
           return {
             id: p.id,
             name: p.name,
             updated_at: p.updated_at,
+            lastOpened: lastOpenedMap[p.id] || p.updated_at,
             data: { elements: p.data?.elements || [], appState },
             history:
               p.math_problem_versions?.map((v: any) => {
@@ -87,8 +93,17 @@ export function MathNotebookModule() {
   const openProblem = (id: string) => {
     const problem = problems.find((p) => p.id === id)
     if (!problem) return
+    const now = new Date().toISOString()
+    const lastOpenedMap =
+      JSON.parse(localStorage.getItem(LAST_OPENED_KEY) || '{}') || {}
+    lastOpenedMap[id] = now
+    localStorage.setItem(LAST_OPENED_KEY, JSON.stringify(lastOpenedMap))
+    const updatedProblem = { ...problem, lastOpened: now }
+    setProblems((prev) =>
+      prev.map((p) => (p.id === id ? updatedProblem : p)),
+    )
     setClosedTabs((prev) => prev.filter((t) => t.id !== id))
-    setTabs([problem])
+    setTabs([updatedProblem])
     setActiveTabId(problem.id)
     setShowHome(false)
   }
@@ -112,13 +127,19 @@ export function MathNotebookModule() {
     }
 
     const { collaborators: _c, ...appState } = data.data?.appState || {}
+    const now = new Date().toISOString()
     const newProblem: TabData = {
       id: data.id,
       name: data.name,
       updated_at: data.updated_at,
+      lastOpened: now,
       data: { elements: data.data?.elements || [], appState },
       history: []
     }
+    const lastOpenedMap =
+      JSON.parse(localStorage.getItem(LAST_OPENED_KEY) || '{}') || {}
+    lastOpenedMap[newProblem.id] = now
+    localStorage.setItem(LAST_OPENED_KEY, JSON.stringify(lastOpenedMap))
     setProblems((prev) => [...prev, newProblem])
     setTabs([newProblem])
     setActiveTabId(newProblem.id)
@@ -144,13 +165,19 @@ export function MathNotebookModule() {
     }
 
     const { collaborators: _c, ...appState } = data.data?.appState || {}
+    const now = new Date().toISOString()
     const newTab: TabData = {
       id: data.id,
       name: data.name,
       updated_at: data.updated_at,
+      lastOpened: now,
       data: { elements: data.data?.elements || [], appState },
       history: []
     }
+    const lastOpenedMap =
+      JSON.parse(localStorage.getItem(LAST_OPENED_KEY) || '{}') || {}
+    lastOpenedMap[newTab.id] = now
+    localStorage.setItem(LAST_OPENED_KEY, JSON.stringify(lastOpenedMap))
     setTabs((prev) => [...prev, newTab])
     setActiveTabId(newTab.id)
     setProblems((prev) => [...prev, newTab])
@@ -378,8 +405,8 @@ export function MathNotebookModule() {
             {[...problems]
               .sort(
                 (a, b) =>
-                  new Date(b.updated_at).getTime() -
-                  new Date(a.updated_at).getTime(),
+                  new Date(b.lastOpened).getTime() -
+                  new Date(a.lastOpened).getTime(),
               )
               .map((p, idx) => (
                 <div

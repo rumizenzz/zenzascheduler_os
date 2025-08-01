@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Math Notebook home now orders notebooks by last opened time and keeps the "Most Recent" label until another notebook is opened (2025-08-01 11:34:40 UTC).
 - Math Notebook scans canvas text for equations, auto-filling the solver and supporting `^` exponents (2025-08-01 11:21:00 UTC).
 - Math Notebook dashboard now highlights the most recently updated notebook and labels it "Most Recent" (2025-08-01 11:17:01 UTC).
 - Math Notebook previews hide Excalidraw menus so sketches show in the dashboard (2025-08-01 11:17:01 UTC).
