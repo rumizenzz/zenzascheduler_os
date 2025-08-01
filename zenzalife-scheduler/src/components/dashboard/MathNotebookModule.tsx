@@ -35,7 +35,7 @@ export function MathNotebookModule() {
   const [newTabName, setNewTabName] = useState('')
   const [mathExpression, setMathExpression] = useState<string | null>(null)
 
-  const isMathExpression = (text: string) => /^[0-9+\-*/().^\s]+$/.test(text)
+  const isMathExpression = (text: string) => /^[0-9+\-*/xX().^\s]+$/.test(text)
 
   useEffect(() => {
     if (!user) return
