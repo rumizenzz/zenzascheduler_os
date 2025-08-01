@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider, useAuth } from '@/contexts/AuthContext'
@@ -11,8 +11,14 @@ import './globals.css'
 const queryClient = new QueryClient()
 
 function AppContent() {
-  const { user, loading, recordLogin } = useAuth()
+  const { user, loading, recordLogin, profile } = useAuth()
   const [showEntrance, setShowEntrance] = useState(true)
+
+  useEffect(() => {
+    if (profile) {
+      setShowEntrance(profile.entrance_animation_enabled !== false)
+    }
+  }, [profile])
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin')
 
   // Show loading state while checking authentication

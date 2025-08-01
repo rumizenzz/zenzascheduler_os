@@ -3,8 +3,12 @@
 All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in this file. This project follows [Semantic Versioning](https://semver.org/) and the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
+### Changed
+- Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Added
 - Life Logistics address form now offers Mapbox-powered search suggestions for quick entry (2025-08-01 16:27:25 UTC)
+- Settings now allow disabling the dreamlike entrance and its sound via a Save Changes button; unsaved changes trigger a Harold and the Purple Crayon & Vanilla Sky warning window (2025-08-01 16:13:28 UTC)
+- Authentication email field now suggests common domains for faster typing (2025-08-01 16:29:03 UTC)
 - Daily and grace prayer calendars list every recording for a date so users can log unlimited prayers (2025-08-01 16:13:41 UTC)
 - Math Solver history now lets users clear all problems or delete individual entries (2025-08-01 16:05:39 UTC)
 - GED-style calculator in Math Notebook saves calculations to Supabase for persistent history (2025-08-01 16:09:50 UTC)
@@ -45,6 +49,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Fixed
 - Restored missing brace in Math Solver history clear function so lint passes (2025-08-01 16:27:25 UTC)
+- Resolved missing brace in Math Solver causing lint parse error (2025-08-01 16:29:03 UTC)
 - Sanitized blank address IDs when saving garbage schedules so Supabase no longer rejects empty UUIDs (2025-08-01 16:13:26 UTC)
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
 - `update:upcoming` now mirrors upcoming releases into an **Upcoming Releases** section of the changelog. (2025-07-24 01:06:50 UTC)
@@ -58,6 +63,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Default Schedule modal now asks when your day started and shifts all tasks to match the chosen time.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires a secret code and stores entries in Supabase.
 ### Fixed
+- GED calculator now renders above the Math Notebook canvas via a portal so it no longer hides behind drawings (2025-08-01 16:23:10 UTC)
 - Active fast lookup now includes user ID so Netlify builds succeed (2025-08-01 14:06:57 UTC)
 - Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
 - Intermittent fasting reminder now displays below top buttons so controls remain visible (2025-08-01 16:10:00 UTC)
@@ -74,6 +80,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Changed
 - Address search component now uses typed Mapbox features and limits suggestions to five results (2025-08-01 16:38:58 UTC)
+- Plus button inside Math Notebook instantly opens a new Notes tab without a template prompt (2025-08-01 16:23:10 UTC)
 - Math Solver history now stores entries only in Supabase, dropping localStorage (2025-08-01 16:12:04 UTC)
 - Bug list access code updated to ZENZASECRETS for monthly report view (2025-08-01 15:50:22 UTC)
 - Math Notebook search now scans canvas text so results match drawings and notes (2025-08-01 15:21:54 UTC)

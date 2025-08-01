@@ -10,6 +10,8 @@ CREATE TABLE users (
     growth_identity TEXT,
     family_id UUID,
     bio TEXT,
+    entrance_sound_enabled BOOLEAN DEFAULT true,
+    entrance_animation_enabled BOOLEAN DEFAULT true,
     last_login TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
