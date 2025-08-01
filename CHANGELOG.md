@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Settings now allow disabling the dreamlike entrance and its sound via a Save Changes button; unsaved changes trigger a Harold and the Purple Crayon & Vanilla Sky warning window (2025-08-01 16:13:28 UTC)
 - Morning and night prayers display a live timer, save duration, and can be replayed from a date-based prayer calendar (2025-08-01 15:13:17 UTC)
 - Alarm window offers a Start Prayer button for Wake Up and Sleep tasks, recording dated morning and night prayers and letting grace prayers show dish photos on demand (2025-08-01 13:14:57 UTC)
 - Grace prayers now show a live timer, store duration, and replay from a date-filtered calendar with optional dish photos (2025-08-01 15:29:18 UTC)

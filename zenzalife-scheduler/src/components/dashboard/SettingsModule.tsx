@@ -32,7 +32,11 @@ const relationshipRoles = [
   { value: 'individual', label: 'Individual' }
 ]
 
-export function SettingsModule() {
+interface SettingsModuleProps {
+  onUnsavedChange?: (unsaved: boolean) => void
+}
+
+export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
   const { user, profile, refreshProfile } = useAuth()
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile')
   const [loading, setLoading] = useState(false)
@@ -53,7 +57,7 @@ export function SettingsModule() {
   ]
 
   const [audioSettings, setAudioSettings] = useState({
-    entrance_sound: true,
+    entrance_sound: localStorage.getItem('entranceSoundEnabled') !== 'false',
     task_alarms: true,
     reminder_sounds: true,
     default_alarm: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
@@ -61,6 +65,11 @@ export function SettingsModule() {
     custom_alarm_name: '',
     custom_alarms: JSON.parse(localStorage.getItem('customAlarmSounds') || '[]') as { name: string; url: string }[]
   })
+  const [appearanceSettings, setAppearanceSettings] = useState({
+    showEntrance: localStorage.getItem('entranceAnimationEnabled') !== 'false',
+    smoothTransitions: true
+  })
+  const [unsavedChanges, setUnsavedChanges] = useState(false)
   const { playEntranceSound, playAudio } = useAudio()
   const { requestPermission, testAlarm } = useNotifications()
   const [showTestAlarm, setShowTestAlarm] = useState(false)
@@ -84,6 +93,19 @@ export function SettingsModule() {
   })
 
   useEffect(() => {
+    onUnsavedChange?.(unsavedChanges)
+  }, [unsavedChanges, onUnsavedChange])
+
+  const saveChanges = () => {
+    localStorage.setItem('entranceSoundEnabled', String(audioSettings.entrance_sound))
+    localStorage.setItem('defaultAlarmSound', audioSettings.default_alarm)
+    localStorage.setItem('customAlarmSounds', JSON.stringify(audioSettings.custom_alarms))
+    localStorage.setItem('entranceAnimationEnabled', String(appearanceSettings.showEntrance))
+    toast.success('Settings saved')
+    setUnsavedChanges(false)
+  }
+
+  useEffect(() => {
     if (profile) {
       setProfileData({
         display_name: profile.display_name || '',
@@ -95,10 +117,6 @@ export function SettingsModule() {
     }
   }, [profile])
 
-  useEffect(() => {
-    localStorage.setItem('defaultAlarmSound', audioSettings.default_alarm)
-    localStorage.setItem('customAlarmSounds', JSON.stringify(audioSettings.custom_alarms))
-  }, [audioSettings.default_alarm, audioSettings.custom_alarms])
 
   useEffect(() => {
     setReleaseAccess(localStorage.getItem('releaseAccess') === 'true')
@@ -361,8 +379,8 @@ export function SettingsModule() {
                   id="defaultAlarm"
                   value={audioSettings.default_alarm}
                   onChange={(e) => {
-                    localStorage.setItem('defaultAlarmSound', e.target.value)
                     setAudioSettings(prev => ({ ...prev, default_alarm: e.target.value }))
+                    setUnsavedChanges(true)
                   }}
                   className="input-dreamy w-full"
                 >
@@ -387,7 +405,10 @@ export function SettingsModule() {
                     name="entranceSound"
                     type="checkbox"
                     checked={audioSettings.entrance_sound}
-                    onChange={(e) => setAudioSettings(prev => ({ ...prev, entrance_sound: e.target.checked }))}
+                    onChange={(e) => {
+                      setAudioSettings(prev => ({ ...prev, entrance_sound: e.target.checked }))
+                      setUnsavedChanges(true)
+                    }}
                     className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                   />
                   <span className="text-sm text-gray-700">Play entrance sound on app load</span>
@@ -404,7 +425,10 @@ export function SettingsModule() {
                     name="taskAlarms"
                     type="checkbox"
                     checked={audioSettings.task_alarms}
-                    onChange={(e) => setAudioSettings(prev => ({ ...prev, task_alarms: e.target.checked }))}
+                    onChange={(e) => {
+                      setAudioSettings(prev => ({ ...prev, task_alarms: e.target.checked }))
+                      setUnsavedChanges(true)
+                    }}
                     className="rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                   />
                   <span className="text-sm text-gray-700">Enable task alarms</span>
@@ -415,7 +439,10 @@ export function SettingsModule() {
                     name="reminderSounds"
                     type="checkbox"
                     checked={audioSettings.reminder_sounds}
-                    onChange={(e) => setAudioSettings(prev => ({ ...prev, reminder_sounds: e.target.checked }))}
+                    onChange={(e) => {
+                      setAudioSettings(prev => ({ ...prev, reminder_sounds: e.target.checked }))
+                      setUnsavedChanges(true)
+                    }}
                     className="rounded border-gray-300 text-green-500 focus:ring-green-500"
                   />
                   <span className="text-sm text-gray-700">Play reminder sounds</span>
@@ -542,17 +569,25 @@ export function SettingsModule() {
                   <input
                     name="showEntranceAnimation"
                     type="checkbox"
-                    defaultChecked
+                    checked={appearanceSettings.showEntrance}
+                    onChange={(e) => {
+                      setAppearanceSettings(prev => ({ ...prev, showEntrance: e.target.checked }))
+                      setUnsavedChanges(true)
+                    }}
                     className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                   />
                   <span className="text-sm text-gray-700">Show entrance animation</span>
                 </label>
-                
+
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
                     name="smoothTransitions"
                     type="checkbox"
-                    defaultChecked
+                    checked={appearanceSettings.smoothTransitions}
+                    onChange={(e) => {
+                      setAppearanceSettings(prev => ({ ...prev, smoothTransitions: e.target.checked }))
+                      setUnsavedChanges(true)
+                    }}
                     className="rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                   />
                   <span className="text-sm text-gray-700">Enable smooth transitions</span>
@@ -704,6 +739,18 @@ export function SettingsModule() {
       {/* Content */}
       <div className="card-floating p-6">
         {renderTabContent()}
+      </div>
+      <div className="flex items-center justify-between mt-4">
+        {unsavedChanges && (
+          <span className="text-sm text-red-500">Unsaved Changes</span>
+        )}
+        <button
+          onClick={saveChanges}
+          disabled={!unsavedChanges}
+          className="btn-dreamy-primary"
+        >
+          Save Changes
+        </button>
       </div>
       <div className="text-center mt-4">
         <span

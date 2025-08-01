@@ -27,8 +27,10 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
     }))
     setParticles(particleArray)
 
-    // Play entrance sound
-    playEntranceSound()
+    // Play entrance sound if enabled
+    if (localStorage.getItem('entranceSoundEnabled') !== 'false') {
+      playEntranceSound()
+    }
 
     // Allow skip after 3 seconds
     const skipTimer = setTimeout(() => {

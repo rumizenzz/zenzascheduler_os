@@ -12,7 +12,9 @@ const queryClient = new QueryClient()
 
 function AppContent() {
   const { user, loading, recordLogin } = useAuth()
-  const [showEntrance, setShowEntrance] = useState(true)
+  const [showEntrance, setShowEntrance] = useState(() =>
+    localStorage.getItem('entranceAnimationEnabled') !== 'false'
+  )
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin')
 
   // Show loading state while checking authentication
