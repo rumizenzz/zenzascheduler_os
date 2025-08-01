@@ -22,6 +22,18 @@ This file tracks project progress and upcoming tasks.
 - Fasting reminder persistence now stores acknowledgments in Supabase for cross-device sync (2025-08-01 13:36:00 UTC)
 - Fasting reminder now supports selecting duration and water options with plans saved to Supabase (2025-08-01 13:28:22 UTC)
  - Monthly fasting reminder alerts users on the first of each month with a top-right toast (2025-08-01 13:15:31 UTC).
+- Create New Notebook modal now appears on the dashboard instead of inside open notes (2025-08-01 15:06:49 UTC).
+- Math Notebook tab close confirmation now appears above the canvas via a portal so it no longer hides under the drawing area (2025-08-01 13:55:07 UTC).
+- Refactored Math Notebook tab modals into portal-rendered components to fix Netlify JSX closing tag errors (2025-08-01 15:05:23 UTC).
+- Refresh, Change Log, and swipe-refresh toggle buttons rearranged so the Refresh button stays visible (2025-08-01 13:47:46 UTC).
+- New notebook modal lets you choose templates like Math, Notes, To-Do List, Journal, or Project Plan with a custom name (2025-08-01 13:48:00 UTC).
+- Math Notebook home now lets users search notebooks by title with a prominent search bar (2025-08-01 13:34:42 UTC).
+- Task Notes history search bar redesigned with a clear icon for easier filtering (2025-08-01 13:34:42 UTC).
+- Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC).
+- Math Notebook solver history now opens in a Harold and the Purple Crayon & Vanilla Sky window via a History button (2025-08-01 13:30:00 UTC).
+- Math Notebook solver interprets `x` and `X` as multiplication and displays × in expressions (2025-08-01 13:21:25 UTC).
+- Refresh button is now larger and always visible on mobile and desktop for easy reloading (2025-08-01 13:18:35 UTC).
+- Calendar action buttons now wrap on desktop so no options are cut off (2025-08-01 13:18:35 UTC).
 - Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC).
 - Scripture study now allows multiple verse entries per day with per-verse edit buttons (2025-08-01 12:56:35 UTC).
 - Math Notebook solver history now syncs to Supabase for cross-device persistence (2025-08-01 12:54:40 UTC).

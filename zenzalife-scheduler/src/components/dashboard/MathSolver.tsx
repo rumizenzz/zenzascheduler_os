@@ -11,6 +11,7 @@ export function MathSolver({ expression }: MathSolverProps) {
   const [input, setInput] = useState('')
   const [result, setResult] = useState<string | null>(null)
   const [history, setHistory] = useState<{ expression: string; result: string }[]>([])
+  const [showHistory, setShowHistory] = useState(false)
 
   useEffect(() => {
     const stored = localStorage.getItem('mathSolverHistory')
@@ -47,11 +48,11 @@ export function MathSolver({ expression }: MathSolverProps) {
     }
   }, [expression])
 
-  const isMath = /^[0-9+\-*/().^\s]+$/.test(input)
+  const isMath = /^[0-9+\-*/xX().^\s]+$/.test(input)
 
   const handleSolve = async () => {
     try {
-      const prepared = input.replace(/\^/g, '**')
+      const prepared = input.replace(/\^/g, '**').replace(/[xX]/g, '*')
       // eslint-disable-next-line no-new-func
       const value = Function(`return (${prepared})`)()
       const stringValue = String(value)
@@ -86,7 +87,7 @@ export function MathSolver({ expression }: MathSolverProps) {
       />
       {isMath && input && (
         <div className="space-y-2">
-          <BlockMath math={input} />
+          <BlockMath math={input.replace(/[xX*]/g, '\\times')} />
           <button
             onClick={handleSolve}
             className="px-3 py-1 bg-blue-500 text-white rounded"
@@ -97,16 +98,32 @@ export function MathSolver({ expression }: MathSolverProps) {
       )}
       {result !== null && <div className="mt-2">Result: {result}</div>}
       {history.length > 0 && (
-        <div className="mt-4">
-          <h3 className="font-semibold">Previous Problems</h3>
-          <ul className="mt-2 space-y-1 text-sm">
-            {history.map((h, i) => (
-              <li key={i} className="flex justify-between">
-                <span>{h.expression}</span>
-                <span className="text-gray-400">= {h.result}</span>
-              </li>
-            ))}
-          </ul>
+        <button
+          onClick={() => setShowHistory(true)}
+          className="btn-dreamy mt-2 text-sm"
+        >
+          History
+        </button>
+      )}
+      {showHistory && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="harold-sky bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-purple-100">
+            <h2 className="text-lg font-light text-center">Previous Problems</h2>
+            <ul className="mt-2 space-y-1 text-sm max-h-60 overflow-y-auto">
+              {history.map((h, i) => (
+                <li key={i} className="flex justify-between">
+                  <span>{h.expression}</span>
+                  <span className="text-gray-400">= {h.result}</span>
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={() => setShowHistory(false)}
+              className="btn-dreamy-primary w-full text-sm"
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>
