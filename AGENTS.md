@@ -100,6 +100,14 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Added timestamp display so Math Notebook dashboard cards show each note's last updated time from Supabase.
 - Confirmed the project passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 12:57 UTC)
+- Added text search to Task Notes history for quickly finding past comments.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 13:34 UTC)
+- Added a prominent search bar to Math Notebook home for filtering notebooks by title.
+- Refined Task Notes history search with a clear icon and rounded styling.
+- Confirmed repository lint passes via `pnpm run lint`.
 ### Codex Agent Reflection (2025-08-01 12:56 UTC)
 - Enabled multiple scripture entries per day with Add Verse Entry button and per-verse editing.
 - Verified repository passes lint with `pnpm run lint`.
@@ -110,4 +118,10 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-01 13:14 UTC)
 - Introduced alarm-triggered Start Prayer recordings with organized prayer history and grace dish images.
 - Verified repository passes lint with `pnpm run lint`.
+### Codex Agent Reflection (2025-08-01 13:48 UTC)
+- Added a template picker so new Math Notebook entries can start as Math, Notes, Math & Notes, To-Do Lists, Journals, or Project Plans with custom names.
+- Verified repository passes lint with `pnpm run lint`.
+### Codex Agent Reflection (2025-08-01 13:30 UTC)
+- Added a History button that opens Math Solver history in a Harold and the Purple Crayon & Vanilla Sky window.
+- Verified the repository passes lint with `pnpm run lint`.
 
