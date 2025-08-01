@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useAudio } from '@/hooks/useAudio'
+import { useAuth } from '@/contexts/AuthContext'
 import { Cloud, Sparkles, X } from 'lucide-react'
 import { ConstellationFamily } from './ConstellationFamily'
 
@@ -13,10 +14,13 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
   const [canSkip, setCanSkip] = useState(false)
   const [started, setStarted] = useState(false)
   const { playEntranceSound } = useAudio()
+  const { profile } = useAuth()
   const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, delay: number}>>([])
 
   useEffect(() => {
     if (!started) return
+
+    const duration = (profile?.entrance_duration_seconds ?? 6) * 1000
 
     // Generate floating particles
     const particleArray = Array.from({ length: 12 }, (_, i) => ({
@@ -27,24 +31,26 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
     }))
     setParticles(particleArray)
 
-    // Play entrance sound
-    playEntranceSound()
+    // Play entrance sound if enabled
+    if (profile?.entrance_sound_enabled !== false) {
+      playEntranceSound()
+    }
 
-    // Allow skip after 3 seconds
+    // Allow skip halfway through the entrance
     const skipTimer = setTimeout(() => {
       setCanSkip(true)
-    }, 3000)
+    }, duration / 2)
 
-    // Auto-complete after 6 seconds
+    // Auto-complete after the configured duration
     const autoCompleteTimer = setTimeout(() => {
       handleComplete()
-    }, 6000)
+    }, duration)
 
     return () => {
       clearTimeout(skipTimer)
       clearTimeout(autoCompleteTimer)
     }
-  }, [started, playEntranceSound])
+  }, [started, playEntranceSound, profile])
 
   const handleComplete = () => {
     setIsVisible(false)

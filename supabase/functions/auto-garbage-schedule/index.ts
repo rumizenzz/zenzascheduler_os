@@ -63,6 +63,7 @@ Deno.serve(async (req) => {
             waste_type: ev.wasteType,
             collection_day: new Date(ev.date).toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase(),
             frequency: 'once',
+            date: ev.date,
             next_collection: ev.date,
             auto_reminder: true,
             updated_at: new Date().toISOString()

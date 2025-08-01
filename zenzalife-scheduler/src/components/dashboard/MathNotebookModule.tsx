@@ -230,6 +230,10 @@ export function MathNotebookModule() {
     setProblems((prev) => [...prev, newTab])
   }
 
+  const quickAddTab = async () => {
+    await addTab(`Notes ${tabs.length + 1}`, 'notes')
+  }
+
   const handleCreateNotebook = async () => {
     const template = newNotebookTemplate
     const defaultLabel =
@@ -642,7 +646,7 @@ export function MathNotebookModule() {
             </div>
           ))}
           <button
-            onClick={() => setShowNewModal(true)}
+            onClick={quickAddTab}
             className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
             title="New Tab"
           >
@@ -717,7 +721,11 @@ export function MathNotebookModule() {
         )}
       </div>
       <MathSolver expression={mathExpression} />
-      {showCalculator && <GEDCalculator onClose={() => setShowCalculator(false)} />}
+      {showCalculator &&
+        createPortal(
+          <GEDCalculator onClose={() => setShowCalculator(false)} />,
+          document.body
+        )}
       {renameModal}
       {closeModal}
       {showNewModal && (
@@ -751,63 +759,6 @@ export function MathNotebookModule() {
               </button>
               <button
                 onClick={() => setShowNewModal(false)}
-                className="btn-dreamy w-full text-sm text-purple-100"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {renamingTab && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
-            <h2 className="text-lg font-light">Harold and the Purple Crayon Meets Vanilla Sky</h2>
-            <input
-              value={newTabName}
-              onChange={(e) => setNewTabName(e.target.value)}
-              className="input-dreamy w-full text-sm"
-              autoFocus
-            />
-            <div className="space-y-2">
-              <button
-                onClick={finalizeRenameTab}
-                className="btn-dreamy-primary w-full text-sm bg-purple-600 hover:bg-purple-700 border-purple-700 text-white"
-              >
-                Rename
-              </button>
-              <button
-                onClick={() => setRenamingTab(null)}
-                className="btn-dreamy w-full text-sm text-purple-100"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {closingTab && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
-            <h2 className="text-lg font-light">Harold and the Purple Crayon</h2>
-            <p className="text-sm">
-              Save <span className="font-semibold">{closingTab.name}</span> before closing?
-            </p>
-            <div className="space-y-2">
-              <button
-                onClick={() => finalizeCloseTab(true)}
-                className="btn-dreamy-primary w-full text-sm bg-purple-600 hover:bg-purple-700 border-purple-700 text-white"
-              >
-                Save & Close
-              </button>
-              <button
-                onClick={() => finalizeCloseTab(false)}
-                className="btn-dreamy w-full text-sm border-purple-400 text-purple-100 hover:bg-purple-900/50"
-              >
-                Close Without Saving
-              </button>
-              <button
-                onClick={() => setClosingTab(null)}
                 className="btn-dreamy w-full text-sm text-purple-100"
               >
                 Cancel

@@ -16,6 +16,16 @@ This file tracks project progress and upcoming tasks.
 ## Latest Updates
 - Life Logistics address form now uses free OpenStreetMap Nominatim suggestions for quick address search (2025-08-01 16:58:29 UTC)
 - Fixed Math Solver history clear function so component parses correctly (2025-08-01 16:27:25 UTC)
+- Garbage schedule saves now populate the required date field so Supabase doesn't reject null values (2025-08-01 16:53:53 UTC).
+- Dashboard sidebar now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out stay visible (2025-08-01 16:57:38 UTC).
+- Report Bug button slides beside the sidebar so it no longer covers Sign Out (2025-08-01 16:57:38 UTC).
+- Entrance animation duration is now configurable in Settings (2025-08-01 16:47:48 UTC).
+- Renaming a Math Notebook tab now shows only a single portal modal above the canvas, removing the duplicate window (2025-08-01 16:50:04 UTC)
+- Entrance animation and sound preferences now persist in Supabase instead of local storage (2025-08-01 16:26:53 UTC).
+- Settings now let users disable the dreamlike entrance and its sound with a Save Changes button that warns of unsaved changes (2025-08-01 16:13:28 UTC).
+- Authentication email field now suggests common domains for quick entry (2025-08-01 16:29:03 UTC).
+- GED calculator now pops above the Math Notebook canvas via a portal for clear visibility (2025-08-01 16:23:10 UTC).
+- Plus button in Math Notebook adds a new Notes tab without asking for a template (2025-08-01 16:23:10 UTC).
 - Garbage & Recycling schedule saves no longer fail when address is unspecified (2025-08-01 16:13:26 UTC).
 - Daily and grace prayer calendars now list all recordings for a date so users can log unlimited prayers (2025-08-01 16:13:41 UTC).
 - Math Solver history now stores entries only in Supabase, dropping localStorage (2025-08-01 16:12:04 UTC).
