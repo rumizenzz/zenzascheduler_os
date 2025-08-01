@@ -14,6 +14,9 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Reminders window now lists Intermittent Fasting & Prayer alongside other reminders (2025-08-01 17:38:05 UTC).
+- Reminders now save to Supabase so milestone countdowns persist across devices (2025-08-01 17:30:21 UTC).
+- Added Monthsary and 1 Year Anniversary task categories with a top-right Reminders button that counts down to upcoming tasks and celebrates special days (2025-08-01 17:20:29 UTC).
 - Dashboard sections now scroll to the top when switching so content doesn't appear buried (2025-08-01 17:09:52 UTC).
 - Life Logistics address form now uses free OpenStreetMap Nominatim suggestions for quick address search (2025-08-01 16:58:29 UTC)
 - Fixed Math Solver history clear function so component parses correctly (2025-08-01 16:27:25 UTC)

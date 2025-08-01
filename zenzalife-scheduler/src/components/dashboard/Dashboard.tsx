@@ -41,6 +41,7 @@ import { RefreshButton } from "../RefreshButton";
 import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
 import { FastingPrayerReminder } from "../FastingPrayerReminder";
 import { ReportBugButton } from "../ReportBugButton";
+import { RemindersButton } from "../RemindersButton";
 
 type DashboardTab =
   | "calendar"
@@ -294,6 +295,7 @@ export function Dashboard() {
       </div>
       <OnboardingModal />
       <MailingListPrompt />
+      <RemindersButton />
       <RefreshButton />
       <PullToRefreshToggleButton
         enabled={pullRefreshEnabled}
