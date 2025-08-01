@@ -162,6 +162,15 @@ export type DailyPrayer = {
   updated_at?: string
 }
 
+export type Fast = {
+  id: string
+  user_id: string
+  start_time: string
+  duration_hours: number
+  allow_water?: boolean
+  created_at?: string
+}
+
 export type TaskHistory = {
   id: string
   user_id: string

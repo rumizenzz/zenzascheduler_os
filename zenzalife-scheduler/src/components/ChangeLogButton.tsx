@@ -77,7 +77,7 @@ export function ChangeLogButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed top-4 right-20 z-40 btn-dreamy text-xs flex items-center gap-2"
+        className="fixed bottom-28 right-4 z-40 btn-dreamy text-xs flex items-center gap-2"
       >
         <List className="w-4 h-4" />
         <span className="hidden sm:inline">Change Log</span>

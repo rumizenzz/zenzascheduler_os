@@ -39,6 +39,8 @@ import { Footer } from "../Footer";
 import { ChangeLogButton } from "../ChangeLogButton";
 import { RefreshButton } from "../RefreshButton";
 import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
+import { FastingPrayerReminder } from "../FastingPrayerReminder";
+import { ReportBugButton } from "../ReportBugButton";
 
 type DashboardTab =
   | "calendar"
@@ -147,6 +149,7 @@ export function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
+      <FastingPrayerReminder />
       {/* Mobile menu button */}
       {sidebarCollapsed && (
         <button
@@ -284,6 +287,7 @@ export function Dashboard() {
         enabled={pullRefreshEnabled}
         toggle={() => setPullRefreshEnabled(!pullRefreshEnabled)}
       />
+      <ReportBugButton />
       <ChangeLogButton />
       <Footer />
     </div>

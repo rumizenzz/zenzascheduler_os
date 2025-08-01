@@ -100,6 +100,14 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Added timestamp display so Math Notebook dashboard cards show each note's last updated time from Supabase.
 - Confirmed the project passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 12:57 UTC)
+- Added text search to Task Notes history for quickly finding past comments.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 13:34 UTC)
+- Added a prominent search bar to Math Notebook home for filtering notebooks by title.
+- Refined Task Notes history search with a clear icon and rounded styling.
+- Confirmed repository lint passes via `pnpm run lint`.
 ### Codex Agent Reflection (2025-08-01 12:56 UTC)
 - Enabled multiple scripture entries per day with Add Verse Entry button and per-verse editing.
 - Verified repository passes lint with `pnpm run lint`.
@@ -109,5 +117,37 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 
 ### Codex Agent Reflection (2025-08-01 13:14 UTC)
 - Introduced alarm-triggered Start Prayer recordings with organized prayer history and grace dish images.
+### Codex Agent Reflection (2025-08-01 13:50 UTC)
+- Added a live countdown timer for active fasts so users can see remaining time at a glance.
+- Confirmed the project passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 14:06 UTC)
+- Fixed active fast lookup to include user ID so TypeScript build passes.
+- Verified repository lint passes via `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 14:56 UTC)
+- Switched the fasting reminder to fire on the first Sunday of each month instead of the first day.
+- Confirmed lint and build succeed with `pnpm run lint` and `pnpm run build`.
+### Codex Agent Reflection (2025-08-01 13:48 UTC)
+- Added a template picker so new Math Notebook entries can start as Math, Notes, Math & Notes, To-Do Lists, Journals, or Project Plans with custom names.
+- Verified repository passes lint with `pnpm run lint`.
+### Codex Agent Reflection (2025-08-01 13:30 UTC)
+- Added a History button that opens Math Solver history in a Harold and the Purple Crayon & Vanilla Sky window.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 13:55 UTC)
+- Routed Math Notebook tab close confirmation through a portal so the modal appears above the canvas.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 15:05 UTC)
+- Refactored Math Notebook tab modals into variables rendered via portals outside the component return to resolve Netlify JSX closing tag errors.
+- Ensured project builds cleanly by running `pnpm run lint` and `pnpm run build`.
+
+### Codex Agent Reflection (2025-08-01 15:21 UTC)
+- Expanded Math Notebook search to scan canvas text so notebooks surface by their contents.
+- Confirmed the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 15:51 UTC)
+- Updated bug list access code to "ZENZASECRETS" so monthly reports stay hidden behind the correct secret.
 - Verified repository passes lint with `pnpm run lint`.
 
