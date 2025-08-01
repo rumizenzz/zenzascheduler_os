@@ -218,3 +218,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Added timer delete controls and persisted dashboard tab selections in Supabase.
 - Verified the repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 18:51 UTC)
+- Added Garbage & Recycling schedules to the Reminders countdown so collection days aren't missed.
+- Verified repository passes lint with `pnpm run lint` and tests with `pnpm test`.
+

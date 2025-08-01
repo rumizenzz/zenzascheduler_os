@@ -17,6 +17,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Garbage & Recycling schedules now appear in Reminders so upcoming collection days are highlighted (2025-08-01 18:51 UTC)
 - Timers can be deleted from the Clock module with a new Remove control (2025-08-01 18:30 UTC)
 - Dashboard restores the last visited tab on load using a Supabase-backed preference (2025-08-01 18:30 UTC)
 - Timer presets can now be edited to update labels and durations (2025-08-01 18:29 UTC)
