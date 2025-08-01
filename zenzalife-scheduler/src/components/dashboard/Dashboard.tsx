@@ -78,6 +78,8 @@ export function Dashboard() {
   const initialTab = (new URLSearchParams(window.location.search).get("tab") as DashboardTab) || "calendar";
   const [activeTab, setActiveTab] = useState<DashboardTab>(initialTab);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [hasUnsavedSettings, setHasUnsavedSettings] = useState(false);
+  const [showUnsavedModal, setShowUnsavedModal] = useState(false);
   const isMobile = useIsMobile();
   const storageKey = isMobile ? "ptr-mobile-enabled" : "ptr-desktop-enabled";
   const [pullRefreshEnabled, setPullRefreshEnabled] = useState(
@@ -114,6 +116,14 @@ export function Dashboard() {
     }
   };
 
+  const handleTabClick = (id: DashboardTab) => {
+    if (activeTab === "settings" && hasUnsavedSettings && id !== "settings") {
+      setShowUnsavedModal(true);
+      return;
+    }
+    setActiveTab(id);
+  };
+
   const renderContent = (): JSX.Element => {
     switch (activeTab) {
       case "calendar":
@@ -141,7 +151,7 @@ export function Dashboard() {
       case "math":
         return <MathNotebookModule />;
       case "settings":
-        return <SettingsModule />;
+        return <SettingsModule onUnsavedChange={setHasUnsavedSettings} />;
       default:
         return <ZenzaCalendar />;
     }
@@ -220,7 +230,7 @@ export function Dashboard() {
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id as DashboardTab)}
+                onClick={() => handleTabClick(item.id as DashboardTab)}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-200 ${
                   isActive ? "bg-white/70 shadow-sm" : "hover:bg-white/40"
                 }`}
@@ -290,6 +300,19 @@ export function Dashboard() {
       <ReportBugButton />
       <ChangeLogButton />
       <Footer />
+      {showUnsavedModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="harold-sky bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-purple-100">
+            <p className="text-center">Please save your changes before leaving Settings.</p>
+            <button
+              className="btn-dreamy-primary w-full text-sm"
+              onClick={() => setShowUnsavedModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

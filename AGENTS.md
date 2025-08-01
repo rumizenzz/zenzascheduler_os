@@ -154,3 +154,11 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Updated bug list access code to "ZENZASECRETS" so monthly reports stay hidden behind the correct secret.
 - Verified repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 16:13 UTC)
+- Added Settings safeguards so users can disable the entrance animation and sound with a Save Changes button.
+- Confirmed lint passes with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 16:26 UTC)
+- Persisted entrance animation and sound preferences in Supabase instead of local storage.
+- Verified repository lint passes via `pnpm run lint`.
+
