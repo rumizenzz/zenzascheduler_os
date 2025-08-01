@@ -35,6 +35,7 @@ interface CalendarEvent {
   title: string;
   start: string | Date;
   end?: string | Date;
+  allDay?: boolean;
   backgroundColor?: string;
   borderColor?: string;
   textColor?: string;
@@ -250,7 +251,7 @@ export function ZenzaCalendar() {
 
       const uniqueMap = new Map<string, Task>();
       for (const t of data || []) {
-        const key = `${t.title}-${t.start_time}-${t.end_time}-${t.user_id}`;
+        const key = `${t.title}-${t.start_time}-${t.end_time}-${t.user_id}-${t.all_day}`;
         if (!uniqueMap.has(key)) {
           uniqueMap.set(key, t);
         }
@@ -322,7 +323,8 @@ export function ZenzaCalendar() {
       id: task.id,
       title: task.title,
       start: task.start_time ? dayjs(task.start_time).toDate() : "",
-      end: task.end_time ? dayjs(task.end_time).toDate() : "",
+      end: task.all_day ? undefined : task.end_time ? dayjs(task.end_time).toDate() : "",
+      allDay: task.all_day || false,
       backgroundColor: getCategoryColor(task.category),
       borderColor: getCategoryColor(task.category, true),
       textColor: "#374151",
@@ -480,15 +482,21 @@ export function ZenzaCalendar() {
   const handleEventDrop = async (info: any) => {
     if (!user || !isOwnCalendar) return;
     const id = info.event.id;
-    const start = dayjs(info.event.start).format("YYYY-MM-DDTHH:mm:ssZ");
-    const end = info.event.end
-      ? dayjs(info.event.end).format("YYYY-MM-DDTHH:mm:ssZ")
-      : null;
+    const isAllDay = info.event.allDay;
+    const start = isAllDay
+      ? dayjs(info.event.start).startOf("day").format("YYYY-MM-DDTHH:mm:ssZ")
+      : dayjs(info.event.start).format("YYYY-MM-DDTHH:mm:ssZ");
+    const end = isAllDay
+      ? null
+      : info.event.end
+        ? dayjs(info.event.end).format("YYYY-MM-DDTHH:mm:ssZ")
+        : null;
     const { error } = await supabase
       .from("tasks")
       .update({
         start_time: start,
         end_time: end,
+        all_day: isAllDay,
         updated_at: new Date().toISOString(),
       })
       .eq("id", id);
@@ -504,15 +512,21 @@ export function ZenzaCalendar() {
   const handleEventResize = async (info: any) => {
     if (!user || !isOwnCalendar) return;
     const id = info.event.id;
-    const start = dayjs(info.event.start).format("YYYY-MM-DDTHH:mm:ssZ");
-    const end = info.event.end
-      ? dayjs(info.event.end).format("YYYY-MM-DDTHH:mm:ssZ")
-      : null;
+    const isAllDay = info.event.allDay;
+    const start = isAllDay
+      ? dayjs(info.event.start).startOf("day").format("YYYY-MM-DDTHH:mm:ssZ")
+      : dayjs(info.event.start).format("YYYY-MM-DDTHH:mm:ssZ");
+    const end = isAllDay
+      ? null
+      : info.event.end
+        ? dayjs(info.event.end).format("YYYY-MM-DDTHH:mm:ssZ")
+        : null;
     const { error } = await supabase
       .from("tasks")
       .update({
         start_time: start,
         end_time: end,
+        all_day: isAllDay,
         updated_at: new Date().toISOString(),
       })
       .eq("id", id);
@@ -538,6 +552,7 @@ export function ZenzaCalendar() {
         start_time: start.format("YYYY-MM-DDTHH:mm:ssZ"),
         end_time: end.format("YYYY-MM-DDTHH:mm:ssZ"),
         alarm: item.alarm,
+        all_day: false,
       }
     })
 
