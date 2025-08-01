@@ -39,6 +39,7 @@ export type Task = {
   category?: string
   start_time?: string
   end_time?: string
+  all_day?: boolean
   repeat_pattern?: string
   alarm?: boolean
   custom_sound_path?: string
@@ -264,6 +265,24 @@ export type Timer = {
   duration: number
   remaining: number
   running: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+export type TimerPreset = {
+  id: string
+  user_id: string
+  label: string
+  duration: number
+  created_at?: string
+  updated_at?: string
+}
+
+export type Stopwatch = {
+  id: string
+  user_id: string
+  label: string
+  elapsed: number
   created_at?: string
   updated_at?: string
 }

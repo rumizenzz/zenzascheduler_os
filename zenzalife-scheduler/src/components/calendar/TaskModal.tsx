@@ -50,6 +50,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     category: 'other',
     start_time: '',
     end_time: '',
+    all_day: false,
     repeat_pattern: 'none',
     alarm: false,
     custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
@@ -70,6 +71,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         end_time: task.end_time
           ? dayjs(task.end_time).local().format('YYYY-MM-DDTHH:mm')
           : '',
+        all_day: task.all_day || false,
         repeat_pattern: task.repeat_pattern || 'none',
         alarm: task.alarm || false,
         custom_sound_path: task.custom_sound_path || localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
@@ -86,6 +88,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         category: 'other',
         start_time: startTime,
         end_time: endTime,
+        all_day: false,
         repeat_pattern: 'none',
         alarm: false,
         custom_sound_path: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
@@ -108,12 +111,21 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
       alert('Please select a start time')
       return
     }
-    
+
+    const start = dayjs(formData.start_time)
+    const startIso = formData.all_day ? start.startOf('day').toISOString() : start.toISOString()
+    const endIso = formData.all_day
+      ? null
+      : formData.end_time
+        ? dayjs(formData.end_time).toISOString()
+        : null
+
     onSave({
       title: formData.title.trim(),
       category: formData.category,
-      start_time: dayjs(formData.start_time).toISOString(),
-      end_time: formData.end_time ? dayjs(formData.end_time).toISOString() : null,
+      start_time: startIso,
+      end_time: endIso,
+      all_day: formData.all_day,
       repeat_pattern: formData.repeat_pattern,
       alarm: formData.alarm,
       custom_sound_path: formData.custom_sound_path,
@@ -221,7 +233,7 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   Start Time
                 </label>
                 <input
-                  type="datetime-local"
+                  type={formData.all_day ? 'date' : 'datetime-local'}
                   value={formData.start_time}
                   onChange={(e) => handleChange('start_time', e.target.value)}
                   className="input-dreamy w-full"
@@ -229,27 +241,38 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                 />
               </div>
 
-              {/* End Time */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  End Time
-                  <button
-                    type="button"
-                    onClick={autoSetEndTime}
-                    className="text-xs text-blue-500 hover:text-blue-700 ml-2"
-                  >
-                    +1 hour
-                  </button>
-                </label>
-                <input
-                  type="datetime-local"
-                  value={formData.end_time}
-                  onChange={(e) => handleChange('end_time', e.target.value)}
-                  className="input-dreamy w-full"
-                />
-              </div>
+              {!formData.all_day && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    End Time
+                    <button
+                      type="button"
+                      onClick={autoSetEndTime}
+                      className="text-xs text-blue-500 hover:text-blue-700 ml-2"
+                    >
+                      +1 hour
+                    </button>
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={formData.end_time}
+                    onChange={(e) => handleChange('end_time', e.target.value)}
+                    className="input-dreamy w-full"
+                  />
+                </div>
+              )}
             </div>
+
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={formData.all_day}
+                onChange={(e) => handleChange('all_day', e.target.checked)}
+                className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700">All Day</span>
+            </label>
 
             {/* Repeat Pattern */}
             <div className="space-y-2">
