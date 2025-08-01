@@ -4,6 +4,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Changed
+- World Clock timezone selector now uses a Harold and the Purple Crayon & Vanilla Sky dropdown that stays clear of other buttons (2025-08-01 23:14 UTC)
+- World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59 UTC)
+- Journal and Dream Journal entries now show full timestamps down to the second (2025-08-01 22:48 UTC)
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
@@ -29,6 +32,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Asia/Cebu Philippines time zone available in World Clock (2025-08-01 23:14 UTC)
+- World Clock section lets users search time zones and displays selected times in a top-right overlay (2025-08-01 22:48 UTC)
 - Monaco-powered diff editor enables real-time side-by-side comparison with spinning Harold and the Purple Crayon & Vanilla Sky Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes controls (2025-08-01 22:10 UTC)
 - See All Reminders now opens a Harold and the Purple Crayon & Vanilla Sky window above the current panel (2025-08-01 21:30 UTC)
 - Garbage & Recycling schedules now appear in Reminders so upcoming collection days are highlighted (2025-08-01 18:51 UTC)

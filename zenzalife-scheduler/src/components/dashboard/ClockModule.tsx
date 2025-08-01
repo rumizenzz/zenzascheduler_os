@@ -1,18 +1,36 @@
 import React, { useState, useEffect } from 'react'
-import { Timer as TimerIcon, Plus, Pause, Play, RotateCcw, Edit, Trash2 } from 'lucide-react'
+import {
+  Timer as TimerIcon,
+  Plus,
+  Pause,
+  Play,
+  RotateCcw,
+  Edit,
+  Trash2,
+  Globe2,
+} from 'lucide-react'
 import { useAudio } from '@/hooks/useAudio'
 import {
   supabase,
   Timer as TimerType,
   TimerPreset,
-  Stopwatch as StopwatchType
+  Stopwatch as StopwatchType,
+  WorldClockZone
 } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from 'react-hot-toast'
 
+const baseTimeZones: string[] = (Intl as any).supportedValuesOf
+  ? ((Intl as any).supportedValuesOf('timeZone') as string[])
+  : []
+const zoneAlias: Record<string, string> = { 'Asia/Cebu': 'Asia/Manila' }
+const allTimeZones: string[] = Array.from(
+  new Set([...baseTimeZones, ...Object.keys(zoneAlias)])
+)
+
 export function ClockModule() {
   const { user } = useAuth()
-  const [mode, setMode] = useState<'timer' | 'stopwatch'>('timer')
+  const [mode, setMode] = useState<'timer' | 'stopwatch' | 'worldclock'>('timer')
   const [timers, setTimers] = useState<TimerType[]>([])
   const [label, setLabel] = useState('')
   const [minutes, setMinutes] = useState(0)
@@ -27,13 +45,21 @@ export function ClockModule() {
   const [swRunning, setSwRunning] = useState(false)
   const [swLabel, setSwLabel] = useState('')
   const [swHistory, setSwHistory] = useState<StopwatchType[]>([])
+  const [zoneInput, setZoneInput] = useState('')
+  const [showZoneList, setShowZoneList] = useState(false)
+  const [worldZones, setWorldZones] = useState<WorldClockZone[]>([])
+  const [now, setNow] = useState(new Date())
   const { playAudio } = useAudio()
+  const filteredZones = allTimeZones.filter(tz =>
+    tz.toLowerCase().includes(zoneInput.toLowerCase())
+  )
 
   useEffect(() => {
     if (user) {
       loadTimers()
       loadPresets()
       loadStopwatches()
+      loadWorldZones()
     }
   }, [user])
 
@@ -120,6 +146,26 @@ export function ClockModule() {
       toast.error('Failed to load stopwatches: ' + error.message)
     }
   }
+
+  const loadWorldZones = async () => {
+    if (!user) return
+    try {
+      const { data, error } = await supabase
+        .from('world_clock_zones')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at')
+      if (error) throw error
+      setWorldZones(data || [])
+    } catch (error: any) {
+      toast.error('Failed to load time zones: ' + error.message)
+    }
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   const createTimer = async (timerLabel: string, totalSeconds: number) => {
     if (!user) return
@@ -312,32 +358,106 @@ export function ClockModule() {
     setSwElapsed(0)
   }
 
-  return (
-    <div className="harold-sky space-y-6 p-6 rounded-xl bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100">
-      <div className="flex justify-center mb-4">
-        <div className="bg-white/10 rounded-full p-1 flex">
-          <button
-            onClick={() => setMode('timer')}
-            className={`px-4 py-1 rounded-full text-sm transition-colors ${
-              mode === 'timer' ? 'bg-purple-200 text-purple-900' : 'text-purple-100'
-            }`}
-          >
-            Timer
-          </button>
-          <button
-            onClick={() => setMode('stopwatch')}
-            className={`px-4 py-1 rounded-full text-sm transition-colors ${
-              mode === 'stopwatch' ? 'bg-purple-200 text-purple-900' : 'text-purple-100'
-            }`}
-          >
-            Stopwatch
-          </button>
-        </div>
-      </div>
+  const addZone = async () => {
+    const actual = zoneAlias[zoneInput] || zoneInput
+    if (
+      !zoneInput ||
+      worldZones.some(z => (zoneAlias[z.zone] || z.zone) === actual)
+    )
+      return
+    if (!baseTimeZones.includes(actual)) {
+      toast.error('Invalid time zone')
+      return
+    }
+    if (!user) return
+    try {
+      const { data, error } = await supabase
+        .from('world_clock_zones')
+        .insert({
+          user_id: user.id,
+          zone: zoneInput,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .select()
+        .single()
+      if (error) throw error
+      if (data) {
+        setWorldZones([...worldZones, data])
+        setZoneInput('')
+      }
+    } catch (error: any) {
+      toast.error('Failed to add time zone: ' + error.message)
+    }
+  }
 
-      {mode === 'timer' ? (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
+  const removeZone = async (id: string) => {
+    if (!user) return
+    try {
+      const { error } = await supabase
+        .from('world_clock_zones')
+        .delete()
+        .eq('id', id)
+      if (error) throw error
+      setWorldZones(worldZones.filter(z => z.id !== id))
+    } catch (error: any) {
+      toast.error('Failed to remove time zone: ' + error.message)
+    }
+  }
+
+  const formatZoneTime = (zone: string) =>
+    now.toLocaleTimeString([], {
+      timeZone: zoneAlias[zone] || zone,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+
+  return (
+    <>
+      <div className="fixed top-20 right-2 sm:top-4 flex flex-col items-end gap-1 pointer-events-none z-50">
+        {worldZones.map(zone => (
+          <div
+            key={zone.id}
+            className="bg-black/50 text-white text-xs px-2 py-1 rounded"
+          >
+            {formatZoneTime(zone.zone)} {zone.zone}
+          </div>
+        ))}
+      </div>
+      <div className="harold-sky space-y-6 p-6 rounded-xl bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100">
+        <div className="flex justify-center mb-4">
+          <div className="bg-white/10 rounded-full p-1 flex">
+            <button
+              onClick={() => setMode('timer')}
+              className={`px-4 py-1 rounded-full text-sm transition-colors ${
+                mode === 'timer' ? 'bg-purple-200 text-purple-900' : 'text-purple-100'
+              }`}
+            >
+              Timer
+            </button>
+            <button
+              onClick={() => setMode('stopwatch')}
+              className={`px-4 py-1 rounded-full text-sm transition-colors ${
+                mode === 'stopwatch' ? 'bg-purple-200 text-purple-900' : 'text-purple-100'
+              }`}
+            >
+              Stopwatch
+            </button>
+            <button
+              onClick={() => setMode('worldclock')}
+              className={`px-4 py-1 rounded-full text-sm transition-colors ${
+                mode === 'worldclock' ? 'bg-purple-200 text-purple-900' : 'text-purple-100'
+              }`}
+            >
+              World Clock
+            </button>
+          </div>
+        </div>
+
+        {mode === 'timer' ? (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-light flex items-center gap-2">
                 <TimerIcon className="w-6 h-6 text-blue-100" /> Timers
@@ -489,7 +609,7 @@ export function ClockModule() {
             </div>
           )}
         </div>
-      ) : (
+      ) : mode === 'stopwatch' ? (
         <div className="space-y-6 text-center">
           <div>
             <h1 className="text-2xl font-light flex items-center justify-center gap-2">
@@ -535,8 +655,71 @@ export function ClockModule() {
             </div>
           )}
         </div>
+      ) : (
+        <div className="space-y-6 text-center">
+          <div>
+            <h1 className="text-2xl font-light flex items-center justify-center gap-2">
+              <Globe2 className="w-6 h-6 text-blue-100" /> World Clock
+            </h1>
+            <p className="text-purple-100 font-light mt-1">Track time across zones</p>
+          </div>
+          <div className="flex justify-center gap-2">
+            <div className="relative w-64">
+              <input
+                type="text"
+                value={zoneInput}
+                onChange={e => setZoneInput(e.target.value)}
+                onFocus={() => setShowZoneList(true)}
+                onBlur={() => setTimeout(() => setShowZoneList(false), 100)}
+                placeholder="Search timezone"
+                className="input-dreamy w-full"
+              />
+              {showZoneList && zoneInput && (
+                <ul className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto card-floating bg-gradient-to-br from-purple-900/90 via-indigo-900/90 to-blue-900/90 text-purple-100 text-left">
+                  {filteredZones.map(tz => (
+                    <li
+                      key={tz}
+                      className="px-3 py-2 hover:bg-purple-700/50 cursor-pointer"
+                      onMouseDown={() => {
+                        setZoneInput(tz)
+                        setShowZoneList(false)
+                      }}
+                    >
+                      {tz}
+                    </li>
+                  ))}
+                  {filteredZones.length === 0 && (
+                    <li className="px-3 py-2 text-purple-300">No matches</li>
+                  )}
+                </ul>
+              )}
+            </div>
+            <button onClick={addZone} className="btn-dreamy-primary flex items-center gap-1 px-3 py-1">
+              <Plus className="w-4 h-4" /> Add
+            </button>
+          </div>
+          {worldZones.length === 0 ? (
+            <div className="text-center text-purple-100">No time zones added</div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {worldZones.map(zone => (
+                <div key={zone.id} className="card-floating p-4 space-y-2 text-center">
+                  <div className="text-lg font-medium text-gray-800">{zone.zone}</div>
+                  <div className="text-3xl font-light text-blue-800">{formatZoneTime(zone.zone)}</div>
+                  <button
+                    onClick={() => removeZone(zone.id)}
+                    className="btn-dreamy-secondary px-3 py-1 flex items-center gap-1 mx-auto"
+                  >
+                    <Trash2 className="w-4 h-4" /> Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       )}
-    </div>
+      </div>
+    </>
   )
 }
 
