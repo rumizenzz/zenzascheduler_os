@@ -18,6 +18,7 @@ interface TabData {
   id: string
   name: string
   data: ExcalidrawData
+  updated_at: string
   history: { id: string; created_at: string; data: ExcalidrawData }[]
 }
 
@@ -38,9 +39,11 @@ export function MathNotebookModule() {
     const load = async () => {
       const { data, error } = await supabase
         .from('math_problems')
-        .select('id, name, data, math_problem_versions(id, data, created_at)')
+        .select(
+          'id, name, data, updated_at, math_problem_versions(id, data, created_at)'
+        )
         .eq('user_id', user.id)
-        .order('created_at')
+        .order('updated_at', { ascending: false })
 
       if (error) {
         console.error('Failed to load math problems:', error)
@@ -54,16 +57,21 @@ export function MathNotebookModule() {
           return {
             id: p.id,
             name: p.name,
+            updated_at: p.updated_at,
             data: { elements: p.data?.elements || [], appState },
             history:
               p.math_problem_versions?.map((v: any) => {
-                const { collaborators: _c, ...vAppState } = v.data?.appState || {}
+                const { collaborators: _c, ...vAppState } =
+                  v.data?.appState || {}
                 return {
                   id: v.id,
                   created_at: v.created_at,
-                  data: { elements: v.data?.elements || [], appState: vAppState }
+                  data: {
+                    elements: v.data?.elements || [],
+                    appState: vAppState,
+                  },
                 }
-              }) || []
+              }) || [],
           }
         })
         setProblems(formatted)
@@ -91,7 +99,7 @@ export function MathNotebookModule() {
         name: `Problem ${problems.length + 1}`,
         data: { elements: [], appState: {} }
       })
-      .select('id, name, data')
+      .select('id, name, data, updated_at')
       .single()
 
     if (error) {
@@ -104,6 +112,7 @@ export function MathNotebookModule() {
     const newProblem: TabData = {
       id: data.id,
       name: data.name,
+      updated_at: data.updated_at,
       data: { elements: data.data?.elements || [], appState },
       history: []
     }
@@ -122,7 +131,7 @@ export function MathNotebookModule() {
         name: `Problem ${problems.length + 1}`,
         data: { elements: [], appState: {} }
       })
-      .select('id, name, data')
+      .select('id, name, data, updated_at')
       .single()
 
     if (error) {
@@ -135,6 +144,7 @@ export function MathNotebookModule() {
     const newTab: TabData = {
       id: data.id,
       name: data.name,
+      updated_at: data.updated_at,
       data: { elements: data.data?.elements || [], appState },
       history: []
     }
@@ -155,12 +165,15 @@ export function MathNotebookModule() {
     if (save) {
       const { collaborators, ...cleanAppState } = closingTab.data.appState || {}
       const newData = { elements: closingTab.data.elements, appState: cleanAppState }
+      const updatedAt = new Date().toISOString()
       await supabase
         .from('math_problems')
-        .update({ data: newData, updated_at: new Date().toISOString() })
+        .update({ data: newData, updated_at: updatedAt })
         .eq('id', id)
       setProblems((prev) =>
-        prev.map((p) => (p.id === id ? { ...p, data: newData } : p)),
+        prev.map((p) =>
+          p.id === id ? { ...p, data: newData, updated_at: updatedAt } : p,
+        ),
       )
     }
     setTabs((prev) => prev.filter((t) => t.id !== id))
@@ -212,17 +225,25 @@ export function MathNotebookModule() {
     const interval = setInterval(async () => {
       const { data } = await supabase
         .from('math_problems')
-        .select('data')
+        .select('data, updated_at')
         .eq('id', activeTabId)
         .single()
       if (data) {
         const { collaborators, ...appState } = data.data?.appState || {}
         const fetched = { elements: data.data?.elements || [], appState }
         setTabs((prev) =>
-          prev.map((t) => (t.id === activeTabId ? { ...t, data: fetched } : t)),
+          prev.map((t) =>
+            t.id === activeTabId
+              ? { ...t, data: fetched, updated_at: data.updated_at }
+              : t,
+          ),
         )
         setProblems((prev) =>
-          prev.map((p) => (p.id === activeTabId ? { ...p, data: fetched } : p)),
+          prev.map((p) =>
+            p.id === activeTabId
+              ? { ...p, data: fetched, updated_at: data.updated_at }
+              : p,
+          ),
         )
       }
     }, 10000)
@@ -233,16 +254,25 @@ export function MathNotebookModule() {
       async (elements: readonly ExcalidrawElement[], appState: AppState) => {
         const { collaborators, ...cleanAppState } = appState
         const newData = { elements, appState: cleanAppState }
+        const updatedAt = new Date().toISOString()
         setTabs((prev) =>
-          prev.map((tab) => (tab.id === activeTabId ? { ...tab, data: newData } : tab)),
+          prev.map((tab) =>
+            tab.id === activeTabId
+              ? { ...tab, data: newData, updated_at: updatedAt }
+              : tab,
+          ),
         )
         setProblems((prev) =>
-          prev.map((p) => (p.id === activeTabId ? { ...p, data: newData } : p)),
+          prev.map((p) =>
+            p.id === activeTabId
+              ? { ...p, data: newData, updated_at: updatedAt }
+              : p,
+          ),
         )
         if (activeTabId) {
           await supabase
             .from('math_problems')
-            .update({ data: newData, updated_at: new Date().toISOString() })
+            .update({ data: newData, updated_at: updatedAt })
             .eq('id', activeTabId)
         }
       },
@@ -286,17 +316,19 @@ export function MathNotebookModule() {
     if (!version) return
     const { collaborators, ...cleanAppState } = version.data.appState || {}
     const versionData = { elements: version.data.elements, appState: cleanAppState }
-
+    const updatedAt = new Date().toISOString()
     const newTabs = tabs.map((t) =>
-      t.id === tab.id ? { ...t, data: versionData } : t,
+      t.id === tab.id ? { ...t, data: versionData, updated_at: updatedAt } : t,
     )
     setTabs(newTabs)
     setProblems((prev) =>
-      prev.map((p) => (p.id === tab.id ? { ...p, data: versionData } : p)),
+      prev.map((p) =>
+        p.id === tab.id ? { ...p, data: versionData, updated_at: updatedAt } : p,
+      ),
     )
     await supabase
       .from('math_problems')
-      .update({ data: versionData, updated_at: new Date().toISOString() })
+      .update({ data: versionData, updated_at: updatedAt })
       .eq('id', tab.id)
   }
 
@@ -336,18 +368,34 @@ export function MathNotebookModule() {
         </div>
         {problems.length > 0 ? (
           <div className="columns-1 sm:columns-2 lg:columns-4 gap-6 space-y-6">
-            {problems.map((p) => (
-              <div
-                key={p.id}
-                onClick={() => openProblem(p.id)}
-                className="mb-6 break-inside-avoid rounded-xl p-4 bg-gradient-to-br from-purple-800/70 via-indigo-800/70 to-blue-800/70 border border-purple-500 shadow-lg hover:shadow-2xl cursor-pointer transition"
-              >
-                <div className="h-32 mb-2 border border-purple-600 rounded bg-gray-900 pointer-events-none">
-                  <Excalidraw initialData={p.data} viewModeEnabled theme="dark" />
+            {[...problems]
+              .sort(
+                (a, b) =>
+                  new Date(b.updated_at).getTime() -
+                  new Date(a.updated_at).getTime(),
+              )
+              .map((p, idx) => (
+                <div
+                  key={p.id}
+                  onClick={() => openProblem(p.id)}
+                  className="mb-6 break-inside-avoid rounded-xl p-4 bg-gradient-to-br from-purple-800/70 via-indigo-800/70 to-blue-800/70 border border-purple-500 shadow-lg hover:shadow-2xl cursor-pointer transition"
+                >
+                  {idx === 0 && (
+                    <div className="mb-1 text-xs uppercase tracking-wide text-purple-300">
+                      Most Recent
+                    </div>
+                  )}
+                  <div className="h-32 mb-2 border border-purple-600 rounded bg-gray-900 pointer-events-none excalidraw-preview">
+                    <Excalidraw
+                      initialData={p.data}
+                      viewModeEnabled
+                      zenModeEnabled
+                      theme="dark"
+                    />
+                  </div>
+                  <div className="text-sm font-medium">{p.name}</div>
                 </div>
-                <div className="text-sm font-medium">{p.name}</div>
-              </div>
-            ))}
+              ))}
           </div>
         ) : (
           <p className="text-sm text-purple-200/70">No notebooks yet.</p>
