@@ -218,3 +218,15 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Added timer delete controls and persisted dashboard tab selections in Supabase.
 - Verified the repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 18:51 UTC)
+- Added Garbage & Recycling schedules to the Reminders countdown so collection days aren't missed.
+- Verified repository passes lint with `pnpm run lint` and tests with `pnpm test`.
+
+### Codex Agent Reflection (2025-08-01 19:05 UTC)
+- Removed duplicate variable declarations in RemindersButton and ClockModule to fix Netlify TypeScript build errors.
+- Confirmed the project passes lint and tests with `pnpm run lint` and `pnpm test`.
+
+### Codex Agent Reflection (2025-08-01 21:30 UTC)
+- "See All Reminders" now opens a Harold and the Purple Crayon & Vanilla Sky window above the existing panel.
+- Verified the repository passes lint and tests with `pnpm run lint` and `pnpm test`.
+
