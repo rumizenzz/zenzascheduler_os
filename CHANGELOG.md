@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Report Bug button and hidden bug list accessible in Settings via secret code (2025-08-01 15:38:34 UTC)
 - Fasting reminder now displays upcoming fast date and days remaining before the first Sunday (2025-08-01 15:09:18 UTC)
 - Monthly fasting reminder now triggers on the first Sunday of each month with a top-right toast (2025-08-01 14:56:08 UTC)
 - Fasting plan now shows a live countdown timer once started so users can track remaining time (2025-08-01 13:50:28 UTC)

@@ -40,6 +40,7 @@ import { ChangeLogButton } from "../ChangeLogButton";
 import { RefreshButton } from "../RefreshButton";
 import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
 import { FastingPrayerReminder } from "../FastingPrayerReminder";
+import { ReportBugButton } from "../ReportBugButton";
 
 type DashboardTab =
   | "calendar"
@@ -285,6 +286,7 @@ export function Dashboard() {
         enabled={pullRefreshEnabled}
         toggle={() => setPullRefreshEnabled(!pullRefreshEnabled)}
       />
+      <ReportBugButton />
       <ChangeLogButton />
       <Footer />
     </div>
