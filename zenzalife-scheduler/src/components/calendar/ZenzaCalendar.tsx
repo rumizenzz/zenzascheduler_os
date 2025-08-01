@@ -1224,6 +1224,7 @@ export function ZenzaCalendar() {
           eventTitle={activeAlarm.title}
           eventTime={dayjs(activeAlarm.start).format("h:mm A")}
           soundUrl={getAlarmSound(activeAlarm)}
+          eventCategory={activeAlarm.extendedProps?.category}
           onDismiss={() => {
             setActiveAlarm(null)
             postMessage({ type: 'dismiss' })

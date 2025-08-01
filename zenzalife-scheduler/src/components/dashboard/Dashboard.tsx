@@ -12,7 +12,7 @@ import { GarbageModule } from "./GarbageModule";
 import { SettingsModule } from "./SettingsModule";
 import { SpiritualModule } from "./SpiritualModule";
 import { TimerModule } from "./TimerModule";
-import { GracePrayerModule } from "./GracePrayerModule";
+import { PrayerModule } from "./PrayerModule";
 import { VerseOfTheDay } from "./VerseOfTheDay";
 import { MathNotebookModule } from "./MathNotebookModule";
 import {
@@ -40,6 +40,7 @@ import { ChangeLogButton } from "../ChangeLogButton";
 import { RefreshButton } from "../RefreshButton";
 import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
 import { FastingPrayerReminder } from "../FastingPrayerReminder";
+import { ReportBugButton } from "../ReportBugButton";
 
 type DashboardTab =
   | "calendar"
@@ -52,7 +53,7 @@ type DashboardTab =
   | "garbage"
   | "verse"
   | "spiritual"
-  | "grace"
+  | "prayers"
   | "math"
   | "settings";
 
@@ -67,14 +68,15 @@ const navigationItems = [
   { id: "garbage", label: "Garbage/Recycling", icon: Trash2, color: "text-gray-500" },
   { id: "verse", label: "Verse of the Day", icon: Sparkles, color: "text-indigo-500" },
   { id: "spiritual", label: "Spiritual Study", icon: BookOpen, color: "text-purple-500" },
-  { id: "grace", label: "Grace Prayer", icon: Mic, color: "text-purple-500" },
+  { id: "prayers", label: "Prayers", icon: Mic, color: "text-purple-500" },
   { id: "math", label: "Math Notebook", icon: Pencil, color: "text-blue-600" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
 
 export function Dashboard() {
   const { user, profile, signOut } = useAuth();
-  const [activeTab, setActiveTab] = useState<DashboardTab>("calendar");
+  const initialTab = (new URLSearchParams(window.location.search).get("tab") as DashboardTab) || "calendar";
+  const [activeTab, setActiveTab] = useState<DashboardTab>(initialTab);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const isMobile = useIsMobile();
   const storageKey = isMobile ? "ptr-mobile-enabled" : "ptr-desktop-enabled";
@@ -134,8 +136,8 @@ export function Dashboard() {
         return <VerseOfTheDay />;
       case "spiritual":
         return <SpiritualModule />;
-      case "grace":
-        return <GracePrayerModule />;
+      case "prayers":
+        return <PrayerModule />;
       case "math":
         return <MathNotebookModule />;
       case "settings":
@@ -285,6 +287,7 @@ export function Dashboard() {
         enabled={pullRefreshEnabled}
         toggle={() => setPullRefreshEnabled(!pullRefreshEnabled)}
       />
+      <ReportBugButton />
       <ChangeLogButton />
       <Footer />
     </div>

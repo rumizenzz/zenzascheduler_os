@@ -16,6 +16,11 @@ This file tracks project progress and upcoming tasks.
 ## Latest Updates
 - Intermittent fasting reminder toast only captures clicks inside itself so calendar and bottom buttons remain visible (2025-08-01 15:55:20 UTC).
 - Intermittent fasting reminder now ignores pointer events so calendar and bottom buttons stay clickable (2025-08-01 15:47:02 UTC).
+- Grace prayers now track live duration and can be replayed by date from a calendar view (2025-08-01 15:29:18 UTC).
+- Morning and night prayers now track live prayer duration and can be reviewed by date in a prayer calendar (2025-08-01 15:13:17 UTC).
+- Morning and night prayers now record audio from alarm Start Prayer button with organized playback, and grace prayers include viewable dish images (2025-08-01 13:14:57 UTC).
+- Added Report Bug button with secret bug list in Settings (2025-08-01 15:38:34 UTC).
+- Bug list secret code updated to ZENZASECRETS for viewing monthly reports (2025-08-01 15:50:22 UTC).
 - New Notebook template selector now uses Harold and the Purple Crayon & Vanilla Sky colors so options stand out (2025-08-01 15:21:33 UTC).
 - Relocated Refresh, Change Log, and swipe-refresh toggle buttons to the bottom-right so calendar actions remain accessible (2025-08-01 15:19:23 UTC).
 - Math Notebook search now scans canvas text so notebooks can be found by their contents (2025-08-01 15:21:54 UTC).
