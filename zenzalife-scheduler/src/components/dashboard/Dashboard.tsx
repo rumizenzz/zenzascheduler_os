@@ -115,6 +115,9 @@ export function Dashboard() {
     scroller.scrollLeft = 0;
     document.body.scrollTop = 0;
     document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
+    document
+      .getElementById("dashboard-content")
+      ?.scrollTo({ top: 0, left: 0 });
   };
 
   useLayoutEffect(() => {
@@ -337,6 +340,7 @@ export function Dashboard() {
 
       {/* Main Content */}
       <div
+        id="dashboard-content"
         className={`transition-all duration-300 ml-0 ${
           sidebarCollapsed ? "md:ml-16" : "md:ml-64"
         }`}

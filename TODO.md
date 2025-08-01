@@ -37,6 +37,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Dashboard content now displays immediately beside the sidebar without manual scrolling (2025-08-01 23:15:00 UTC)
 - Added a Tools button on the dashboard that opens the IDE diff editor from any tab (2025-08-01 23:00:00 UTC)
 - Added a Tools section to the README explaining where the wrench menu lives and how to open the diff editor or jump to `/ide` (2025-08-01 22:40:00 UTC)
 - Documented Magic Diff Editor location with a dedicated IDE section in the README and noted the IDE button on the right edge of every dashboard section (2025-08-01 22:30:00 UTC)
