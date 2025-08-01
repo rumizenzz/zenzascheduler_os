@@ -3,6 +3,7 @@
 These guidelines apply to the entire repository.
 
 ## Contribution workflow
+
 - Keep `TODO.md` up to date with tasks that are finished and tasks that remain. This file summarizes the large feature list in `todo.md`.
 - Always record every change, fix, bug fix, or new feature in `CHANGELOG.md`.
   Entries must follow the [Keep a Changelog](https://keepachangelog.com/) style
@@ -17,16 +18,20 @@ These guidelines apply to the entire repository.
 - Commit with clear messages.
 
 ## Development tips
+
 - Use `pnpm` for package management.
 - Local development: `pnpm run dev` in `zenzalife-scheduler`.
 - Build for production: `pnpm run build` in `zenzalife-scheduler`.
 
 ## Style
+
 - Prefer TypeScript and keep formatting consistent (use Prettier or an equivalent formatter).
 
 ## Project tasks
+
 `todo.md` lists the complete feature roadmap. Keep `TODO.md` updated as work
 progresses. High level milestones:
+
 - Supabase authentication setup
 - Database schema design
 - Storage bucket configuration
@@ -35,9 +40,11 @@ progresses. High level milestones:
 - Final deployment and testing
 
 ## Agent Directory
+
 This repository uses a small collection of workflow agents modeled after the Minimax M1 process. Every agent documents actions here and in `TODO.md` so progress remains transparent.
 
 ### Codex Agent
+
 **Role & responsibilities**: Implements code and documentation changes from user requests, runs lint tests, and updates `CHANGELOG.md`.
 
 **Current abilities**: TypeScript development, Markdown docs, basic testing and linting.
@@ -51,6 +58,7 @@ This repository uses a small collection of workflow agents modeled after the Min
 **Change log**: see `CHANGELOG.md` for commit history.
 
 ### Documentation Agent
+
 **Role & responsibilities**: Maintains `AGENTS.md` and `TODO.md` in sync with repository changes.
 
 **Current abilities**: Writes summaries, organizes tasks, and logs reflections after each update.
@@ -64,83 +72,113 @@ This repository uses a small collection of workflow agents modeled after the Min
 **Change log**: all updates recorded in `CHANGELOG.md`.
 
 ## World-Class Output Practices
+
 All deliverables aim to match the polish of projects from OpenAI, DeepMind, Google Research, Anthropic, Meta FAIR, and Minimax. We follow Semantic Versioning, Keep a Changelog, clear commit messages, and linted TypeScript code. Future upgrades should benchmark UX and code quality against those organizations' public repositories.
 
 ## Continuous Improvement Policy
+
 After completing a task, agents self-evaluate in `AGENTS.md` and append reflections to `TODO.md`. Feedback from maintainers or users becomes new tasks in `TODO.md` with links back to the relevant agent section. Major decisions are briefly explained in these files to keep motivation transparent.
 
 ### Codex Agent Reflection (2025-07-24 12:52 UTC)
+
 - Fixed a misplaced closing tag in `VerseOfTheDay.tsx` so the favorite star renders correctly.
 - Ran `pnpm run lint` to verify the component compiles without errors.
 
 ### Codex Agent Reflection (2025-07-31 22:34 UTC)
+
 - Optimized Math Notebook with responsive height and scrollable tabs for better mobile and desktop UX.
 - Confirmed styling changes compile by running `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-07-31 22:53 UTC)
+
 - Added right padding to Math Notebook tab bar so Change Log and Subscribe buttons don't hide tabs on mobile.
 - Verified repository passes lint with `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 02:13 UTC)
+
 - Restyled Math Notebook with a spacious Google Keep-inspired masonry grid and default dark canvas.
 - Confirmed repository lint passes via `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 11:21 UTC)
+
 - Auto-populated the Math Notebook solver by scanning canvas text for equations and converting `^` to exponents.
 - Verified the repository passes lint with `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 12:48 UTC)
+
 - Enabled Math Solver history so previous problems persist across sessions.
 - Verified repository lint passes via `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 12:54 UTC)
+
 - Synced Math Solver history with Supabase for cross-device persistence.
 - Verified repository lint passes via `pnpm run lint`.
+
 ### Codex Agent Reflection (2025-08-01 11:40 UTC)
+
 - Added timestamp display so Math Notebook dashboard cards show each note's last updated time from Supabase.
 - Confirmed the project passes lint with `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 12:57 UTC)
+
 - Added text search to Task Notes history for quickly finding past comments.
 - Verified the repository passes lint with `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 13:34 UTC)
+
 - Added a prominent search bar to Math Notebook home for filtering notebooks by title.
 - Refined Task Notes history search with a clear icon and rounded styling.
 - Confirmed repository lint passes via `pnpm run lint`.
+
 ### Codex Agent Reflection (2025-08-01 12:56 UTC)
+
 - Enabled multiple scripture entries per day with Add Verse Entry button and per-verse editing.
 - Verified repository passes lint with `pnpm run lint`.
+
 ### Codex Agent Reflection (2025-08-01 12:52 UTC)
+
 - Added a Harold and the Purple Crayon & Vanilla Sky starfield to the Math Notebook so the canvas feels magical.
 - Ran `pnpm run lint` to ensure the project passes linting.
 
 ### Codex Agent Reflection (2025-08-01 13:50 UTC)
+
 - Added a live countdown timer for active fasts so users can see remaining time at a glance.
 - Confirmed the project passes lint with `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 14:06 UTC)
+
 - Fixed active fast lookup to include user ID so TypeScript build passes.
 - Verified repository lint passes via `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 14:56 UTC)
+
 - Switched the fasting reminder to fire on the first Sunday of each month instead of the first day.
 - Confirmed lint and build succeed with `pnpm run lint` and `pnpm run build`.
+
 ### Codex Agent Reflection (2025-08-01 13:48 UTC)
+
 - Added a template picker so new Math Notebook entries can start as Math, Notes, Math & Notes, To-Do Lists, Journals, or Project Plans with custom names.
 - Verified repository passes lint with `pnpm run lint`.
+
 ### Codex Agent Reflection (2025-08-01 13:30 UTC)
+
 - Added a History button that opens Math Solver history in a Harold and the Purple Crayon & Vanilla Sky window.
 - Verified the repository passes lint with `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 13:55 UTC)
+
 - Routed Math Notebook tab close confirmation through a portal so the modal appears above the canvas.
 - Verified the repository passes lint with `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 15:05 UTC)
+
 - Refactored Math Notebook tab modals into variables rendered via portals outside the component return to resolve Netlify JSX closing tag errors.
 - Ensured project builds cleanly by running `pnpm run lint` and `pnpm run build`.
 
+### Codex Agent Reflection (2025-08-01 15:35 UTC)
+
+- Added a bottom-left Report Bug button with a Harold and the Purple Crayon & Vanilla Sky bug icon.
+- Verified lint passes via `pnpm run lint`.
 ### Codex Agent Reflection (2025-08-01 15:21 UTC)
 - Expanded Math Notebook search to scan canvas text so notebooks surface by their contents.
 - Confirmed the repository passes lint with `pnpm run lint`.
