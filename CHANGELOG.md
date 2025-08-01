@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Math Notebook tabs can be renamed, closed with confirmation, reopened, and auto-refresh from Supabase; history shows full timestamps (2025-07-31 23:35:07 UTC)
 - Added Math Notebook module with tabbed Excalidraw canvas for solving math problems (2025-07-30 23:05:25 UTC)
 - Math Notebook now saves problems and version history in Supabase (2025-07-30 23:14:19 UTC)
 - Documented world-class agentic workflow in `AGENTS.md` and expanded `TODO.md` tracker. (2025-07-22 20:34:18 UTC)
@@ -30,6 +31,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Changed
 - Optimized Math Notebook with responsive height and scrollable tabs for mobile and desktop (2025-07-31 22:34:46 UTC)
+- Math Notebook tab close confirmation now uses a Harold and the Purple Crayon themed modal with save option (2025-08-01 00:03:39 UTC)
 - Documented that every update must include a professional changelog entry.
 - Clarified the policy in `AGENTS.md`.
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
