@@ -34,6 +34,7 @@ interface AddressSearchProps {
 export default function AddressSearch({ value, onChange, onSelect }: AddressSearchProps) {
   const [query, setQuery] = useState(value)
   const [results, setResults] = useState<NominatimResult[]>([])
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     setQuery(value)
@@ -42,12 +43,12 @@ export default function AddressSearch({ value, onChange, onSelect }: AddressSear
   useEffect(() => {
     if (query.length < 3) {
       setResults([])
+      setError(null)
       return
     }
 
     const controller = new AbortController()
-
-    const fetchResults = async () => {
+    const delay = setTimeout(async () => {
       try {
         const res = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=${encodeURIComponent(query)}`,
@@ -55,15 +56,19 @@ export default function AddressSearch({ value, onChange, onSelect }: AddressSear
         )
         const data = await res.json()
         setResults((data as NominatimResult[]) || [])
+        setError(null)
       } catch (err) {
         if ((err as Error).name !== 'AbortError') {
           console.error('Address search failed', err)
+          setError('Address search failed')
         }
       }
-    }
+    }, 300)
 
-    fetchResults()
-    return () => controller.abort()
+    return () => {
+      clearTimeout(delay)
+      controller.abort()
+    }
   }, [query])
 
   const handleSelect = (result: NominatimResult) => {
@@ -93,6 +98,7 @@ export default function AddressSearch({ value, onChange, onSelect }: AddressSear
         placeholder="Search address"
         className="input-dreamy w-full"
       />
+      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
       {results.length > 0 && (
         <ul className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
           {results.map(result => (
