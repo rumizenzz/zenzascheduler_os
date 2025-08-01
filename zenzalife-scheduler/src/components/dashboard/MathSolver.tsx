@@ -10,31 +10,30 @@ interface MathSolverProps {
 export function MathSolver({ expression }: MathSolverProps) {
   const [input, setInput] = useState('')
   const [result, setResult] = useState<string | null>(null)
-  const [history, setHistory] = useState<{ expression: string; result: string }[]>([])
+  interface HistoryEntry {
+    id?: number
+    expression: string
+    result: string
+  }
+
+  const [history, setHistory] = useState<HistoryEntry[]>([])
   const [showHistory, setShowHistory] = useState(false)
 
-  useEffect(() => {
-    const stored = localStorage.getItem('mathSolverHistory')
-    if (stored) {
-      try {
-        setHistory(JSON.parse(stored))
-      } catch {
-        /* ignore malformed history */
-      }
-    }
+  const isDesktop =
+    typeof navigator !== 'undefined' && !/Mobi|Android/i.test(navigator.userAgent)
 
+  useEffect(() => {
     const loadFromSupabase = async () => {
       const user = await getCurrentUser()
       if (!user) return
       const { data, error } = await supabase
         .from('math_solver_history')
-        .select('expression, result')
+        .select('id, expression, result')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
 
       if (!error && data) {
         setHistory(data)
-        localStorage.setItem('mathSolverHistory', JSON.stringify(data))
       }
     }
 
@@ -57,20 +56,55 @@ export function MathSolver({ expression }: MathSolverProps) {
       const value = Function(`return (${prepared})`)()
       const stringValue = String(value)
       setResult(stringValue)
-      const entry = { expression: input, result: stringValue }
+      const user = await getCurrentUser()
+      const entry: HistoryEntry = { expression: input, result: stringValue }
+      if (user) {
+        const { data } = await supabase
+          .from('math_solver_history')
+          .insert({
+            user_id: user.id,
+            expression: input,
+            result: stringValue
+          })
+          .select('id')
+          .single()
+        if (data?.id) entry.id = data.id
+      }
       const newHistory = [entry, ...history]
       setHistory(newHistory)
-      localStorage.setItem('mathSolverHistory', JSON.stringify(newHistory))
-      const user = await getCurrentUser()
-      if (user) {
-        await supabase.from('math_solver_history').insert({
-          user_id: user.id,
-          expression: input,
-          result: stringValue
-        })
-      }
     } catch {
       setResult('Error')
+    }
+  }
+
+  const handleDelete = async (index: number, id?: number) => {
+    const user = await getCurrentUser()
+    if (user && id) {
+      await supabase
+        .from('math_solver_history')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id)
+    }
+    const newHistory = history.filter((_, i) => i !== index)
+    setHistory(newHistory)
+  }
+
+  const handleClear = async () => {
+    const user = await getCurrentUser()
+    if (user) {
+      await supabase
+        .from('math_solver_history')
+        .delete()
+        .eq('user_id', user.id)
+    }
+    setHistory([])
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isDesktop && e.key === 'Enter' && isMath && input) {
+      e.preventDefault()
+      void handleSolve()
     }
   }
 
@@ -82,6 +116,7 @@ export function MathSolver({ expression }: MathSolverProps) {
           setInput(e.target.value)
           setResult(null)
         }}
+        onKeyDown={handleKeyDown}
         placeholder="Type a math expression"
         className="w-full p-2 border rounded"
       />
@@ -111,18 +146,33 @@ export function MathSolver({ expression }: MathSolverProps) {
             <h2 className="text-lg font-light text-center">Previous Problems</h2>
             <ul className="mt-2 space-y-1 text-sm max-h-60 overflow-y-auto">
               {history.map((h, i) => (
-                <li key={i} className="flex justify-between">
-                  <span>{h.expression}</span>
-                  <span className="text-gray-400">= {h.result}</span>
+                <li key={h.id ?? i} className="flex justify-between items-center gap-2">
+                  <span>
+                    {h.expression} <span className="text-gray-400">= {h.result}</span>
+                  </span>
+                  <button
+                    onClick={() => handleDelete(i, h.id)}
+                    className="text-xs text-red-400 hover:text-red-300"
+                  >
+                    Delete
+                  </button>
                 </li>
               ))}
             </ul>
-            <button
-              onClick={() => setShowHistory(false)}
-              className="btn-dreamy-primary w-full text-sm"
-            >
-              Close
-            </button>
+            <div className="space-y-2">
+              <button
+                onClick={handleClear}
+                className="btn-dreamy-secondary w-full text-sm"
+              >
+                Clear History
+              </button>
+              <button
+                onClick={() => setShowHistory(false)}
+                className="btn-dreamy-primary w-full text-sm"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
