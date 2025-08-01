@@ -43,6 +43,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Refresh button enlarged and always visible on mobile and desktop for easy reloading (2025-08-01 13:18:35 UTC)
 - Math Notebook background now shimmers with a Harold and the Purple Crayon & Vanilla Sky starfield for a magical feel (2025-08-01 12:52:11 UTC)
 - Swipe down refresh disabled by default unless enabled for the current device (2025-08-01 11:39:36 UTC)
 - Math Notebook now stores last opened times in Supabase for cross-device "Most Recent" labels (2025-08-01 11:42:02 UTC)
@@ -57,6 +58,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Fixed
 - Math Notebook solver interprets `x` and `X` as multiplication and renders × in expressions (2025-08-01 13:21:25 UTC)
+- Calendar action toolbar now wraps on desktop so buttons never get cut off (2025-08-01 13:18:35 UTC)
 - Math Notebook solver reads canvas equations and treats `^` as exponent so results calculate correctly (2025-08-01 11:21:00 UTC)
 - Math Notebook previews now hide Excalidraw menus so note thumbnails show sketch content (2025-08-01 11:17:01 UTC)
 - Removed KaTeX from Vite's external bundle list so math solver scripts load and the app no longer white screens (2025-08-01 11:02:09 UTC)

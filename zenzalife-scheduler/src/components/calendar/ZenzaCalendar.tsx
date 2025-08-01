@@ -761,7 +761,7 @@ export function ZenzaCalendar() {
           </p>
         </div>
 
-        <div className="flex gap-3 w-full sm:w-auto pb-2 sm:pb-0 items-center">
+        <div className="flex flex-wrap gap-3 w-full sm:w-auto pb-2 sm:pb-0 items-center justify-center sm:justify-start">
           <select
             value={selectedYear}
             onChange={(e) => {
