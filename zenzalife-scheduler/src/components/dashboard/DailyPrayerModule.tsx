@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 import dayjs from 'dayjs'
 import { useAuth } from '@/contexts/AuthContext'
-import { supabase, GracePrayer } from '@/lib/supabase'
+import { supabase, DailyPrayer } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 import { Mic, StopCircle } from 'lucide-react'
 
-type MealTime = 'morning' | 'afternoon' | 'evening' | 'night'
+interface DailyPrayerModuleProps {
+  autoStartType?: 'morning' | 'night'
+}
 
 function fileToDataURL(file: Blob) {
   return new Promise<string>((resolve, reject) => {
@@ -16,16 +18,15 @@ function fileToDataURL(file: Blob) {
   })
 }
 
-export function GracePrayerModule() {
+export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
   const { user } = useAuth()
-  const [mealTime, setMealTime] = useState<MealTime>('morning')
+  const [prayerType, setPrayerType] = useState<'morning' | 'night'>('morning')
   const [recording, setRecording] = useState(false)
   const [startTime, setStartTime] = useState<Date | null>(null)
   const [elapsed, setElapsed] = useState(0)
   const [lastDuration, setLastDuration] = useState<number | null>(null)
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'))
-  const [photoFile, setPhotoFile] = useState<File | null>(null)
-  const [prayers, setPrayers] = useState<GracePrayer[]>([])
+  const [prayers, setPrayers] = useState<DailyPrayer[]>([])
   const mediaRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -33,7 +34,7 @@ export function GracePrayerModule() {
   const fetchPrayers = async () => {
     if (!user) return
     const { data, error } = await supabase
-      .from('grace_prayers')
+      .from('daily_prayers')
       .select('*')
       .eq('user_id', user.id)
       .order('started_at', { ascending: false })
@@ -44,7 +45,7 @@ export function GracePrayerModule() {
     fetchPrayers()
   }, [user])
 
-  const startRecording = async () => {
+  const startRecording = async (type?: 'morning' | 'night') => {
     if (!user) return toast.error('You must be signed in')
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -63,6 +64,7 @@ export function GracePrayerModule() {
         setElapsed(Date.now() - start.getTime())
       }, 1000)
       setRecording(true)
+      if (type) setPrayerType(type)
     } catch (err) {
       toast.error('Failed to start recording')
     }
@@ -72,37 +74,22 @@ export function GracePrayerModule() {
     const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' })
     try {
       const audioData = await fileToDataURL(audioBlob)
-      const fileName = `grace-${mealTime}-${Date.now()}.webm`
+      const fileName = `${prayerType}-prayer-${Date.now()}.webm`
       const { data, error } = await supabase.functions.invoke('audio-upload', {
         body: { audioData, fileName, userId: user!.id }
       })
       if (error || !data?.publicUrl) throw error
-
-      let photoUrl: string | null = null
-      if (photoFile) {
-        const imgData = await fileToDataURL(photoFile)
-        const imgRes = await supabase.functions.invoke('image-upload', {
-          body: {
-            imageData: imgData,
-            fileName: `grace-photo-${Date.now()}-${photoFile.name}`,
-            userId: user!.id
-          }
-        })
-      if (imgRes.error || !imgRes.data?.publicUrl) throw imgRes.error
-      photoUrl = imgRes.data.publicUrl
-    }
       const durationMs = startTime ? Date.now() - startTime.getTime() : 0
       const durationSeconds = Math.floor(durationMs / 1000)
-      await supabase.from('grace_prayers').insert({
+      await supabase.from('daily_prayers').insert({
         user_id: user!.id,
-        meal_time: mealTime,
+        prayer_type: prayerType,
         audio_url: data.publicUrl,
-        photo_url: photoUrl,
         started_at: startTime?.toISOString(),
         duration_seconds: durationSeconds
       })
       setLastDuration(durationMs)
-      toast.success('Grace prayer saved')
+      toast.success('Prayer saved')
       fetchPrayers()
     } catch (err: any) {
       toast.error('Upload failed: ' + err.message)
@@ -112,13 +99,21 @@ export function GracePrayerModule() {
       setElapsed(0)
       setRecording(false)
       setStartTime(null)
-      setPhotoFile(null)
     }
   }
 
   const stopRecording = () => {
     mediaRef.current?.stop()
   }
+
+  useEffect(() => {
+    if (autoStartType) {
+      startRecording(autoStartType)
+      const params = new URLSearchParams(window.location.search)
+      params.delete('type')
+      window.history.replaceState({}, '', `${window.location.pathname}?${params}`)
+    }
+  }, [autoStartType])
 
   const formatDuration = (ms: number) => {
     const totalSeconds = Math.floor(ms / 1000)
@@ -140,28 +135,19 @@ export function GracePrayerModule() {
   return (
     <div className="space-y-4">
       <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
-        <Mic className="w-8 h-8 text-purple-500" /> Grace Prayer
+        <Mic className="w-8 h-8 text-purple-500" /> Morning & Night Prayers
       </h1>
       <div className="flex items-center gap-3">
         <select
-          value={mealTime}
-          onChange={e => setMealTime(e.target.value as MealTime)}
+          value={prayerType}
+          onChange={e => setPrayerType(e.target.value as 'morning' | 'night')}
           className="input-dreamy"
         >
           <option value="morning">Morning</option>
-          <option value="afternoon">Afternoon</option>
-          <option value="evening">Evening</option>
           <option value="night">Night</option>
         </select>
-        <input
-          type="file"
-          accept="image/*"
-          capture="environment"
-          onChange={e => setPhotoFile(e.target.files?.[0] || null)}
-          className="text-sm"
-        />
         {!recording ? (
-          <button onClick={startRecording} className="btn-dreamy-primary flex items-center gap-2">
+          <button onClick={() => startRecording()} className="btn-dreamy-primary flex items-center gap-2">
             <Mic className="w-4 h-4" /> Start
           </button>
         ) : (
@@ -177,7 +163,7 @@ export function GracePrayerModule() {
         <p className="text-sm text-gray-500">You prayed for {formatDuration(lastDuration)}</p>
       )}
       <div className="space-y-2">
-        <h2 className="text-xl font-medium text-gray-800">Grace Prayer Calendar</h2>
+        <h2 className="text-xl font-medium text-gray-800">Prayer Calendar</h2>
         <input
           type="date"
           value={selectedDate}
@@ -187,21 +173,13 @@ export function GracePrayerModule() {
         {prayersForDate.map(p => (
           <div key={p.id} className="p-3 bg-white/50 rounded-lg border space-y-1">
             <p className="text-sm text-gray-700 capitalize">
-              {p.meal_time} - {dayjs(p.started_at).format('h:mm A')} ({formatDuration(p.duration_seconds * 1000)})
+              {p.prayer_type} - {dayjs(p.started_at).format('h:mm A')} ({formatDuration(p.duration_seconds * 1000)})
             </p>
             <audio controls src={p.audio_url} className="w-full" />
-            {p.photo_url && (
-              <button
-                onClick={() => window.open(p.photo_url!, '_blank')}
-                className="btn-dreamy mt-1 text-sm"
-              >
-                See Dish
-              </button>
-            )}
           </div>
         ))}
         {prayersForDate.length === 0 && (
-          <p className="text-sm text-gray-500">No grace prayers for this date.</p>
+          <p className="text-sm text-gray-500">No prayers for this date.</p>
         )}
       </div>
     </div>
