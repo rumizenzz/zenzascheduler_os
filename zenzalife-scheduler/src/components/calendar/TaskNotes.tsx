@@ -90,6 +90,11 @@ interface NotesHistoryModalProps {
 }
 
 function NotesHistoryModal({ notes, onClose }: NotesHistoryModalProps) {
+  const [search, setSearch] = useState('')
+  const filtered = notes.filter(n =>
+    n.content.toLowerCase().includes(search.toLowerCase())
+  )
+
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md mx-4 max-h-[80vh] overflow-y-auto p-4 space-y-4">
@@ -99,8 +104,15 @@ function NotesHistoryModal({ notes, onClose }: NotesHistoryModalProps) {
           </button>
         </div>
         <h3 className="text-xl font-light text-gray-800">Notes History</h3>
+        <input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search notes"
+          className="input-dreamy w-full"
+        />
         <ul className="space-y-2">
-          {notes.map((n) => (
+          {filtered.map(n => (
             <li key={n.id} className="p-2 bg-white rounded-lg shadow">
               <div className="text-xs text-gray-500 mb-1">
                 {dayjs(n.created_at).format('MMM D, h:mm A')}
@@ -109,6 +121,9 @@ function NotesHistoryModal({ notes, onClose }: NotesHistoryModalProps) {
             </li>
           ))}
         </ul>
+        {filtered.length === 0 && (
+          <p className="text-sm text-gray-500">No notes found.</p>
+        )}
       </div>
     </div>
   )

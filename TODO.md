@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC).
 - Scripture study now allows multiple verse entries per day with per-verse edit buttons (2025-08-01 12:56:35 UTC).
 - Math Notebook solver history now syncs to Supabase for cross-device persistence (2025-08-01 12:54:40 UTC).
 - Math Notebook solver now remembers previously solved problems across sessions (2025-08-01 12:48:12 UTC).
