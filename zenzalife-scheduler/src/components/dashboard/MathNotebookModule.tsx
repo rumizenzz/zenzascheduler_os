@@ -34,6 +34,18 @@ export function MathNotebookModule() {
   const [renamingTab, setRenamingTab] = useState<TabData | null>(null)
   const [newTabName, setNewTabName] = useState('')
   const [mathExpression, setMathExpression] = useState<string | null>(null)
+  const [showNewModal, setShowNewModal] = useState(false)
+  const [newNotebookName, setNewNotebookName] = useState('')
+  const [newNotebookTemplate, setNewNotebookTemplate] = useState('math')
+
+  const templates = [
+    { value: 'math', label: 'Math' },
+    { value: 'notes', label: 'Notes' },
+    { value: 'both', label: 'Math & Notes' },
+    { value: 'todo', label: 'To-Do List' },
+    { value: 'journal', label: 'Journal' },
+    { value: 'project', label: 'Project Plan' }
+  ]
   const [search, setSearch] = useState('')
 
   const isMathExpression = (text: string) => /^[0-9+\-*/xX().^\s]+$/.test(text)
@@ -106,15 +118,15 @@ export function MathNotebookModule() {
     setShowHome(false)
   }
 
-  const createProblem = async () => {
+  const createProblem = async (name: string, template: string) => {
     if (!user) return
     const now = new Date().toISOString()
     const { data, error } = await supabase
       .from('math_problems')
       .insert({
         user_id: user.id,
-        name: `Problem ${problems.length + 1}`,
-        data: { elements: [], appState: {} },
+        name,
+        data: { elements: [], appState: { template } },
         last_opened: now
       })
       .select('id, name, data, updated_at, last_opened')
@@ -141,15 +153,15 @@ export function MathNotebookModule() {
     setShowHome(false)
   }
 
-  const addTab = async () => {
+  const addTab = async (name: string, template: string) => {
     if (!user) return
     const now = new Date().toISOString()
     const { data, error } = await supabase
       .from('math_problems')
       .insert({
         user_id: user.id,
-        name: `Problem ${problems.length + 1}`,
-        data: { elements: [], appState: {} },
+        name,
+        data: { elements: [], appState: { template } },
         last_opened: now
       })
       .select('id, name, data, updated_at, last_opened')
@@ -173,6 +185,22 @@ export function MathNotebookModule() {
     setTabs((prev) => [...prev, newTab])
     setActiveTabId(newTab.id)
     setProblems((prev) => [...prev, newTab])
+  }
+
+  const handleCreateNotebook = async () => {
+    const template = newNotebookTemplate
+    const defaultLabel =
+      templates.find((t) => t.value === template)?.label || 'Notebook'
+    const name =
+      newNotebookName.trim() || `${defaultLabel} ${problems.length + 1}`
+    if (showHome) {
+      await createProblem(name, template)
+    } else {
+      await addTab(name, template)
+    }
+    setShowNewModal(false)
+    setNewNotebookName('')
+    setNewNotebookTemplate('math')
   }
 
   const handleCloseTab = (id: string) => {
@@ -392,7 +420,10 @@ export function MathNotebookModule() {
               down.
             </p>
           </div>
-          <button onClick={createProblem} className="btn-dreamy-primary text-sm">
+          <button
+            onClick={() => setShowNewModal(true)}
+            className="btn-dreamy-primary text-sm"
+          >
             Create New Notebook
           </button>
         </div>
@@ -493,7 +524,7 @@ export function MathNotebookModule() {
             </div>
           ))}
           <button
-            onClick={addTab}
+            onClick={() => setShowNewModal(true)}
             className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
             title="New Tab"
           >
@@ -561,6 +592,45 @@ export function MathNotebookModule() {
         )}
       </div>
       <MathSolver expression={mathExpression} />
+      {showNewModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
+            <h2 className="text-lg font-light">New Notebook</h2>
+            <input
+              value={newNotebookName}
+              onChange={(e) => setNewNotebookName(e.target.value)}
+              className="input-dreamy w-full text-sm"
+              placeholder="Notebook name"
+              autoFocus
+            />
+            <select
+              value={newNotebookTemplate}
+              onChange={(e) => setNewNotebookTemplate(e.target.value)}
+              className="input-dreamy w-full text-sm"
+            >
+              {templates.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+            <div className="space-y-2">
+              <button
+                onClick={handleCreateNotebook}
+                className="btn-dreamy-primary w-full text-sm bg-purple-600 hover:bg-purple-700 border-purple-700 text-white"
+              >
+                Create
+              </button>
+              <button
+                onClick={() => setShowNewModal(false)}
+                className="btn-dreamy w-full text-sm text-purple-100"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {renamingTab && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">

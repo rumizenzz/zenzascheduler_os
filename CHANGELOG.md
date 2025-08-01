@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Users can create notebooks from templates like Math, Notes, To-Do List, Journal, or Project Plan with custom names (2025-08-01 13:48:00 UTC)
 - Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC)
 - Math Notebook home now includes a search bar to filter notebooks by title (2025-08-01 13:34:42 UTC)
 - Math Solver history opens in a Harold and the Purple Crayon & Vanilla Sky themed window via a History button (2025-08-01 13:30:00 UTC)
