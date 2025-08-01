@@ -11,7 +11,7 @@ import { AncestryModule } from "./AncestryModule";
 import { GarbageModule } from "./GarbageModule";
 import { SettingsModule } from "./SettingsModule";
 import { SpiritualModule } from "./SpiritualModule";
-import { TimerModule } from "./TimerModule";
+import { ClockModule } from "./ClockModule";
 import { PrayerModule } from "./PrayerModule";
 import { VerseOfTheDay } from "./VerseOfTheDay";
 import { MathNotebookModule } from "./MathNotebookModule";
@@ -61,7 +61,7 @@ const navigationItems = [
   { id: "calendar", label: "Your Calendar", icon: Calendar, color: "text-blue-500" },
   { id: "growth", label: "1% Better", icon: TrendingUp, color: "text-green-500" },
   { id: "affirmations", label: "Affirmations", icon: Heart, color: "text-pink-500" },
-  { id: "timer", label: "Timers", icon: TimerIcon, color: "text-blue-500" },
+  { id: "timer", label: "Clock", icon: TimerIcon, color: "text-blue-500" },
   { id: "family", label: "Family", icon: Users, color: "text-purple-500" },
   { id: "ancestry", label: "Ancestry", icon: TreePine, color: "text-green-600" },
   { id: "logistics", label: "Life Logistics", icon: MapPin, color: "text-orange-500" },
@@ -137,7 +137,7 @@ export function Dashboard() {
       case "affirmations":
         return <AffirmationsModule />;
       case "timer":
-        return <TimerModule />;
+        return <ClockModule />;
       case "family":
         return <FamilyModule />;
       case "ancestry":

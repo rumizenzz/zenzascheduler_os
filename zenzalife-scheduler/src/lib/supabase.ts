@@ -258,6 +258,24 @@ export type Timer = {
   updated_at?: string
 }
 
+export type TimerPreset = {
+  id: string
+  user_id: string
+  label: string
+  duration: number
+  created_at?: string
+  updated_at?: string
+}
+
+export type Stopwatch = {
+  id: string
+  user_id: string
+  label: string
+  elapsed: number
+  created_at?: string
+  updated_at?: string
+}
+
 export type CalendarPreference = {
   user_id: string
   selected_year: number
