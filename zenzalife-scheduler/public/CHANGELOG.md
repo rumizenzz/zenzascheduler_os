@@ -39,6 +39,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Default Schedule modal now asks when your day started and shifts all tasks to match the chosen time.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires a secret code and stores entries in Supabase.
 - Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
+
+### Fixed
+- Math Notebook tab close confirmation now appears above the canvas instead of hiding beneath it (2025-08-01 13:55:07 UTC)
 - Grace Prayer module records audio and stores start time with Supabase (2025-07-23 15:08:27 UTC)
 - Grace Prayer module now supports photo capture with Supabase storage (2025-07-24 18:00:00 UTC)
 - Added Verse of the Day module with Book of Mormon and Bible API support (2025-07-23 20:09:46 UTC)
