@@ -16,6 +16,9 @@ This file tracks project progress and upcoming tasks.
 ## Latest Updates
 - Math Notebook solver history now syncs to Supabase for cross-device persistence (2025-08-01 12:54:40 UTC).
 - Math Notebook solver now remembers previously solved problems across sessions (2025-08-01 12:48:12 UTC).
+- Math Notebook now shimmers with a Harold and the Purple Crayon & Vanilla Sky starfield for a magical feel (2025-08-01 12:52:11 UTC).
+- Added a top-right Refresh button to manually reload the app (2025-08-01 11:52:14 UTC).
+- Math Notebook dashboard now shows full timestamps for each notebook on the home grid (2025-08-01 11:40:46 UTC).
 - Swipe refresh now requires Harold and the Purple Crayon/Vanilla Sky toggle per device, disabled by default (2025-08-01 11:39:36 UTC).
 - Math Notebook last opened times now save in Supabase so the "Most Recent" label syncs across devices (2025-08-01 11:42:02 UTC).
 - Math Notebook home now orders notebooks by last opened time and keeps the "Most Recent" label until another notebook is opened (2025-08-01 11:34:40 UTC).

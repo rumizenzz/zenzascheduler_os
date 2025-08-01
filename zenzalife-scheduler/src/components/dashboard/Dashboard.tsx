@@ -37,6 +37,7 @@ import { MailingListPrompt } from "../auth/MailingListPrompt";
 import { OnboardingModal } from "../onboarding/OnboardingModal";
 import { Footer } from "../Footer";
 import { ChangeLogButton } from "../ChangeLogButton";
+import { RefreshButton } from "../RefreshButton";
 import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
 
 type DashboardTab =
@@ -277,6 +278,7 @@ export function Dashboard() {
       </div>
       <OnboardingModal />
       <MailingListPrompt />
+      <RefreshButton />
       <PullToRefreshToggleButton
         enabled={pullRefreshEnabled}
         toggle={() => setPullRefreshEnabled(!pullRefreshEnabled)}

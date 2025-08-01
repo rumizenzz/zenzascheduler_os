@@ -376,7 +376,7 @@ export function MathNotebookModule() {
       'friend'
 
     return (
-      <div className="w-full max-w-7xl mx-auto space-y-8 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-6 rounded-xl">
+      <div className="harold-sky w-full max-w-7xl mx-auto space-y-8 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-6 rounded-xl">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-semibold text-purple-200">
@@ -419,6 +419,16 @@ export function MathNotebookModule() {
                     />
                   </div>
                   <div className="text-sm font-medium">{p.name}</div>
+                  <div className="text-xs text-purple-300 mt-1">
+                    {new Date(p.updated_at).toLocaleString(undefined, {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                    })}
+                  </div>
                 </div>
               ))}
           </div>
@@ -430,7 +440,7 @@ export function MathNotebookModule() {
   }
 
   return (
-    <div className="space-y-4 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-4 sm:p-6 rounded-xl">
+    <div className="harold-sky space-y-4 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-4 sm:p-6 rounded-xl">
       <div className="flex items-center gap-2">
         <button
           onClick={() => {
