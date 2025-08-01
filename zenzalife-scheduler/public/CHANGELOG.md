@@ -17,7 +17,6 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
-- Timer presets can now be edited to update labels and durations (2025-08-01 18:26:51 UTC)
 - Added Supabase tables for stopwatch history and timer presets so saved sessions load without missing relation errors (2025-08-01 17:53:27 UTC)
 - Reminders now pull upcoming calendar tasks and create matching tasks for new reminders so scheduling stays in sync (2025-08-01 17:44:00 UTC)
 - Reminders modal now lists Intermittent Fasting & Prayer countdown so monthly fasts show alongside other tasks (2025-08-01 17:38:05 UTC)
