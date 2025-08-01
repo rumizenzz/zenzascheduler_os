@@ -1026,6 +1026,21 @@ export function ZenzaCalendar() {
           dayMaxEvents={true}
           weekends={true}
           events={events}
+          eventClassNames={(arg) => {
+            const category = arg.event.extendedProps?.category || "";
+            return ["monthsary", "anniversary"].includes(category)
+              ? ["special-occasion"]
+              : [];
+          }}
+          dayCellClassNames={(arg) => {
+            const hasSpecial = events.some(
+              (ev) =>
+                ["monthsary", "anniversary"].includes(
+                  ev.extendedProps?.category || "",
+                ) && dayjs(ev.start).isSame(arg.date, "day"),
+            );
+            return hasSpecial ? ["special-occasion"] : [];
+          }}
           dayCellContent={(arg) => {
             if (calendarView === "dayGridMonth" || calendarView === "timeGridWeek") {
               const dayEvents = events.filter((ev) =>
