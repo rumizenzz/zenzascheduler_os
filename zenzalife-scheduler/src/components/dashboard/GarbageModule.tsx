@@ -156,7 +156,7 @@ export function GarbageModule() {
   }
 
   const saveSchedule = async (scheduleData: any) => {
-    if (!user) return
+    if (!user?.id) return
     
     try {
       const nextCollection = calculateNextCollection(
@@ -165,8 +165,17 @@ export function GarbageModule() {
         editingSchedule?.next_collection
       )
       
+      // Replace blank strings with null so Supabase UUID fields don't receive ""
+      const cleaned = Object.fromEntries(
+        Object.entries(scheduleData).map(([key, value]) => [
+          key,
+          typeof value === 'string' && value.trim() === '' ? null : value
+        ])
+      )
+
       const data = {
-        ...scheduleData,
+        ...cleaned,
+        user_id: user.id || null,
         next_collection: nextCollection,
         updated_at: new Date().toISOString()
       }

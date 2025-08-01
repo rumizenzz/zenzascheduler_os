@@ -154,3 +154,11 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Updated bug list access code to "ZENZASECRETS" so monthly reports stay hidden behind the correct secret.
 - Verified repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 16:13 UTC)
+- Sanitized garbage schedule saves by converting blank address IDs to null.
+- Confirmed repository passes lint and tests with `pnpm run lint` and `pnpm test`.
+
+### Codex Agent Reflection (2025-08-01 16:32 UTC)
+- Stripped empty strings from all garbage schedule fields so Supabase never receives invalid UUIDs.
+- Verified updates with `pnpm run lint` and `pnpm test`.
+
