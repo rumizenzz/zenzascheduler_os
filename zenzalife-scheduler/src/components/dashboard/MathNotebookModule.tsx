@@ -230,6 +230,10 @@ export function MathNotebookModule() {
     setProblems((prev) => [...prev, newTab])
   }
 
+  const quickAddTab = async () => {
+    await addTab(`Notes ${tabs.length + 1}`, 'notes')
+  }
+
   const handleCreateNotebook = async () => {
     const template = newNotebookTemplate
     const defaultLabel =
@@ -642,7 +646,7 @@ export function MathNotebookModule() {
             </div>
           ))}
           <button
-            onClick={() => setShowNewModal(true)}
+            onClick={quickAddTab}
             className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
             title="New Tab"
           >
@@ -717,7 +721,11 @@ export function MathNotebookModule() {
         )}
       </div>
       <MathSolver expression={mathExpression} />
-      {showCalculator && <GEDCalculator onClose={() => setShowCalculator(false)} />}
+      {showCalculator &&
+        createPortal(
+          <GEDCalculator onClose={() => setShowCalculator(false)} />,
+          document.body
+        )}
       {renameModal}
       {closeModal}
       {showNewModal && (
