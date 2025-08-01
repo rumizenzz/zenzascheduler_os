@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
 import { ZenzaCalendar } from "@/components/calendar/ZenzaCalendar";
 import { GrowthTracker } from "./GrowthTracker";
@@ -37,6 +38,7 @@ import { OnboardingModal } from "../onboarding/OnboardingModal";
 import { Footer } from "../Footer";
 import { ChangeLogButton } from "../ChangeLogButton";
 import { RefreshButton } from "../RefreshButton";
+import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
 
 type DashboardTab =
   | "calendar"
@@ -73,7 +75,21 @@ export function Dashboard() {
   const { user, profile, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState<DashboardTab>("calendar");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  usePullToRefresh();
+  const isMobile = useIsMobile();
+  const storageKey = isMobile ? "ptr-mobile-enabled" : "ptr-desktop-enabled";
+  const [pullRefreshEnabled, setPullRefreshEnabled] = useState(
+    () => localStorage.getItem(storageKey) === "true"
+  );
+
+  useEffect(() => {
+    setPullRefreshEnabled(localStorage.getItem(storageKey) === "true");
+  }, [storageKey]);
+
+  useEffect(() => {
+    localStorage.setItem(storageKey, String(pullRefreshEnabled));
+  }, [pullRefreshEnabled, storageKey]);
+
+  usePullToRefresh(pullRefreshEnabled);
 
   useEffect(() => {
     const handleResize = () => {
@@ -263,6 +279,10 @@ export function Dashboard() {
       <OnboardingModal />
       <MailingListPrompt />
       <RefreshButton />
+      <PullToRefreshToggleButton
+        enabled={pullRefreshEnabled}
+        toggle={() => setPullRefreshEnabled(!pullRefreshEnabled)}
+      />
       <ChangeLogButton />
       <Footer />
     </div>

@@ -5,7 +5,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ## [Unreleased]
 ### Added
 - Added a top-right Refresh button to manually reload the app (2025-08-01 11:52:14 UTC)
+- Math Notebook dashboard displays last updated time for each notebook (2025-08-01 11:40:46 UTC)
+- Harold and the Purple Crayon/Vanilla Sky button toggles swipe-to-refresh per device (2025-08-01 11:39:36 UTC)
 - Math Notebook home highlights the most recently updated notebook with a "Most Recent" label (2025-08-01 11:17:01 UTC)
+- Math Notebook home now orders notebooks by last opened time and keeps the "Most Recent" label until another notebook is opened (2025-08-01 11:34:40 UTC)
 - Math Notebook now detects math expressions and offers a Solve button to compute results (2025-08-01 02:07:51 UTC)
 - Math Notebook opens to a dashboard home for browsing old problems and creating new notebooks (2025-08-01 00:19:08 UTC)
 - Math Notebook dashboard greets users by name with a time-of-day message and Keep-style grid of notebooks (2025-08-01 00:31:23 UTC)
@@ -36,6 +39,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Swipe down refresh disabled by default unless enabled for the current device (2025-08-01 11:39:36 UTC)
+- Math Notebook now stores last opened times in Supabase for cross-device "Most Recent" labels (2025-08-01 11:42:02 UTC)
 - Math Notebook home dashboard uses profile display name for greeting (2025-08-01 00:53:08 UTC)
 - Math Notebook home defaults to dark mode with a spacious Google Keep-style masonry layout and purple-sky palette (2025-08-01 02:13:08 UTC)
 - Double-clicking a Math Notebook tab now opens a Harold and the Purple Crayon & Vanilla Sky themed rename modal (2025-08-01 03:22:44 UTC)
