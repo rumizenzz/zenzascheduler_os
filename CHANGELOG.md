@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Math Notebook dashboard displays last updated time for each notebook (2025-08-01 11:40:46 UTC)
 - Harold and the Purple Crayon/Vanilla Sky button toggles swipe-to-refresh per device (2025-08-01 11:39:36 UTC)
 - Math Notebook home highlights the most recently updated notebook with a "Most Recent" label (2025-08-01 11:17:01 UTC)
 - Math Notebook home now orders notebooks by last opened time and keeps the "Most Recent" label until another notebook is opened (2025-08-01 11:34:40 UTC)
