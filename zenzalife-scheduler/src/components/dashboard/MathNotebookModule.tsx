@@ -19,6 +19,7 @@ interface TabData {
   name: string
   data: ExcalidrawData
   updated_at: string
+  lastOpened: string
   history: { id: string; created_at: string; data: ExcalidrawData }[]
 }
 
@@ -43,10 +44,10 @@ export function MathNotebookModule() {
       const { data, error } = await supabase
         .from('math_problems')
         .select(
-          'id, name, data, updated_at, math_problem_versions(id, data, created_at)'
+          'id, name, data, updated_at, last_opened, math_problem_versions(id, data, created_at)'
         )
         .eq('user_id', user.id)
-        .order('updated_at', { ascending: false })
+        .order('last_opened', { ascending: false })
 
       if (error) {
         console.error('Failed to load math problems:', error)
@@ -61,6 +62,7 @@ export function MathNotebookModule() {
             id: p.id,
             name: p.name,
             updated_at: p.updated_at,
+            lastOpened: p.last_opened || p.updated_at,
             data: { elements: p.data?.elements || [], appState },
             history:
               p.math_problem_versions?.map((v: any) => {
@@ -84,25 +86,37 @@ export function MathNotebookModule() {
     load()
   }, [user])
 
-  const openProblem = (id: string) => {
+  const openProblem = async (id: string) => {
     const problem = problems.find((p) => p.id === id)
     if (!problem) return
+    const now = new Date().toISOString()
+    const { error } = await supabase
+      .from('math_problems')
+      .update({ last_opened: now })
+      .eq('id', id)
+    if (error) {
+      console.error('Failed to update last opened:', error)
+    }
+    const updatedProblem = { ...problem, lastOpened: now }
+    setProblems((prev) => prev.map((p) => (p.id === id ? updatedProblem : p)))
     setClosedTabs((prev) => prev.filter((t) => t.id !== id))
-    setTabs([problem])
+    setTabs([updatedProblem])
     setActiveTabId(problem.id)
     setShowHome(false)
   }
 
   const createProblem = async () => {
     if (!user) return
+    const now = new Date().toISOString()
     const { data, error } = await supabase
       .from('math_problems')
       .insert({
         user_id: user.id,
         name: `Problem ${problems.length + 1}`,
-        data: { elements: [], appState: {} }
+        data: { elements: [], appState: {} },
+        last_opened: now
       })
-      .select('id, name, data, updated_at')
+      .select('id, name, data, updated_at, last_opened')
       .single()
 
     if (error) {
@@ -116,6 +130,7 @@ export function MathNotebookModule() {
       id: data.id,
       name: data.name,
       updated_at: data.updated_at,
+      lastOpened: data.last_opened || now,
       data: { elements: data.data?.elements || [], appState },
       history: []
     }
@@ -127,14 +142,16 @@ export function MathNotebookModule() {
 
   const addTab = async () => {
     if (!user) return
+    const now = new Date().toISOString()
     const { data, error } = await supabase
       .from('math_problems')
       .insert({
         user_id: user.id,
         name: `Problem ${problems.length + 1}`,
-        data: { elements: [], appState: {} }
+        data: { elements: [], appState: {} },
+        last_opened: now
       })
-      .select('id, name, data, updated_at')
+      .select('id, name, data, updated_at, last_opened')
       .single()
 
     if (error) {
@@ -148,6 +165,7 @@ export function MathNotebookModule() {
       id: data.id,
       name: data.name,
       updated_at: data.updated_at,
+      lastOpened: data.last_opened || now,
       data: { elements: data.data?.elements || [], appState },
       history: []
     }
@@ -378,8 +396,8 @@ export function MathNotebookModule() {
             {[...problems]
               .sort(
                 (a, b) =>
-                  new Date(b.updated_at).getTime() -
-                  new Date(a.updated_at).getTime(),
+                  new Date(b.lastOpened).getTime() -
+                  new Date(a.lastOpened).getTime(),
               )
               .map((p, idx) => (
                 <div
