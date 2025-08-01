@@ -29,6 +29,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Monaco-powered diff editor enables real-time side-by-side comparison with spinning Harold and the Purple Crayon & Vanilla Sky Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes controls (2025-08-01 22:10 UTC)
 - See All Reminders now opens a Harold and the Purple Crayon & Vanilla Sky window above the current panel (2025-08-01 21:30 UTC)
 - Garbage & Recycling schedules now appear in Reminders so upcoming collection days are highlighted (2025-08-01 18:51 UTC)
 - Magical purple Journal and Lucid Dream Journal modules save daily entries with lucidity tracking (2025-08-01 20:12 UTC)
