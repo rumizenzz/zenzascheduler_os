@@ -89,3 +89,11 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Auto-populated the Math Notebook solver by scanning canvas text for equations and converting `^` to exponents.
 - Verified the repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 12:48 UTC)
+- Enabled Math Solver history so previous problems persist across sessions.
+- Verified repository lint passes via `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 12:54 UTC)
+- Synced Math Solver history with Supabase for cross-device persistence.
+- Verified repository lint passes via `pnpm run lint`.
+
