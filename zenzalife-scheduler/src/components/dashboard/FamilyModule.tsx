@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase, FamilyGroup, User } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
-import { Users, Plus, Crown, Baby, GraduationCap, Heart, Target } from 'lucide-react'
+import { Users, Plus, Crown, Baby, GraduationCap, Heart, Target, ChevronDown } from 'lucide-react'
+import { TabPermissionsModal, TabPermissions } from './TabPermissionsModal'
 
 export function FamilyModule() {
   const { user, profile } = useAuth()
@@ -11,6 +12,9 @@ export function FamilyModule() {
   const [loading, setLoading] = useState(true)
   const [showCreateFamily, setShowCreateFamily] = useState(false)
   const [showJoinFamily, setShowJoinFamily] = useState(false)
+  const [selectedMember, setSelectedMember] = useState<User | null>(null)
+  const [permissions, setPermissions] = useState<Record<string, TabPermissions>>({})
+  const [showPermissions, setShowPermissions] = useState(false)
 
   useEffect(() => {
     if (user && profile) {
@@ -118,6 +122,13 @@ export function FamilyModule() {
     } catch (error: any) {
       toast.error('Failed to join family: ' + error.message)
     }
+  }
+
+  const handleSavePermissions = (perms: TabPermissions) => {
+    if (selectedMember) {
+      setPermissions(prev => ({ ...prev, [selectedMember.id]: perms }))
+    }
+    setShowPermissions(false)
   }
 
   const updateFamilyMilestone = async (milestone: string) => {
@@ -300,7 +311,17 @@ export function FamilyModule() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {familyMembers.map((member) => (
-            <div key={member.id} className="p-4 bg-gray-50/80 rounded-xl">
+            <div key={member.id} className="p-4 bg-gray-50/80 rounded-xl relative">
+              <button
+                onClick={() => {
+                  setSelectedMember(member)
+                  setShowPermissions(true)
+                }}
+                className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                aria-label="Manage tab permissions"
+              >
+                <ChevronDown className="w-4 h-4" />
+              </button>
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center">
                   {getRoleIcon(member.relationship_role)}
@@ -321,6 +342,20 @@ export function FamilyModule() {
               
               {member.age && (
                 <p className="text-xs text-gray-500 mt-2">Age: {member.age}</p>
+              )}
+              {permissions[member.id] && (
+                <div className="mt-3">
+                  <p className="text-xs text-gray-500">Allowed Tabs:</p>
+                  <ul className="text-xs text-gray-700 flex flex-wrap gap-1 mt-1">
+                    {Object.entries(permissions[member.id])
+                      .filter(([, allowed]) => allowed)
+                      .map(([tab]) => (
+                        <li key={tab} className="px-2 py-1 bg-white/60 rounded">
+                          {tab}
+                        </li>
+                      ))}
+                  </ul>
+                </div>
               )}
             </div>
           ))}
@@ -356,6 +391,14 @@ export function FamilyModule() {
           <p className="text-gray-600 text-center py-8">No milestones yet. Add your first family milestone!</p>
         )}
       </div>
+      {selectedMember && showPermissions && (
+        <TabPermissionsModal
+          member={selectedMember}
+          current={permissions[selectedMember.id]}
+          onSave={handleSavePermissions}
+          onClose={() => setShowPermissions(false)}
+        />
+      )}
     </div>
   )
 }
@@ -409,8 +452,9 @@ function CreateFamilyModal({ isOpen, onClose, onCreate }: CreateFamilyModalProps
               </button>
             </div>
           </form>
-        </div>
       </div>
+    </div>
+
     </div>
   )
 }

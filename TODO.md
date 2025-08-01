@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Added UI stub for requesting and revoking family tab permissions (2025-08-01 02:23:27 UTC).
 - Math Notebook dashboard now uses profile display name for greeting (2025-08-01 00:53:08 UTC).
 - Math Notebook now opens to a dashboard home listing all problems with a Create New Math Notebook button (2025-08-01 00:19:08 UTC).
 - Math Notebook dashboard greets users by name with a time-of-day message and Keep-style grid of notebooks (2025-08-01 00:31:23 UTC).
@@ -276,5 +277,6 @@ This file tracks project progress and upcoming tasks.
 
 ## Improvement Ideas
 - Add CI pipeline to verify documentation sync and run lint/tests.
+- Connect family tab permissions to Supabase with request and approval flow.
 
 (add any new ideas here)
