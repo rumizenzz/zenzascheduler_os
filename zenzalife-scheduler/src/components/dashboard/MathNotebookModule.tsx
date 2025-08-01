@@ -5,12 +5,17 @@ import { PlusCircle, History, X, Home } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
-import type { AppState } from '@excalidraw/excalidraw/types'
+import type {
+  AppState,
+  BinaryFiles,
+  BinaryFileData,
+} from '@excalidraw/excalidraw/types'
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/element/types'
 
 type ExcalidrawData = {
   elements: readonly ExcalidrawElement[]
   appState: Partial<AppState>
+  files: BinaryFiles
 }
 
 interface TabData {
@@ -51,16 +56,24 @@ export function MathNotebookModule() {
           return {
             id: p.id,
             name: p.name,
-            data: { elements: p.data?.elements || [], appState },
+            data: {
+              elements: p.data?.elements || [],
+              appState,
+              files: p.data?.files || {},
+            },
             history:
               p.math_problem_versions?.map((v: any) => {
                 const { collaborators: _c, ...vAppState } = v.data?.appState || {}
                 return {
                   id: v.id,
                   created_at: v.created_at,
-                  data: { elements: v.data?.elements || [], appState: vAppState }
+                  data: {
+                    elements: v.data?.elements || [],
+                    appState: vAppState,
+                    files: v.data?.files || {},
+                  },
                 }
-              }) || []
+              }) || [],
           }
         })
         setProblems(formatted)
@@ -86,7 +99,7 @@ export function MathNotebookModule() {
       .insert({
         user_id: user.id,
         name: `Problem ${problems.length + 1}`,
-        data: { elements: [], appState: {} }
+        data: { elements: [], appState: {}, files: {} }
       })
       .select('id, name, data')
       .single()
@@ -101,8 +114,12 @@ export function MathNotebookModule() {
     const newProblem: TabData = {
       id: data.id,
       name: data.name,
-      data: { elements: data.data?.elements || [], appState },
-      history: []
+      data: {
+        elements: data.data?.elements || [],
+        appState,
+        files: data.data?.files || {},
+      },
+      history: [],
     }
     setProblems((prev) => [...prev, newProblem])
     setTabs([newProblem])
@@ -117,7 +134,7 @@ export function MathNotebookModule() {
       .insert({
         user_id: user.id,
         name: `Problem ${problems.length + 1}`,
-        data: { elements: [], appState: {} }
+        data: { elements: [], appState: {}, files: {} }
       })
       .select('id, name, data')
       .single()
@@ -132,8 +149,12 @@ export function MathNotebookModule() {
     const newTab: TabData = {
       id: data.id,
       name: data.name,
-      data: { elements: data.data?.elements || [], appState },
-      history: []
+      data: {
+        elements: data.data?.elements || [],
+        appState,
+        files: data.data?.files || {},
+      },
+      history: [],
     }
     setTabs((prev) => [...prev, newTab])
     setActiveTabId(newTab.id)
@@ -151,7 +172,11 @@ export function MathNotebookModule() {
     const id = closingTab.id
     if (save) {
       const { collaborators, ...cleanAppState } = closingTab.data.appState || {}
-      const newData = { elements: closingTab.data.elements, appState: cleanAppState }
+      const newData = {
+        elements: closingTab.data.elements,
+        appState: cleanAppState,
+        files: closingTab.data.files,
+      }
       await supabase
         .from('math_problems')
         .update({ data: newData, updated_at: new Date().toISOString() })
@@ -197,7 +222,11 @@ export function MathNotebookModule() {
         .single()
       if (data) {
         const { collaborators, ...appState } = data.data?.appState || {}
-        const fetched = { elements: data.data?.elements || [], appState }
+        const fetched = {
+          elements: data.data?.elements || [],
+          appState,
+          files: data.data?.files || {},
+        }
         setTabs((prev) =>
           prev.map((t) => (t.id === activeTabId ? { ...t, data: fetched } : t)),
         )
@@ -210,9 +239,46 @@ export function MathNotebookModule() {
   }, [activeTabId])
 
     const updateTabData = useCallback(
-      async (elements: readonly ExcalidrawElement[], appState: AppState) => {
+      async (
+        elements: readonly ExcalidrawElement[],
+        appState: AppState,
+        files: BinaryFiles,
+      ) => {
         const { collaborators, ...cleanAppState } = appState
-        const newData = { elements, appState: cleanAppState }
+        const currentTab = tabs.find((t) => t.id === activeTabId)
+        const existingFiles = currentTab?.data.files || {}
+        const newFiles: BinaryFiles = { ...existingFiles }
+
+        for (const [id, file] of Object.entries(files || {})) {
+          if (!existingFiles[id] && file.dataURL.startsWith('data:') && user) {
+            try {
+              const ext = file.mimeType.split('/')[1] || 'png'
+              const { data: img, error } = await supabase.functions.invoke(
+                'image-upload',
+                {
+                  body: {
+                    imageData: file.dataURL,
+                    fileName: `${id}.${ext}`,
+                    userId: user.id,
+                  },
+                },
+              )
+              if (!error && img?.publicUrl) {
+                newFiles[id] = { ...file, dataURL: img.publicUrl } as BinaryFileData
+              } else {
+                newFiles[id] = file as BinaryFileData
+              }
+            } catch (err) {
+              console.error('Image upload failed:', err)
+              toast.error('Image upload failed')
+              newFiles[id] = file as BinaryFileData
+            }
+          } else {
+            newFiles[id] = file as BinaryFileData
+          }
+        }
+
+        const newData = { elements, appState: cleanAppState, files: newFiles }
         setTabs((prev) =>
           prev.map((tab) => (tab.id === activeTabId ? { ...tab, data: newData } : tab)),
         )
@@ -226,14 +292,18 @@ export function MathNotebookModule() {
             .eq('id', activeTabId)
         }
       },
-      [activeTabId],
+      [activeTabId, tabs, user],
     )
 
   const saveVersion = async () => {
     const tab = tabs.find((t) => t.id === activeTabId)
     if (!tab) return
     const { collaborators, ...cleanAppState } = tab.data.appState || {}
-    const versionData = { elements: tab.data.elements, appState: cleanAppState }
+    const versionData = {
+      elements: tab.data.elements,
+      appState: cleanAppState,
+      files: tab.data.files,
+    }
 
     const { data, error } = await supabase
       .from('math_problem_versions')
@@ -265,7 +335,11 @@ export function MathNotebookModule() {
     const version = tab.history.find((h) => h.id === versionId)
     if (!version) return
     const { collaborators, ...cleanAppState } = version.data.appState || {}
-    const versionData = { elements: version.data.elements, appState: cleanAppState }
+    const versionData = {
+      elements: version.data.elements,
+      appState: cleanAppState,
+      files: version.data.files || {},
+    }
 
     const newTabs = tabs.map((t) =>
       t.id === tab.id ? { ...t, data: versionData } : t,

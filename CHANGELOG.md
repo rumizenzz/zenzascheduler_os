@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Math Notebook now uploads pasted images to Supabase storage (2025-08-01 02:10:39 UTC)
 - Math Notebook opens to a dashboard home for browsing old problems and creating new notebooks (2025-08-01 00:19:08 UTC)
 - Math Notebook dashboard greets users by name with a time-of-day message and Keep-style grid of notebooks (2025-08-01 00:31:23 UTC)
 - Math Notebook tabs can be renamed, closed with confirmation, reopened, and auto-refresh from Supabase; history shows full timestamps (2025-07-31 23:35:07 UTC)
