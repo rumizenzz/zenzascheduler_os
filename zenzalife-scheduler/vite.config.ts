@@ -40,7 +40,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: ["workbox-window"],
+      external: ["workbox-window", "katex"],
     },
   },
 })
