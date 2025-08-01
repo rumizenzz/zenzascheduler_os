@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Math Solver history now stores entries only in Supabase, dropping localStorage (2025-08-01 16:12:04 UTC).
+- Math Solver history now supports clearing all problems or deleting individual entries (2025-08-01 16:05:39 UTC).
 - Intermittent fasting reminder toast only captures clicks inside itself so calendar and bottom buttons remain visible (2025-08-01 15:55:20 UTC).
 - Intermittent fasting reminder now ignores pointer events so calendar and bottom buttons stay clickable (2025-08-01 15:47:02 UTC).
 - Grace prayers now track live duration and can be replayed by date from a calendar view (2025-08-01 15:29:18 UTC).

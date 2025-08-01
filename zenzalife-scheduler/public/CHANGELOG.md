@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Math Solver history now lets users clear all problems or delete individual entries (2025-08-01 16:05:39 UTC)
 - Morning and night prayers display a live timer, save duration, and can be replayed from a date-based prayer calendar (2025-08-01 15:13:17 UTC)
 - Alarm window offers a Start Prayer button for Wake Up and Sleep tasks, recording dated morning and night prayers and letting grace prayers show dish photos on demand (2025-08-01 13:14:57 UTC)
 - Grace prayers now show a live timer, store duration, and replay from a date-filtered calendar with optional dish photos (2025-08-01 15:29:18 UTC)
@@ -63,6 +64,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Math Solver history now stores entries only in Supabase, dropping localStorage (2025-08-01 16:12:04 UTC)
 - Bug list access code updated to ZENZASECRETS for monthly report view (2025-08-01 15:50:22 UTC)
 - Math Notebook search now scans canvas text so results match drawings and notes (2025-08-01 15:21:54 UTC)
 - Fasting reminder no longer falls back to localStorage, relying solely on Supabase (2025-08-01 13:39:47 UTC)
