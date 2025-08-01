@@ -4,6 +4,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Math Notebook solver history now saves to Supabase for cross-device sync (2025-08-01 12:54:40 UTC)
+- Math Notebook solver now remembers previously solved problems with persistent history (2025-08-01 12:48:12 UTC)
 - Added a top-right Refresh button to manually reload the app (2025-08-01 11:52:14 UTC)
 - Math Notebook dashboard displays last updated time for each notebook (2025-08-01 11:40:46 UTC)
 - Harold and the Purple Crayon/Vanilla Sky button toggles swipe-to-refresh per device (2025-08-01 11:39:36 UTC)
