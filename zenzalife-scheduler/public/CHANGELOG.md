@@ -48,6 +48,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
 
 ### Fixed
+- Renaming a Math Notebook tab no longer shows duplicate windows; the rename modal now appears only once above the canvas (2025-08-01 16:50:04 UTC)
 - Resolved missing brace in Math Solver causing lint parse error (2025-08-01 16:29:03 UTC)
 - Sanitized blank address IDs when saving garbage schedules so Supabase no longer rejects empty UUIDs (2025-08-01 16:13:26 UTC)
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
