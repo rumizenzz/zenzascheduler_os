@@ -39,6 +39,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Math Notebook background now shimmers with a Harold and the Purple Crayon & Vanilla Sky starfield for a magical feel (2025-08-01 12:52:11 UTC)
 - Swipe down refresh disabled by default unless enabled for the current device (2025-08-01 11:39:36 UTC)
 - Math Notebook now stores last opened times in Supabase for cross-device "Most Recent" labels (2025-08-01 11:42:02 UTC)
 - Math Notebook home dashboard uses profile display name for greeting (2025-08-01 00:53:08 UTC)
