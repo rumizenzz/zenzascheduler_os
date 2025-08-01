@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Daily and grace prayer calendars now list all recordings for a date so users can log unlimited prayers (2025-08-01 16:13:41 UTC).
 - Math Solver history now stores entries only in Supabase, dropping localStorage (2025-08-01 16:12:04 UTC).
 - Math Solver history now supports clearing all problems or deleting individual entries (2025-08-01 16:05:39 UTC).
 - Intermittent fasting reminder now appears below top controls so buttons remain visible (2025-08-01 16:10:00 UTC).

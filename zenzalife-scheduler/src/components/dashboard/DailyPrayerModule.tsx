@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import dayjs from 'dayjs'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase, DailyPrayer } from '@/lib/supabase'
@@ -128,8 +128,12 @@ export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
     return parts.join(':')
   }
 
-  const prayersForDate = prayers.filter(p =>
-    dayjs(p.started_at).isSame(selectedDate, 'day')
+  const prayersForDate = useMemo(
+    () =>
+      prayers
+        .filter(p => dayjs(p.started_at).isSame(selectedDate, 'day'))
+        .sort((a, b) => dayjs(a.started_at).diff(b.started_at)),
+    [prayers, selectedDate]
   )
 
   return (
@@ -170,10 +174,12 @@ export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
           onChange={e => setSelectedDate(e.target.value)}
           className="input-dreamy"
         />
-        {prayersForDate.map(p => (
+        {prayersForDate.map((p, idx) => (
           <div key={p.id} className="p-3 bg-white/50 rounded-lg border space-y-1">
             <p className="text-sm text-gray-700 capitalize">
-              {p.prayer_type} - {dayjs(p.started_at).format('h:mm A')} ({formatDuration(p.duration_seconds * 1000)})
+              Prayer {idx + 1}: {p.prayer_type} - {dayjs(p.started_at).format('h:mm A')} ({
+                formatDuration(p.duration_seconds * 1000)
+              })
             </p>
             <audio controls src={p.audio_url} className="w-full" />
           </div>

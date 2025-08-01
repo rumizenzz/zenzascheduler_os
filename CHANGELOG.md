@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Daily and grace prayer calendars list every recording for a date so users can log unlimited prayers (2025-08-01 16:13:41 UTC)
 - Math Solver history now lets users clear all problems or delete individual entries (2025-08-01 16:05:39 UTC)
 - GED-style calculator in Math Notebook saves calculations to Supabase for persistent history (2025-08-01 16:09:50 UTC)
 - Pressing Enter on desktop solves Math Notebook problems without clicking the Solve button (2025-08-01 16:04:16 UTC)
