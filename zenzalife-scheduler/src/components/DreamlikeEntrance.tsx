@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useAudio } from '@/hooks/useAudio'
+import { useAuth } from '@/contexts/AuthContext'
 import { Cloud, Sparkles, X } from 'lucide-react'
 import { ConstellationFamily } from './ConstellationFamily'
 
@@ -13,6 +14,7 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
   const [canSkip, setCanSkip] = useState(false)
   const [started, setStarted] = useState(false)
   const { playEntranceSound } = useAudio()
+  const { profile } = useAuth()
   const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, delay: number}>>([])
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
     setParticles(particleArray)
 
     // Play entrance sound if enabled
-    if (localStorage.getItem('entranceSoundEnabled') !== 'false') {
+    if (profile?.entrance_sound_enabled !== false) {
       playEntranceSound()
     }
 
@@ -46,7 +48,7 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
       clearTimeout(skipTimer)
       clearTimeout(autoCompleteTimer)
     }
-  }, [started, playEntranceSound])
+  }, [started, playEntranceSound, profile])
 
   const handleComplete = () => {
     setIsVisible(false)

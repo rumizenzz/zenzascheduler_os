@@ -158,3 +158,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Added Settings safeguards so users can disable the entrance animation and sound with a Save Changes button.
 - Confirmed lint passes with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 16:26 UTC)
+- Persisted entrance animation and sound preferences in Supabase instead of local storage.
+- Verified repository lint passes via `pnpm run lint`.
+

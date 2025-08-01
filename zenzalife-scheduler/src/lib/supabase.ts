@@ -24,6 +24,8 @@ export type User = {
   growth_identity?: string
   family_id?: string
   bio?: string
+  entrance_sound_enabled?: boolean
+  entrance_animation_enabled?: boolean
   last_login?: string
   created_at?: string
   updated_at?: string

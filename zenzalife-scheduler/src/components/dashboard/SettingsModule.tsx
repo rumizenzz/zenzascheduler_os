@@ -57,7 +57,7 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
   ]
 
   const [audioSettings, setAudioSettings] = useState({
-    entrance_sound: localStorage.getItem('entranceSoundEnabled') !== 'false',
+    entrance_sound: profile?.entrance_sound_enabled ?? true,
     task_alarms: true,
     reminder_sounds: true,
     default_alarm: localStorage.getItem('defaultAlarmSound') || builtinAlarms[0].url,
@@ -66,7 +66,7 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
     custom_alarms: JSON.parse(localStorage.getItem('customAlarmSounds') || '[]') as { name: string; url: string }[]
   })
   const [appearanceSettings, setAppearanceSettings] = useState({
-    showEntrance: localStorage.getItem('entranceAnimationEnabled') !== 'false',
+    showEntrance: profile?.entrance_animation_enabled ?? true,
     smoothTransitions: true
   })
   const [unsavedChanges, setUnsavedChanges] = useState(false)
@@ -96,13 +96,25 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
     onUnsavedChange?.(unsavedChanges)
   }, [unsavedChanges, onUnsavedChange])
 
-  const saveChanges = () => {
-    localStorage.setItem('entranceSoundEnabled', String(audioSettings.entrance_sound))
-    localStorage.setItem('defaultAlarmSound', audioSettings.default_alarm)
-    localStorage.setItem('customAlarmSounds', JSON.stringify(audioSettings.custom_alarms))
-    localStorage.setItem('entranceAnimationEnabled', String(appearanceSettings.showEntrance))
-    toast.success('Settings saved')
-    setUnsavedChanges(false)
+  const saveChanges = async () => {
+    if (!user) return
+
+    setLoading(true)
+    try {
+      localStorage.setItem('defaultAlarmSound', audioSettings.default_alarm)
+      localStorage.setItem('customAlarmSounds', JSON.stringify(audioSettings.custom_alarms))
+      await updateUserProfile(user.id, {
+        entrance_sound_enabled: audioSettings.entrance_sound,
+        entrance_animation_enabled: appearanceSettings.showEntrance
+      })
+      await refreshProfile()
+      toast.success('Settings saved')
+      setUnsavedChanges(false)
+    } catch (error: any) {
+      toast.error('Failed to save settings: ' + error.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -114,6 +126,15 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
         bio: profile.bio || '',
         growth_identity: profile.growth_identity || ''
       })
+      setAudioSettings(prev => ({
+        ...prev,
+        entrance_sound: profile.entrance_sound_enabled ?? true
+      }))
+      setAppearanceSettings(prev => ({
+        ...prev,
+        showEntrance: profile.entrance_animation_enabled ?? true
+      }))
+      setUnsavedChanges(false)
     }
   }, [profile])
 
