@@ -66,6 +66,7 @@
     "react-query": "^3.39.3",
     "react-resizable-panels": "^2.1.7",
     "react-router-dom": "^6",
+    "react-katex": "^3.0.2",
     "recharts": "^2.12.4",
     "sonner": "^1.7.2",
     "tailwind-merge": "^2.6.0",
