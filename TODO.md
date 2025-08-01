@@ -14,6 +14,10 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Reminders and calendar tasks now sync so upcoming schedule items appear in the Reminders window and new reminders create matching tasks (2025-08-01 17:44:00 UTC).
+- Reminders window now lists Intermittent Fasting & Prayer alongside other reminders (2025-08-01 17:38:05 UTC).
+- Reminders now save to Supabase so milestone countdowns persist across devices (2025-08-01 17:30:21 UTC).
+- Added Monthsary and 1 Year Anniversary task categories with a top-right Reminders button that counts down to upcoming tasks and celebrates special days (2025-08-01 17:20:29 UTC).
 - Stopwatch sessions now save to Supabase with selectable timer presets (2025-08-01 17:26:56 UTC)
 - Clock module now unites timers and a stopwatch with a Harold and the Purple Crayon & Vanilla Sky starfield (2025-08-01 17:16:12 UTC)
 - Task modal now includes an All Day option so full-day tasks don't require times (2025-08-01 17:33:19 UTC).

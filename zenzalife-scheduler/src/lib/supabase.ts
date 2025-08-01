@@ -52,6 +52,17 @@ export type Task = {
   updated_at?: string
 }
 
+export type Reminder = {
+  id: string
+  user_id: string
+  title: string
+  category?: string
+  remind_at: string
+  completed?: boolean
+  created_at?: string
+  updated_at?: string
+}
+
 export type FamilyGroup = {
   id: string
   family_name: string
