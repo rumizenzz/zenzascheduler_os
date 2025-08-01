@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
@@ -96,6 +96,24 @@ export function Dashboard() {
 
   usePullToRefresh(pullRefreshEnabled);
 
+  const scrollToTop = () => {
+    const scroller = document.scrollingElement || document.documentElement;
+    scroller.scrollTop = 0;
+    scroller.scrollLeft = 0;
+    document.body.scrollTop = 0;
+    document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
+  };
+
+  useLayoutEffect(() => {
+    scrollToTop();
+  }, [activeTab]);
+
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
@@ -121,6 +139,7 @@ export function Dashboard() {
       setShowUnsavedModal(true);
       return;
     }
+    scrollToTop();
     setActiveTab(id);
   };
 

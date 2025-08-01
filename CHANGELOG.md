@@ -6,6 +6,13 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Changed
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
+### Fixed
+- Switching dashboard sections now resets scroll position so content starts at the top (2025-08-01 17:09:52 UTC)
+- Removed smooth scroll animation when switching dashboard sections so content jumps to the top immediately (2025-08-01 17:26:11 UTC)
+- Dashboard always loads modules at the top by disabling scroll restoration and jumping to the start before paint (2025-08-01 17:33:13 UTC)
+- Dashboard sections now scroll the window, document, and body to the start so content never hides below prior scroll (2025-08-01 17:48:34 UTC)
+- Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
+- Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
 - Entrance animation duration can now be customized in Settings (2025-08-01 16:47:48 UTC)
 - Settings now allow disabling the dreamlike entrance and its sound via a Save Changes button; unsaved changes trigger a Harold and the Purple Crayon & Vanilla Sky warning window (2025-08-01 16:13:28 UTC)
