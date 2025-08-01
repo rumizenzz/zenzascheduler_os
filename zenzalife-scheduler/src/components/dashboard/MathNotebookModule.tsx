@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
-import { PlusCircle, History, X, Home } from 'lucide-react'
+import { PlusCircle, History, X, Home, Search } from 'lucide-react'
 import { MathSolver } from './MathSolver'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
@@ -34,6 +34,19 @@ export function MathNotebookModule() {
   const [renamingTab, setRenamingTab] = useState<TabData | null>(null)
   const [newTabName, setNewTabName] = useState('')
   const [mathExpression, setMathExpression] = useState<string | null>(null)
+  const [showNewModal, setShowNewModal] = useState(false)
+  const [newNotebookName, setNewNotebookName] = useState('')
+  const [newNotebookTemplate, setNewNotebookTemplate] = useState('math')
+
+  const templates = [
+    { value: 'math', label: 'Math' },
+    { value: 'notes', label: 'Notes' },
+    { value: 'both', label: 'Math & Notes' },
+    { value: 'todo', label: 'To-Do List' },
+    { value: 'journal', label: 'Journal' },
+    { value: 'project', label: 'Project Plan' }
+  ]
+  const [search, setSearch] = useState('')
 
   const isMathExpression = (text: string) => /^[0-9+\-*/xX().^\s]+$/.test(text)
 
@@ -105,15 +118,15 @@ export function MathNotebookModule() {
     setShowHome(false)
   }
 
-  const createProblem = async () => {
+  const createProblem = async (name: string, template: string) => {
     if (!user) return
     const now = new Date().toISOString()
     const { data, error } = await supabase
       .from('math_problems')
       .insert({
         user_id: user.id,
-        name: `Problem ${problems.length + 1}`,
-        data: { elements: [], appState: {} },
+        name,
+        data: { elements: [], appState: { template } },
         last_opened: now
       })
       .select('id, name, data, updated_at, last_opened')
@@ -140,15 +153,15 @@ export function MathNotebookModule() {
     setShowHome(false)
   }
 
-  const addTab = async () => {
+  const addTab = async (name: string, template: string) => {
     if (!user) return
     const now = new Date().toISOString()
     const { data, error } = await supabase
       .from('math_problems')
       .insert({
         user_id: user.id,
-        name: `Problem ${problems.length + 1}`,
-        data: { elements: [], appState: {} },
+        name,
+        data: { elements: [], appState: { template } },
         last_opened: now
       })
       .select('id, name, data, updated_at, last_opened')
@@ -172,6 +185,22 @@ export function MathNotebookModule() {
     setTabs((prev) => [...prev, newTab])
     setActiveTabId(newTab.id)
     setProblems((prev) => [...prev, newTab])
+  }
+
+  const handleCreateNotebook = async () => {
+    const template = newNotebookTemplate
+    const defaultLabel =
+      templates.find((t) => t.value === template)?.label || 'Notebook'
+    const name =
+      newNotebookName.trim() || `${defaultLabel} ${problems.length + 1}`
+    if (showHome) {
+      await createProblem(name, template)
+    } else {
+      await addTab(name, template)
+    }
+    setShowNewModal(false)
+    setNewNotebookName('')
+    setNewNotebookTemplate('math')
   }
 
   const handleCloseTab = (id: string) => {
@@ -375,6 +404,10 @@ export function MathNotebookModule() {
       user?.email?.split('@')[0] ||
       'friend'
 
+    const filtered = problems.filter(p =>
+      p.name.toLowerCase().includes(search.toLowerCase()),
+    )
+
     return (
       <div className="harold-sky w-full max-w-7xl mx-auto space-y-8 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-6 rounded-xl">
         <div className="flex items-center justify-between">
@@ -387,13 +420,27 @@ export function MathNotebookModule() {
               down.
             </p>
           </div>
-          <button onClick={createProblem} className="btn-dreamy-primary text-sm">
+          <button
+            onClick={() => setShowNewModal(true)}
+            className="btn-dreamy-primary text-sm"
+          >
             Create New Notebook
           </button>
         </div>
-        {problems.length > 0 ? (
+        <div className="relative max-w-sm">
+          <Search className="w-5 h-5 text-purple-300 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search notebooks..."
+            aria-label="Search notebooks"
+            className="input-dreamy w-full pl-10 rounded-full border-2 border-purple-500 bg-purple-900/30 text-purple-100 placeholder-purple-300 focus:border-purple-300"
+          />
+        </div>
+        {filtered.length > 0 ? (
           <div className="columns-1 sm:columns-2 lg:columns-4 gap-6 space-y-6">
-            {[...problems]
+            {[...filtered]
               .sort(
                 (a, b) =>
                   new Date(b.lastOpened).getTime() -
@@ -433,7 +480,7 @@ export function MathNotebookModule() {
               ))}
           </div>
         ) : (
-          <p className="text-sm text-purple-200/70">No notebooks yet.</p>
+          <p className="text-sm text-purple-200/70">No notebooks found.</p>
         )}
       </div>
     )
@@ -477,7 +524,7 @@ export function MathNotebookModule() {
             </div>
           ))}
           <button
-            onClick={addTab}
+            onClick={() => setShowNewModal(true)}
             className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
             title="New Tab"
           >
@@ -545,6 +592,45 @@ export function MathNotebookModule() {
         )}
       </div>
       <MathSolver expression={mathExpression} />
+      {showNewModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
+            <h2 className="text-lg font-light">New Notebook</h2>
+            <input
+              value={newNotebookName}
+              onChange={(e) => setNewNotebookName(e.target.value)}
+              className="input-dreamy w-full text-sm"
+              placeholder="Notebook name"
+              autoFocus
+            />
+            <select
+              value={newNotebookTemplate}
+              onChange={(e) => setNewNotebookTemplate(e.target.value)}
+              className="input-dreamy w-full text-sm"
+            >
+              {templates.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+            <div className="space-y-2">
+              <button
+                onClick={handleCreateNotebook}
+                className="btn-dreamy-primary w-full text-sm bg-purple-600 hover:bg-purple-700 border-purple-700 text-white"
+              >
+                Create
+              </button>
+              <button
+                onClick={() => setShowNewModal(false)}
+                className="btn-dreamy w-full text-sm text-purple-100"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {renamingTab && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
