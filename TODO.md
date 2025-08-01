@@ -15,10 +15,12 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Bundled KaTeX and raised Workbox cache limit so math solver loads without module errors (2025-08-01 03:33:51 UTC).
+- Externalized KaTeX in build config to resolve Netlify build failure (2025-08-01 02:16:25 UTC).
 - Added math expression solver that detects equations and offers a Solve button in Math Notebook (2025-08-01 02:07:51 UTC).
 - Math Notebook dashboard now uses profile display name for greeting (2025-08-01 00:53:08 UTC).
 - Math Notebook now opens to a dashboard home listing all problems with a Create New Math Notebook button (2025-08-01 00:19:08 UTC).
 - Math Notebook dashboard greets users by name with a time-of-day message and Keep-style grid of notebooks (2025-08-01 00:31:23 UTC).
+- Math Notebook home now defaults to dark mode with a spacious Google Keep-style masonry layout and purple-sky palette (2025-08-01 02:13:08 UTC).
 - Math Notebook now uses a Harold and the Purple Crayon themed warning when closing tabs, with options to save before exit (2025-08-01 00:03:39 UTC).
 - Math Notebook tabs can be renamed, closed with confirmation, reopened, and auto-refresh from Supabase; history now shows exact timestamps (2025-07-31 23:35:07 UTC).
 - Added mobile padding for Math Notebook tabs so Change Log and Subscribe buttons no longer obscure them (2025-07-31 22:53:28 UTC).
