@@ -99,7 +99,7 @@ export function JournalModule() {
   }, {})
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-24">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-light text-purple-200 flex items-center gap-3">
           <NotebookPen className="w-8 h-8" />
