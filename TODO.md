@@ -36,6 +36,7 @@ This file tracks project progress and upcoming tasks.
 - Life Logistics address form now uses free OpenStreetMap Nominatim suggestions for quick address search (2025-08-01 16:58:29 UTC)
 - Fixed Math Solver history clear function so component parses correctly (2025-08-01 16:27:25 UTC)
 - Garbage schedule saves now populate the required date field so Supabase doesn't reject null values (2025-08-01 16:53:53 UTC).
+- Garbage schedule queries now filter by user ID to avoid 400 errors from row-level security (2025-08-01 18:19:18 UTC)
 - Dashboard sidebar now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out stay visible (2025-08-01 16:57:38 UTC).
 - Report Bug button slides beside the sidebar so it no longer covers Sign Out (2025-08-01 16:57:38 UTC).
 - Entrance animation duration is now configurable in Settings (2025-08-01 16:47:48 UTC).
