@@ -15,6 +15,14 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Math Notebook search now scans canvas text so notebooks can be found by their contents (2025-08-01 15:21:54 UTC).
+ - Fasting reminder now shows upcoming fast date and days remaining before the first Sunday (2025-08-01 15:09:18 UTC)
+ - Monthly fasting reminder now activates on the first Sunday of each month instead of the first day (2025-08-01 14:56:08 UTC)
+- Fixed active fast lookup to include user ID so TypeScript build succeeds (2025-08-01 14:06:31 UTC)
+- Fasting plan now displays a live countdown timer once started for clear tracking (2025-08-01 13:50:20 UTC)
+- Fasting reminder now relies solely on Supabase with no localStorage fallback (2025-08-01 13:39:47 UTC)
+- Fasting reminder persistence now stores acknowledgments in Supabase for cross-device sync (2025-08-01 13:36:00 UTC)
+- Fasting reminder now supports selecting duration and water options with plans saved to Supabase (2025-08-01 13:28:22 UTC)
+ - Monthly fasting reminder alerts users on the first of each month with a top-right toast (2025-08-01 13:15:31 UTC).
 - Create New Notebook modal now appears on the dashboard instead of inside open notes (2025-08-01 15:06:49 UTC).
 - Math Notebook tab close confirmation now appears above the canvas via a portal so it no longer hides under the drawing area (2025-08-01 13:55:07 UTC).
 - Refactored Math Notebook tab modals into portal-rendered components to fix Netlify JSX closing tag errors (2025-08-01 15:05:23 UTC).

@@ -4,6 +4,12 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Fasting reminder now displays upcoming fast date and days remaining before the first Sunday (2025-08-01 15:09:18 UTC)
+- Monthly fasting reminder now triggers on the first Sunday of each month with a top-right toast (2025-08-01 14:56:08 UTC)
+- Fasting plan now shows a live countdown timer once started so users can track remaining time (2025-08-01 13:50:28 UTC)
+- Fasting reminder acknowledgment now stored in Supabase so reminders sync across devices (2025-08-01 13:36:00 UTC)
+- Fasting reminder now lets users choose duration and water restrictions, storing plans in Supabase with health cautions (2025-08-01 13:28:22 UTC)
+- Monthly fasting reminder prompts users on the first of each month with a top-right toast and Start option (2025-08-01 13:15:31 UTC)
 - Users can create notebooks from templates like Math, Notes, To-Do List, Journal, or Project Plan with custom names (2025-08-01 13:48:00 UTC)
 - Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC)
 - Math Notebook home now includes a search bar to filter notebooks by title (2025-08-01 13:34:42 UTC)
@@ -38,6 +44,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires code "ZENZALIFE" and stores entries in Supabase.
 - Default Schedule modal now asks when your day started and shifts all tasks to match the chosen time.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires a secret code and stores entries in Supabase.
+### Fixed
+- Active fast lookup now includes user ID so Netlify builds succeed (2025-08-01 14:06:57 UTC)
 - Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
 
 ### Fixed
@@ -52,6 +60,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Changed
 - Math Notebook search now scans canvas text so results match drawings and notes (2025-08-01 15:21:54 UTC)
+- Fasting reminder no longer falls back to localStorage, relying solely on Supabase (2025-08-01 13:39:47 UTC)
 - Task Notes history search bar redesigned with a clear icon for easier filtering (2025-08-01 13:34:42 UTC)
 - Refresh button enlarged and always visible on mobile and desktop for easy reloading (2025-08-01 13:18:35 UTC)
 - Math Notebook background now shimmers with a Harold and the Purple Crayon & Vanilla Sky starfield for a magical feel (2025-08-01 12:52:11 UTC)
