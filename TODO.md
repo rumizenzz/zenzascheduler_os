@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Pull-to-refresh indicator no longer pushes dashboard content below the app, so sections start at the top without scrolling (2025-08-01 22:55:00 UTC)
 - Journal and Dream Journal Add buttons now sit above bottom controls so they're never hidden (2025-08-01 21:45:00 UTC)
 - Journal and Dream Journal entries now support editing and deleting with Supabase persistence (2025-08-01 21:30:00 UTC)
 - Magical journal module and lucid dream tracker save entries with Vanilla Sky styling (2025-08-01 20:12:17 UTC)

@@ -7,7 +7,7 @@ let initialized = false
 export function initPullToRefresh() {
   if (initialized) return
   PullToRefresh.init({
-    mainElement: 'body',
+    mainElement: '#root',
     instructionsPullToRefresh: 'Swipe down to refresh',
     instructionsReleaseToRefresh: 'Release to refresh',
     instructionsRefreshing: 'Refreshing...',
