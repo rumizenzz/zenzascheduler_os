@@ -270,7 +270,7 @@ export function ClockModule() {
           <button
             onClick={() => setMode('timer')}
             className={`px-4 py-1 rounded-full text-sm transition-colors ${
-              mode === 'timer' ? 'bg-white text-purple-900' : 'text-purple-100'
+              mode === 'timer' ? 'bg-purple-200 text-purple-900' : 'text-purple-100'
             }`}
           >
             Timer
@@ -278,7 +278,7 @@ export function ClockModule() {
           <button
             onClick={() => setMode('stopwatch')}
             className={`px-4 py-1 rounded-full text-sm transition-colors ${
-              mode === 'stopwatch' ? 'bg-white text-purple-900' : 'text-purple-100'
+              mode === 'stopwatch' ? 'bg-purple-200 text-purple-900' : 'text-purple-100'
             }`}
           >
             Stopwatch
@@ -291,9 +291,9 @@ export function ClockModule() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-light flex items-center gap-2">
-                <TimerIcon className="w-6 h-6 text-blue-300" /> Timers
+                <TimerIcon className="w-6 h-6 text-blue-100" /> Timers
               </h1>
-              <p className="text-purple-200/80 font-light mt-1">
+              <p className="text-purple-100 font-light mt-1">
                 Manage multiple countdowns for any activity
               </p>
             </div>
@@ -368,7 +368,7 @@ export function ClockModule() {
               </div>
             )}
             {presets.length === 0 ? (
-              <div className="text-center text-purple-200/80">No presets yet</div>
+              <div className="text-center text-purple-100">No presets yet</div>
             ) : (
               <div className="flex flex-wrap gap-2">
                 {presets.map(preset => (
@@ -391,7 +391,7 @@ export function ClockModule() {
               {timers.map(timer => (
                 <div key={timer.id} className="card-floating p-4 space-y-2 text-center">
                   <div className="text-lg font-medium text-gray-800">{timer.label}</div>
-                  <div className="text-3xl font-light text-blue-600">{format(timer.remaining)}</div>
+                  <div className="text-3xl font-light text-blue-800">{format(timer.remaining)}</div>
                   <div className="flex justify-center gap-3">
                     <button
                       onClick={() => toggleTimer(timer.id)}
@@ -419,13 +419,13 @@ export function ClockModule() {
         <div className="space-y-6 text-center">
           <div>
             <h1 className="text-2xl font-light flex items-center justify-center gap-2">
-              <TimerIcon className="w-6 h-6 text-blue-300" /> Stopwatch
+              <TimerIcon className="w-6 h-6 text-blue-100" /> Stopwatch
             </h1>
-            <p className="text-purple-200/80 font-light mt-1">
+            <p className="text-purple-100 font-light mt-1">
               Track elapsed time with style
             </p>
           </div>
-          <div className="text-5xl font-light text-blue-300">{formatStopwatch(swElapsed)}</div>
+          <div className="text-5xl font-light text-white">{formatStopwatch(swElapsed)}</div>
           <div className="flex justify-center gap-3">
             <button onClick={toggleStopwatch} className="btn-dreamy-primary px-4 py-2">
               {swRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
