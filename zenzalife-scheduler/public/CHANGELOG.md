@@ -8,6 +8,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
+- All-day task date input now uses a date-only value so browsers no longer warn about invalid format (2025-08-01 20:55 UTC)
 - Bundled pulltorefreshjs in Vite build so module specifier resolves during runtime (2025-08-01 20:14 UTC)
 - Externalized pulltorefreshjs in Vite configuration to resolve missing CSS module during builds (2025-08-01 20:00 UTC)
 - Removed duplicate editing preset state in Clock module that caused TypeScript redeclaration errors during builds (2025-08-01 18:53 UTC)

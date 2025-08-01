@@ -218,3 +218,6 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Added timer delete controls and persisted dashboard tab selections in Supabase.
 - Verified the repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 20:55 UTC)
+- Constrained all-day task start dates to date-only values to remove browser format warnings.
+- Verified the repository passes lint with `pnpm run lint`.
