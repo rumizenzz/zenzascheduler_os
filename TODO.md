@@ -16,6 +16,8 @@ This file tracks project progress and upcoming tasks.
 ## Latest Updates
 - Stopwatch sessions now save to Supabase with selectable timer presets (2025-08-01 17:26:56 UTC)
 - Clock module now unites timers and a stopwatch with a Harold and the Purple Crayon & Vanilla Sky starfield (2025-08-01 17:16:12 UTC)
+- Task modal now includes an All Day option so full-day tasks don't require times (2025-08-01 17:33:19 UTC).
+- Dashboard sections now scroll to the top when switching so content doesn't appear buried (2025-08-01 17:09:52 UTC).
 - Life Logistics address form now uses free OpenStreetMap Nominatim suggestions for quick address search (2025-08-01 16:58:29 UTC)
 - Fixed Math Solver history clear function so component parses correctly (2025-08-01 16:27:25 UTC)
 - Garbage schedule saves now populate the required date field so Supabase doesn't reject null values (2025-08-01 16:53:53 UTC).

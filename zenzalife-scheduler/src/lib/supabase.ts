@@ -39,6 +39,7 @@ export type Task = {
   category?: string
   start_time?: string
   end_time?: string
+  all_day?: boolean
   repeat_pattern?: string
   alarm?: boolean
   custom_sound_path?: string
