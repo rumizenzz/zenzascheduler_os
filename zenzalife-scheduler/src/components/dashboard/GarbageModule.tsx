@@ -85,6 +85,7 @@ export function GarbageModule() {
       const { data: scheduleData, error: scheduleError } = await supabase
         .from('garbage_schedule')
         .select('*')
+        .eq('user_id', user.id)
         .order('next_collection', { ascending: true })
       
       if (scheduleError) throw scheduleError
@@ -182,6 +183,7 @@ export function GarbageModule() {
           .from('garbage_schedule')
           .update(data)
           .eq('id', editingSchedule.id)
+          .eq('user_id', user.id)
         
         if (error) throw error
         toast.success('Schedule updated successfully!')
@@ -211,6 +213,7 @@ export function GarbageModule() {
         .from('garbage_schedule')
         .delete()
         .eq('id', id)
+        .eq('user_id', user.id)
       
       if (error) throw error
       
@@ -237,6 +240,7 @@ export function GarbageModule() {
           updated_at: new Date().toISOString()
         })
         .eq('id', schedule.id)
+        .eq('user_id', user.id)
       
       if (error) throw error
       
