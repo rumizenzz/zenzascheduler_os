@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- All-day toggle now converts start date formats so date inputs accept YYYY-MM-DD without errors (2025-08-01 19:00:11 UTC)
 - Fixed duplicate Clock module editing state so Netlify build no longer hits TypeScript redeclaration errors (2025-08-01 18:53:59 UTC)
 - Pull-to-refresh overlay loads its CSS so content appears without scrolling (2025-08-01 18:43:26 UTC)
 - Timer presets now editable so labels and durations can be updated (2025-08-01 18:26:51 UTC)

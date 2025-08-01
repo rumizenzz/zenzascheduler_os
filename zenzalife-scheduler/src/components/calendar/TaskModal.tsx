@@ -66,11 +66,15 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
         title: task.title || '',
         category: task.category || 'other',
         start_time: task.start_time
-          ? dayjs(task.start_time).local().format('YYYY-MM-DDTHH:mm')
+          ? task.all_day
+            ? dayjs(task.start_time).local().format('YYYY-MM-DD')
+            : dayjs(task.start_time).local().format('YYYY-MM-DDTHH:mm')
           : '',
-        end_time: task.end_time
-          ? dayjs(task.end_time).local().format('YYYY-MM-DDTHH:mm')
-          : '',
+        end_time: task.all_day
+          ? ''
+          : task.end_time
+            ? dayjs(task.end_time).local().format('YYYY-MM-DDTHH:mm')
+            : '',
         all_day: task.all_day || false,
         repeat_pattern: task.repeat_pattern || 'none',
         alarm: task.alarm || false,
@@ -136,7 +140,31 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
   }
 
   const handleChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+    if (field === 'all_day') {
+      if (value) {
+        const dateOnly = formData.start_time
+          ? dayjs(formData.start_time).format('YYYY-MM-DD')
+          : dayjs().format('YYYY-MM-DD')
+        setFormData(prev => ({
+          ...prev,
+          all_day: true,
+          start_time: dateOnly,
+          end_time: ''
+        }))
+      } else {
+        const start = formData.start_time
+          ? dayjs(formData.start_time).hour(9).minute(0)
+          : dayjs().hour(9).minute(0)
+        setFormData(prev => ({
+          ...prev,
+          all_day: false,
+          start_time: start.format('YYYY-MM-DDTHH:mm'),
+          end_time: start.add(1, 'hour').format('YYYY-MM-DDTHH:mm')
+        }))
+      }
+    } else {
+      setFormData(prev => ({ ...prev, [field]: value }))
+    }
   }
 
   const autoSetEndTime = () => {
