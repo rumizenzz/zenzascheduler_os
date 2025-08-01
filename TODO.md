@@ -33,6 +33,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Added Supabase tables for journal and dream journal entries to resolve missing relation errors (2025-08-01 21:08:22 UTC)
 - Magical journal module and lucid dream tracker save entries with Vanilla Sky styling (2025-08-01 20:12:17 UTC)
 - All-day task start date now stores only the date so browsers accept the value without errors (2025-08-01 20:55:54 UTC)
 - Bundled pulltorefreshjs in Vite build so module specifier resolves during runtime (2025-08-01 20:14:05 UTC)
