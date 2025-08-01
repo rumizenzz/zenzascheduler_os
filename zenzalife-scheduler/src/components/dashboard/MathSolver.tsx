@@ -99,6 +99,8 @@ export function MathSolver({ expression }: MathSolverProps) {
         .eq('user_id', user.id)
     }
     setHistory([])
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (isDesktop && e.key === 'Enter' && isMath && input) {
       e.preventDefault()
