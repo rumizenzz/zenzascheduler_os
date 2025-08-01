@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Changed
+- Journal and Dream Journal entries now show full timestamps down to the second (2025-08-01 22:48 UTC)
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
@@ -32,6 +33,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Tools button on the right side of the dashboard opens the IDE diff editor from any tab (2025-08-01 23:00 UTC)
 - Documented Magic Diff Editor location with a dedicated IDE section in the README and noted the IDE button on the right edge of every dashboard section (2025-08-01 22:30 UTC)
 - Added a Tools section to the README explaining the wrench-menu location and how to launch the diff editor or visit `/ide` directly (2025-08-01 22:40 UTC)
+- World Clock section lets users search time zones and displays selected times in a top-right overlay (2025-08-01 22:48 UTC)
 - Monaco-powered diff editor enables real-time side-by-side comparison with spinning Harold and the Purple Crayon & Vanilla Sky Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes controls (2025-08-01 22:10 UTC)
 - See All Reminders now opens a Harold and the Purple Crayon & Vanilla Sky window above the current panel (2025-08-01 21:30 UTC)
 - Garbage & Recycling schedules now appear in Reminders so upcoming collection days are highlighted (2025-08-01 18:51 UTC)
