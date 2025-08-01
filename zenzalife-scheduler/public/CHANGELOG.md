@@ -4,6 +4,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Daily and grace prayer calendars list every recording for a date so users can log unlimited prayers (2025-08-01 16:13:41 UTC)
+- Math Solver history now lets users clear all problems or delete individual entries (2025-08-01 16:05:39 UTC)
 - GED-style calculator in Math Notebook saves calculations to Supabase for persistent history (2025-08-01 16:09:50 UTC)
 - Pressing Enter on desktop solves Math Notebook problems without clicking the Solve button (2025-08-01 16:04:16 UTC)
 - Morning and night prayers display a live timer, save duration, and can be replayed from a date-based prayer calendar (2025-08-01 15:13:17 UTC)
@@ -39,6 +41,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Documented world-class agentic workflow in `AGENTS.md` and expanded `TODO.md` tracker. (2025-07-22 20:34:18 UTC)
 - Script `update:upcoming` exports Supabase upcoming releases to `UPCOMING_RELEASES.md`.
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
+
+### Fixed
+- Sanitized blank address IDs when saving garbage schedules so Supabase no longer rejects empty UUIDs (2025-08-01 16:13:26 UTC)
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
 - `update:upcoming` now mirrors upcoming releases into an **Upcoming Releases** section of the changelog. (2025-07-24 01:06:50 UTC)
 - Users see a "What's new" toast when new updates are published.
@@ -68,6 +73,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ### Changed
 - Plus button inside Math Notebook instantly opens a new Notes tab without a template prompt (2025-08-01 16:23:10 UTC)
+- Math Solver history now stores entries only in Supabase, dropping localStorage (2025-08-01 16:12:04 UTC)
 - Bug list access code updated to ZENZASECRETS for monthly report view (2025-08-01 15:50:22 UTC)
 - Math Notebook search now scans canvas text so results match drawings and notes (2025-08-01 15:21:54 UTC)
 - Fasting reminder no longer falls back to localStorage, relying solely on Supabase (2025-08-01 13:39:47 UTC)

@@ -165,8 +165,11 @@ export function GarbageModule() {
         editingSchedule?.next_collection
       )
       
+      // Normalize optional fields so Supabase doesn't receive empty strings
       const data = {
         ...scheduleData,
+        user_id: user.id,
+        address_id: scheduleData.address_id || null,
         next_collection: nextCollection,
         updated_at: new Date().toISOString()
       }
