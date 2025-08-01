@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Timer as TimerIcon, Plus, Pause, Play, RotateCcw } from 'lucide-react'
+import { Timer as TimerIcon, Plus, Pause, Play, RotateCcw, Pencil } from 'lucide-react'
 import { useAudio } from '@/hooks/useAudio'
 import {
   supabase,
@@ -22,6 +22,7 @@ export function ClockModule() {
   const [presetLabel, setPresetLabel] = useState('')
   const [presetMinutes, setPresetMinutes] = useState(0)
   const [presetSeconds, setPresetSeconds] = useState(0)
+  const [editingPreset, setEditingPreset] = useState<TimerPreset | null>(null)
   const [swElapsed, setSwElapsed] = useState(0)
   const [swRunning, setSwRunning] = useState(false)
   const [swLabel, setSwLabel] = useState('')
@@ -159,32 +160,60 @@ export function ClockModule() {
     void createTimer(preset.label, preset.duration)
   }
 
-  const addPreset = async () => {
+  const startEditing = (preset: TimerPreset) => {
+    setEditingPreset(preset)
+    setPresetLabel(preset.label)
+    setPresetMinutes(Math.floor(preset.duration / 60))
+    setPresetSeconds(preset.duration % 60)
+    setShowPresetForm(true)
+  }
+
+  const savePreset = async () => {
     if (!user) return
     const total = presetMinutes * 60 + presetSeconds
     if (total <= 0) return
     try {
-      const { data, error } = await supabase
-        .from('timer_presets')
-        .insert({
-          user_id: user.id,
-          label: presetLabel || 'Preset',
-          duration: total,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-        .select()
-        .single()
-      if (error) throw error
-      if (data) {
-        setPresets([...presets, data])
-        setShowPresetForm(false)
-        setPresetLabel('')
-        setPresetMinutes(0)
-        setPresetSeconds(0)
+      if (editingPreset) {
+        const { data, error } = await supabase
+          .from('timer_presets')
+          .update({
+            label: presetLabel || 'Preset',
+            duration: total,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', editingPreset.id)
+          .select()
+          .single()
+        if (error) throw error
+        if (data) {
+          setPresets(presets.map(p => (p.id === data.id ? data : p)))
+        }
+      } else {
+        const { data, error } = await supabase
+          .from('timer_presets')
+          .insert({
+            user_id: user.id,
+            label: presetLabel || 'Preset',
+            duration: total,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .select()
+          .single()
+        if (error) throw error
+        if (data) {
+          setPresets([...presets, data])
+        }
       }
+      setShowPresetForm(false)
+      setEditingPreset(null)
+      setPresetLabel('')
+      setPresetMinutes(0)
+      setPresetSeconds(0)
     } catch (error: any) {
-      toast.error('Failed to add preset: ' + error.message)
+      toast.error(
+        'Failed to ' + (editingPreset ? 'update' : 'add') + ' preset: ' + error.message
+      )
     }
   }
 
@@ -331,7 +360,13 @@ export function ClockModule() {
             <div className="flex items-center justify-between">
               <h2 className="font-medium text-gray-800">Presets</h2>
               <button
-                onClick={() => setShowPresetForm(s => !s)}
+                onClick={() => {
+                  setEditingPreset(null)
+                  setPresetLabel('')
+                  setPresetMinutes(0)
+                  setPresetSeconds(0)
+                  setShowPresetForm(s => !s)
+                }}
                 className="btn-dreamy-secondary px-2 py-1 flex items-center gap-1"
               >
                 <Plus className="w-4 h-4" /> Preset
@@ -362,8 +397,8 @@ export function ClockModule() {
                   onChange={e => setPresetSeconds(parseInt(e.target.value) || 0)}
                   className="input-dreamy w-20"
                 />
-                <button onClick={addPreset} className="btn-dreamy-primary flex items-center gap-1">
-                  <Plus className="w-4 h-4" /> Save
+                <button onClick={savePreset} className="btn-dreamy-primary flex items-center gap-1">
+                  <Plus className="w-4 h-4" /> {editingPreset ? 'Update' : 'Save'}
                 </button>
               </div>
             )}
@@ -372,13 +407,21 @@ export function ClockModule() {
             ) : (
               <div className="flex flex-wrap gap-2">
                 {presets.map(preset => (
-                  <button
-                    key={preset.id}
-                    onClick={() => applyPreset(preset)}
-                    className="btn-dreamy-secondary px-3 py-1"
-                  >
-                    {preset.label} ({format(preset.duration)})
-                  </button>
+                  <div key={preset.id} className="flex items-center gap-1">
+                    <button
+                      onClick={() => applyPreset(preset)}
+                      className="btn-dreamy-secondary px-3 py-1"
+                    >
+                      {preset.label} ({format(preset.duration)})
+                    </button>
+                    <button
+                      onClick={() => startEditing(preset)}
+                      className="text-purple-100 hover:text-white"
+                      aria-label="Edit preset"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
