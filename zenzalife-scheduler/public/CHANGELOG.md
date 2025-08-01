@@ -8,6 +8,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
+- Pull-to-refresh no longer attaches to `#root`, restoring dashboard content above the fold on load (2025-08-01 23:20 UTC)
+- Pull-to-refresh placeholder no longer pushes dashboard content below the app; sections now load at the top (2025-08-01 22:55 UTC)
 - Journal and Dream Journal Add buttons now sit above bottom controls so they remain clickable (2025-08-01 21:45 UTC)
 - Added missing Supabase tables for journal and dream journal entries to resolve relation errors (2025-08-01 21:08 UTC)
 - All-day task date input now uses a date-only value so browsers no longer warn about invalid format (2025-08-01 20:55 UTC)
