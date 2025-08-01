@@ -4,6 +4,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC)
+- Math Notebook home now includes a search bar to filter notebooks by title (2025-08-01 13:34:42 UTC)
 - Math Notebook dashboard displays last updated time for each notebook (2025-08-01 11:40:46 UTC)
 - Harold and the Purple Crayon/Vanilla Sky button toggles swipe-to-refresh per device (2025-08-01 11:39:36 UTC)
 - Math Notebook home highlights the most recently updated notebook with a "Most Recent" label (2025-08-01 11:17:01 UTC)
@@ -38,6 +40,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Task Notes history search bar redesigned with a clear icon for easier filtering (2025-08-01 13:34:42 UTC)
 - Swipe down refresh disabled by default unless enabled for the current device (2025-08-01 11:39:36 UTC)
 - Math Notebook now stores last opened times in Supabase for cross-device "Most Recent" labels (2025-08-01 11:42:02 UTC)
 - Math Notebook home dashboard uses profile display name for greeting (2025-08-01 00:53:08 UTC)
