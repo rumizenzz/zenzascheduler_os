@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Added a top-right Refresh button to manually reload the app (2025-08-01 11:52:14 UTC).
 - Math Notebook scans canvas text for equations, auto-filling the solver and supporting `^` exponents (2025-08-01 11:21:00 UTC).
 - Math Notebook dashboard now highlights the most recently updated notebook and labels it "Most Recent" (2025-08-01 11:17:01 UTC).
 - Math Notebook previews hide Excalidraw menus so sketches show in the dashboard (2025-08-01 11:17:01 UTC).

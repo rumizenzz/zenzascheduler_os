@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Added a top-right Refresh button to manually reload the app (2025-08-01 11:52:14 UTC)
 - Math Notebook home highlights the most recently updated notebook with a "Most Recent" label (2025-08-01 11:17:01 UTC)
 - Math Notebook now detects math expressions and offers a Solve button to compute results (2025-08-01 02:07:51 UTC)
 - Math Notebook opens to a dashboard home for browsing old problems and creating new notebooks (2025-08-01 00:19:08 UTC)

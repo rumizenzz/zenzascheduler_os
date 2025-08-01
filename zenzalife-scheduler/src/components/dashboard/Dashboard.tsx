@@ -36,6 +36,7 @@ import { MailingListPrompt } from "../auth/MailingListPrompt";
 import { OnboardingModal } from "../onboarding/OnboardingModal";
 import { Footer } from "../Footer";
 import { ChangeLogButton } from "../ChangeLogButton";
+import { RefreshButton } from "../RefreshButton";
 
 type DashboardTab =
   | "calendar"
@@ -261,6 +262,7 @@ export function Dashboard() {
       </div>
       <OnboardingModal />
       <MailingListPrompt />
+      <RefreshButton />
       <ChangeLogButton />
       <Footer />
     </div>
