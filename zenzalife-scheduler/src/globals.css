@@ -343,12 +343,14 @@
   cursor: pointer;
   transition: transform 0.3s ease;
   overflow: visible;
+  color: white !important;
+  background: linear-gradient(135deg, #ec4899, #fbbf24) !important;
+  box-shadow: 0 0 8px rgba(236, 72, 153, 0.4);
+  animation: love-pulse 3s ease-in-out infinite;
 }
 
 .special-occasion:hover {
   transform: scale(1.05);
-  color: white !important;
-  background: linear-gradient(135deg, #ec4899, #fbbf24) !important;
   box-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
   animation: love-pulse 1.5s ease-in-out infinite;
 }
