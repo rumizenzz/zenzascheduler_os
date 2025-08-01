@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { createPortal } from 'react-dom'
 import { Wrench, Code2, X } from 'lucide-react'
 import MagicDiffEditor from './MagicDiffEditor'
 
@@ -34,22 +33,20 @@ export function ToolsButton() {
           </div>
         </>
       )}
-      {showIDE &&
-        createPortal(
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
-            <div className="relative w-full max-w-5xl p-4">
-              <button
-                onClick={() => setShowIDE(false)}
-                className="absolute top-4 right-4 text-white hover:text-purple-200"
-                aria-label="Close IDE"
-              >
-                <X className="w-6 h-6" />
-              </button>
-              <MagicDiffEditor />
-            </div>
-          </div>,
-          document.body,
-        )}
+      {showIDE && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 harold-sky">
+          <div className="relative w-full max-w-5xl p-4">
+            <button
+              onClick={() => setShowIDE(false)}
+              className="absolute top-4 right-4 text-white hover:text-purple-200"
+              aria-label="Close IDE"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <MagicDiffEditor />
+          </div>
+        </div>
+      )}
     </>
   )
 }
