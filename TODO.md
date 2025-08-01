@@ -14,6 +14,12 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Dashboard scroll reset now also targets the root element so modules never appear below the app (2025-08-01 18:13:13 UTC).
+- Calendar Add Task button floats above Refresh, Change Log, and swipe-toggle controls so it's never hidden (2025-08-01 17:48:34 UTC).
+- Dashboard scroll reset now targets window, document, and body so new sections always start at the top (2025-08-01 17:48:34 UTC).
+- Dashboard now always opens modules at the top by disabling scroll restoration and resetting scroll before paint (2025-08-01 17:33:13 UTC).
+- Dashboard tabs now jump to the top instantly when switching so content never hides below prior scroll (2025-08-01 17:26:11 UTC).
+- Dashboard sections now scroll to the top when switching so content doesn't appear buried (2025-08-01 17:09:52 UTC).
 - Added Supabase tables for stopwatch history and timer presets to resolve missing relation errors (2025-08-01 17:53:27 UTC)
 - Stopwatch sessions now save to Supabase with selectable timer presets (2025-08-01 17:26:56 UTC)
 - Clock module now unites timers and a stopwatch with a Harold and the Purple Crayon & Vanilla Sky starfield (2025-08-01 17:16:12 UTC)

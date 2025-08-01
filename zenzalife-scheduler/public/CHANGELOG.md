@@ -8,6 +8,11 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
 - Switching dashboard sections now resets scroll position so content starts at the top (2025-08-01 17:09:52 UTC)
+- Removed smooth scroll animation when switching dashboard sections so content jumps to the top immediately (2025-08-01 17:26:11 UTC)
+- Dashboard always loads modules at the top by disabling scroll restoration and jumping to the start before paint (2025-08-01 17:33:13 UTC)
+- Dashboard sections now scroll the window, document, and body to the start so content never hides below prior scroll (2025-08-01 17:48:34 UTC)
+- Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
+- Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
 - Added Supabase tables for stopwatch history and timer presets so saved sessions load without missing relation errors (2025-08-01 17:53:27 UTC)
 - Reminders now pull upcoming calendar tasks and create matching tasks for new reminders so scheduling stays in sync (2025-08-01 17:44:00 UTC)

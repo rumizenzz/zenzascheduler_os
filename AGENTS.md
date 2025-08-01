@@ -169,6 +169,27 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Offset intermittent fasting reminder below top controls so buttons remain visible.
 - Verified the repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 17:09 UTC)
+- Ensured dashboard sections reset scroll position so new tabs open at the top.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 17:26 UTC)
+- Removed smooth scroll so dashboard tabs snap to the top immediately.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 17:33 UTC)
+- Disabled browser scroll restoration and scrolled before render so dashboard modules always open at the very top.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 17:48 UTC)
+- Reset window, document, and body scroll so dashboard sections always start at the top.
+- Moved the calendar Add Task button above bottom controls so it stays visible.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 18:13 UTC)
+- Scrolled the root element on tab changes so modules never appear beneath the dashboard.
+- Verified the repository passes lint with `pnpm run lint`.
+
 ### Codex Agent Reflection (2025-08-01 17:16 UTC)
 - Unified timers and a stopwatch into a single Clock module with Harold and the Purple Crayon & Vanilla Sky styling.
 - Verified the repository passes lint with `pnpm run lint`.
