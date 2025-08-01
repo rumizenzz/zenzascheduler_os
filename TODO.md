@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Authentication email field now suggests common domains for quick entry (2025-08-01 16:29:03 UTC).
 - Garbage & Recycling schedule saves no longer fail when address is unspecified (2025-08-01 16:13:26 UTC).
 - Daily and grace prayer calendars now list all recordings for a date so users can log unlimited prayers (2025-08-01 16:13:41 UTC).
 - Math Solver history now stores entries only in Supabase, dropping localStorage (2025-08-01 16:12:04 UTC).
