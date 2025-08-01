@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- GED calculator now pops above the Math Notebook canvas via a portal for clear visibility (2025-08-01 16:23:10 UTC).
+- Plus button in Math Notebook adds a new Notes tab without asking for a template (2025-08-01 16:23:10 UTC).
 - Intermittent fasting reminder now appears below top controls so buttons remain visible (2025-08-01 16:10:00 UTC).
 - GED-style calculator added to Math Notebook with Supabase history (2025-08-01 16:09:50 UTC).
 - Pressing Enter on desktop now solves Math Notebook problems (2025-08-01 16:04:16 UTC).

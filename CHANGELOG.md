@@ -51,6 +51,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Default Schedule modal now asks when your day started and shifts all tasks to match the chosen time.
 - Hidden upcoming releases admin accessed via a wood log icon in Settings. Requires a secret code and stores entries in Supabase.
 ### Fixed
+- GED calculator now renders above the Math Notebook canvas via a portal so it no longer hides behind drawings (2025-08-01 16:23:10 UTC)
 - Active fast lookup now includes user ID so Netlify builds succeed (2025-08-01 14:06:57 UTC)
 - Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
 - Intermittent fasting reminder now displays below top buttons so controls remain visible (2025-08-01 16:10:00 UTC)
@@ -66,6 +67,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Plus button inside Math Notebook instantly opens a new Notes tab without a template prompt (2025-08-01 16:23:10 UTC)
 - Bug list access code updated to ZENZASECRETS for monthly report view (2025-08-01 15:50:22 UTC)
 - Math Notebook search now scans canvas text so results match drawings and notes (2025-08-01 15:21:54 UTC)
 - Fasting reminder no longer falls back to localStorage, relying solely on Supabase (2025-08-01 13:39:47 UTC)
