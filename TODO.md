@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Math Notebook now opens to a dashboard home listing all problems with a Create New Math Notebook button (2025-08-01 00:19:08 UTC).
+- Math Notebook dashboard greets users by name with a time-of-day message and Keep-style grid of notebooks (2025-08-01 00:31:23 UTC).
 - Math Notebook now uses a Harold and the Purple Crayon themed warning when closing tabs, with options to save before exit (2025-08-01 00:03:39 UTC).
 - Math Notebook tabs can be renamed, closed with confirmation, reopened, and auto-refresh from Supabase; history now shows exact timestamps (2025-07-31 23:35:07 UTC).
 - Added mobile padding for Math Notebook tabs so Change Log and Subscribe buttons no longer obscure them (2025-07-31 22:53:28 UTC).
