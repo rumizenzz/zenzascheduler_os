@@ -189,7 +189,7 @@ export function LucidDreamJournalModule() {
               {editingId === entry.id ? (
                 <>
                   <div className="text-sm opacity-80">
-                    {dayjs(entry.created_at).format('YYYY-MM-DD HH:mm:ss')}
+                    {dayjs(entry.created_at).format('YYYY-MM-DD hh:mm:ss A')}
                   </div>
                   <textarea
                     className="textarea-dreamy w-full"
@@ -230,7 +230,7 @@ export function LucidDreamJournalModule() {
               ) : (
                 <>
                   <div className="text-sm opacity-80">
-                    {dayjs(entry.created_at).format('YYYY-MM-DD HH:mm:ss')}
+                    {dayjs(entry.created_at).format('YYYY-MM-DD hh:mm:ss A')}
                   </div>
                   <div className="whitespace-pre-wrap">{entry.description}</div>
                   <div className="text-sm mt-2">
