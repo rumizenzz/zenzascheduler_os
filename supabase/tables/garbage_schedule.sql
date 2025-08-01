@@ -7,6 +7,7 @@ CREATE TABLE garbage_schedule (
     collection_day VARCHAR(20) NOT NULL,
     collection_time VARCHAR(20),
     frequency VARCHAR(20) NOT NULL,
+    date DATE NOT NULL,
     next_collection DATE,
     auto_reminder BOOLEAN DEFAULT false,
     notes TEXT,

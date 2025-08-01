@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Garbage schedule saves now populate the required date field so Supabase doesn't reject null values (2025-08-01 16:53:53 UTC).
 - Entrance animation and sound preferences now persist in Supabase instead of local storage (2025-08-01 16:26:53 UTC).
 - Settings now let users disable the dreamlike entrance and its sound with a Save Changes button that warns of unsaved changes (2025-08-01 16:13:28 UTC).
 - Authentication email field now suggests common domains for quick entry (2025-08-01 16:29:03 UTC).
