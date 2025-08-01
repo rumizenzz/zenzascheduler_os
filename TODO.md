@@ -14,6 +14,10 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Fasting reminder now relies solely on Supabase with no localStorage fallback (2025-08-01 13:39:47 UTC)
+- Fasting reminder persistence now stores acknowledgments in Supabase for cross-device sync (2025-08-01 13:36:00 UTC)
+- Fasting reminder now supports selecting duration and water options with plans saved to Supabase (2025-08-01 13:28:22 UTC)
+ - Monthly fasting reminder alerts users on the first of each month with a top-right toast (2025-08-01 13:15:31 UTC).
 - Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC).
 - Scripture study now allows multiple verse entries per day with per-verse edit buttons (2025-08-01 12:56:35 UTC).
 - Math Notebook solver history now syncs to Supabase for cross-device persistence (2025-08-01 12:54:40 UTC).
