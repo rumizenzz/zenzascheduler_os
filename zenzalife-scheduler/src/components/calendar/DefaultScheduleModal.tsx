@@ -45,7 +45,11 @@ export function DefaultScheduleModal({ isOpen, onClose, onApply }: DefaultSchedu
     })()
     destroyPullToRefresh()
     return () => {
-      initPullToRefresh()
+      const isMobile = window.innerWidth < 768
+      const key = isMobile ? 'ptr-mobile-enabled' : 'ptr-desktop-enabled'
+      if (localStorage.getItem(key) === 'true') {
+        initPullToRefresh()
+      }
     }
   }, [isOpen, user])
 
