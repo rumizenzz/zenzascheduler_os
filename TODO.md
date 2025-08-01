@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Pull-to-refresh overlay loads its CSS so content appears without scrolling (2025-08-01 18:43:26 UTC)
+- Timer presets now editable so labels and durations can be updated (2025-08-01 18:26:51 UTC)
 - Timers now include a delete button so presets can be removed from the Clock module (2025-08-01 18:30:54 UTC)
 - Dashboard remembers the last visited tab using Supabase so returning users resume where they left off (2025-08-01 18:30:54 UTC)
 - Clock presets now support editing so labels and durations can be updated (2025-08-01 18:29:58 UTC)
