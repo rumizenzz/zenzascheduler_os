@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- New Notebook template selector now uses Harold and the Purple Crayon & Vanilla Sky colors so options stand out (2025-08-01 15:21:33 UTC).
 - Create New Notebook modal now appears on the dashboard instead of inside open notes (2025-08-01 15:06:49 UTC).
 - Math Notebook tab close confirmation now appears above the canvas via a portal so it no longer hides under the drawing area (2025-08-01 13:55:07 UTC).
 - Refactored Math Notebook tab modals into portal-rendered components to fix Netlify JSX closing tag errors (2025-08-01 15:05:23 UTC).

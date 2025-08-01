@@ -66,6 +66,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
 
 ### Fixed
+- New Notebook template selector now shines with Harold and the Purple Crayon & Vanilla Sky colors for easy visibility (2025-08-01 15:21:33 UTC)
 - Create New Notebook modal opens on the dashboard instead of inside previously viewed notebooks (2025-08-01 15:06:49 UTC)
 - Refresh button no longer obscured by Change Log and swipe refresh toggle (2025-08-01 13:47:46 UTC)
 - Math Notebook solver interprets `x` and `X` as multiplication and renders × in expressions (2025-08-01 13:21:25 UTC)
