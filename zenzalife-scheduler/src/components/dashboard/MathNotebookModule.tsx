@@ -50,6 +50,46 @@ export function MathNotebookModule() {
 
   const isMathExpression = (text: string) => /^[0-9+\-*/xX().^\s]+$/.test(text)
 
+  const NewNotebookModal = () => (
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+      <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
+        <h2 className="text-lg font-light">New Notebook</h2>
+        <input
+          value={newNotebookName}
+          onChange={(e) => setNewNotebookName(e.target.value)}
+          className="input-dreamy w-full text-sm"
+          placeholder="Notebook name"
+          autoFocus
+        />
+        <select
+          value={newNotebookTemplate}
+          onChange={(e) => setNewNotebookTemplate(e.target.value)}
+          className="input-dreamy w-full text-sm"
+        >
+          {templates.map((t) => (
+            <option key={t.value} value={t.value}>
+              {t.label}
+            </option>
+          ))}
+        </select>
+        <div className="space-y-2">
+          <button
+            onClick={handleCreateNotebook}
+            className="btn-dreamy-primary w-full text-sm bg-purple-600 hover:bg-purple-700 border-purple-700 text-white"
+          >
+            Create
+          </button>
+          <button
+            onClick={() => setShowNewModal(false)}
+            className="btn-dreamy w-full text-sm text-purple-100"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+
   useEffect(() => {
     if (!user) return
 
@@ -409,6 +449,7 @@ export function MathNotebookModule() {
     )
 
     return (
+      <>
       <div className="harold-sky w-full max-w-7xl mx-auto space-y-8 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-6 rounded-xl">
         <div className="flex items-center justify-between">
           <div>
@@ -483,6 +524,8 @@ export function MathNotebookModule() {
           <p className="text-sm text-purple-200/70">No notebooks found.</p>
         )}
       </div>
+      {showNewModal && <NewNotebookModal />}
+      </>
     )
   }
 
@@ -592,45 +635,7 @@ export function MathNotebookModule() {
         )}
       </div>
       <MathSolver expression={mathExpression} />
-      {showNewModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
-            <h2 className="text-lg font-light">New Notebook</h2>
-            <input
-              value={newNotebookName}
-              onChange={(e) => setNewNotebookName(e.target.value)}
-              className="input-dreamy w-full text-sm"
-              placeholder="Notebook name"
-              autoFocus
-            />
-            <select
-              value={newNotebookTemplate}
-              onChange={(e) => setNewNotebookTemplate(e.target.value)}
-              className="input-dreamy w-full text-sm"
-            >
-              {templates.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
-            <div className="space-y-2">
-              <button
-                onClick={handleCreateNotebook}
-                className="btn-dreamy-primary w-full text-sm bg-purple-600 hover:bg-purple-700 border-purple-700 text-white"
-              >
-                Create
-              </button>
-              <button
-                onClick={() => setShowNewModal(false)}
-                className="btn-dreamy w-full text-sm text-purple-100"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {showNewModal && <NewNotebookModal />}
       {renamingTab && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">

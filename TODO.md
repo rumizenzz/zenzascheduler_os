@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Create New Notebook modal now appears on the dashboard instead of inside open notes (2025-08-01 15:06:49 UTC).
 - Refresh, Change Log, and swipe-refresh toggle buttons rearranged so the Refresh button stays visible (2025-08-01 13:47:46 UTC).
 - New notebook modal lets you choose templates like Math, Notes, To-Do List, Journal, or Project Plan with a custom name (2025-08-01 13:48:00 UTC).
 - Math Notebook home now lets users search notebooks by title with a prominent search bar (2025-08-01 13:34:42 UTC).
