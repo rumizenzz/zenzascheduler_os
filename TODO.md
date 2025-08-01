@@ -15,6 +15,8 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Intermittent fasting reminder now appears below top controls so buttons remain visible (2025-08-01 16:10:00 UTC).
+- GED-style calculator added to Math Notebook with Supabase history (2025-08-01 16:09:50 UTC).
+- Pressing Enter on desktop now solves Math Notebook problems (2025-08-01 16:04:16 UTC).
 - Intermittent fasting reminder toast only captures clicks inside itself so calendar and bottom buttons remain visible (2025-08-01 15:55:20 UTC).
 - Intermittent fasting reminder now ignores pointer events so calendar and bottom buttons stay clickable (2025-08-01 15:47:02 UTC).
 - Grace prayers now track live duration and can be replayed by date from a calendar view (2025-08-01 15:29:18 UTC).

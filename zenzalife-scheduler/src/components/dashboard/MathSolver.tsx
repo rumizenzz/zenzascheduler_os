@@ -13,6 +13,9 @@ export function MathSolver({ expression }: MathSolverProps) {
   const [history, setHistory] = useState<{ expression: string; result: string }[]>([])
   const [showHistory, setShowHistory] = useState(false)
 
+  const isDesktop =
+    typeof navigator !== 'undefined' && !/Mobi|Android/i.test(navigator.userAgent)
+
   useEffect(() => {
     const stored = localStorage.getItem('mathSolverHistory')
     if (stored) {
@@ -74,6 +77,13 @@ export function MathSolver({ expression }: MathSolverProps) {
     }
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isDesktop && e.key === 'Enter' && isMath && input) {
+      e.preventDefault()
+      void handleSolve()
+    }
+  }
+
   return (
     <div className="space-y-2">
       <input
@@ -82,6 +92,7 @@ export function MathSolver({ expression }: MathSolverProps) {
           setInput(e.target.value)
           setResult(null)
         }}
+        onKeyDown={handleKeyDown}
         placeholder="Type a math expression"
         className="w-full p-2 border rounded"
       />
