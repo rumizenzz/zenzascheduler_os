@@ -14,7 +14,8 @@ import {
   supabase,
   Timer as TimerType,
   TimerPreset,
-  Stopwatch as StopwatchType
+  Stopwatch as StopwatchType,
+  WorldClockZone
 } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from 'react-hot-toast'
@@ -41,13 +42,7 @@ export function ClockModule() {
   const [swLabel, setSwLabel] = useState('')
   const [swHistory, setSwHistory] = useState<StopwatchType[]>([])
   const [zoneInput, setZoneInput] = useState('')
-  const [worldZones, setWorldZones] = useState<string[]>(() => {
-    try {
-      return JSON.parse(localStorage.getItem('worldZones') || '[]')
-    } catch {
-      return []
-    }
-  })
+  const [worldZones, setWorldZones] = useState<WorldClockZone[]>([])
   const [now, setNow] = useState(new Date())
   const { playAudio } = useAudio()
 
@@ -56,6 +51,7 @@ export function ClockModule() {
       loadTimers()
       loadPresets()
       loadStopwatches()
+      loadWorldZones()
     }
   }, [user])
 
@@ -143,14 +139,25 @@ export function ClockModule() {
     }
   }
 
+  const loadWorldZones = async () => {
+    if (!user) return
+    try {
+      const { data, error } = await supabase
+        .from('world_clock_zones')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at')
+      if (error) throw error
+      setWorldZones(data || [])
+    } catch (error: any) {
+      toast.error('Failed to load time zones: ' + error.message)
+    }
+  }
+
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 1000)
     return () => clearInterval(interval)
   }, [])
-
-  useEffect(() => {
-    localStorage.setItem('worldZones', JSON.stringify(worldZones))
-  }, [worldZones])
 
   const createTimer = async (timerLabel: string, totalSeconds: number) => {
     if (!user) return
@@ -343,18 +350,46 @@ export function ClockModule() {
     setSwElapsed(0)
   }
 
-  const addZone = () => {
-    if (!zoneInput || worldZones.includes(zoneInput)) return
+  const addZone = async () => {
+    if (!zoneInput || worldZones.some(z => z.zone === zoneInput)) return
     if (!allTimeZones.includes(zoneInput)) {
       toast.error('Invalid time zone')
       return
     }
-    setWorldZones([...worldZones, zoneInput])
-    setZoneInput('')
+    if (!user) return
+    try {
+      const { data, error } = await supabase
+        .from('world_clock_zones')
+        .insert({
+          user_id: user.id,
+          zone: zoneInput,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .select()
+        .single()
+      if (error) throw error
+      if (data) {
+        setWorldZones([...worldZones, data])
+        setZoneInput('')
+      }
+    } catch (error: any) {
+      toast.error('Failed to add time zone: ' + error.message)
+    }
   }
 
-  const removeZone = (zone: string) => {
-    setWorldZones(worldZones.filter(z => z !== zone))
+  const removeZone = async (id: string) => {
+    if (!user) return
+    try {
+      const { error } = await supabase
+        .from('world_clock_zones')
+        .delete()
+        .eq('id', id)
+      if (error) throw error
+      setWorldZones(worldZones.filter(z => z.id !== id))
+    } catch (error: any) {
+      toast.error('Failed to remove time zone: ' + error.message)
+    }
   }
 
   const formatZoneTime = (zone: string) =>
@@ -370,10 +405,10 @@ export function ClockModule() {
       <div className="fixed top-2 right-2 flex flex-col items-end gap-1 pointer-events-none z-50">
         {worldZones.map(zone => (
           <div
-            key={zone}
+            key={zone.id}
             className="bg-black/50 text-white text-xs px-2 py-1 rounded"
           >
-            {formatZoneTime(zone)} {zone}
+            {formatZoneTime(zone.zone)} {zone.zone}
           </div>
         ))}
       </div>
@@ -638,11 +673,11 @@ export function ClockModule() {
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {worldZones.map(zone => (
-                <div key={zone} className="card-floating p-4 space-y-2 text-center">
-                  <div className="text-lg font-medium text-gray-800">{zone}</div>
-                  <div className="text-3xl font-light text-blue-800">{formatZoneTime(zone)}</div>
+                <div key={zone.id} className="card-floating p-4 space-y-2 text-center">
+                  <div className="text-lg font-medium text-gray-800">{zone.zone}</div>
+                  <div className="text-3xl font-light text-blue-800">{formatZoneTime(zone.zone)}</div>
                   <button
-                    onClick={() => removeZone(zone)}
+                    onClick={() => removeZone(zone.id)}
                     className="btn-dreamy-secondary px-3 py-1 flex items-center gap-1 mx-auto"
                   >
                     <Trash2 className="w-4 h-4" /> Remove
