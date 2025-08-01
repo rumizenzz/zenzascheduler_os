@@ -33,12 +33,12 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Hovering Monthsary or Anniversary tasks now releases floating hearts for an affectionate celebration (2025-08-01 21:12:07 UTC)
 - Added Supabase tables for journal and dream journal entries to resolve missing relation errors (2025-08-01 21:08:22 UTC)
 - Magical journal module and lucid dream tracker save entries with Vanilla Sky styling (2025-08-01 20:12:17 UTC)
 - All-day task start date now stores only the date so browsers accept the value without errors (2025-08-01 20:55:54 UTC)
 - Bundled pulltorefreshjs in Vite build so module specifier resolves during runtime (2025-08-01 20:14:05 UTC)
 - Externalized pulltorefreshjs in Vite build to fix missing CSS module resolution (2025-08-01 20:00:18 UTC)
-- Monthsary and Anniversary tasks now sparkle with affectionate hover animations (2025-08-01 19:03:15 UTC)
 - Fixed duplicate Clock module editing state so Netlify build no longer hits TypeScript redeclaration errors (2025-08-01 18:53:59 UTC)
 - Pull-to-refresh overlay loads its CSS so content appears without scrolling (2025-08-01 18:43:26 UTC)
 - Timer presets now editable so labels and durations can be updated (2025-08-01 18:26:51 UTC)
