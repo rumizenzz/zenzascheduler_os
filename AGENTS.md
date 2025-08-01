@@ -85,3 +85,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Restyled Math Notebook with a spacious Google Keep-inspired masonry grid and default dark canvas.
 - Confirmed repository lint passes via `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-01 03:23 UTC)
+- Removed KaTeX from rollup externals so the module loads at runtime without errors.
+- Verified lint passes with `pnpm run lint`.
+
