@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast'
 import { MapPin, Plus, Home, Car, Briefcase, Building, DollarSign, Edit, Trash2 } from 'lucide-react'
 import { IncomeTracker } from './IncomeTracker'
 import dayjs from 'dayjs'
+import AddressSearch from './AddressSearch'
 
 type LogisticsTab = 'addresses' | 'vehicles' | 'jobs' | 'businesses' | 'income'
 
@@ -531,12 +532,16 @@ function LogisticsModal({ tab, item, onClose, onSave }: LogisticsModalProps) {
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Address Line 1</label>
-              <input
-                type="text"
+              <AddressSearch
                 value={formData.address_line1}
-                onChange={e => handleChange('address_line1', e.target.value)}
-                className="input-dreamy w-full"
-                required
+                onChange={value => handleChange('address_line1', value)}
+                onSelect={addr => {
+                  handleChange('address_line1', addr.address_line1)
+                  handleChange('city', addr.city)
+                  handleChange('state', addr.state)
+                  handleChange('zip', addr.zip)
+                  handleChange('country', addr.country)
+                }}
               />
             </div>
             <div className="space-y-2">
