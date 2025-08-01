@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import PullToRefresh from 'pulltorefreshjs'
+import 'pulltorefreshjs/dist/pulltorefresh.css'
 
 let initialized = false
 

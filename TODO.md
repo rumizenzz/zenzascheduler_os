@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Pull-to-refresh overlay loads its CSS so content appears without scrolling (2025-08-01 18:43:26 UTC)
 - Timer presets now editable so labels and durations can be updated (2025-08-01 18:26:51 UTC)
 - Manual garbage schedule saves now include a type value to satisfy Supabase not-null constraints (2025-08-01 18:15:30 UTC)
 - Clock module colors darkened so timers and presets are easy to read (2025-08-01 18:09:58 UTC)
