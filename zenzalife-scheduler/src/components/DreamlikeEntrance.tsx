@@ -20,6 +20,8 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
   useEffect(() => {
     if (!started) return
 
+    const duration = (profile?.entrance_duration_seconds ?? 6) * 1000
+
     // Generate floating particles
     const particleArray = Array.from({ length: 12 }, (_, i) => ({
       id: i,
@@ -34,15 +36,15 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
       playEntranceSound()
     }
 
-    // Allow skip after 3 seconds
+    // Allow skip halfway through the entrance
     const skipTimer = setTimeout(() => {
       setCanSkip(true)
-    }, 3000)
+    }, duration / 2)
 
-    // Auto-complete after 6 seconds
+    // Auto-complete after the configured duration
     const autoCompleteTimer = setTimeout(() => {
       handleComplete()
-    }, 6000)
+    }, duration)
 
     return () => {
       clearTimeout(skipTimer)
