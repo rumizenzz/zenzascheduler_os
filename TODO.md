@@ -15,6 +15,10 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Refresh, Change Log, and swipe-refresh toggle buttons rearranged so the Refresh button stays visible (2025-08-01 13:47:46 UTC).
+- New notebook modal lets you choose templates like Math, Notes, To-Do List, Journal, or Project Plan with a custom name (2025-08-01 13:48:00 UTC).
+- Math Notebook home now lets users search notebooks by title with a prominent search bar (2025-08-01 13:34:42 UTC).
+- Task Notes history search bar redesigned with a clear icon for easier filtering (2025-08-01 13:34:42 UTC).
+- Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC).
 - Math Notebook solver history now opens in a Harold and the Purple Crayon & Vanilla Sky window via a History button (2025-08-01 13:30:00 UTC).
 - Math Notebook solver interprets `x` and `X` as multiplication and displays × in expressions (2025-08-01 13:21:25 UTC).
 - Refresh button is now larger and always visible on mobile and desktop for easy reloading (2025-08-01 13:18:35 UTC).
