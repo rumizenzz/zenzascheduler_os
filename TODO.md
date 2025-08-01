@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- New Notebook template selector now uses Harold and the Purple Crayon & Vanilla Sky colors so options stand out (2025-08-01 15:21:33 UTC).
 - Relocated Refresh, Change Log, and swipe-refresh toggle buttons to the bottom-right so calendar actions remain accessible (2025-08-01 15:19:23 UTC).
 - Math Notebook search now scans canvas text so notebooks can be found by their contents (2025-08-01 15:21:54 UTC).
  - Fasting reminder now shows upcoming fast date and days remaining before the first Sunday (2025-08-01 15:09:18 UTC)

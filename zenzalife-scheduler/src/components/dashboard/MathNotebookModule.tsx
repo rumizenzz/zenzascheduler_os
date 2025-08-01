@@ -65,10 +65,10 @@ export function MathNotebookModule() {
         <select
           value={newNotebookTemplate}
           onChange={(e) => setNewNotebookTemplate(e.target.value)}
-          className="input-dreamy w-full text-sm"
+          className="select-dreamy w-full text-sm"
         >
           {templates.map((t) => (
-            <option key={t.value} value={t.value}>
+            <option key={t.value} value={t.value} className="bg-purple-900 text-purple-100">
               {t.label}
             </option>
           ))}
