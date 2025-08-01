@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Fixed duplicate Clock module editing state so Netlify build no longer hits TypeScript redeclaration errors (2025-08-01 18:53:59 UTC)
 - Pull-to-refresh overlay loads its CSS so content appears without scrolling (2025-08-01 18:43:26 UTC)
 - Timer presets now editable so labels and durations can be updated (2025-08-01 18:26:51 UTC)
 - Timers now include a delete button so presets can be removed from the Clock module (2025-08-01 18:30:54 UTC)
