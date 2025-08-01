@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Dashboard tabs now jump to the top instantly when switching so content never hides below prior scroll (2025-08-01 17:26:11 UTC).
+- Dashboard sections now scroll to the top when switching so content doesn't appear buried (2025-08-01 17:09:52 UTC).
 - Garbage schedule saves now populate the required date field so Supabase doesn't reject null values (2025-08-01 16:53:53 UTC).
 - Dashboard sidebar now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out stay visible (2025-08-01 16:57:38 UTC).
 - Report Bug button slides beside the sidebar so it no longer covers Sign Out (2025-08-01 16:57:38 UTC).

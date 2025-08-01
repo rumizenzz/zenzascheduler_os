@@ -97,6 +97,10 @@ export function Dashboard() {
   usePullToRefresh(pullRefreshEnabled);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTab]);
+
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setSidebarCollapsed(true);
