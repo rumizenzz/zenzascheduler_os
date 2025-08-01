@@ -5,6 +5,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ## [Unreleased]
 ### Added
 - Math Solver history now lets users clear all problems or delete individual entries (2025-08-01 16:05:39 UTC)
+- GED-style calculator in Math Notebook saves calculations to Supabase for persistent history (2025-08-01 16:09:50 UTC)
+- Pressing Enter on desktop solves Math Notebook problems without clicking the Solve button (2025-08-01 16:04:16 UTC)
 - Morning and night prayers display a live timer, save duration, and can be replayed from a date-based prayer calendar (2025-08-01 15:13:17 UTC)
 - Alarm window offers a Start Prayer button for Wake Up and Sleep tasks, recording dated morning and night prayers and letting grace prayers show dish photos on demand (2025-08-01 13:14:57 UTC)
 - Grace prayers now show a live timer, store duration, and replay from a date-filtered calendar with optional dish photos (2025-08-01 15:29:18 UTC)
@@ -52,6 +54,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Fixed
 - Active fast lookup now includes user ID so Netlify builds succeed (2025-08-01 14:06:57 UTC)
 - Admin changelog page now prompts for a secret code before access. (2025-07-22 17:15:12 UTC)
+- Intermittent fasting reminder now displays below top buttons so controls remain visible (2025-08-01 16:10:00 UTC)
 
 ### Fixed
 - Math Notebook tab close confirmation now appears above the canvas instead of hiding beneath it (2025-08-01 13:55:07 UTC)

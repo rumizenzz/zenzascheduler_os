@@ -19,6 +19,9 @@ export function MathSolver({ expression }: MathSolverProps) {
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [showHistory, setShowHistory] = useState(false)
 
+  const isDesktop =
+    typeof navigator !== 'undefined' && !/Mobi|Android/i.test(navigator.userAgent)
+
   useEffect(() => {
     const loadFromSupabase = async () => {
       const user = await getCurrentUser()
@@ -96,6 +99,11 @@ export function MathSolver({ expression }: MathSolverProps) {
         .eq('user_id', user.id)
     }
     setHistory([])
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isDesktop && e.key === 'Enter' && isMath && input) {
+      e.preventDefault()
+      void handleSolve()
+    }
   }
 
   return (
@@ -106,6 +114,7 @@ export function MathSolver({ expression }: MathSolverProps) {
           setInput(e.target.value)
           setResult(null)
         }}
+        onKeyDown={handleKeyDown}
         placeholder="Type a math expression"
         className="w-full p-2 border rounded"
       />
