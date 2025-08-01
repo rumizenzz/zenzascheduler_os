@@ -14,6 +14,9 @@ export default defineConfig({
       devOptions: {
         enabled: true
       },
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+      },
       manifest: {
         name: 'ZenzaLife Scheduler',
         short_name: 'ZenzaLife',
