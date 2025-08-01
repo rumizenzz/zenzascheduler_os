@@ -38,6 +38,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Documented world-class agentic workflow in `AGENTS.md` and expanded `TODO.md` tracker. (2025-07-22 20:34:18 UTC)
 - Script `update:upcoming` exports Supabase upcoming releases to `UPCOMING_RELEASES.md`.
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
+
+### Fixed
+- Sanitized blank address IDs when saving garbage schedules so Supabase no longer rejects empty UUIDs (2025-08-01 16:13:26 UTC)
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
 - `update:upcoming` now mirrors upcoming releases into an **Upcoming Releases** section of the changelog. (2025-07-24 01:06:50 UTC)
 - Users see a "What's new" toast when new updates are published.
