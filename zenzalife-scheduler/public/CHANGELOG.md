@@ -76,6 +76,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
 
 ### Fixed
+- Intermittent fasting reminder no longer intercepts calendar or bottom button clicks (2025-08-01 15:47:02 UTC)
 - New Notebook template selector now shines with Harold and the Purple Crayon & Vanilla Sky colors for easy visibility (2025-08-01 15:21:33 UTC)
 - Refresh, Change Log, and swipe-refresh toggle buttons moved to the bottom-right so they no longer cover calendar actions (2025-08-01 15:19:23 UTC)
 - Create New Notebook modal opens on the dashboard instead of inside previously viewed notebooks (2025-08-01 15:06:49 UTC)
