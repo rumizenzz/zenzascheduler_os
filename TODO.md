@@ -1,4 +1,4 @@
-# Changelog
+# TODO Tracker
 
 All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in this file. This project follows [Semantic Versioning](https://semver.org/) and the [Keep a Changelog](https://keepachangelog.com/) format.
 
@@ -38,6 +38,9 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59:00 UTC)
+- Added a Tools button on the dashboard that opens the IDE diff editor from any tab (2025-08-01 23:00:00 UTC)
+- Added a Tools section to the README explaining where the wrench menu lives and how to open the diff editor or jump to `/ide` (2025-08-01 22:40:00 UTC)
+- Documented Magic Diff Editor location with a dedicated IDE section in the README and noted the IDE button on the right edge of every dashboard section (2025-08-01 22:30:00 UTC)
 - World Clock section lets users search time zones and shows selected times in a top-right overlay (2025-08-01 22:48:00 UTC)
 - Journal and Dream Journal entries now display full timestamps down to seconds (2025-08-01 22:48:00 UTC)
 - Diff editor now uses Monaco for real-time side-by-side comparisons with spinning Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes controls (2025-08-01 22:10:00 UTC)
@@ -424,6 +427,8 @@ This file tracks project progress and upcoming tasks.
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Added a Tools section to the README explaining the wrench-menu location and how to launch the diff editor or visit `/ide` directly (2025-08-01 22:40 UTC)
+- Documented Magic Diff Editor location with a dedicated IDE section in the README (2025-08-01 22:30 UTC)
 - See All Reminders now opens a Harold and the Purple Crayon & Vanilla Sky window above the current panel (2025-08-01 21:30 UTC)
 - Garbage & Recycling schedules now appear in Reminders so upcoming collection days are highlighted (2025-08-01 18:51 UTC)
 - Magical purple Journal and Lucid Dream Journal modules save daily entries with lucidity tracking (2025-08-01 20:12 UTC)
