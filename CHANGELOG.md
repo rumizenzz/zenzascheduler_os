@@ -9,6 +9,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Fixed
 - Switching dashboard sections now resets scroll position so content starts at the top (2025-08-01 17:09:52 UTC)
 ### Added
+- Reminders now pull upcoming calendar tasks and create matching tasks for new reminders so scheduling stays in sync (2025-08-01 17:44:00 UTC)
+- Reminders modal now lists Intermittent Fasting & Prayer countdown so monthly fasts show alongside other tasks (2025-08-01 17:38:05 UTC)
+- Reminders now save to Supabase with an Add Reminder form for persistent countdowns (2025-08-01 17:30:21 UTC)
+- Monthsary and 1 Year Anniversary task categories with a Reminders button that counts down to upcoming tasks and celebrates special days (2025-08-01 17:20:29 UTC)
 - Life Logistics address form now offers free OpenStreetMap Nominatim search suggestions for quick entry (2025-08-01 16:58:29 UTC)
 - Entrance animation duration can now be customized in Settings (2025-08-01 16:47:48 UTC)
 - Settings now allow disabling the dreamlike entrance and its sound via a Save Changes button; unsaved changes trigger a Harold and the Purple Crayon & Vanilla Sky warning window (2025-08-01 16:13:28 UTC)

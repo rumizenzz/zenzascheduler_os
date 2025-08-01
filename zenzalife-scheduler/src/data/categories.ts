@@ -12,6 +12,8 @@ export const categories: TaskCategory[] = [
   { value: 'work', label: 'Work', color: '#10b981', icon: '💼' },
   { value: 'personal', label: 'Personal', color: '#6366f1', icon: '🌟' },
   { value: 'family', label: 'Family', color: '#ef4444', icon: '👪' },
+  { value: 'monthsary', label: 'Monthsary', color: '#d946ef', icon: '🌙' },
+  { value: 'anniversary', label: '1 Year Anniversary', color: '#fbbf24', icon: '🎉' },
   { value: 'hygiene', label: 'Hygiene', color: '#0ea5e9', icon: '🛁' },
   { value: 'meal', label: 'Meal', color: '#65a30d', icon: '🍽️' },
   { value: 'doordash', label: 'DoorDash', color: '#ee2723', icon: '🍔' },
