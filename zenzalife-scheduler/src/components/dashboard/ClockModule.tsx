@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Timer as TimerIcon, Plus, Pause, Play, RotateCcw } from 'lucide-react'
+import { Timer as TimerIcon, Plus, Pause, Play, RotateCcw, Trash2 } from 'lucide-react'
 import { useAudio } from '@/hooks/useAudio'
 import {
   supabase,
@@ -241,6 +241,17 @@ export function ClockModule() {
     void updateTimerDb(id, { remaining: duration, running: false })
   }
 
+  const deleteTimer = async (id: string) => {
+    if (!user) return
+    try {
+      const { error } = await supabase.from('timers').delete().eq('id', id)
+      if (error) throw error
+      setTimers(prev => prev.filter(t => t.id !== id))
+    } catch (error: any) {
+      toast.error('Failed to delete timer: ' + error.message)
+    }
+  }
+
   const format = (total: number) => {
     const m = Math.floor(total / 60)
     const s = total % 60
@@ -408,6 +419,12 @@ export function ClockModule() {
                       className="btn-dreamy-secondary px-3 py-1"
                     >
                       <RotateCcw className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => deleteTimer(timer.id)}
+                      className="btn-dreamy-secondary px-3 py-1"
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>

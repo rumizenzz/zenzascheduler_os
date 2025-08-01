@@ -27,6 +27,7 @@ export type User = {
   entrance_sound_enabled?: boolean
   entrance_animation_enabled?: boolean
   entrance_duration_seconds?: number
+  last_dashboard_tab?: string
   last_login?: string
   created_at?: string
   updated_at?: string

@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Timers now include a delete button so presets can be removed from the Clock module (2025-08-01 18:30:54 UTC)
+- Dashboard remembers the last visited tab using Supabase so returning users resume where they left off (2025-08-01 18:30:54 UTC)
 - Manual garbage schedule saves now include a type value to satisfy Supabase not-null constraints (2025-08-01 18:15:30 UTC)
 - Clock module colors darkened so timers and presets are easy to read (2025-08-01 18:09:58 UTC)
 - Dashboard scroll reset now also targets the root element so modules never appear below the app (2025-08-01 18:13:13 UTC).
