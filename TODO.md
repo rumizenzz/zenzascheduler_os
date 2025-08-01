@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- New notebook modal lets you choose templates like Math, Notes, To-Do List, Journal, or Project Plan with a custom name (2025-08-01 13:48:00 UTC).
 - Math Notebook solver interprets `x` and `X` as multiplication and displays × in expressions (2025-08-01 13:21:25 UTC).
 - Refresh button is now larger and always visible on mobile and desktop for easy reloading (2025-08-01 13:18:35 UTC).
 - Calendar action buttons now wrap on desktop so no options are cut off (2025-08-01 13:18:35 UTC).
