@@ -36,7 +36,7 @@ export function MathNotebookModule() {
   const [mathExpression, setMathExpression] = useState<string | null>(null)
   const [search, setSearch] = useState('')
 
-  const isMathExpression = (text: string) => /^[0-9+\-*/().^\s]+$/.test(text)
+  const isMathExpression = (text: string) => /^[0-9+\-*/xX().^\s]+$/.test(text)
 
   useEffect(() => {
     if (!user) return
@@ -381,7 +381,7 @@ export function MathNotebookModule() {
     )
 
     return (
-      <div className="w-full max-w-7xl mx-auto space-y-8 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-6 rounded-xl">
+      <div className="harold-sky w-full max-w-7xl mx-auto space-y-8 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-6 rounded-xl">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-semibold text-purple-200">
@@ -456,7 +456,7 @@ export function MathNotebookModule() {
   }
 
   return (
-    <div className="space-y-4 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-4 sm:p-6 rounded-xl">
+    <div className="harold-sky space-y-4 text-gray-100 bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 p-4 sm:p-6 rounded-xl">
       <div className="flex items-center gap-2">
         <button
           onClick={() => {
