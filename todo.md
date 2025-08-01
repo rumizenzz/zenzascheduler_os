@@ -72,4 +72,5 @@
 - Collaborative commenting and family engagement features
 - Custom alarms with upload capability
 - Growth dashboards and progress visualization
+- Monthly first-of-month fasting and prayer reminder for LDS tradition with customizable duration, water options, and a live countdown timer saved to Supabase
 - Template system for schedule management

@@ -4,6 +4,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Fasting plan now shows a live countdown timer once started so users can track remaining time (2025-08-01 13:50:28 UTC)
+- Fasting reminder acknowledgment now stored in Supabase so reminders sync across devices (2025-08-01 13:36:00 UTC)
+- Fasting reminder now lets users choose duration and water restrictions, storing plans in Supabase with health cautions (2025-08-01 13:28:22 UTC)
+- Monthly fasting reminder prompts users on the first of each month with a top-right toast and Start option (2025-08-01 13:15:31 UTC)
 - Task Notes history now supports text search to find past comments quickly (2025-08-01 12:57:51 UTC)
 - Spiritual study supports multiple verse entries per day with an Add Verse Entry button and per-verse edit controls (2025-08-01 12:56:35 UTC)
 - Math Notebook solver history now saves to Supabase for cross-device sync (2025-08-01 12:54:40 UTC)
@@ -43,6 +47,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse of the Day now records the translation or Book of Mormon reference when saved to Spiritual Study (2025-07-24 03:00:00 UTC)
 
 ### Changed
+- Fasting reminder no longer falls back to localStorage, relying solely on Supabase (2025-08-01 13:39:47 UTC)
 - Math Notebook background now shimmers with a Harold and the Purple Crayon & Vanilla Sky starfield for a magical feel (2025-08-01 12:52:11 UTC)
 - Swipe down refresh disabled by default unless enabled for the current device (2025-08-01 11:39:36 UTC)
 - Math Notebook now stores last opened times in Supabase for cross-device "Most Recent" labels (2025-08-01 11:42:02 UTC)
