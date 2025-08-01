@@ -155,6 +155,12 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Verified repository passes lint with `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-01 16:13 UTC)
+- Added Settings safeguards so users can disable the entrance animation and sound with a Save Changes button.
+- Confirmed lint passes with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-01 16:26 UTC)
+- Persisted entrance animation and sound preferences in Supabase instead of local storage.
+- Verified repository lint passes via `pnpm run lint`.
 - Sanitized garbage schedule saves by converting blank address IDs to null.
 - Confirmed repository passes lint and tests with `pnpm run lint` and `pnpm test`.
 - Sorted daily and grace prayer lists chronologically with numbering so users can log unlimited prayers per day.

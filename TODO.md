@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Entrance animation and sound preferences now persist in Supabase instead of local storage (2025-08-01 16:26:53 UTC).
+- Settings now let users disable the dreamlike entrance and its sound with a Save Changes button that warns of unsaved changes (2025-08-01 16:13:28 UTC).
 - Authentication email field now suggests common domains for quick entry (2025-08-01 16:29:03 UTC).
 - GED calculator now pops above the Math Notebook canvas via a portal for clear visibility (2025-08-01 16:23:10 UTC).
 - Plus button in Math Notebook adds a new Notes tab without asking for a template (2025-08-01 16:23:10 UTC).
