@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Math Notebook now detects math expressions and offers a Solve button to compute results (2025-08-01 02:07:51 UTC)
 - Math Notebook opens to a dashboard home for browsing old problems and creating new notebooks (2025-08-01 00:19:08 UTC)
 - Math Notebook dashboard greets users by name with a time-of-day message and Keep-style grid of notebooks (2025-08-01 00:31:23 UTC)
 - Math Notebook tabs can be renamed, closed with confirmation, reopened, and auto-refresh from Supabase; history shows full timestamps (2025-07-31 23:35:07 UTC)
@@ -41,6 +42,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
 
 ### Fixed
+- Externalized KaTeX in Vite build config to resolve Netlify deployment error (2025-08-01 02:16:25 UTC)
 - Math Notebook tabs no longer hide beneath Change Log and Subscribe buttons on mobile (2025-07-31 22:53:28 UTC)
 - PWA install prompt now waits for a user gesture, preventing `NotAllowedError` on modern browsers (2025-07-31 21:23:15 UTC)
 - Stripped collaborator maps from saved Excalidraw app state so Math Notebook sketches no longer throw runtime errors (2025-07-31 21:23:15 UTC)

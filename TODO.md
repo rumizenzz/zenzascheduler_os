@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Externalized KaTeX in build config to resolve Netlify build failure (2025-08-01 02:16:25 UTC).
+- Added math expression solver that detects equations and offers a Solve button in Math Notebook (2025-08-01 02:07:51 UTC).
 - Math Notebook dashboard now uses profile display name for greeting (2025-08-01 00:53:08 UTC).
 - Math Notebook now opens to a dashboard home listing all problems with a Create New Math Notebook button (2025-08-01 00:19:08 UTC).
 - Math Notebook dashboard greets users by name with a time-of-day message and Keep-style grid of notebooks (2025-08-01 00:31:23 UTC).
