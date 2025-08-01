@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Diff editor now uses Monaco for real-time side-by-side comparisons with spinning Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes controls (2025-08-01 22:10:00 UTC)
+- Prototype diff editor adds Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes with Harold and the Purple Crayon & Vanilla Sky spins (2025-08-01 21:48:45 UTC)
 - "See All Reminders" button opens a Harold and the Purple Crayon & Vanilla Sky window above the existing panel (2025-08-01 21:30:00 UTC)
 - Fixed Netlify build failure by removing duplicate variables in Reminders and Clock modules (2025-08-01 19:05:00 UTC)
 - Garbage & Recycling schedules now appear in Reminders so upcoming collections are counted down (2025-08-01 18:51:54 UTC)
