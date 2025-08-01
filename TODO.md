@@ -14,6 +14,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Dashboard sidebar now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out stay visible (2025-08-01 16:57:38 UTC).
+- Report Bug button slides beside the sidebar so it no longer covers Sign Out (2025-08-01 16:57:38 UTC).
 - Entrance animation duration is now configurable in Settings (2025-08-01 16:47:48 UTC).
 - Renaming a Math Notebook tab now shows only a single portal modal above the canvas, removing the duplicate window (2025-08-01 16:50:04 UTC)
 - Entrance animation and sound preferences now persist in Supabase instead of local storage (2025-08-01 16:26:53 UTC).

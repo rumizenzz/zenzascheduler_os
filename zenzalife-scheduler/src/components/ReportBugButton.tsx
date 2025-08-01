@@ -2,9 +2,15 @@ import React, { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 
-export function ReportBugButton() {
+interface Props {
+  sidebarCollapsed: boolean
+  isMobile: boolean
+}
+
+export function ReportBugButton({ sidebarCollapsed, isMobile }: Props) {
   const [open, setOpen] = useState(false)
   const [description, setDescription] = useState('')
+  const left = sidebarCollapsed ? (isMobile ? '1rem' : '5rem') : '17rem'
   const submitBug = async () => {
     if (!description.trim()) return
     const { error } = await supabase.from('bugs').insert({ description })
@@ -20,7 +26,8 @@ export function ReportBugButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 left-4 z-50 btn-dreamy flex items-center gap-2 text-xs"
+        className="fixed bottom-4 z-40 btn-dreamy flex items-center gap-2 text-xs"
+        style={{ left }}
         title="Report a Bug"
       >
         <BugIcon className="w-4 h-4 text-purple-600" />
@@ -28,10 +35,10 @@ export function ReportBugButton() {
       </button>
       {open && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-4 space-y-3 w-full max-w-sm">
+          <div className="harold-sky bg-purple-950 border-2 border-purple-400 rounded-lg p-4 space-y-3 w-full max-w-sm text-purple-100">
             <h2 className="text-lg font-light text-center">Report a Bug</h2>
             <textarea
-              className="border rounded w-full p-2 text-sm"
+              className="border rounded w-full p-2 text-sm text-gray-800"
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
