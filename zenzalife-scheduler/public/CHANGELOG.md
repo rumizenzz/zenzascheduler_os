@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Life Logistics address form now offers Mapbox-powered search suggestions for quick entry (2025-08-01 16:27:25 UTC)
 - Daily and grace prayer calendars list every recording for a date so users can log unlimited prayers (2025-08-01 16:13:41 UTC)
 - Math Solver history now lets users clear all problems or delete individual entries (2025-08-01 16:05:39 UTC)
 - GED-style calculator in Math Notebook saves calculations to Supabase for persistent history (2025-08-01 16:09:50 UTC)
@@ -43,6 +44,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - ChangeLogButton now fetches and displays this changelog alongside Supabase entries.
 
 ### Fixed
+- Restored missing brace in Math Solver history clear function so lint passes (2025-08-01 16:27:25 UTC)
 - Sanitized blank address IDs when saving garbage schedules so Supabase no longer rejects empty UUIDs (2025-08-01 16:13:26 UTC)
 - Changelog entries now include version, title, tags, and icon URL with exact timestamps.
 - `update:upcoming` now mirrors upcoming releases into an **Upcoming Releases** section of the changelog. (2025-07-24 01:06:50 UTC)
