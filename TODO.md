@@ -14,6 +14,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Morning and night prayers now record audio from alarm Start Prayer button with organized playback, and grace prayers include viewable dish images (2025-08-01 13:14:57 UTC).
 - Scripture study now allows multiple verse entries per day with per-verse edit buttons (2025-08-01 12:56:35 UTC).
 - Math Notebook solver history now syncs to Supabase for cross-device persistence (2025-08-01 12:54:40 UTC).
 - Math Notebook solver now remembers previously solved problems across sessions (2025-08-01 12:48:12 UTC).
