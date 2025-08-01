@@ -67,6 +67,7 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
   })
   const [appearanceSettings, setAppearanceSettings] = useState({
     showEntrance: profile?.entrance_animation_enabled ?? true,
+    entranceDuration: profile?.entrance_duration_seconds ?? 6,
     smoothTransitions: true
   })
   const [unsavedChanges, setUnsavedChanges] = useState(false)
@@ -105,7 +106,8 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
       localStorage.setItem('customAlarmSounds', JSON.stringify(audioSettings.custom_alarms))
       await updateUserProfile(user.id, {
         entrance_sound_enabled: audioSettings.entrance_sound,
-        entrance_animation_enabled: appearanceSettings.showEntrance
+        entrance_animation_enabled: appearanceSettings.showEntrance,
+        entrance_duration_seconds: appearanceSettings.entranceDuration
       })
       await refreshProfile()
       toast.success('Settings saved')
@@ -132,7 +134,8 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
       }))
       setAppearanceSettings(prev => ({
         ...prev,
-        showEntrance: profile.entrance_animation_enabled ?? true
+        showEntrance: profile.entrance_animation_enabled ?? true,
+        entranceDuration: profile.entrance_duration_seconds ?? 6
       }))
       setUnsavedChanges(false)
     }
@@ -599,6 +602,26 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
                   />
                   <span className="text-sm text-gray-700">Show entrance animation</span>
                 </label>
+
+                {appearanceSettings.showEntrance && (
+                  <div className="flex items-center gap-3">
+                    <input
+                      name="entranceDuration"
+                      type="number"
+                      min={1}
+                      value={appearanceSettings.entranceDuration}
+                      onChange={e => {
+                        setAppearanceSettings(prev => ({
+                          ...prev,
+                          entranceDuration: parseInt(e.target.value) || 0
+                        }))
+                        setUnsavedChanges(true)
+                      }}
+                      className="w-20 px-2 py-1 border border-gray-300 rounded-md text-sm"
+                    />
+                    <span className="text-sm text-gray-700">Entrance duration (seconds)</span>
+                  </div>
+                )}
 
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
