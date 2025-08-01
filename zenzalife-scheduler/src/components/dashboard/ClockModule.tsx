@@ -23,7 +23,6 @@ export function ClockModule() {
   const [presetLabel, setPresetLabel] = useState('')
   const [presetMinutes, setPresetMinutes] = useState(0)
   const [presetSeconds, setPresetSeconds] = useState(0)
-  const [editingPreset, setEditingPreset] = useState<TimerPreset | null>(null)
   const [swElapsed, setSwElapsed] = useState(0)
   const [swRunning, setSwRunning] = useState(false)
   const [swLabel, setSwLabel] = useState('')

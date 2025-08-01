@@ -8,6 +8,20 @@ import {
   getCurrentUser
 } from '@/lib/supabase'
 
+const wasteLabels: Record<string, string> = {
+  trash: 'Garbage',
+  recycling: 'Recycling',
+  yard_waste: 'Yard Waste',
+  bulk: 'Bulk Items',
+  hazardous: 'Hazardous Waste'
+}
+
+type GarbageSchedule = {
+  id: string
+  waste_type: string
+  next_collection: string
+}
+
 export function RemindersButton() {
   const [open, setOpen] = useState(false)
   const [reminders, setReminders] = useState<Reminder[]>([])
@@ -53,6 +67,29 @@ export function RemindersButton() {
           title: t.title,
           category: (t as Task).category,
           remind_at: t.start_time
+        })
+      }
+    })
+
+    const todayIso = new Date().toISOString().slice(0, 10)
+    const { data: garbageData } = await supabase
+      .from('garbage_schedule')
+      .select('id,waste_type,next_collection')
+      .eq('user_id', user.id)
+      .gte('next_collection', todayIso)
+      .order('next_collection', { ascending: true })
+
+    ;(garbageData as GarbageSchedule[] | null)?.forEach(g => {
+      const dateIso = dayjs(g.next_collection).startOf('day').toISOString()
+      const title = wasteLabels[g.waste_type] || 'Garbage'
+      const key = `${title}-${dateIso}`
+      if (!map.has(key)) {
+        map.set(key, {
+          id: `garbage-${g.id}`,
+          user_id: user.id,
+          title,
+          category: g.waste_type,
+          remind_at: dateIso
         })
       }
     })
