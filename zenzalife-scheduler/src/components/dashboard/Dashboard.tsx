@@ -42,6 +42,7 @@ import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
 import { FastingPrayerReminder } from "../FastingPrayerReminder";
 import { ReportBugButton } from "../ReportBugButton";
 import { RemindersButton } from "../RemindersButton";
+import { supabase } from "@/lib/supabase";
 
 type DashboardTab =
   | "calendar"
@@ -76,8 +77,10 @@ const navigationItems = [
 
 export function Dashboard() {
   const { user, profile, signOut } = useAuth();
-  const initialTab = (new URLSearchParams(window.location.search).get("tab") as DashboardTab) || "calendar";
-  const [activeTab, setActiveTab] = useState<DashboardTab>(initialTab);
+  const urlTab = new URLSearchParams(window.location.search).get("tab") as DashboardTab | null;
+  const [activeTab, setActiveTab] = useState<DashboardTab>(
+    urlTab || (profile?.last_dashboard_tab as DashboardTab) || "calendar"
+  );
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [hasUnsavedSettings, setHasUnsavedSettings] = useState(false);
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
@@ -114,6 +117,21 @@ export function Dashboard() {
       window.history.scrollRestoration = "manual";
     }
   }, []);
+
+  useEffect(() => {
+    if (!urlTab && profile?.last_dashboard_tab) {
+      setActiveTab(profile.last_dashboard_tab as DashboardTab);
+    }
+  }, [profile, urlTab]);
+
+  useEffect(() => {
+    if (user) {
+      void supabase
+        .from("users")
+        .update({ last_dashboard_tab: activeTab, updated_at: new Date().toISOString() })
+        .eq("id", user.id);
+    }
+  }, [activeTab, user]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });

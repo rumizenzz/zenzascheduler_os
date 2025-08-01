@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Timer as TimerIcon, Plus, Pause, Play, RotateCcw, Pencil } from 'lucide-react'
+import { Timer as TimerIcon, Plus, Pause, Play, RotateCcw, Edit, Trash2 } from 'lucide-react'
 import { useAudio } from '@/hooks/useAudio'
 import {
   supabase,
@@ -19,6 +19,7 @@ export function ClockModule() {
   const [seconds, setSeconds] = useState(0)
   const [presets, setPresets] = useState<TimerPreset[]>([])
   const [showPresetForm, setShowPresetForm] = useState(false)
+  const [editingPreset, setEditingPreset] = useState<TimerPreset | null>(null)
   const [presetLabel, setPresetLabel] = useState('')
   const [presetMinutes, setPresetMinutes] = useState(0)
   const [presetSeconds, setPresetSeconds] = useState(0)
@@ -160,7 +161,7 @@ export function ClockModule() {
     void createTimer(preset.label, preset.duration)
   }
 
-  const startEditing = (preset: TimerPreset) => {
+  const startEditPreset = (preset: TimerPreset) => {
     setEditingPreset(preset)
     setPresetLabel(preset.label)
     setPresetMinutes(Math.floor(preset.duration / 60))
@@ -212,9 +213,18 @@ export function ClockModule() {
       setPresetSeconds(0)
     } catch (error: any) {
       toast.error(
-        'Failed to ' + (editingPreset ? 'update' : 'add') + ' preset: ' + error.message
+        (editingPreset ? 'Failed to update preset: ' : 'Failed to add preset: ') +
+          error.message
       )
     }
+  }
+
+  const cancelEditPreset = () => {
+    setEditingPreset(null)
+    setShowPresetForm(false)
+    setPresetLabel('')
+    setPresetMinutes(0)
+    setPresetSeconds(0)
   }
 
   const saveStopwatch = async () => {
@@ -268,6 +278,17 @@ export function ClockModule() {
       })
     )
     void updateTimerDb(id, { remaining: duration, running: false })
+  }
+
+  const deleteTimer = async (id: string) => {
+    if (!user) return
+    try {
+      const { error } = await supabase.from('timers').delete().eq('id', id)
+      if (error) throw error
+      setTimers(prev => prev.filter(t => t.id !== id))
+    } catch (error: any) {
+      toast.error('Failed to delete timer: ' + error.message)
+    }
   }
 
   const format = (total: number) => {
@@ -400,6 +421,11 @@ export function ClockModule() {
                 <button onClick={savePreset} className="btn-dreamy-primary flex items-center gap-1">
                   <Plus className="w-4 h-4" /> {editingPreset ? 'Update' : 'Save'}
                 </button>
+                {editingPreset && (
+                  <button onClick={cancelEditPreset} className="btn-dreamy-secondary px-3 py-1">
+                    Cancel
+                  </button>
+                )}
               </div>
             )}
             {presets.length === 0 ? (
@@ -415,11 +441,11 @@ export function ClockModule() {
                       {preset.label} ({format(preset.duration)})
                     </button>
                     <button
-                      onClick={() => startEditing(preset)}
-                      className="text-purple-100 hover:text-white"
+                      onClick={() => startEditPreset(preset)}
+                      className="p-1 text-gray-500 hover:text-blue-500"
                       aria-label="Edit preset"
                     >
-                      <Pencil className="w-4 h-4" />
+                      <Edit className="w-4 h-4" />
                     </button>
                   </div>
                 ))}
@@ -451,6 +477,12 @@ export function ClockModule() {
                       className="btn-dreamy-secondary px-3 py-1"
                     >
                       <RotateCcw className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => deleteTimer(timer.id)}
+                      className="btn-dreamy-secondary px-3 py-1"
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
