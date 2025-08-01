@@ -401,6 +401,16 @@ export function MathNotebookModule() {
                     />
                   </div>
                   <div className="text-sm font-medium">{p.name}</div>
+                  <div className="text-xs text-purple-300 mt-1">
+                    {new Date(p.updated_at).toLocaleString(undefined, {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                    })}
+                  </div>
                 </div>
               ))}
           </div>
