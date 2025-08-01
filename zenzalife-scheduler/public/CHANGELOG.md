@@ -9,6 +9,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
 - Journal and Dream Journal Add buttons now sit above bottom controls so they remain clickable (2025-08-01 21:45 UTC)
+- Added missing Supabase tables for journal and dream journal entries to resolve relation errors (2025-08-01 21:08 UTC)
 - All-day task date input now uses a date-only value so browsers no longer warn about invalid format (2025-08-01 20:55 UTC)
 - Bundled pulltorefreshjs in Vite build so module specifier resolves during runtime (2025-08-01 20:14 UTC)
 - Externalized pulltorefreshjs in Vite configuration to resolve missing CSS module during builds (2025-08-01 20:00 UTC)
@@ -26,6 +27,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Magical purple Journal and Lucid Dream Journal modules save daily entries with lucidity tracking (2025-08-01 20:12 UTC)
 - Journal and Dream Journal entries can be edited or deleted with Supabase syncing (2025-08-01 21:30 UTC)
 - Monthsary and Anniversary tasks now sparkle with affectionate hover animations (2025-08-01 19:03 UTC)
+ - Hovering Monthsary or Anniversary tasks now releases floating hearts for an affectionate celebration (2025-08-01 21:10 UTC)
 - Timers can be deleted from the Clock module with a new Remove control (2025-08-01 18:30 UTC)
 - Dashboard restores the last visited tab on load using a Supabase-backed preference (2025-08-01 18:30 UTC)
 - Timer presets can now be edited to update labels and durations (2025-08-01 18:29 UTC)
