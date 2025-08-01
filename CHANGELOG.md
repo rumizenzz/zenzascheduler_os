@@ -44,6 +44,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed the secret code value from this changelog to keep it private. (2025-07-22 17:33:44 UTC)
 
 ### Fixed
+- Math Notebook solver reads canvas equations and treats `^` as exponent so results calculate correctly (2025-08-01 11:21:00 UTC)
 - Removed KaTeX from Vite's external bundle list so math solver scripts load and the app no longer white screens (2025-08-01 11:02:09 UTC)
 - Bundled KaTeX and raised Workbox cache limit so math solver scripts load without module errors (2025-08-01 03:33:51 UTC)
 - Externalized KaTeX in Vite build config to resolve Netlify deployment error (2025-08-01 02:16:25 UTC)

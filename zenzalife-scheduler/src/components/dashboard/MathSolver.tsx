@@ -1,17 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BlockMath } from 'react-katex'
 import 'katex/dist/katex.min.css'
 
-export function MathSolver() {
+interface MathSolverProps {
+  expression?: string | null
+}
+
+export function MathSolver({ expression }: MathSolverProps) {
   const [input, setInput] = useState('')
   const [result, setResult] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (expression) {
+      setInput(expression)
+      setResult(null)
+    }
+  }, [expression])
 
   const isMath = /^[0-9+\-*/().^\s]+$/.test(input)
 
   const handleSolve = () => {
     try {
+      const prepared = input.replace(/\^/g, '**')
       // eslint-disable-next-line no-new-func
-      const value = Function(`return (${input})`)()
+      const value = Function(`return (${prepared})`)()
       setResult(String(value))
     } catch {
       setResult('Error')
