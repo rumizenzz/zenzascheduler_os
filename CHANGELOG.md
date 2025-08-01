@@ -7,6 +7,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Math Notebook now detects math expressions and offers a Solve button to compute results (2025-08-01 02:07:51 UTC)
 - Math Notebook opens to a dashboard home for browsing old problems and creating new notebooks (2025-08-01 00:19:08 UTC)
 - Math Notebook dashboard greets users by name with a time-of-day message and Keep-style grid of notebooks (2025-08-01 00:31:23 UTC)
+- Math Notebook dashboard now previews each notebook like Google Keep for quick scanning (2025-08-01 02:33:07 UTC)
 - Math Notebook tabs can be renamed, closed with confirmation, reopened, and auto-refresh from Supabase; history shows full timestamps (2025-07-31 23:35:07 UTC)
 - Added Math Notebook module with tabbed Excalidraw canvas for solving math problems (2025-07-30 23:05:25 UTC)
 - Math Notebook now saves problems and version history in Supabase (2025-07-30 23:14:19 UTC)
