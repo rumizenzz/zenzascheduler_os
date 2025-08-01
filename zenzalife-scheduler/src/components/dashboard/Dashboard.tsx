@@ -46,6 +46,7 @@ import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
 import { FastingPrayerReminder } from "../FastingPrayerReminder";
 import { ReportBugButton } from "../ReportBugButton";
 import { RemindersButton } from "../RemindersButton";
+import { ToolsButton } from "../ToolsButton";
 import { supabase } from "@/lib/supabase";
 
 type DashboardTab =
@@ -345,6 +346,7 @@ export function Dashboard() {
       <OnboardingModal />
       <MailingListPrompt />
       <RemindersButton />
+      <ToolsButton />
       <RefreshButton />
       <PullToRefreshToggleButton
         enabled={pullRefreshEnabled}

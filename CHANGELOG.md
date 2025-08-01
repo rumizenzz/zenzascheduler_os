@@ -29,6 +29,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Tools button on the right side of the dashboard opens the IDE diff editor from any tab (2025-08-01 23:00 UTC)
+- Documented Magic Diff Editor location with a dedicated IDE section in the README and noted the IDE button on the right edge of every dashboard section (2025-08-01 22:30 UTC)
+- Added a Tools section to the README explaining the wrench-menu location and how to launch the diff editor or visit `/ide` directly (2025-08-01 22:40 UTC)
 - Monaco-powered diff editor enables real-time side-by-side comparison with spinning Harold and the Purple Crayon & Vanilla Sky Accept Current, Accept Incoming Changes, Accept Both Changes, and Compare Changes controls (2025-08-01 22:10 UTC)
 - See All Reminders now opens a Harold and the Purple Crayon & Vanilla Sky window above the current panel (2025-08-01 21:30 UTC)
 - Garbage & Recycling schedules now appear in Reminders so upcoming collection days are highlighted (2025-08-01 18:51 UTC)
