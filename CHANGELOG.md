@@ -9,6 +9,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Fixed
 - Switching dashboard sections now resets scroll position so content starts at the top (2025-08-01 17:09:52 UTC)
 ### Added
+- Added Supabase tables for stopwatch history and timer presets so saved sessions load without missing relation errors (2025-08-01 17:53:27 UTC)
 - Reminders now pull upcoming calendar tasks and create matching tasks for new reminders so scheduling stays in sync (2025-08-01 17:44:00 UTC)
 - Reminders modal now lists Intermittent Fasting & Prayer countdown so monthly fasts show alongside other tasks (2025-08-01 17:38:05 UTC)
 - Reminders now save to Supabase with an Add Reminder form for persistent countdowns (2025-08-01 17:30:21 UTC)
