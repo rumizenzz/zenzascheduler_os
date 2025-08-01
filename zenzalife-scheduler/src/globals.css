@@ -330,6 +330,43 @@
   }
 }
 
+/* Harold and the Purple Crayon meets Vanilla Sky */
+.harold-sky {
+  position: relative;
+  overflow: hidden;
+}
+
+.harold-sky::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.2) 0, transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.15) 0, transparent 60%),
+    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.1) 0, transparent 60%);
+  background-size: 300px 300px, 400px 400px, 500px 500px;
+  animation: vanilla-sky 60s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.harold-sky > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes vanilla-sky {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  50% {
+    background-position: 1000px 500px, -800px 400px, 600px -300px;
+  }
+  100% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+}
+
 /* Hide Excalidraw UI in note previews */
 .excalidraw-preview .layer-ui__wrapper {
   display: none !important;

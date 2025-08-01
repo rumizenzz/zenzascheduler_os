@@ -213,6 +213,14 @@ export type MathProblemVersion = {
   created_at?: string
 }
 
+export type MathSolverHistory = {
+  id: string
+  user_id: string
+  expression: string
+  result: string
+  created_at?: string
+}
+
 export type Timer = {
   id: string
   user_id: string
