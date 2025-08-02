@@ -18,6 +18,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14 UTC)
+- Dashboard tabs no longer render modules below the app; removing smooth scrolling forces all containers back to the top (2025-08-02 02:43 UTC)
+- Dashboard sections remount and scroll after paint so modules never hide beneath the app (2025-08-02 02:50 UTC)
+- Dashboard tab content scrolls inside its own container so sections never render underneath the app (2025-08-02 03:01 UTC)
 - IDE close warning window now renders via a portal with a high z-index so it appears above editor content (2025-08-02 02:40 UTC)
 - Raised IDE close warning z-index so the confirmation window always floats above the editor overlay (2025-08-02 02:49 UTC)
 - World Clock right-click menu renders via a portal with a high z-index so it appears on top (2025-08-02 02:19 UTC)
@@ -53,6 +57,9 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14:31 UTC)
+- Dashboard tab content scrolls inside its own container so modules never render beneath the app (2025-08-02 03:01:00 UTC)
+- Dashboard sections remount and scroll after paint so modules never hide beneath the app (2025-08-02 02:50:00 UTC)
 - GED Math Study module adds staged self-study with official GED PDFs and Supabase tracking (2025-08-02 04:00 UTC)
 - GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05 UTC)
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)

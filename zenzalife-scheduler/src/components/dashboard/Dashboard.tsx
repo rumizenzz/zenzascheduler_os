@@ -114,11 +114,14 @@ export function Dashboard() {
   usePullToRefresh(pullRefreshEnabled);
 
   const scrollToTop = () => {
-    const scroller = document.scrollingElement || document.documentElement;
-    scroller.scrollTop = 0;
-    scroller.scrollLeft = 0;
-    document.body.scrollTop = 0;
-    document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0 });
+      const scroller = document.scrollingElement || document.documentElement;
+      scroller.scrollTop = 0;
+      scroller.scrollLeft = 0;
+      document.body.scrollTop = 0;
+      document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
+    });
   };
 
   useLayoutEffect(() => {
@@ -145,10 +148,6 @@ export function Dashboard() {
         .eq("id", user.id);
     }
   }, [activeTab, user]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [activeTab]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -343,6 +342,7 @@ export function Dashboard() {
 
       {/* Main Content */}
       <div
+        key={activeTab}
         className={`transition-all duration-300 ml-0 ${
           sidebarCollapsed ? "md:ml-16" : "md:ml-64"
         }`}
