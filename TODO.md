@@ -12,6 +12,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 - Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22 UTC)
 ### Fixed
+- Dashboard content width now subtracts sidebar width so sections align beside the app on desktop and mobile (2025-08-02 01:32 UTC)
+- Dashboard layout now displays section content beside the app instead of below it (2025-08-02 00:17 UTC)
 - Exported Lucid Dream Journal module correctly so dashboard imports compile (2025-08-02 00:05 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
 - IDE overlay now renders via a portal with a sky-high z-index so the diff editor appears above all dashboard content (2025-08-01 23:46 UTC)
