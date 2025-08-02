@@ -14,6 +14,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Dashboard sections now render inside the app instead of beneath it by removing a nested padding wrapper (2025-08-02 02:52 UTC)
 - IDE close warning window now renders via a portal with a high z-index so it appears above editor content (2025-08-02 02:40 UTC)
 - Raised IDE close warning z-index so the confirmation window always floats above the editor overlay (2025-08-02 02:49 UTC)
 - World Clock right-click menu renders via a portal with a high z-index so it appears on top (2025-08-02 02:19 UTC)
@@ -49,6 +50,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Dashboard sections now render inside the app instead of beneath it by removing a nested padding wrapper (2025-08-02 02:52:00 UTC)
 - IDE close warning and World Clock context menu now render via high-z-index portals so overlays never hide beneath dashboard elements (2025-08-02 02:40:00 UTC)
 - Right-clicking a World Clock time zone opens a Harold and the Purple Crayon & Vanilla Sky menu with a Remove Time Zone option (2025-08-01 23:39:07 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58:00 UTC)
