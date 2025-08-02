@@ -11,6 +11,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study module offers staged self-study using official GED PDFs with Supabase session tracking (2025-08-02 04:00 UTC)
 - Tools menu now offers a Diff Viewer for side-by-side code comparisons within the IDE overlay (2025-08-02 04:20 UTC)
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
+- Commit Diff Viewer component compares commits with split or inline layouts, change navigation, merge conflict controls, and a commit metadata header (2025-08-02 04:41 UTC)
 ### Changed
 - Diff Viewer now appears only when a file has commit history, mirroring VS Code's commit diff workflow (2025-08-02 04:00 UTC)
 - IDE now opens in a Harold and the Purple Crayon & Vanilla Sky overlay instead of a new browser tab (2025-08-01 23:27 UTC)
