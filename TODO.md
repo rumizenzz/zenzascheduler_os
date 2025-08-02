@@ -16,8 +16,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05 UTC)
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
+- IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
 - IDE close warning window now renders via a portal with a high z-index so it appears above editor content (2025-08-02 02:40 UTC)
+- Raised IDE close warning z-index so the confirmation window always floats above the editor overlay (2025-08-02 02:49 UTC)
 - World Clock right-click menu renders via a portal with a high z-index so it appears on top (2025-08-02 02:19 UTC)
 - Corrected Lucid Dream Journal module export so TypeScript build succeeds (2025-08-02 02:14 UTC)
 - Raised Workbox precache limit to 6 MB so large bundles like index-DCXdUHmw.js are cached and Netlify builds succeed (2025-08-02 01:29 UTC)
