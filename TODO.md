@@ -3,6 +3,8 @@
 All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in this file. This project follows [Semantic Versioning](https://semver.org/) and the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
+### Added
+- Multi-tab Monaco IDE with Supabase-backed tabs, Save/Save As, Undo/Redo, version history, and live word count (2025-08-02 00:00 UTC)
 ### Changed
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
@@ -41,6 +43,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Multi-tab Monaco IDE saves tabs and versions in Supabase with Undo/Redo and live word count (2025-08-02 00:00:00 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58:00 UTC)
 - Removed duplicate timer preset editing state to fix Clock module TypeScript build error (2025-08-01 21:44:04 UTC)
 - Debounced address search queries so OpenStreetMap requests don't time out (2025-08-01 18:46:00 UTC)

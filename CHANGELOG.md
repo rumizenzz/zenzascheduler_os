@@ -40,6 +40,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Monaco-powered IDE now supports multiple tabs with Supabase persistence, Save/Save As, Undo/Redo, version history, and word count (2025-08-02)
 - Movable World Clock widgets with a Harold and the Purple Crayon & Vanilla Sky context menu that remembers positions through Supabase (2025-08-01 23:24 UTC)
 - Asia/Cebu Philippines time zone available in World Clock (2025-08-01 23:14 UTC)
 - Tools button on the right side of the dashboard opens the IDE diff editor from any tab (2025-08-01 23:00 UTC)
