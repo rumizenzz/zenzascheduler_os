@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Wrench, Code2, X } from 'lucide-react'
-import MagicDiffEditor from './MagicDiffEditor'
+import MagicIDE from './MagicIDE'
 
 export function ToolsButton() {
   const [open, setOpen] = useState(false)
@@ -45,7 +45,7 @@ export function ToolsButton() {
               >
                 <X className="w-6 h-6" />
               </button>
-              <MagicDiffEditor />
+              <MagicIDE />
             </div>
           </div>,
           document.body,
