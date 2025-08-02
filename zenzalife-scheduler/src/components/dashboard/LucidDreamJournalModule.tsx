@@ -29,7 +29,7 @@ export function LucidDreamJournalModule() {
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
     if (error) {
-      toast.error('Failed to load dream entries: ' + error.message)
+      toast.error('Failed to load dream journal entries: ' + error.message)
     } else {
       setEntries(data || [])
     }
@@ -46,12 +46,12 @@ export function LucidDreamJournalModule() {
       updated_at: new Date().toISOString(),
     })
     if (error) {
-      toast.error('Failed to save dream entry: ' + error.message)
+      toast.error('Failed to save dream journal entry: ' + error.message)
     } else {
       setDescription('')
       setShowAdd(false)
       await loadEntries()
-      toast.success('Dream entry saved')
+      toast.success('Dream journal entry saved')
     }
   }
 
@@ -68,12 +68,12 @@ export function LucidDreamJournalModule() {
       .eq('id', editingId)
       .eq('user_id', user.id)
     if (error) {
-      toast.error('Failed to update dream entry: ' + error.message)
+      toast.error('Failed to update dream journal entry: ' + error.message)
     } else {
       setEditingId(null)
       setEditDescription('')
       await loadEntries()
-      toast.success('Dream entry updated')
+      toast.success('Dream journal entry updated')
     }
   }
 
@@ -85,10 +85,10 @@ export function LucidDreamJournalModule() {
       .eq('id', id)
       .eq('user_id', user.id)
     if (error) {
-      toast.error('Failed to delete dream entry: ' + error.message)
+      toast.error('Failed to delete dream journal entry: ' + error.message)
     } else {
       await loadEntries()
-      toast.success('Dream entry deleted')
+      toast.success('Dream journal entry deleted')
     }
   }
 
