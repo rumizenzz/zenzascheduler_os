@@ -18,6 +18,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+ - Cleared document and body horizontal scroll offsets and hid horizontal overflow so dashboard tabs always appear inside the app (2025-08-02 05:00 UTC)
+- Reset dashboard scroll containers so tab content renders within the app instead of underneath it (2025-08-02 04:30 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14 UTC)
 - Dashboard tabs no longer render modules below the app; removing smooth scrolling forces all containers back to the top (2025-08-02 02:43 UTC)
 - Dashboard sections remount and scroll after paint so modules never hide beneath the app (2025-08-02 02:50 UTC)
@@ -57,6 +59,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+ - Cleared document and body horizontal scroll offsets and hid horizontal overflow so dashboard tabs always appear inside the app (2025-08-02 05:00:00 UTC)
+- Reset dashboard scroll containers so tab content renders within the app instead of underneath it (2025-08-02 04:30:00 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14:31 UTC)
 - Dashboard tab content scrolls inside its own container so modules never render beneath the app (2025-08-02 03:01:00 UTC)
 - Dashboard sections remount and scroll after paint so modules never hide beneath the app (2025-08-02 02:50:00 UTC)

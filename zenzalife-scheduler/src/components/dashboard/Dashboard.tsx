@@ -114,14 +114,20 @@ export function Dashboard() {
   usePullToRefresh(pullRefreshEnabled);
 
   const scrollToTop = () => {
-    requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, left: 0 });
-      const scroller = document.scrollingElement || document.documentElement;
-      scroller.scrollTop = 0;
-      scroller.scrollLeft = 0;
-      document.body.scrollTop = 0;
-      document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
-    });
+    window.scrollTo({ top: 0, left: 0 });
+    const scroller = document.scrollingElement || document.documentElement;
+    scroller.scrollTop = 0;
+    scroller.scrollLeft = 0;
+    document.documentElement.scrollTop = 0;
+    document.documentElement.scrollLeft = 0;
+    document.body.scrollTop = 0;
+    document.body.scrollLeft = 0;
+    const root = document.getElementById("root");
+    if (root) {
+      root.scrollTo({ top: 0, left: 0 });
+      root.scrollTop = 0;
+      root.scrollLeft = 0;
+    }
   };
 
   useLayoutEffect(() => {
@@ -218,7 +224,7 @@ export function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
+    <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
       <FastingPrayerReminder />
       {/* Mobile menu button */}
       {sidebarCollapsed && (
