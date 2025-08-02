@@ -17,6 +17,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
+- Math Notebook close and rename modals now render with higher z-indices so warnings and custom names appear above all content (2025-08-02 02:19 UTC)
+- World Clock right-click menu uses a portal with a sky-high z-index so the context window always shows on top (2025-08-02 02:19 UTC)
 - Increased Workbox precache limit to 6 MB so large bundles like index-DCXdUHmw.js are cached and Netlify builds succeed (2025-08-02 01:29 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
 - Removed duplicate timer preset editing state that caused TypeScript redeclaration errors in the Clock module (2025-08-01 21:44 UTC)

@@ -438,7 +438,7 @@ export function MathNotebookModule() {
   const renameModal =
     renamingTab &&
     createPortal(
-      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[1000]">
         <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
           <h2 className="text-lg font-light">Harold and the Purple Crayon Meets Vanilla Sky</h2>
           <input
@@ -469,7 +469,7 @@ export function MathNotebookModule() {
   const closeModal =
     closingTab &&
     createPortal(
-      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[1000]">
         <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
           <h2 className="text-lg font-light">Harold and the Purple Crayon</h2>
           <p className="text-sm">
