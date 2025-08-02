@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { Plus, NotebookPen, Pencil, Trash2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
-export function JournalModule() {
+export function LucidDreamJournalModule() {
   const { user } = useAuth()
   const [entries, setEntries] = useState<JournalEntry[]>([])
   const [loading, setLoading] = useState(true)
@@ -204,4 +204,4 @@ export function JournalModule() {
   )
 }
 
-export default JournalModule
+export default LucidDreamJournalModule

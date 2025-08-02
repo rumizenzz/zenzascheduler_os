@@ -14,6 +14,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
+- Corrected Lucid Dream Journal module export so TypeScript build succeeds (2025-08-02 02:14 UTC)
 - Pull-to-refresh placeholder no longer pushes dashboard content below the app; sections now load at the top (2025-08-01 22:55 UTC)
 - Special occasion heart hover now shows in week and month views, and hovering a special day showers the whole calendar with floating hearts (2025-08-01 21:35 UTC)
 - Journal and Dream Journal selection fields now glow with Harold and the Purple Crayon & Vanilla Sky gradients instead of plain white (2025-08-01 21:50 UTC)
@@ -34,6 +35,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Right-clicking a World Clock time zone opens a Harold and the Purple Crayon & Vanilla Sky menu with a Remove Time Zone option (2025-08-01 23:39 UTC)
 - Movable World Clock widgets with a Harold and the Purple Crayon & Vanilla Sky context menu that remembers positions through Supabase (2025-08-01 23:24 UTC)
 - Asia/Cebu Philippines time zone available in World Clock (2025-08-01 23:14 UTC)
 - Tools button on the right side of the dashboard opens the IDE diff editor from any tab (2025-08-01 23:00 UTC)
