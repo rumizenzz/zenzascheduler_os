@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Wrench, Code2, X } from 'lucide-react'
+import { Wrench, Code2, GitCompare, X } from 'lucide-react'
 import MagicIDE from './MagicIDE'
+import MagicDiffEditor from './MagicDiffEditor'
 
 export function ToolsButton() {
   const [open, setOpen] = useState(false)
   const [showIDE, setShowIDE] = useState(false)
+  const [showDiff, setShowDiff] = useState(false)
 
   return (
     <>
@@ -31,6 +33,16 @@ export function ToolsButton() {
               <Code2 className="w-4 h-4" />
               <span>IDE</span>
             </button>
+            <button
+              onClick={() => {
+                setShowDiff(true)
+                setOpen(false)
+              }}
+              className="flex items-center gap-2 w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+            >
+              <GitCompare className="w-4 h-4" />
+              <span>Diff Viewer</span>
+            </button>
           </div>
         </>
       )}
@@ -46,6 +58,22 @@ export function ToolsButton() {
                 <X className="w-6 h-6" />
               </button>
               <MagicIDE />
+            </div>
+          </div>,
+          document.body,
+        )}
+      {showDiff &&
+        createPortal(
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
+            <div className="relative w-full max-w-5xl p-4">
+              <button
+                onClick={() => setShowDiff(false)}
+                className="absolute top-4 right-4 text-white hover:text-purple-200"
+                aria-label="Close Diff Viewer"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <MagicDiffEditor />
             </div>
           </div>,
           document.body,

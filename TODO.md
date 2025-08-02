@@ -7,6 +7,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study module offers staged self-study using official GED PDFs with Supabase session tracking (2025-08-02 04:00 UTC)
 - Right-clicking a World Clock time zone opens a Harold and the Purple Crayon & Vanilla Sky menu with a Remove Time Zone option (2025-08-01 23:39 UTC)
 - IDE diff editor tabs can be renamed inline to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
+- Tools menu now opens both a code editor and a diff viewer for side-by-side comparisons (2025-08-02 04:20 UTC)
 ### Changed
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
@@ -57,6 +58,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Tools menu now lets users open a Diff Viewer alongside the IDE for comparing files (2025-08-02 04:20 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14:31 UTC)
 - Dashboard tab content scrolls inside its own container so modules never render beneath the app (2025-08-02 03:01:00 UTC)
 - Dashboard sections remount and scroll after paint so modules never hide beneath the app (2025-08-02 02:50:00 UTC)
