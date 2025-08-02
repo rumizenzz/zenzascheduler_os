@@ -18,6 +18,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
+ - Dashboard tabs no longer show modules beneath the app by removing smooth scrolling and forcing all containers to the top (2025-08-02 02:43 UTC)
  - IDE close warning window now renders via a portal with a high z-index so it always appears above editor content (2025-08-02 02:40 UTC)
  - World Clock right-click menu uses a portal with a sky-high z-index so the context window always shows on top (2025-08-02 02:19 UTC)
 - Corrected Lucid Dream Journal module export so TypeScript build succeeds (2025-08-02 02:14 UTC)
