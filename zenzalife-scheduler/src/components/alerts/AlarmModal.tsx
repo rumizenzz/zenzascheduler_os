@@ -24,14 +24,30 @@ export function AlarmModal({ eventTitle, eventTime, soundUrl, onDismiss, onSnooz
   React.useEffect(() => {
     const requestWake = async () => {
       try {
-        wakeLockRef.current = await (navigator as any).wakeLock?.request?.('screen');
+        if (document.visibilityState === 'visible') {
+          wakeLockRef.current = await (navigator as any).wakeLock?.request?.('screen');
+        }
       } catch (err) {
         console.error('Wake lock failed', err);
       }
     };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        requestWake();
+      } else if (wakeLockRef.current) {
+        wakeLockRef.current.release().catch((err) => {
+          console.error('Wake lock release failed', err);
+        });
+        wakeLockRef.current = null;
+      }
+    };
+
     requestWake();
+    document.addEventListener('visibilitychange', handleVisibility);
     playAudio(soundUrl, 1, true);
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
       stopAudio();
       if (wakeLockRef.current) {
         wakeLockRef.current.release().catch((err) => {
