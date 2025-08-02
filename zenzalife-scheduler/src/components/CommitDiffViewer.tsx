@@ -36,6 +36,11 @@ function ControlButton({ onClick, children }: { onClick: () => void; children: s
   )
 }
 
+interface DiffNavigator {
+  next: () => void
+  previous: () => void
+}
+
 export default function CommitDiffViewer({
   original,
   modified,

@@ -29,6 +29,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Resolved TypeScript errors in CommitDiffViewer by typing the diff navigator wrapper so Netlify builds succeed (2025-08-02 11:22 UTC)
+- Prayer recordings now save with browser-compatible formats so morning, night, and grace prayers replay reliably (2025-08-02 05:40 UTC)
+- Prayer audio and dish images now upload to Supabase storage buckets for reliable playback (2025-08-02 10:50 UTC)
 - Commit Diff Viewer now retrieves commit content from GitHub instead of Supabase for accurate diffs (2025-08-02 04:55 UTC)
 - Commit Diff Viewer now displays commit changes directly inside the tool (2025-08-02 04:45 UTC)
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
