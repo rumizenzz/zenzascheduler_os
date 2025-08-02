@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Wrench, Code2, GitCompare, X } from 'lucide-react'
 import MagicIDE from './MagicIDE'
-import MagicDiffEditor from './MagicDiffEditor'
 
 export function ToolsButton() {
   const [open, setOpen] = useState(false)
   const [showIDE, setShowIDE] = useState(false)
-  const [showDiff, setShowDiff] = useState(false)
+  const [startDiff, setStartDiff] = useState(false)
 
   return (
     <>
@@ -25,6 +24,7 @@ export function ToolsButton() {
           <div className="fixed top-28 right-4 z-50 bg-white rounded shadow-lg py-2">
             <button
               onClick={() => {
+                setStartDiff(false)
                 setShowIDE(true)
                 setOpen(false)
               }}
@@ -35,7 +35,8 @@ export function ToolsButton() {
             </button>
             <button
               onClick={() => {
-                setShowDiff(true)
+                setStartDiff(true)
+                setShowIDE(true)
                 setOpen(false)
               }}
               className="flex items-center gap-2 w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
@@ -51,29 +52,16 @@ export function ToolsButton() {
           <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
             <div className="relative w-full max-w-5xl p-4">
               <button
-                onClick={() => setShowIDE(false)}
+                onClick={() => {
+                  setShowIDE(false)
+                  setStartDiff(false)
+                }}
                 className="absolute top-4 right-4 text-white hover:text-purple-200"
                 aria-label="Close IDE"
               >
                 <X className="w-6 h-6" />
               </button>
-              <MagicIDE />
-            </div>
-          </div>,
-          document.body,
-        )}
-      {showDiff &&
-        createPortal(
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
-            <div className="relative w-full max-w-5xl p-4">
-              <button
-                onClick={() => setShowDiff(false)}
-                className="absolute top-4 right-4 text-white hover:text-purple-200"
-                aria-label="Close Diff Viewer"
-              >
-                <X className="w-6 h-6" />
-              </button>
-              <MagicDiffEditor />
+              <MagicIDE startDiff={startDiff} />
             </div>
           </div>,
           document.body,

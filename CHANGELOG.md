@@ -8,6 +8,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - IDE diff editor tabs can be renamed to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
 - GED Math Study module offers staged self-study using official GED PDFs with Supabase session tracking (2025-08-02 04:00 UTC)
 - Tools menu now offers a Diff Viewer for side-by-side code comparisons within the IDE overlay (2025-08-02 04:20 UTC)
+- Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
 ### Changed
 - IDE now opens in a Harold and the Purple Crayon & Vanilla Sky overlay instead of a new browser tab (2025-08-01 23:27 UTC)
 - World Clock timezone selector now uses a Harold and the Purple Crayon & Vanilla Sky dropdown that stays clear of other buttons (2025-08-01 23:14 UTC)

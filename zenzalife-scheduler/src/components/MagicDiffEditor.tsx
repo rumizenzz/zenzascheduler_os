@@ -22,7 +22,7 @@ function DiffButton({
   );
 }
 
-export default function MagicDiffEditor() {
+export default function MagicDiffEditor({ height = '70vh' }: { height?: string }) {
   const editorRef = useRef<MonacoEditor.IStandaloneDiffEditor | null>(null);
   const [sideBySide, setSideBySide] = useState(true);
   const [leftName, setLeftName] = useState('original.ts');
@@ -154,7 +154,7 @@ export default function MagicDiffEditor() {
         )}
       </div>
       <DiffEditor
-        height="70vh"
+        height={height}
         theme="vs-dark"
         language="typescript"
         original=""
