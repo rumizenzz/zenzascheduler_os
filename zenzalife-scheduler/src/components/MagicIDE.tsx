@@ -31,6 +31,8 @@ export default function MagicIDE() {
   const [showCloseWarning, setShowCloseWarning] = useState<string | null>(null)
   const [showHistory, setShowHistory] = useState(false)
   const [history, setHistory] = useState<{ id: string; content: string; created_at: string }[]>([])
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editTitle, setEditTitle] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -105,6 +107,47 @@ export default function MagicIDE() {
 
   const wordCount = activeFile ? activeFile.content.trim().split(/\s+/).filter(Boolean).length : 0
 
+  const startRename = (file: IDEFile) => {
+    setEditingId(file.id)
+    setEditTitle(file.title)
+  }
+
+  const finishRename = async (id: string) => {
+    const title = editTitle.trim()
+    if (!title) return cancelRename()
+    const { error } = await supabase
+      .from('ide_files')
+      .update({ title })
+      .eq('id', id)
+    if (error) return
+    setFiles(files.map((f) => (f.id === id ? { ...f, title } : f)))
+    setEditingId(null)
+    setEditTitle('')
+  }
+
+  const cancelRename = () => {
+    setEditingId(null)
+    setEditTitle('')
+  }
+
+  const languageMap: Record<string, string> = {
+    ts: 'typescript',
+    tsx: 'typescript',
+    js: 'javascript',
+    jsx: 'javascript',
+    json: 'json',
+    md: 'markdown',
+    html: 'html',
+    css: 'css',
+    py: 'python',
+    sh: 'shell',
+  }
+
+  const getLanguage = (title: string) => {
+    const ext = title.split('.').pop()?.toLowerCase() ?? ''
+    return languageMap[ext] || 'plaintext'
+  }
+
   const closeTab = (id: string) => setShowCloseWarning(id)
   const confirmClose = () => {
     const id = showCloseWarning
@@ -158,26 +201,48 @@ export default function MagicIDE() {
   return (
     <div className="space-y-4 rounded-lg bg-gradient-to-br from-purple-800 to-sky-600 p-4 text-sm text-white">
       <div className="flex flex-wrap gap-2">
-        {files.map((file) => (
-          <button
-            key={file.id}
-            onClick={() => setActiveId(file.id)}
-            className={`flex items-center gap-2 rounded-t px-3 py-1 ${
-              file.id === activeId ? 'bg-sky-500 text-white' : 'bg-purple-600 text-white/80'
-            }`}
-          >
-            {file.title}
-            <span
-              className="ml-2 cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation()
-                closeTab(file.id)
-              }}
+        {files.map((file) => {
+          const ext = file.title.includes('.') ? file.title.split('.').pop() ?? '' : ''
+          const name = ext ? file.title.slice(0, -(ext.length + 1)) : file.title
+          return (
+            <div
+              key={file.id}
+              onClick={() => setActiveId(file.id)}
+              onDoubleClick={() => startRename(file)}
+              className={`flex items-center gap-2 rounded-t px-3 py-1 cursor-pointer ${
+                file.id === activeId ? 'bg-sky-500 text-white' : 'bg-purple-600 text-white/80'
+              }`}
             >
-              ×
-            </span>
-          </button>
-        ))}
+              {editingId === file.id ? (
+                <input
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  onBlur={() => finishRename(file.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') finishRename(file.id)
+                    if (e.key === 'Escape') cancelRename()
+                  }}
+                  className="rounded bg-sky-700 px-1 text-white outline-none harold-sky"
+                  autoFocus
+                />
+              ) : (
+                <>
+                  <span>{name}</span>
+                  <span className="rounded bg-sky-700 px-1 text-xs uppercase">{ext || 'txt'}</span>
+                </>
+              )}
+              <span
+                className="ml-2 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  closeTab(file.id)
+                }}
+              >
+                ×
+              </span>
+            </div>
+          )
+        })}
         <button onClick={addTab} className="rounded bg-purple-700 px-3 py-1">
           +
         </button>
@@ -187,7 +252,7 @@ export default function MagicIDE() {
           <Editor
             height="60vh"
             theme="vs-dark"
-            language="typescript"
+            language={getLanguage(activeFile.title)}
             value={activeFile.content}
             onMount={handleMount}
             onChange={(value) => {
