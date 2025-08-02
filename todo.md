@@ -5,6 +5,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ## [Unreleased]
 ### Added
 - Sleep and Wake Up task categories trigger morning and night prayers via the alarm Start Prayer button (2025-08-02 04:14:20 UTC)
+- Task modal offers quick "Current Time" buttons to set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
 - IDE tabs support inline renaming and extension changes with Harold and the Purple Crayon & Vanilla Sky file type badges (2025-08-02 00:30 UTC)
 - GED Math Study module offers staged self-study using official GED PDFs with Supabase session tracking (2025-08-02 04:00 UTC)
 - IDE diff editor tabs can be renamed inline to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
@@ -51,6 +52,7 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
+- Task modal adds Current Time buttons to quickly set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
 - GED Math Study module adds staged self-study with official GED PDFs and Supabase tracking (2025-08-02 04:00:00 UTC)
 - GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05:00 UTC)
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10:00 UTC)
