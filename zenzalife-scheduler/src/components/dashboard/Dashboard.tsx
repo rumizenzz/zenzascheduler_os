@@ -17,6 +17,7 @@ import { VerseOfTheDay } from "./VerseOfTheDay";
 import { MathNotebookModule } from "./MathNotebookModule";
 import { JournalModule } from "./JournalModule";
 import { LucidDreamJournalModule } from "./LucidDreamJournalModule";
+import { GEDMathStudyModule } from "./GEDMathStudyModule";
 import {
   Calendar,
   TrendingUp,
@@ -35,6 +36,7 @@ import {
   Pencil,
   NotebookPen,
   MoonStar,
+  Calculator,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -64,6 +66,7 @@ type DashboardTab =
   | "math"
   | "journal"
   | "dreams"
+  | "gedstudy"
   | "settings";
 
 const navigationItems = [
@@ -79,6 +82,7 @@ const navigationItems = [
   { id: "spiritual", label: "Spiritual Study", icon: BookOpen, color: "text-purple-500" },
   { id: "prayers", label: "Prayers", icon: Mic, color: "text-purple-500" },
   { id: "math", label: "Math Notebook", icon: Pencil, color: "text-blue-600" },
+  { id: "gedstudy", label: "GED Math Study", icon: Calculator, color: "text-blue-700" },
   { id: "journal", label: "Journal", icon: NotebookPen, color: "text-purple-600" },
   { id: "dreams", label: "Dream Journal", icon: MoonStar, color: "text-indigo-600" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
@@ -201,6 +205,8 @@ export function Dashboard() {
         return <PrayerModule />;
       case "math":
         return <MathNotebookModule />;
+      case "gedstudy":
+        return <GEDMathStudyModule />;
       case "journal":
         return <JournalModule />;
       case "dreams":

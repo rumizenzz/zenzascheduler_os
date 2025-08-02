@@ -343,6 +343,14 @@ export type ChangeLogView = {
   updated_at?: string
 }
 
+export type GEDMathStudySession = {
+  id: string
+  user_id: string
+  mode: string
+  stage?: string
+  created_at?: string
+}
+
 // Helper functions
 export async function getCurrentUser() {
   const {
