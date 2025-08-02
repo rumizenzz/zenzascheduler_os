@@ -339,9 +339,9 @@ export function Dashboard() {
       <div
         className={`transition-all duration-300 ml-0 ${
           sidebarCollapsed ? "md:ml-16" : "md:ml-64"
-        }`}
+        } p-6`}
       >
-        <div className="p-6">{renderContent()}</div>
+        {renderContent()}
       </div>
       <OnboardingModal />
       <MailingListPrompt />
