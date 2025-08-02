@@ -28,6 +28,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Prayer recordings now save with browser-compatible formats so morning, night, and grace prayers replay reliably (2025-08-02 05:40 UTC)
+- Prayer audio and dish images now upload to Supabase storage buckets for reliable playback (2025-08-02 10:50 UTC)
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - Guarded wake lock requests with a visibility check so alarms don't throw NotAllowedError in hidden tabs (2025-08-02 04:18 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14 UTC)

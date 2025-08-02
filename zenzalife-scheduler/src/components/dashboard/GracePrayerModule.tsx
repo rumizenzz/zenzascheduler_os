@@ -7,15 +7,6 @@ import { Mic, StopCircle } from 'lucide-react'
 
 type MealTime = 'morning' | 'afternoon' | 'evening' | 'night'
 
-function fileToDataURL(file: Blob) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onloadend = () => resolve(reader.result as string)
-    reader.onerror = () => reject(new Error('Failed to read file'))
-    reader.readAsDataURL(file)
-  })
-}
-
 export function GracePrayerModule() {
   const { user } = useAuth()
   const [mealTime, setMealTime] = useState<MealTime>('morning')
@@ -69,34 +60,41 @@ export function GracePrayerModule() {
   }
 
   const handleStop = async () => {
-    const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' })
+    const mimeType = mediaRef.current?.mimeType || 'audio/webm'
+    const audioBlob = new Blob(chunksRef.current, { type: mimeType })
     try {
-      const audioData = await fileToDataURL(audioBlob)
-      const fileName = `grace-${mealTime}-${Date.now()}.webm`
-      const { data, error } = await supabase.functions.invoke('audio-upload', {
-        body: { audioData, fileName, userId: user!.id }
-      })
-      if (error || !data?.publicUrl) throw error
+      const extension = mimeType.split(';')[0].split('/')[1]
+      const fileName = `grace-${mealTime}-${Date.now()}.${extension}`
+      const audioPath = `prayers/grace/${user!.id}/${fileName}`
+      const { error: audioError } = await supabase.storage
+        .from('zenzalife-assets')
+        .upload(audioPath, audioBlob, { contentType: mimeType, upsert: true })
+      if (audioError) throw audioError
+      const {
+        data: { publicUrl: audioUrl }
+      } = supabase.storage.from('zenzalife-assets').getPublicUrl(audioPath)
 
       let photoUrl: string | null = null
       if (photoFile) {
-        const imgData = await fileToDataURL(photoFile)
-        const imgRes = await supabase.functions.invoke('image-upload', {
-          body: {
-            imageData: imgData,
-            fileName: `grace-photo-${Date.now()}-${photoFile.name}`,
-            userId: user!.id
-          }
-        })
-      if (imgRes.error || !imgRes.data?.publicUrl) throw imgRes.error
-      photoUrl = imgRes.data.publicUrl
-    }
+        const photoPath = `prayers/grace/photos/${user!.id}/${Date.now()}-${photoFile.name}`
+        const { error: photoError } = await supabase.storage
+          .from('zenzalife-assets')
+          .upload(photoPath, photoFile, {
+            contentType: photoFile.type,
+            upsert: true
+          })
+        if (photoError) throw photoError
+        const {
+          data: { publicUrl: imageUrl }
+        } = supabase.storage.from('zenzalife-assets').getPublicUrl(photoPath)
+        photoUrl = imageUrl
+      }
       const durationMs = startTime ? Date.now() - startTime.getTime() : 0
       const durationSeconds = Math.floor(durationMs / 1000)
       await supabase.from('grace_prayers').insert({
         user_id: user!.id,
         meal_time: mealTime,
-        audio_url: data.publicUrl,
+        audio_url: audioUrl,
         photo_url: photoUrl,
         started_at: startTime?.toISOString(),
         duration_seconds: durationSeconds

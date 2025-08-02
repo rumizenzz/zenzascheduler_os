@@ -9,15 +9,6 @@ interface DailyPrayerModuleProps {
   autoStartType?: 'morning' | 'night'
 }
 
-function fileToDataURL(file: Blob) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onloadend = () => resolve(reader.result as string)
-    reader.onerror = () => reject(new Error('Failed to read file'))
-    reader.readAsDataURL(file)
-  })
-}
-
 export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
   const { user } = useAuth()
   const [prayerType, setPrayerType] = useState<'morning' | 'night'>('morning')
@@ -71,20 +62,25 @@ export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
   }
 
   const handleStop = async () => {
-    const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' })
+    const mimeType = mediaRef.current?.mimeType || 'audio/webm'
+    const audioBlob = new Blob(chunksRef.current, { type: mimeType })
     try {
-      const audioData = await fileToDataURL(audioBlob)
-      const fileName = `${prayerType}-prayer-${Date.now()}.webm`
-      const { data, error } = await supabase.functions.invoke('audio-upload', {
-        body: { audioData, fileName, userId: user!.id }
-      })
-      if (error || !data?.publicUrl) throw error
+      const extension = mimeType.split(';')[0].split('/')[1]
+      const fileName = `${prayerType}-prayer-${Date.now()}.${extension}`
+      const filePath = `prayers/daily/${user!.id}/${fileName}`
+      const { error: uploadError } = await supabase.storage
+        .from('zenzalife-assets')
+        .upload(filePath, audioBlob, { contentType: mimeType, upsert: true })
+      if (uploadError) throw uploadError
+      const {
+        data: { publicUrl }
+      } = supabase.storage.from('zenzalife-assets').getPublicUrl(filePath)
       const durationMs = startTime ? Date.now() - startTime.getTime() : 0
       const durationSeconds = Math.floor(durationMs / 1000)
       await supabase.from('daily_prayers').insert({
         user_id: user!.id,
         prayer_type: prayerType,
-        audio_url: data.publicUrl,
+        audio_url: publicUrl,
         started_at: startTime?.toISOString(),
         duration_seconds: durationSeconds
       })
