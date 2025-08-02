@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { Plus, NotebookPen, Pencil, Trash2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
-export function JournalModule() {
+export function LucidDreamJournalModule() {
   const { user } = useAuth()
   const [entries, setEntries] = useState<JournalEntry[]>([])
   const [loading, setLoading] = useState(true)
@@ -29,7 +29,7 @@ export function JournalModule() {
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
     if (error) {
-      toast.error('Failed to load journal entries: ' + error.message)
+      toast.error('Failed to load dream journal entries: ' + error.message)
     } else {
       setEntries(data || [])
     }
@@ -45,12 +45,12 @@ export function JournalModule() {
       updated_at: new Date().toISOString(),
     })
     if (error) {
-      toast.error('Failed to save entry: ' + error.message)
+      toast.error('Failed to save dream journal entry: ' + error.message)
     } else {
       setContent('')
       setShowAdd(false)
       await loadEntries()
-      toast.success('Journal entry saved')
+      toast.success('Dream journal entry saved')
     }
   }
 
@@ -67,12 +67,12 @@ export function JournalModule() {
       .eq('id', editingId)
       .eq('user_id', user.id)
     if (error) {
-      toast.error('Failed to update entry: ' + error.message)
+      toast.error('Failed to update dream journal entry: ' + error.message)
     } else {
       setEditingId(null)
       setEditContent('')
       await loadEntries()
-      toast.success('Journal entry updated')
+      toast.success('Dream journal entry updated')
     }
   }
 
@@ -84,10 +84,10 @@ export function JournalModule() {
       .eq('id', id)
       .eq('user_id', user.id)
     if (error) {
-      toast.error('Failed to delete entry: ' + error.message)
+      toast.error('Failed to delete dream journal entry: ' + error.message)
     } else {
       await loadEntries()
-      toast.success('Journal entry deleted')
+      toast.success('Dream journal entry deleted')
     }
   }
 
@@ -103,7 +103,7 @@ export function JournalModule() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-light text-purple-200 flex items-center gap-3">
           <NotebookPen className="w-8 h-8" />
-          Journal
+          Dream Journal
         </h1>
         <button
           onClick={() => setShowAdd(true)}
@@ -204,4 +204,4 @@ export function JournalModule() {
   )
 }
 
-export default JournalModule
+export default LucidDreamJournalModule
