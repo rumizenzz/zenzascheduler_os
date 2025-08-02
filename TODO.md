@@ -11,6 +11,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - IDE diff editor tabs can be renamed inline to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
 - Tools menu now opens both a code editor and a diff viewer for side-by-side comparisons (2025-08-02 04:20 UTC)
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
+- Commit Diff Viewer compares commits with split or inline layouts, navigation between changes, merge conflict controls, and a commit metadata header (2025-08-02 04:41 UTC)
 ### Changed
 - Diff Viewer button appears only when a file has commit history, mirroring VS Code's commit diff behavior (2025-08-02 04:00 UTC)
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
@@ -67,6 +68,7 @@ This file tracks project progress and upcoming tasks.
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - Task modal adds Current Time buttons to quickly set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
+- Commit Diff Viewer compares commits with split or inline layouts, navigation between changes, merge conflict controls, and a commit metadata header (2025-08-02 04:41 UTC)
 - Tools menu now lets users open a Diff Viewer alongside the IDE for comparing files (2025-08-02 04:20 UTC)
 - Guarded wake lock requests with a visibility check so alarms don't throw NotAllowedError in hidden tabs (2025-08-02 04:18 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14:31 UTC)
