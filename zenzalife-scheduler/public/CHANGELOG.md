@@ -10,6 +10,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Tools menu now offers a Diff Viewer for side-by-side code comparisons within the IDE overlay (2025-08-02 04:20 UTC)
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
 ### Changed
+- Diff Viewer now appears only when a file has commit history, mirroring VS Code's commit diff workflow (2025-08-02 04:00 UTC)
 - IDE now opens in a Harold and the Purple Crayon & Vanilla Sky overlay instead of a new browser tab (2025-08-01 23:27 UTC)
 - World Clock timezone selector now uses a Harold and the Purple Crayon & Vanilla Sky dropdown that stays clear of other buttons (2025-08-01 23:14 UTC)
 - World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59 UTC)

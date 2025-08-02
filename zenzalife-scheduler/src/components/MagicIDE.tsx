@@ -37,6 +37,8 @@ export default function MagicIDE({ startDiff = false }: { startDiff?: boolean })
   const [renameId, setRenameId] = useState<string | null>(null)
   const [renameTitle, setRenameTitle] = useState('')
   const [showDiff, setShowDiff] = useState(startDiff)
+  const [hasHistory, setHasHistory] = useState(false)
+  const [diffOriginal, setDiffOriginal] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -55,6 +57,32 @@ export default function MagicIDE({ startDiff = false }: { startDiff?: boolean })
     }
     load()
   }, [])
+
+  useEffect(() => {
+    async function checkHistory() {
+      if (!activeId) {
+        setHasHistory(false)
+        setDiffOriginal('')
+        setShowDiff(false)
+        return
+      }
+      const { data } = await supabase
+        .from('ide_file_versions')
+        .select('content')
+        .eq('file_id', activeId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+      if (data && data.length > 0) {
+        setHasHistory(true)
+        setDiffOriginal(data[0].content)
+      } else {
+        setHasHistory(false)
+        setDiffOriginal('')
+        setShowDiff(false)
+      }
+    }
+    checkHistory()
+  }, [activeId])
 
   const activeFile = files.find((f) => f.id === activeId)
 
@@ -92,6 +120,8 @@ export default function MagicIDE({ startDiff = false }: { startDiff?: boolean })
 
     if (file) {
       await supabase.from('ide_file_versions').insert({ file_id: file.id, content })
+      setDiffOriginal(content)
+      setHasHistory(true)
     }
   }
 
@@ -329,12 +359,20 @@ export default function MagicIDE({ startDiff = false }: { startDiff?: boolean })
             <IDEButton onClick={undo}>Undo</IDEButton>
             <IDEButton onClick={redo}>Redo</IDEButton>
             <IDEButton onClick={openHistory}>History</IDEButton>
-            <IDEButton onClick={() => setShowDiff(!showDiff)}>Diff Viewer</IDEButton>
+            {hasHistory && (
+              <IDEButton onClick={() => setShowDiff(!showDiff)}>Diff Viewer</IDEButton>
+            )}
             <span className="ml-auto self-center">Words: {wordCount}</span>
           </div>
           {showDiff && (
             <div className="mt-4">
-              <MagicDiffEditor height="30vh" />
+              <MagicDiffEditor
+                height="30vh"
+                original={diffOriginal}
+                modified={activeFile.content}
+                leftName={`${activeFile.title} (last commit)`}
+                rightName={`${activeFile.title} (current)`}
+              />
             </div>
           )}
         </>

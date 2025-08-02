@@ -1,15 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import type { editor as MonacoEditor } from 'monaco-editor';
-import * as monaco from 'monaco-editor';
-import { DiffEditor } from '@monaco-editor/react';
+import { useEffect, useRef, useState } from 'react'
+import type { editor as MonacoEditor } from 'monaco-editor'
+import * as monaco from 'monaco-editor'
+import { DiffEditor } from '@monaco-editor/react'
 
-function DiffButton({
-  children,
-  onClick,
-}: {
-  children: string;
-  onClick: () => void;
-}) {
+function DiffButton({ children, onClick }: { children: string; onClick: () => void }) {
   return (
     <button
       type="button"
@@ -19,16 +13,28 @@ function DiffButton({
       <span className="absolute -left-6 top-1/2 -translate-y-1/2 animate-spin text-sky-300">🌀</span>
       {children}
     </button>
-  );
+  )
 }
 
-export default function MagicDiffEditor({ height = '70vh' }: { height?: string }) {
-  const editorRef = useRef<MonacoEditor.IStandaloneDiffEditor | null>(null);
-  const [sideBySide, setSideBySide] = useState(true);
-  const [leftName, setLeftName] = useState('original.ts');
-  const [rightName, setRightName] = useState('modified.ts');
-  const [editingLeft, setEditingLeft] = useState(false);
-  const [editingRight, setEditingRight] = useState(false);
+export default function MagicDiffEditor({
+  height = '70vh',
+  original,
+  modified,
+  leftName: initialLeft = 'original.ts',
+  rightName: initialRight = 'modified.ts',
+}: {
+  height?: string
+  original: string
+  modified: string
+  leftName?: string
+  rightName?: string
+}) {
+  const editorRef = useRef<MonacoEditor.IStandaloneDiffEditor | null>(null)
+  const [sideBySide, setSideBySide] = useState(true)
+  const [leftName, setLeftName] = useState(initialLeft)
+  const [rightName, setRightName] = useState(initialRight)
+  const [editingLeft, setEditingLeft] = useState(false)
+  const [editingRight, setEditingRight] = useState(false)
 
   const getLanguage = (name: string) => {
     const ext = name.split('.').pop()?.toLowerCase();
@@ -157,8 +163,8 @@ export default function MagicDiffEditor({ height = '70vh' }: { height?: string }
         height={height}
         theme="vs-dark"
         language="typescript"
-        original=""
-        modified=""
+        original={original}
+        modified={modified}
         onMount={handleMount}
         options={{ originalEditable: true }}
       />
