@@ -52,10 +52,16 @@ export function ClockModule() {
   const [dragging, setDragging] = useState<
     { id: string; offsetX: number; offsetY: number } | null
   >(null)
-  const [contextMenu, setContextMenu] = useState({
+  const [contextMenu, setContextMenu] = useState<{
+    x: number
+    y: number
+    visible: boolean
+    zoneId: string | null
+  }>({
     x: 0,
     y: 0,
-    visible: false
+    visible: false,
+    zoneId: null
   })
   const { playAudio } = useAudio()
   const filteredZones = allTimeZones.filter(tz =>
@@ -490,10 +496,25 @@ export function ClockModule() {
     })
   }
 
-  const handleContextMenu = (e: React.MouseEvent) => {
+  const handleContextMenu = (e: React.MouseEvent, zoneId?: string) => {
     e.preventDefault()
-    setContextMenu({ x: e.clientX, y: e.clientY, visible: true })
+    setContextMenu({
+      x: e.clientX,
+      y: e.clientY,
+      visible: true,
+      zoneId: zoneId || null
+    })
   }
+
+  const closeContextMenu = () =>
+    setContextMenu(c => ({ ...c, visible: false, zoneId: null }))
+
+  useEffect(() => {
+    if (!contextMenu.visible) return
+    const handleClick = () => closeContextMenu()
+    window.addEventListener('click', handleClick)
+    return () => window.removeEventListener('click', handleClick)
+  }, [contextMenu.visible])
 
   const formatZoneTime = (zone: string) =>
     now.toLocaleTimeString([], {
@@ -513,6 +534,7 @@ export function ClockModule() {
             className="fixed z-50 cursor-move bg-black/50 text-white text-xs px-2 py-1 rounded"
             style={{ top: zone.pos_y, left: zone.pos_x }}
             onMouseDown={e => startDrag(e, zone.id)}
+            onContextMenu={e => handleContextMenu(e, zone.id)}
           >
             {formatZoneTime(zone.zone)} {zone.zone}
           </div>
@@ -521,6 +543,7 @@ export function ClockModule() {
         <div
           className="fixed z-50 p-4 rounded-xl harold-sky bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100 shadow-lg"
           style={{ top: contextMenu.y, left: contextMenu.x }}
+          onClick={e => e.stopPropagation()}
         >
           <div className="mb-4">World Clock Menu</div>
           <div className="text-[10px] text-right text-purple-200 leading-snug">
@@ -528,6 +551,17 @@ export function ClockModule() {
             <br />
             (Always draw what you think of and create anything you can imagine. - Rumi)
           </div>
+          {contextMenu.zoneId && (
+            <button
+              onClick={() => {
+                void removeZone(contextMenu.zoneId as string)
+                closeContextMenu()
+              }}
+              className="btn-dreamy-secondary px-3 py-1 mt-4 w-full text-sm"
+            >
+              Remove Time Zone
+            </button>
+          )}
         </div>
       )}
       <div className="harold-sky space-y-6 p-6 rounded-xl bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100">
@@ -761,7 +795,7 @@ export function ClockModule() {
           )}
         </div>
       ) : (
-        <div className="space-y-6 text-center relative" onContextMenu={handleContextMenu}>
+        <div className="space-y-6 text-center relative" onContextMenu={e => handleContextMenu(e)}>
           <div>
             <h1 className="text-2xl font-light flex items-center justify-center gap-2">
               <Globe2 className="w-6 h-6 text-blue-100" /> World Clock
@@ -808,7 +842,11 @@ export function ClockModule() {
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {worldZones.map(zone => (
-                <div key={zone.id} className="card-floating p-4 space-y-2 text-center">
+                <div
+                  key={zone.id}
+                  className="card-floating p-4 space-y-2 text-center"
+                  onContextMenu={e => handleContextMenu(e, zone.id)}
+                >
                   <div className="text-lg font-medium text-gray-800">{zone.zone}</div>
                   <div className="text-3xl font-light text-blue-800">{formatZoneTime(zone.zone)}</div>
                   <label className="flex items-center justify-center gap-2 text-sm">
