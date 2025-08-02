@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { Editor } from '@monaco-editor/react'
 import type { editor as MonacoEditor } from 'monaco-editor'
 import { supabase, getCurrentUser } from '../lib/supabase'
+import MagicDiffEditor from './MagicDiffEditor'
 
 type IDEFile = {
   id: string
@@ -23,7 +24,7 @@ function IDEButton({ children, onClick }: { children: string; onClick: () => voi
   )
 }
 
-export default function MagicIDE() {
+export default function MagicIDE({ startDiff = false }: { startDiff?: boolean }) {
   const editorRef = useRef<MonacoEditor.IStandaloneCodeEditor | null>(null)
   const [files, setFiles] = useState<IDEFile[]>([])
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -35,6 +36,7 @@ export default function MagicIDE() {
   const [newTitle, setNewTitle] = useState('')
   const [renameId, setRenameId] = useState<string | null>(null)
   const [renameTitle, setRenameTitle] = useState('')
+  const [showDiff, setShowDiff] = useState(startDiff)
 
   useEffect(() => {
     async function load() {
@@ -327,8 +329,14 @@ export default function MagicIDE() {
             <IDEButton onClick={undo}>Undo</IDEButton>
             <IDEButton onClick={redo}>Redo</IDEButton>
             <IDEButton onClick={openHistory}>History</IDEButton>
+            <IDEButton onClick={() => setShowDiff(!showDiff)}>Diff Viewer</IDEButton>
             <span className="ml-auto self-center">Words: {wordCount}</span>
           </div>
+          {showDiff && (
+            <div className="mt-4">
+              <MagicDiffEditor height="30vh" />
+            </div>
+          )}
         </>
       )}
       {showHistory && (
