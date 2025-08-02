@@ -3,6 +3,8 @@
 All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in this file. This project follows [Semantic Versioning](https://semver.org/) and the [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## [Unreleased]
+### Added
+- IDE diff editor tabs can be renamed to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
 ### Changed
 - IDE now opens in a Harold and the Purple Crayon & Vanilla Sky overlay instead of a new browser tab (2025-08-01 23:27 UTC)
 - World Clock timezone selector now uses a Harold and the Purple Crayon & Vanilla Sky dropdown that stays clear of other buttons (2025-08-01 23:14 UTC)
@@ -15,6 +17,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
+- Increased Workbox precache limit to 6 MB so large bundles like index-DCXdUHmw.js are cached and Netlify builds succeed (2025-08-02 01:29 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
 - Removed duplicate timer preset editing state that caused TypeScript redeclaration errors in the Clock module (2025-08-01 21:44 UTC)
 - Address search requests are debounced to prevent timeouts when typing quickly (2025-08-01 18:46 UTC)
