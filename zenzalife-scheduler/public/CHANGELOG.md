@@ -22,6 +22,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+ - Reset scroll position on initial dashboard load so tab content appears inside the app immediately (2025-08-02 05:10 UTC)
+ - Cleared document and body horizontal scroll offsets and hid horizontal overflow so dashboard tabs always appear inside the app (2025-08-02 05:00 UTC)
+- Reset dashboard scroll containers so tab content appears inside the main app instead of beneath it (2025-08-02 04:30 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14 UTC)
 - Dashboard tabs no longer show modules beneath the app by removing smooth scrolling and forcing all containers to the top (2025-08-02 02:43 UTC)
 - Dashboard sections remount and scroll after paint so modules never hide beneath the app (2025-08-02 02:50 UTC)
