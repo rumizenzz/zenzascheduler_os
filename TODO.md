@@ -24,6 +24,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Resolved TypeScript errors in CommitDiffViewer by typing the diff navigator wrapper so Netlify builds succeed (2025-08-02 11:22 UTC)
+- Prayer recordings now save with browser-compatible formats so morning, night, and grace prayers replay reliably (2025-08-02 05:40 UTC)
+- Prayer audio and dish images now upload to Supabase storage buckets for reliable playback (2025-08-02 10:50 UTC)
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - Guarded wake lock requests with a visibility check so alarms don't throw NotAllowedError in hidden tabs (2025-08-02 04:18 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14 UTC)
@@ -65,6 +68,9 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Resolved TypeScript errors in CommitDiffViewer by typing the diff navigator wrapper so Netlify builds succeed (2025-08-02 11:22 UTC)
+- Prayer recordings now save with browser-compatible formats so morning, night, and grace prayers replay reliably (2025-08-02 05:40 UTC)
+- Prayer audio and dish images now upload to Supabase storage buckets for reliable playback (2025-08-02 10:50 UTC)
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - Task modal adds Current Time buttons to quickly set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
