@@ -6,6 +6,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Added
 - IDE tabs support inline renaming and extension changes with Harold and the Purple Crayon & Vanilla Sky file type badges (2025-08-02 00:30 UTC)
 - IDE diff editor tabs can be renamed to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
+- GED Math Study module offers staged self-study using official GED PDFs with Supabase session tracking (2025-08-02 04:00 UTC)
 ### Changed
 - IDE now opens in a Harold and the Purple Crayon & Vanilla Sky overlay instead of a new browser tab (2025-08-01 23:27 UTC)
 - World Clock timezone selector now uses a Harold and the Purple Crayon & Vanilla Sky dropdown that stays clear of other buttons (2025-08-01 23:14 UTC)
@@ -17,6 +18,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
+- GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05 UTC)
+- GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
  - IDE close warning window now renders via a portal with a high z-index so it always appears above editor content (2025-08-02 02:40 UTC)
@@ -47,6 +50,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Dashboard sections now scroll the window, document, and body to the start so content never hides below prior scroll (2025-08-01 17:48:34 UTC)
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
+### Removed
+- Duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 ### Added
 - Right-clicking a World Clock time zone opens a Harold and the Purple Crayon & Vanilla Sky menu with a Remove Time Zone option (2025-08-01 23:39 UTC)
 - Movable World Clock widgets with a Harold and the Purple Crayon & Vanilla Sky context menu that remembers positions through Supabase (2025-08-01 23:24 UTC)

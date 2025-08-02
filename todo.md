@@ -4,6 +4,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- IDE tabs support inline renaming and extension changes with Harold and the Purple Crayon & Vanilla Sky file type badges (2025-08-02 00:30 UTC)
+- GED Math Study module offers staged self-study using official GED PDFs with Supabase session tracking (2025-08-02 04:00 UTC)
 - IDE diff editor tabs can be renamed inline to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
 ### Changed
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
@@ -11,6 +13,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 - Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22 UTC)
+- GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05 UTC)
+- GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
+- Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 ### Fixed
 - Raised Workbox precache limit to 6 MB so large bundles like index-DCXdUHmw.js are cached and Netlify builds succeed (2025-08-02 01:29 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
@@ -43,6 +48,10 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- GED Math Study module adds staged self-study with official GED PDFs and Supabase tracking (2025-08-02 04:00:00 UTC)
+- GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05:00 UTC)
+- GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10:00 UTC)
+- Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10:00 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58:00 UTC)
 - Removed duplicate timer preset editing state to fix Clock module TypeScript build error (2025-08-01 21:44:04 UTC)
 - Debounced address search queries so OpenStreetMap requests don't time out (2025-08-01 18:46:00 UTC)
