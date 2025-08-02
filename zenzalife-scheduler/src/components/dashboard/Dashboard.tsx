@@ -175,6 +175,15 @@ export function Dashboard() {
     setActiveTab(id);
   };
 
+  const sidebarWidth = sidebarCollapsed ? 64 : 256;
+
+  const contentStyle: React.CSSProperties = isMobile
+    ? { width: "100%" }
+    : {
+        marginLeft: sidebarWidth,
+        width: `calc(100% - ${sidebarWidth}px)`,
+      };
+
   const renderContent = (): JSX.Element => {
     switch (activeTab) {
       case "calendar":
@@ -336,11 +345,7 @@ export function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div
-        className={`transition-all duration-300 ml-0 ${
-          sidebarCollapsed ? "md:ml-16" : "md:ml-64"
-        }`}
-      >
+      <div className="transition-all duration-300" style={contentStyle}>
         <div className="p-6">{renderContent()}</div>
       </div>
       <OnboardingModal />
