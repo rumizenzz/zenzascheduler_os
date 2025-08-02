@@ -31,8 +31,10 @@ export default function MagicIDE() {
   const [showCloseWarning, setShowCloseWarning] = useState<string | null>(null)
   const [showHistory, setShowHistory] = useState(false)
   const [history, setHistory] = useState<{ id: string; content: string; created_at: string }[]>([])
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [editTitle, setEditTitle] = useState('')
+  const [showNewFile, setShowNewFile] = useState(false)
+  const [newTitle, setNewTitle] = useState('')
+  const [renameId, setRenameId] = useState<string | null>(null)
+  const [renameTitle, setRenameTitle] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -108,12 +110,14 @@ export default function MagicIDE() {
   const wordCount = activeFile ? activeFile.content.trim().split(/\s+/).filter(Boolean).length : 0
 
   const startRename = (file: IDEFile) => {
-    setEditingId(file.id)
-    setEditTitle(file.title)
+    setRenameId(file.id)
+    setRenameTitle(file.title)
   }
 
-  const finishRename = async (id: string) => {
-    const title = editTitle.trim()
+  const confirmRename = async () => {
+    const id = renameId
+    if (!id) return
+    const title = renameTitle.trim()
     if (!title) return cancelRename()
     const { error } = await supabase
       .from('ide_files')
@@ -121,13 +125,13 @@ export default function MagicIDE() {
       .eq('id', id)
     if (error) return
     setFiles(files.map((f) => (f.id === id ? { ...f, title } : f)))
-    setEditingId(null)
-    setEditTitle('')
+    setRenameId(null)
+    setRenameTitle('')
   }
 
   const cancelRename = () => {
-    setEditingId(null)
-    setEditTitle('')
+    setRenameId(null)
+    setRenameTitle('')
   }
 
   const languageMap: Record<string, string> = {
@@ -162,7 +166,7 @@ export default function MagicIDE() {
   const closeWarningPortal =
     showCloseWarning &&
     createPortal(
-      <div className="fixed inset-0 z-[1002] flex items-center justify-center bg-black/60 harold-sky">
+      <div className="fixed inset-0 z-[1004] flex items-center justify-center bg-black/60 harold-sky">
         <div className="space-y-4 rounded bg-purple-900 p-6">
           <p>Close this tab without saving?</p>
           <div className="flex justify-end gap-2">
@@ -184,10 +188,9 @@ export default function MagicIDE() {
       document.body,
     )
 
-  const addTab = async () => {
+  const createFile = async () => {
     if (!userId) return
-    const title = prompt('Filename', 'untitled')
-    if (!title) return
+    const title = newTitle.trim() || 'untitled'
     const { data, error } = await supabase
       .from('ide_files')
       .insert({ user_id: userId, title, content: '' })
@@ -196,7 +199,73 @@ export default function MagicIDE() {
     if (error || !data) return
     setFiles([...files, data])
     setActiveId(data.id)
+    setShowNewFile(false)
+    setNewTitle('')
   }
+
+  const newFilePortal =
+    showNewFile &&
+    createPortal(
+      <div className="fixed inset-0 z-[1002] flex items-center justify-center bg-black/60 harold-sky">
+        <div className="space-y-4 rounded bg-purple-900 p-6">
+          <input
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            placeholder="Filename"
+            className="w-64 rounded bg-sky-700 px-2 py-1 text-white outline-none harold-sky"
+            autoFocus
+          />
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={createFile}
+              className="rounded bg-purple-600 px-3 py-1 text-white hover:bg-purple-500"
+            >
+              Create
+            </button>
+            <button
+              onClick={() => {
+                setShowNewFile(false)
+                setNewTitle('')
+              }}
+              className="rounded bg-sky-600 px-3 py-1 text-white hover:bg-sky-500"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>,
+      document.body,
+    )
+
+  const renamePortal =
+    renameId &&
+    createPortal(
+      <div className="fixed inset-0 z-[1003] flex items-center justify-center bg-black/60 harold-sky">
+        <div className="space-y-4 rounded bg-purple-900 p-6">
+          <input
+            value={renameTitle}
+            onChange={(e) => setRenameTitle(e.target.value)}
+            className="w-64 rounded bg-sky-700 px-2 py-1 text-white outline-none harold-sky"
+            autoFocus
+          />
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={confirmRename}
+              className="rounded bg-purple-600 px-3 py-1 text-white hover:bg-purple-500"
+            >
+              Rename
+            </button>
+            <button
+              onClick={cancelRename}
+              className="rounded bg-sky-600 px-3 py-1 text-white hover:bg-sky-500"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>,
+      document.body,
+    )
 
   return (
     <div className="space-y-4 rounded-lg bg-gradient-to-br from-purple-800 to-sky-600 p-4 text-sm text-white">
@@ -213,24 +282,10 @@ export default function MagicIDE() {
                 file.id === activeId ? 'bg-sky-500 text-white' : 'bg-purple-600 text-white/80'
               }`}
             >
-              {editingId === file.id ? (
-                <input
-                  value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
-                  onBlur={() => finishRename(file.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') finishRename(file.id)
-                    if (e.key === 'Escape') cancelRename()
-                  }}
-                  className="rounded bg-sky-700 px-1 text-white outline-none harold-sky"
-                  autoFocus
-                />
-              ) : (
-                <>
-                  <span>{name}</span>
-                  <span className="rounded bg-sky-700 px-1 text-xs uppercase">{ext || 'txt'}</span>
-                </>
-              )}
+              <>
+                <span>{name}</span>
+                <span className="rounded bg-sky-700 px-1 text-xs uppercase">{ext || 'txt'}</span>
+              </>
               <span
                 className="ml-2 cursor-pointer"
                 onClick={(e) => {
@@ -243,7 +298,13 @@ export default function MagicIDE() {
             </div>
           )
         })}
-        <button onClick={addTab} className="rounded bg-purple-700 px-3 py-1">
+        <button
+          onClick={() => {
+            setNewTitle('')
+            setShowNewFile(true)
+          }}
+          className="rounded bg-purple-700 px-3 py-1"
+        >
           +
         </button>
       </div>
@@ -298,6 +359,8 @@ export default function MagicIDE() {
           </div>
         </div>
       )}
+      {newFilePortal}
+      {renamePortal}
       {closeWarningPortal}
     </div>
   )
