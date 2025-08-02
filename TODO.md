@@ -10,6 +10,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Tools menu now opens both a code editor and a diff viewer for side-by-side comparisons (2025-08-02 04:20 UTC)
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
 ### Changed
+- Diff Viewer button appears only when a file has commit history, mirroring VS Code's commit diff behavior (2025-08-02 04:00 UTC)
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
