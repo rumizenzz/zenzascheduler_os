@@ -110,6 +110,7 @@ export function Dashboard() {
   usePullToRefresh(pullRefreshEnabled);
 
   const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0 });
     const scroller = document.scrollingElement || document.documentElement;
     scroller.scrollTop = 0;
     scroller.scrollLeft = 0;
@@ -141,10 +142,6 @@ export function Dashboard() {
         .eq("id", user.id);
     }
   }, [activeTab, user]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [activeTab]);
 
   useEffect(() => {
     const handleResize = () => {
