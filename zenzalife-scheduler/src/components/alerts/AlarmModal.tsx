@@ -15,6 +15,7 @@ export function AlarmModal({ eventTitle, eventTime, soundUrl, onDismiss, onSnooz
   const wakeLockRef = React.useRef<WakeLockSentinel | null>(null);
   const lowerCat = eventCategory?.toLowerCase();
   const isPrayerCategory = lowerCat === 'wake up' || lowerCat === 'sleep';
+  const prayerLabel = lowerCat === 'wake up' ? 'Start Morning Prayer' : 'Start Night Prayer';
 
   const handleStartPrayer = () => {
     const type = lowerCat === 'wake up' ? 'morning' : 'night';
@@ -50,7 +51,7 @@ export function AlarmModal({ eventTitle, eventTime, soundUrl, onDismiss, onSnooz
         <div className="flex gap-3 pt-2">
           {isPrayerCategory && (
             <button onClick={handleStartPrayer} className="btn-dreamy-primary flex-1">
-              Start Prayer
+              {prayerLabel}
             </button>
           )}
           <button onClick={onDismiss} className="btn-dreamy flex-1">
