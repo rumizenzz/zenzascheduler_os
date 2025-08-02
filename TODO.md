@@ -13,7 +13,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
 - Commit Diff Viewer compares commits with split or inline layouts, navigation between changes, merge conflict controls, and a commit metadata header (2025-08-02 04:41 UTC)
 ### Changed
-- Diff Viewer button appears only when a file has commit history, mirroring VS Code's commit diff behavior (2025-08-02 04:00 UTC)
+- IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
+- Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
@@ -24,6 +25,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Commit Diff Viewer now retrieves commit content from GitHub instead of Supabase for accurate diffs (2025-08-02 04:55 UTC)
+- Commit Diff Viewer now displays commit changes directly inside the tool (2025-08-02 04:45 UTC)
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - Guarded wake lock requests with a visibility check so alarms don't throw NotAllowedError in hidden tabs (2025-08-02 04:18 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14 UTC)
@@ -65,6 +68,10 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
+- IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
+- Commit Diff Viewer now retrieves commit content from GitHub instead of Supabase for accurate diffs (2025-08-02 04:55 UTC)
+- Commit Diff Viewer now displays commit changes directly inside the tool (2025-08-02 04:45 UTC)
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - Task modal adds Current Time buttons to quickly set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)

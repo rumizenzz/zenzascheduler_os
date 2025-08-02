@@ -13,7 +13,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
 - Commit Diff Viewer component compares commits with split or inline layouts, change navigation, merge conflict controls, and a commit metadata header (2025-08-02 04:41 UTC)
 ### Changed
-- Diff Viewer now appears only when a file has commit history, mirroring VS Code's commit diff workflow (2025-08-02 04:00 UTC)
+- IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
+- Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
 - IDE now opens in a Harold and the Purple Crayon & Vanilla Sky overlay instead of a new browser tab (2025-08-01 23:27 UTC)
 - World Clock timezone selector now uses a Harold and the Purple Crayon & Vanilla Sky dropdown that stays clear of other buttons (2025-08-01 23:14 UTC)
 - World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59 UTC)
@@ -28,6 +29,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Commit Diff Viewer now retrieves commit content from GitHub instead of Supabase for accurate diffs (2025-08-02 04:55 UTC)
+- Commit Diff Viewer now displays commit changes directly inside the tool (2025-08-02 04:45 UTC)
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - Guarded wake lock requests with a visibility check so alarms don't throw NotAllowedError in hidden tabs (2025-08-02 04:18 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14 UTC)
