@@ -19,6 +19,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+ - Dashboard tabs no longer show modules beneath the app by removing smooth scrolling and forcing all containers to the top (2025-08-02 02:43 UTC)
+ - Dashboard sections remount and scroll after paint so modules never hide beneath the app (2025-08-02 02:50 UTC)
+ - Dashboard tab content scrolls within its own container so sections never render underneath the app (2025-08-02 03:01 UTC)
  - IDE close warning window now renders via a portal with a high z-index so it always appears above editor content (2025-08-02 02:40 UTC)
  - Raised IDE close warning z-index so the confirmation window always floats above the editor overlay (2025-08-02 02:49 UTC)
  - World Clock right-click menu uses a portal with a sky-high z-index so the context window always shows on top (2025-08-02 02:19 UTC)

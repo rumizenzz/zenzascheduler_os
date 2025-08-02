@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
@@ -109,12 +109,18 @@ export function Dashboard() {
 
   usePullToRefresh(pullRefreshEnabled);
 
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const scrollToTop = () => {
-    const scroller = document.scrollingElement || document.documentElement;
-    scroller.scrollTop = 0;
-    scroller.scrollLeft = 0;
-    document.body.scrollTop = 0;
-    document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0 });
+      const scroller = document.scrollingElement || document.documentElement;
+      scroller.scrollTop = 0;
+      scroller.scrollLeft = 0;
+      document.body.scrollTop = 0;
+      document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
+      contentRef.current?.scrollTo({ top: 0, left: 0 });
+    });
   };
 
   useLayoutEffect(() => {
@@ -141,10 +147,6 @@ export function Dashboard() {
         .eq("id", user.id);
     }
   }, [activeTab, user]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [activeTab]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -337,7 +339,9 @@ export function Dashboard() {
 
       {/* Main Content */}
       <div
-        className={`transition-all duration-300 ml-0 ${
+        key={activeTab}
+        ref={contentRef}
+        className={`transition-all duration-300 ml-0 overflow-y-auto h-screen ${
           sidebarCollapsed ? "md:ml-16" : "md:ml-64"
         }`}
       >
