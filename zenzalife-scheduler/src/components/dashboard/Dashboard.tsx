@@ -337,7 +337,7 @@ export function Dashboard() {
 
       {/* Main Content */}
       <div
-        className={`transition-all duration-300 ml-0 ${
+        className={`transition-all duration-300 ml-0 w-full ${
           sidebarCollapsed ? "md:ml-16" : "md:ml-64"
         }`}
       >
