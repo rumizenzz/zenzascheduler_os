@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { Editor } from '@monaco-editor/react'
 import type { editor as MonacoEditor } from 'monaco-editor'
 import { supabase, getCurrentUser } from '../lib/supabase'
@@ -158,6 +159,31 @@ export default function MagicIDE() {
   }
   const cancelClose = () => setShowCloseWarning(null)
 
+  const closeWarningPortal =
+    showCloseWarning &&
+    createPortal(
+      <div className="fixed inset-0 z-[1002] flex items-center justify-center bg-black/60 harold-sky">
+        <div className="space-y-4 rounded bg-purple-900 p-6">
+          <p>Close this tab without saving?</p>
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={confirmClose}
+              className="rounded bg-purple-600 px-3 py-1 text-white hover:bg-purple-500"
+            >
+              Close
+            </button>
+            <button
+              onClick={cancelClose}
+              className="rounded bg-sky-600 px-3 py-1 text-white hover:bg-sky-500"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>,
+      document.body,
+    )
+
   const addTab = async () => {
     if (!userId) return
     const title = prompt('Filename', 'untitled')
@@ -272,27 +298,7 @@ export default function MagicIDE() {
           </div>
         </div>
       )}
-      {showCloseWarning && (
-        <div className="fixed inset-0 z-[1001] flex items-center justify-center bg-black/60 harold-sky">
-          <div className="space-y-4 rounded bg-purple-900 p-6">
-            <p>Close this tab without saving?</p>
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={confirmClose}
-                className="rounded bg-purple-600 px-3 py-1 text-white hover:bg-purple-500"
-              >
-                Close
-              </button>
-              <button
-                onClick={cancelClose}
-                className="rounded bg-sky-600 px-3 py-1 text-white hover:bg-sky-500"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {closeWarningPortal}
     </div>
   )
 }

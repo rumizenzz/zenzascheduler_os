@@ -13,6 +13,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 - Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22 UTC)
 ### Fixed
+- IDE close warning window now renders via a portal with a high z-index so it appears above editor content (2025-08-02 02:40 UTC)
+- World Clock right-click menu renders via a portal with a high z-index so it appears on top (2025-08-02 02:19 UTC)
 - Corrected Lucid Dream Journal module export so TypeScript build succeeds (2025-08-02 02:14 UTC)
 - Raised Workbox precache limit to 6 MB so large bundles like index-DCXdUHmw.js are cached and Netlify builds succeed (2025-08-02 01:29 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
@@ -45,6 +47,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- IDE close warning and World Clock context menu now render via high-z-index portals so overlays never hide beneath dashboard elements (2025-08-02 02:40:00 UTC)
 - Right-clicking a World Clock time zone opens a Harold and the Purple Crayon & Vanilla Sky menu with a Remove Time Zone option (2025-08-01 23:39:07 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58:00 UTC)
 - Removed duplicate timer preset editing state to fix Clock module TypeScript build error (2025-08-01 21:44:04 UTC)
