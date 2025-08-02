@@ -158,6 +158,15 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
     }
   }
 
+  const setCurrentTime = (offset: number) => {
+    const now = dayjs()
+    const start = now.format('YYYY-MM-DDTHH:mm')
+    const end = offset
+      ? now.add(offset, 'minute').format('YYYY-MM-DDTHH:mm')
+      : start
+    setFormData(prev => ({ ...prev, start_time: start, end_time: end }))
+  }
+
   const autoSetEndTime = () => {
     if (formData.start_time) {
       const endTime = dayjs(formData.start_time).add(1, 'hour').format('YYYY-MM-DDTHH:mm')
@@ -258,6 +267,45 @@ export function TaskModal({ isOpen, onClose, onSave, onDelete, task, initialDate
                   className="input-dreamy w-full"
                   required
                 />
+                {!formData.all_day && (
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCurrentTime(0)}
+                      className="text-xs text-blue-500 hover:text-blue-700"
+                    >
+                      Current Time
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentTime(5)}
+                      className="text-xs text-blue-500 hover:text-blue-700"
+                    >
+                      +5m
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentTime(10)}
+                      className="text-xs text-blue-500 hover:text-blue-700"
+                    >
+                      +10m
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentTime(30)}
+                      className="text-xs text-blue-500 hover:text-blue-700"
+                    >
+                      +30m
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentTime(60)}
+                      className="text-xs text-blue-500 hover:text-blue-700"
+                    >
+                      +60m
+                    </button>
+                  </div>
+                )}
               </div>
 
               {!formData.all_day && (
