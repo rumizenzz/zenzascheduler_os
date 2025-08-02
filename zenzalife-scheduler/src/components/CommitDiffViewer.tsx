@@ -3,6 +3,11 @@ import type { editor as MonacoEditor } from 'monaco-editor'
 import * as monaco from 'monaco-editor'
 import { DiffEditor } from '@monaco-editor/react'
 
+interface DiffNavigator {
+  next(): void
+  previous(): void
+}
+
 interface CommitMeta {
   author: string
   timestamp: string
@@ -41,15 +46,15 @@ export default function CommitDiffViewer({
   initialView = 'split',
 }: CommitDiffViewerProps) {
   const editorRef = useRef<MonacoEditor.IStandaloneDiffEditor | null>(null)
-  const navigatorRef = useRef<monaco.editor.IDiffNavigator | null>(null)
+  const navigatorRef = useRef<DiffNavigator | null>(null)
   const [sideBySide, setSideBySide] = useState(initialView === 'split')
 
   const handleMount = (editor: MonacoEditor.IStandaloneDiffEditor) => {
     editorRef.current = editor
-    navigatorRef.current = monaco.editor.createDiffNavigator(editor, {
+    navigatorRef.current = (monaco.editor as any).createDiffNavigator(editor, {
       followsCaret: true,
       ignoreCharChanges: true,
-    })
+    }) as DiffNavigator
   }
 
   const acceptCurrent = () => {
