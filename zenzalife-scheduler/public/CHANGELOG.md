@@ -17,6 +17,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Fixed
 - Dashboard content width now subtracts the sidebar so sections sit beside the app on all screens (2025-08-02 01:32 UTC)
 - Dashboard layout now shows section content beside the app instead of beneath it (2025-08-02 00:17 UTC)
+- Exported Lucid Dream Journal module correctly so dashboard imports compile (2025-08-02 00:05 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
 - Removed duplicate timer preset editing state that caused TypeScript redeclaration errors in the Clock module (2025-08-01 21:44 UTC)
 - Address search requests are debounced to prevent timeouts when typing quickly (2025-08-01 18:46 UTC)
@@ -41,6 +42,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
+- Monaco-powered IDE now supports multiple tabs with Supabase persistence, Save/Save As, Undo/Redo, version history, and word count (2025-08-02)
 - Movable World Clock widgets with a Harold and the Purple Crayon & Vanilla Sky context menu that remembers positions through Supabase (2025-08-01 23:24 UTC)
 - Asia/Cebu Philippines time zone available in World Clock (2025-08-01 23:14 UTC)
 - Tools button on the right side of the dashboard opens the IDE diff editor from any tab (2025-08-01 23:00 UTC)
