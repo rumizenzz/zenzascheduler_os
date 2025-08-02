@@ -15,7 +15,8 @@ export default defineConfig({
         enabled: true
       },
       workbox: {
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+        // Allow precaching large bundles like index-DCXdUHmw.js (~5.7 MB)
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
       },
       manifest: {
         name: 'ZenzaLife Scheduler',

@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
-import { Wrench, Code2 } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { Wrench, Code2, X } from 'lucide-react'
+import MagicIDE from './MagicIDE'
 
 export function ToolsButton() {
   const [open, setOpen] = useState(false)
+  const [showIDE, setShowIDE] = useState(false)
 
   return (
     <>
@@ -20,7 +23,7 @@ export function ToolsButton() {
           <div className="fixed top-28 right-4 z-50 bg-white rounded shadow-lg py-2">
             <button
               onClick={() => {
-                window.open('/ide', '_blank')
+                setShowIDE(true)
                 setOpen(false)
               }}
               className="flex items-center gap-2 w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
@@ -31,6 +34,22 @@ export function ToolsButton() {
           </div>
         </>
       )}
+      {showIDE &&
+        createPortal(
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
+            <div className="relative w-full max-w-5xl p-4">
+              <button
+                onClick={() => setShowIDE(false)}
+                className="absolute top-4 right-4 text-white hover:text-purple-200"
+                aria-label="Close IDE"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <MagicIDE />
+            </div>
+          </div>,
+          document.body,
+        )}
     </>
   )
 }

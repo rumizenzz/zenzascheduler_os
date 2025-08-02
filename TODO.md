@@ -5,6 +5,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ## [Unreleased]
 ### Added
 - Right-clicking a World Clock time zone opens a Harold and the Purple Crayon & Vanilla Sky menu with a Remove Time Zone option (2025-08-01 23:39 UTC)
+- IDE diff editor tabs can be renamed inline to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
 ### Changed
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
@@ -13,6 +14,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22 UTC)
 ### Fixed
 - Corrected Lucid Dream Journal module export so TypeScript build succeeds (2025-08-02 02:14 UTC)
+- Raised Workbox precache limit to 6 MB so large bundles like index-DCXdUHmw.js are cached and Netlify builds succeed (2025-08-02 01:29 UTC)
+- Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
+- IDE overlay now renders via a portal with a sky-high z-index so the diff editor appears above all dashboard content (2025-08-01 23:46 UTC)
 - Pull-to-refresh placeholder no longer pushes dashboard content below the app; sections now load at the top (2025-08-01 22:55 UTC)
 - Special occasion heart hover now shows in week and month views, and hovering a special day showers the whole calendar with floating hearts (2025-08-01 21:35 UTC)
 - Journal and Dream Journal selection fields now glow with Harold and the Purple Crayon & Vanilla Sky gradients instead of plain white (2025-08-01 21:50 UTC)
@@ -42,6 +46,11 @@ This file tracks project progress and upcoming tasks.
 
 ## Latest Updates
 - Right-clicking a World Clock time zone opens a Harold and the Purple Crayon & Vanilla Sky menu with a Remove Time Zone option (2025-08-01 23:39:07 UTC)
+- Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58:00 UTC)
+- Removed duplicate timer preset editing state to fix Clock module TypeScript build error (2025-08-01 21:44:04 UTC)
+- Debounced address search queries so OpenStreetMap requests don't time out (2025-08-01 18:46:00 UTC)
+- IDE overlay now renders via a portal with a sky-high z-index so the diff editor appears above all dashboard content (2025-08-01 23:46:00 UTC)
+- IDE diff editor now opens in a Harold and the Purple Crayon & Vanilla Sky overlay instead of a separate browser tab (2025-08-01 23:27:44 UTC)
 - Movable World Clock widgets can be pinned, repositioned, and opened via a Harold and the Purple Crayon & Vanilla Sky context menu with Supabase persistence (2025-08-01 23:24:00 UTC)
 - World Clock timezone selector now offers a Harold and the Purple Crayon & Vanilla Sky dropdown with Asia/Cebu option and a safe top-right overlay (2025-08-01 23:14:00 UTC)
 - World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59:00 UTC)
