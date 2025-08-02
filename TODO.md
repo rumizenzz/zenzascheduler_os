@@ -75,3 +75,4 @@
  - Monthly first-Sunday fasting and prayer reminder for LDS tradition with customizable duration, water options, a pre-fast days-left reminder, and a live countdown timer saved to Supabase
 - Fixed active fast lookup to include user ID so builds compile without TypeScript errors
 - Template system for schedule management
+- IDE tabs support inline renaming and extension changes with file type badges
