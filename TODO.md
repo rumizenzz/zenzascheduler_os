@@ -25,6 +25,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Reset pull-to-refresh transform so dashboard content never renders below the app (2025-08-02 10:53 UTC)
+- Removed leftover pull-to-refresh container and transform so dashboard sections always render at the top (2025-08-02 11:21 UTC)
 - Commit Diff Viewer now retrieves commit content from GitHub instead of Supabase for accurate diffs (2025-08-02 04:55 UTC)
 - Commit Diff Viewer now displays commit changes directly inside the tool (2025-08-02 04:45 UTC)
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
@@ -68,6 +70,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Removed leftover pull-to-refresh container and transform so dashboard sections always render at the top (2025-08-02 11:21 UTC)
+- Reset pull-to-refresh transform so dashboard content never renders below the app (2025-08-02 10:53 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer now retrieves commit content from GitHub instead of Supabase for accurate diffs (2025-08-02 04:55 UTC)

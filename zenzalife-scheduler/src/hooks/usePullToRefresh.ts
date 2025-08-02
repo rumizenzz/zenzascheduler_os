@@ -6,6 +6,8 @@ let initialized = false
 
 export function initPullToRefresh() {
   if (initialized) return
+  const root = document.getElementById('root')
+  root?.style.removeProperty('transform')
   PullToRefresh.init({
     mainElement: '#root',
     instructionsPullToRefresh: 'Swipe down to refresh',
@@ -22,6 +24,11 @@ export function destroyPullToRefresh() {
   if (!initialized) return
   PullToRefresh.destroyAll()
   initialized = false
+  const root = document.getElementById('root')
+  if (root) {
+    root.style.removeProperty('transform')
+    root.querySelector('.ptr--ptr')?.remove()
+  }
 }
 export function usePullToRefresh(enabled = true) {
   useEffect(() => {
