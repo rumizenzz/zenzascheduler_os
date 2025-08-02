@@ -120,7 +120,12 @@ export function Dashboard() {
       scroller.scrollTop = 0;
       scroller.scrollLeft = 0;
       document.body.scrollTop = 0;
-      document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
+      const root = document.getElementById("root");
+      root?.scrollTo({ top: 0, left: 0 });
+      // Reset any pull-to-refresh transform so content doesn't render offscreen
+      if (root) {
+        root.style.removeProperty("transform");
+      }
     });
   };
 

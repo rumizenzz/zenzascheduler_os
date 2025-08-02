@@ -22,6 +22,10 @@ export function destroyPullToRefresh() {
   if (!initialized) return
   PullToRefresh.destroyAll()
   initialized = false
+  const root = document.getElementById('root')
+  if (root) {
+    root.style.removeProperty('transform')
+  }
 }
 export function usePullToRefresh(enabled = true) {
   useEffect(() => {
