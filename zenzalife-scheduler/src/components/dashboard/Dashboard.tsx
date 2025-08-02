@@ -119,8 +119,14 @@ export function Dashboard() {
       const scroller = document.scrollingElement || document.documentElement;
       scroller.scrollTop = 0;
       scroller.scrollLeft = 0;
+      document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
+      const root = document.getElementById("root");
+      if (root) {
+        root.scrollTo({ top: 0, left: 0 });
+        root.scrollTop = 0;
+        root.scrollLeft = 0;
+      }
     });
   };
 
