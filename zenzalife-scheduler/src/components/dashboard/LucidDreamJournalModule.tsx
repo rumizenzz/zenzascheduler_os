@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { supabase, JournalEntry } from '@/lib/supabase'
+import { supabase, DreamJournalEntry } from '@/lib/supabase'
 import dayjs from 'dayjs'
 import { Plus, NotebookPen, Pencil, Trash2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
-export function JournalModule() {
+export function LucidDreamJournalModule() {
   const { user } = useAuth()
-  const [entries, setEntries] = useState<JournalEntry[]>([])
+  const [entries, setEntries] = useState<DreamJournalEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
-  const [content, setContent] = useState('')
+  const [description, setDescription] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
-  const [editContent, setEditContent] = useState('')
+  const [editDescription, setEditDescription] = useState('')
 
   useEffect(() => {
     if (user) {
@@ -24,12 +24,12 @@ export function JournalModule() {
     if (!user) return
     setLoading(true)
     const { data, error } = await supabase
-      .from('journal_entries')
+      .from('dream_journal_entries')
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
     if (error) {
-      toast.error('Failed to load journal entries: ' + error.message)
+      toast.error('Failed to load dream journal entries: ' + error.message)
     } else {
       setEntries(data || [])
     }
@@ -37,61 +37,62 @@ export function JournalModule() {
   }
 
   const saveEntry = async () => {
-    if (!user || !content.trim()) return
-    const { error } = await supabase.from('journal_entries').insert({
+    if (!user || !description.trim()) return
+    const { error } = await supabase.from('dream_journal_entries').insert({
       user_id: user.id,
-      content: content.trim(),
+      description: description.trim(),
+      achieved_lucidity: false,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })
     if (error) {
-      toast.error('Failed to save entry: ' + error.message)
+      toast.error('Failed to save dream journal entry: ' + error.message)
     } else {
-      setContent('')
+      setDescription('')
       setShowAdd(false)
       await loadEntries()
-      toast.success('Journal entry saved')
+      toast.success('Dream journal entry saved')
     }
   }
 
-  const startEdit = (entry: JournalEntry) => {
+  const startEdit = (entry: DreamJournalEntry) => {
     setEditingId(entry.id)
-    setEditContent(entry.content)
+    setEditDescription(entry.description)
   }
 
   const updateEntry = async () => {
-    if (!editingId || !user || !editContent.trim()) return
+    if (!editingId || !user || !editDescription.trim()) return
     const { error } = await supabase
-      .from('journal_entries')
-      .update({ content: editContent.trim(), updated_at: new Date().toISOString() })
+      .from('dream_journal_entries')
+      .update({ description: editDescription.trim(), updated_at: new Date().toISOString() })
       .eq('id', editingId)
       .eq('user_id', user.id)
     if (error) {
-      toast.error('Failed to update entry: ' + error.message)
+      toast.error('Failed to update dream journal entry: ' + error.message)
     } else {
       setEditingId(null)
-      setEditContent('')
+      setEditDescription('')
       await loadEntries()
-      toast.success('Journal entry updated')
+      toast.success('Dream journal entry updated')
     }
   }
 
   const deleteEntry = async (id: string) => {
     if (!user) return
     const { error } = await supabase
-      .from('journal_entries')
+      .from('dream_journal_entries')
       .delete()
       .eq('id', id)
       .eq('user_id', user.id)
     if (error) {
-      toast.error('Failed to delete entry: ' + error.message)
+      toast.error('Failed to delete dream journal entry: ' + error.message)
     } else {
       await loadEntries()
-      toast.success('Journal entry deleted')
+      toast.success('Dream journal entry deleted')
     }
   }
 
-  const grouped = entries.reduce<Record<string, JournalEntry[]>>((acc, entry) => {
+  const grouped = entries.reduce<Record<string, DreamJournalEntry[]>>((acc, entry) => {
     const date = dayjs(entry.created_at).format('YYYY-MM-DD')
     acc[date] = acc[date] || []
     acc[date].push(entry)
@@ -103,7 +104,7 @@ export function JournalModule() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-light text-purple-200 flex items-center gap-3">
           <NotebookPen className="w-8 h-8" />
-          Journal
+          Dream Journal
         </h1>
         <button
           onClick={() => setShowAdd(true)}
@@ -119,8 +120,8 @@ export function JournalModule() {
           <textarea
             className="textarea-dreamy w-full"
             rows={5}
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             placeholder="Write your thoughts..."
           />
           <div className="flex gap-2 justify-end">
@@ -159,8 +160,8 @@ export function JournalModule() {
                         <textarea
                           className="textarea-dreamy w-full"
                           rows={5}
-                          value={editContent}
-                          onChange={(e) => setEditContent(e.target.value)}
+                          value={editDescription}
+                          onChange={(e) => setEditDescription(e.target.value)}
                         />
                         <div className="flex gap-2 justify-end">
                           <button className="btn-secondary" onClick={() => setEditingId(null)}>
@@ -176,7 +177,7 @@ export function JournalModule() {
                         <div className="text-xs opacity-80">
                           {dayjs(entry.created_at).format('YYYY-MM-DD hh:mm:ss A')}
                         </div>
-                        <div>{entry.content}</div>
+                        <div>{entry.description}</div>
                         <div className="flex gap-2 justify-end text-sm">
                           <button
                             className="flex items-center gap-1 hover:text-purple-200"
@@ -204,4 +205,4 @@ export function JournalModule() {
   )
 }
 
-export default JournalModule
+export default LucidDreamJournalModule

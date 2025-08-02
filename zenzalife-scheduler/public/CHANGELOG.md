@@ -15,6 +15,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
+- Exported Lucid Dream Journal module correctly so dashboard imports compile (2025-08-02 00:05 UTC)
+- Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
+- Removed duplicate timer preset editing state that caused TypeScript redeclaration errors in the Clock module (2025-08-01 21:44 UTC)
+- Address search requests are debounced to prevent timeouts when typing quickly (2025-08-01 18:46 UTC)
 - IDE overlay now renders via a portal with a sky-high z-index so it appears above all dashboard content (2025-08-01 23:46 UTC)
 - Pull-to-refresh placeholder no longer pushes dashboard content below the app; sections now load at the top (2025-08-01 22:55 UTC)
 - Special occasion heart hover now shows in week and month views, and hovering a special day showers the whole calendar with floating hearts (2025-08-01 21:35 UTC)
