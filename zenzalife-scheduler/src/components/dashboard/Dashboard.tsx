@@ -175,6 +175,12 @@ export function Dashboard() {
     setActiveTab(id);
   };
 
+  const sidebarWidth = sidebarCollapsed ? 64 : 256;
+
+  const layoutStyle: React.CSSProperties = isMobile
+    ? {}
+    : { paddingLeft: sidebarWidth };
+
   const renderContent = (): JSX.Element => {
     switch (activeTab) {
       case "calendar":
@@ -213,7 +219,10 @@ export function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
+    <div
+      className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100 transition-all duration-300"
+      style={layoutStyle}
+    >
       <FastingPrayerReminder />
       {/* Mobile menu button */}
       {sidebarCollapsed && (
@@ -336,13 +345,7 @@ export function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div
-        className={`transition-all duration-300 ml-0 ${
-          sidebarCollapsed ? "md:ml-16" : "md:ml-64"
-        }`}
-      >
-        <div className="p-6">{renderContent()}</div>
-      </div>
+      <div className="p-6">{renderContent()}</div>
       <OnboardingModal />
       <MailingListPrompt />
       <RemindersButton />
