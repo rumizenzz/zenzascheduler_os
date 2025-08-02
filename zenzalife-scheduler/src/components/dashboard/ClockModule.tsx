@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import {
   Timer as TimerIcon,
   Plus,
@@ -503,6 +504,23 @@ export function ClockModule() {
       second: '2-digit',
     })
 
+  const contextMenuPortal =
+    contextMenu.visible &&
+    createPortal(
+      <div
+        className="fixed z-[1000] p-4 rounded-xl harold-sky bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100 shadow-lg"
+        style={{ top: contextMenu.y, left: contextMenu.x }}
+      >
+        <div className="mb-4">World Clock Menu</div>
+        <div className="text-[10px] text-right text-purple-200 leading-snug">
+          Powered by ZenzaDae Group, Inspired by Harold and the Purple Crayon.
+          <br />
+          (Always draw what you think of and create anything you can imagine. - Rumi)
+        </div>
+      </div>,
+      document.body
+    )
+
   return (
     <>
       {worldZones
@@ -517,19 +535,7 @@ export function ClockModule() {
             {formatZoneTime(zone.zone)} {zone.zone}
           </div>
         ))}
-      {contextMenu.visible && (
-        <div
-          className="fixed z-50 p-4 rounded-xl harold-sky bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100 shadow-lg"
-          style={{ top: contextMenu.y, left: contextMenu.x }}
-        >
-          <div className="mb-4">World Clock Menu</div>
-          <div className="text-[10px] text-right text-purple-200 leading-snug">
-            Powered by ZenzaDae Group, Inspired by Harold and the Purple Crayon.
-            <br />
-            (Always draw what you think of and create anything you can imagine. - Rumi)
-          </div>
-        </div>
-      )}
+      {contextMenuPortal}
       <div className="harold-sky space-y-6 p-6 rounded-xl bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100">
         <div className="flex justify-center mb-4">
           <div className="bg-white/10 rounded-full p-1 flex">
