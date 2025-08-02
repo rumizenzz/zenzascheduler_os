@@ -155,6 +155,24 @@ export type DiscipleshipNote = {
   updated_at?: string
 }
 
+export type JournalEntry = {
+  id: string
+  user_id: string
+  created_at: string
+  content: string
+  updated_at?: string
+}
+
+export type DreamJournalEntry = {
+  id: string
+  user_id: string
+  created_at: string
+  description: string
+  achieved_lucidity: boolean
+  lucidity_level?: number
+  updated_at?: string
+}
+
 export type GracePrayer = {
   id: string
   user_id: string
@@ -284,6 +302,17 @@ export type Stopwatch = {
   user_id: string
   label: string
   elapsed: number
+  created_at?: string
+  updated_at?: string
+}
+
+export type WorldClockZone = {
+  id: string
+  user_id: string
+  zone: string
+  show_widget?: boolean
+  pos_x?: number
+  pos_y?: number
   created_at?: string
   updated_at?: string
 }

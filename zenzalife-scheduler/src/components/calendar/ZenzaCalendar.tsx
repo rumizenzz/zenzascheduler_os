@@ -29,6 +29,7 @@ import { AlarmModal } from "../alerts/AlarmModal";
 import { useAlarmChannel } from "@/hooks/useAlarmChannel";
 import { useNotifications } from "@/hooks/useNotifications";
 import { DragHint } from "./DragHint";
+import { cn } from "@/lib/utils";
 
 interface CalendarEvent {
   id: string;
@@ -1025,6 +1026,21 @@ export function ZenzaCalendar() {
           dayMaxEvents={true}
           weekends={true}
           events={events}
+          eventClassNames={(arg) => {
+            const category = arg.event.extendedProps?.category || "";
+            return ["monthsary", "anniversary"].includes(category)
+              ? ["special-occasion"]
+              : [];
+          }}
+          dayCellClassNames={(arg) => {
+            const hasSpecial = events.some(
+              (ev) =>
+                ["monthsary", "anniversary"].includes(
+                  ev.extendedProps?.category || "",
+                ) && dayjs(ev.start).isSame(arg.date, "day"),
+            );
+            return hasSpecial ? ["special-occasion"] : [];
+          }}
           dayCellContent={(arg) => {
             if (calendarView === "dayGridMonth" || calendarView === "timeGridWeek") {
               const dayEvents = events.filter((ev) =>
@@ -1037,7 +1053,12 @@ export function ZenzaCalendar() {
                   {previews.map((ev) => (
                     <span
                       key={ev.id}
-                      className="event-preview"
+                      className={cn(
+                        "event-preview",
+                        ["monthsary", "anniversary"].includes(
+                          ev.extendedProps?.category || "",
+                        ) && "special-occasion",
+                      )}
                       style={{
                         backgroundColor: ev.backgroundColor,
                         border: `1px solid ${ev.borderColor}`,
@@ -1071,9 +1092,12 @@ export function ZenzaCalendar() {
             const end = arg.event.end
               ? dayjs(arg.event.end).format("h:mm A")
               : undefined;
+            const isSpecial = ["monthsary", "anniversary"].includes(
+              arg.event.extendedProps?.category || "",
+            );
             return (
               <div
-                className="calendar-event"
+                className={cn("calendar-event", isSpecial && "special-occasion")}
                 style={{
                   backgroundColor: arg.event.backgroundColor,
                   border: `1px solid ${arg.event.borderColor}`,

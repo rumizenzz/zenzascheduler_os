@@ -260,6 +260,13 @@
   @apply bg-purple-900 text-purple-100;
 }
 
+/* Textarea styles with Harold & Vanilla Sky vibe */
+.textarea-dreamy {
+  @apply bg-gradient-to-r from-purple-900/70 via-indigo-900/70 to-blue-900/70 text-purple-100;
+  @apply border-2 border-purple-400 rounded-xl px-4 py-3 backdrop-blur-sm;
+  @apply placeholder-purple-300 focus:border-purple-300 focus:bg-purple-900/80 focus:outline-none transition-all duration-300;
+}
+
 /* Glass morphism effect */
 .glass {
   @apply bg-white/20 backdrop-blur-md border border-white/30;
@@ -328,6 +335,74 @@
 
 .event-preview {
   @apply mt-0.5 w-full overflow-hidden whitespace-nowrap text-[10px] rounded px-1;
+}
+
+/* Monthsary and Anniversary celebration */
+.special-occasion {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  overflow: visible;
+  color: white !important;
+  background: linear-gradient(135deg, #ec4899, #fbbf24) !important;
+  box-shadow: 0 0 8px rgba(236, 72, 153, 0.4);
+  animation: love-pulse 3s ease-in-out infinite;
+}
+
+.special-occasion:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
+  animation: love-pulse 1.5s ease-in-out infinite;
+}
+
+.special-occasion::before,
+.special-occasion::after {
+  content: "💖";
+  position: absolute;
+  top: -0.25rem;
+  opacity: 0;
+  transform: translateY(0) scale(0.5) rotate(0deg);
+  pointer-events: none;
+}
+
+.special-occasion::before {
+  left: -0.5rem;
+}
+
+.special-occasion::after {
+  right: -0.5rem;
+}
+
+.special-occasion:hover::before {
+  animation: float-heart 1.5s ease-in-out forwards;
+}
+
+.special-occasion:hover::after {
+  animation: float-heart 1.5s ease-in-out forwards 0.2s;
+}
+
+@keyframes love-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(236, 72, 153, 0);
+  }
+}
+
+@keyframes float-heart {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5) rotate(0deg);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-1rem) scale(1.3) rotate(20deg);
+  }
 }
 
 /* Grid layout for month/week events */
