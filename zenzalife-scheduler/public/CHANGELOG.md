@@ -5,6 +5,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ## [Unreleased]
 ### Added
 - IDE tabs support inline renaming and extension changes with Harold and the Purple Crayon & Vanilla Sky file type badges (2025-08-02 00:30 UTC)
+- IDE diff editor tabs can be renamed to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
 ### Changed
 - IDE now opens in a Harold and the Purple Crayon & Vanilla Sky overlay instead of a new browser tab (2025-08-01 23:27 UTC)
 - World Clock timezone selector now uses a Harold and the Purple Crayon & Vanilla Sky dropdown that stays clear of other buttons (2025-08-01 23:14 UTC)
@@ -17,7 +18,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 ### Fixed
-- Exported Lucid Dream Journal module correctly so dashboard imports compile (2025-08-02 00:05 UTC)
+- Increased Workbox precache limit to 6 MB so large bundles like index-DCXdUHmw.js are cached and Netlify builds succeed (2025-08-02 01:29 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
 - Removed duplicate timer preset editing state that caused TypeScript redeclaration errors in the Clock module (2025-08-01 21:44 UTC)
 - Address search requests are debounced to prevent timeouts when typing quickly (2025-08-01 18:46 UTC)
@@ -42,7 +43,6 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Calendar's Add Task button floats above Refresh, Change Log, and Harold & Vanilla Sky toggle so it's never covered (2025-08-01 17:48:34 UTC)
 - Dashboard scrolls the root element too so modules always appear at the very top (2025-08-01 18:13:13 UTC)
 ### Added
-- Monaco-powered IDE now supports multiple tabs with Supabase persistence, Save/Save As, Undo/Redo, version history, and word count (2025-08-02)
 - Movable World Clock widgets with a Harold and the Purple Crayon & Vanilla Sky context menu that remembers positions through Supabase (2025-08-01 23:24 UTC)
 - Asia/Cebu Philippines time zone available in World Clock (2025-08-01 23:14 UTC)
 - Tools button on the right side of the dashboard opens the IDE diff editor from any tab (2025-08-01 23:00 UTC)
