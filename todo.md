@@ -18,6 +18,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 ### Fixed
+- Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - Raised Workbox precache limit to 6 MB so large bundles like index-DCXdUHmw.js are cached and Netlify builds succeed (2025-08-02 01:29 UTC)
 - Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
 - IDE overlay now renders via a portal with a sky-high z-index so the diff editor appears above all dashboard content (2025-08-01 23:46 UTC)
@@ -49,6 +50,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - GED Math Study module adds staged self-study with official GED PDFs and Supabase tracking (2025-08-02 04:00:00 UTC)
 - GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05:00 UTC)
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10:00 UTC)

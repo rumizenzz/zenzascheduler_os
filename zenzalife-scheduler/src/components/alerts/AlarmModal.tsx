@@ -20,6 +20,7 @@ export function AlarmModal({ eventTitle, eventTime, soundUrl, onDismiss, onSnooz
   const handleStartPrayer = () => {
     const type = lowerCat === 'wake up' ? 'morning' : 'night';
     window.open(`/?tab=prayers&type=${type}`, '_blank');
+    stopAudio();
     onDismiss();
   };
   React.useEffect(() => {
