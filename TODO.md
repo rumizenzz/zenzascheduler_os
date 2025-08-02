@@ -10,6 +10,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
 - Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22 UTC)
 ### Fixed
+- Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58 UTC)
 - IDE overlay now renders via a portal with a sky-high z-index so the diff editor appears above all dashboard content (2025-08-01 23:46 UTC)
 - Pull-to-refresh placeholder no longer pushes dashboard content below the app; sections now load at the top (2025-08-01 22:55 UTC)
 - Special occasion heart hover now shows in week and month views, and hovering a special day showers the whole calendar with floating hearts (2025-08-01 21:35 UTC)
@@ -39,6 +40,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Exported Lucid Dream Journal module so Netlify builds succeed (2025-08-01 23:58:00 UTC)
 - Removed duplicate timer preset editing state to fix Clock module TypeScript build error (2025-08-01 21:44:04 UTC)
 - Debounced address search queries so OpenStreetMap requests don't time out (2025-08-01 18:46:00 UTC)
 - IDE overlay now renders via a portal with a sky-high z-index so the diff editor appears above all dashboard content (2025-08-01 23:46:00 UTC)
