@@ -22,6 +22,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Pull-to-refresh overlay disabled on non-touch devices so desktop content never hides beneath it (2025-08-02 04:30 UTC)
+- Pull-to-refresh overlay remains fixed and transparent so dashboard content is immediately visible on mobile (2025-08-02 04:25 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14 UTC)
 - Dashboard tabs no longer render modules below the app; removing smooth scrolling forces all containers back to the top (2025-08-02 02:43 UTC)
 - Dashboard sections remount and scroll after paint so modules never hide beneath the app (2025-08-02 02:50 UTC)
@@ -61,6 +63,8 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Pull-to-refresh overlay disabled on non-touch devices so desktop content never hides beneath it (2025-08-02 04:30 UTC)
+- Pull-to-refresh overlay stays fixed and transparent so dashboard content is visible at the top on mobile (2025-08-02 04:25 UTC)
 - Task modal adds Current Time buttons to quickly set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
 - Tools menu now lets users open a Diff Viewer alongside the IDE for comparing files (2025-08-02 04:20 UTC)
