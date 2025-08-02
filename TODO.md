@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- Task modal offers quick "Current Time" buttons to set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
 - GED Math Study module offers staged self-study using official GED PDFs with Supabase session tracking (2025-08-02 04:00 UTC)
 - Right-clicking a World Clock time zone opens a Harold and the Purple Crayon & Vanilla Sky menu with a Remove Time Zone option (2025-08-01 23:39 UTC)
 - IDE diff editor tabs can be renamed inline to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
@@ -59,6 +60,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Task modal adds Current Time buttons to quickly set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
 - Tools menu now lets users open a Diff Viewer alongside the IDE for comparing files (2025-08-02 04:20 UTC)
 - Removed the dashboard's internal scroll container so section content no longer hides below the app (2025-08-02 03:14:31 UTC)
