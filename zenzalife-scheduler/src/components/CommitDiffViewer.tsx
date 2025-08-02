@@ -3,6 +3,11 @@ import type { editor as MonacoEditor } from 'monaco-editor'
 import * as monaco from 'monaco-editor'
 import { DiffEditor } from '@monaco-editor/react'
 
+interface DiffNavigator {
+  next(): void
+  previous(): void
+}
+
 interface CommitMeta {
   author: string
   timestamp: string
