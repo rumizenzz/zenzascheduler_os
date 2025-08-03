@@ -40,7 +40,15 @@ export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
     if (!user) return toast.error('You must be signed in')
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      const recorder = new MediaRecorder(stream)
+      let options: MediaRecorderOptions | undefined
+      if (typeof MediaRecorder !== 'undefined') {
+        if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+          options = { mimeType: 'audio/webm;codecs=opus' }
+        } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+          options = { mimeType: 'audio/mp4' }
+        }
+      }
+      const recorder = new MediaRecorder(stream, options)
       mediaRef.current = recorder
       chunksRef.current = []
       recorder.ondataavailable = e => {
@@ -57,7 +65,8 @@ export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
       setRecording(true)
       if (type) setPrayerType(type)
     } catch (err) {
-      toast.error('Failed to start recording')
+      const message = err instanceof Error ? err.message : 'Failed to start recording'
+      toast.error(message)
     }
   }
 
@@ -88,8 +97,11 @@ export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
       toast.success('Prayer saved')
       fetchPrayers()
     } catch (err: any) {
-      toast.error('Upload failed: ' + err.message)
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      toast.error('Upload failed: ' + message)
     } finally {
+      mediaRef.current?.stream.getTracks().forEach(t => t.stop())
+      mediaRef.current = null
       if (timerRef.current) clearInterval(timerRef.current)
       timerRef.current = null
       setElapsed(0)
