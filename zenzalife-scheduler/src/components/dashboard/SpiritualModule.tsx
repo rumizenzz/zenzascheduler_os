@@ -786,11 +786,36 @@ function ScriptureModal({
   const [version, setVersion] = useState(existing?.version || '')
   const [useCustomRef, setUseCustomRef] = useState(book !== 'Book of Mormon')
 
+  const fetchBibleVerse = async (ref: string, ver: string) => {
+    if (!ref.trim()) return
+    try {
+      const url = `https://bible-api.com/${encodeURIComponent(ref)}?translation=${
+        ver || 'kjv'
+      }`
+      const res = await fetch(url)
+      const data = await res.json()
+      if (data.text) {
+        setFullText(data.text.trim())
+      }
+    } catch {
+      /* ignore errors */
+    }
+  }
+
   useEffect(() => {
     if (book !== 'The Bible') {
       setVersion('')
     }
+    if (book === 'The Bible' && scripture) {
+      void fetchBibleVerse(scripture, version)
+    }
   }, [book])
+
+  useEffect(() => {
+    if (book === 'The Bible' && scripture) {
+      void fetchBibleVerse(scripture, version)
+    }
+  }, [version])
 
   const bookOptions = [
     'The Bible',
@@ -918,7 +943,16 @@ function ScriptureModal({
               <input
                 id="scriptureRef"
                 value={scripture}
-                onChange={e => setScripture(e.target.value)}
+                onChange={e => {
+                  const val = e.target.value
+                  setScripture(val)
+                  if (book === 'The Bible') {
+                    void fetchBibleVerse(val, version)
+                  } else if (book === 'Book of Mormon') {
+                    const match = bookOfMormonScriptures.find(s => s.reference === val)
+                    if (match) setFullText(match.text)
+                  }
+                }}
                 className="input-dreamy w-full"
                 placeholder="John 3:16"
                 required
