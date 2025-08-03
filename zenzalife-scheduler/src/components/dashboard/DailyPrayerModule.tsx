@@ -22,6 +22,14 @@ export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
   const chunksRef = useRef<Blob[]>([])
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
+  const blobToDataUrl = (blob: Blob) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result as string)
+      reader.onerror = () => reject(reader.error)
+      reader.readAsDataURL(blob)
+    })
+
   const fetchPrayers = async () => {
     if (!user) return
     const { data, error } = await supabase
@@ -76,28 +84,29 @@ export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
     try {
       const extension = mimeType.split(';')[0].split('/')[1]
       const fileName = `${prayerType}-prayer-${Date.now()}.${extension}`
-      const filePath = `prayers/daily/${user!.id}/${fileName}`
-      const { error: uploadError } = await supabase.storage
-        .from('zenzalife-assets')
-        .upload(filePath, audioBlob, { contentType: mimeType, upsert: true })
-      if (uploadError) throw uploadError
-      const {
-        data: { publicUrl }
-      } = supabase.storage.from('zenzalife-assets').getPublicUrl(filePath)
+      const audioData = await blobToDataUrl(audioBlob)
+      const { data, error: uploadError } = await supabase.functions.invoke('audio-upload', {
+        body: { audioData, fileName, userId: user!.id }
+      })
+      if (uploadError || !data?.data?.publicUrl) {
+        throw uploadError || new Error('No URL returned')
+      }
+      const publicUrl = data.data.publicUrl as string
       const durationMs = startTime ? Date.now() - startTime.getTime() : 0
       const durationSeconds = Math.floor(durationMs / 1000)
-      await supabase.from('daily_prayers').insert({
+      const { error: insertError } = await supabase.from('daily_prayers').insert({
         user_id: user!.id,
         prayer_type: prayerType,
         audio_url: publicUrl,
         started_at: startTime?.toISOString(),
         duration_seconds: durationSeconds
       })
+      if (insertError) throw insertError
       setLastDuration(durationMs)
       toast.success('Prayer saved')
       fetchPrayers()
     } catch (err: any) {
-      const message = err instanceof Error ? err.message : 'Unknown error'
+      const message = err && typeof err === 'object' && 'message' in err ? (err as any).message : 'Unknown error'
       toast.error('Upload failed: ' + message)
     } finally {
       mediaRef.current?.stream.getTracks().forEach(t => t.stop())
