@@ -4,6 +4,20 @@ import './pulltorefresh.css'
 
 let initialized = false
 
+function resetTopSpacing() {
+  ;[document.documentElement, document.body, document.getElementById('root')].forEach(
+    (el) => {
+      if (el) {
+        const target = el as HTMLElement
+        target.style.marginTop = '0'
+        target.style.paddingTop = '0'
+        target.style.transform = 'none'
+      }
+    },
+  )
+  window.scrollTo({ top: 0, left: 0 })
+}
+
 export function initPullToRefresh() {
   if (initialized) return
   PullToRefresh.init({
@@ -16,12 +30,15 @@ export function initPullToRefresh() {
     }
   })
   initialized = true
+  resetTopSpacing()
 }
 
 export function destroyPullToRefresh() {
-  if (!initialized) return
-  PullToRefresh.destroyAll()
-  initialized = false
+  if (initialized) {
+    PullToRefresh.destroyAll()
+    initialized = false
+  }
+  resetTopSpacing()
 }
 export function usePullToRefresh(enabled = true) {
   useEffect(() => {

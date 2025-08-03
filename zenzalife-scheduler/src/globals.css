@@ -53,6 +53,13 @@
   * {
     @apply border-border;
   }
+  html,
+  body,
+  #root {
+    margin: 0;
+    padding: 0;
+    transform: none;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: "Inter", sans-serif;
