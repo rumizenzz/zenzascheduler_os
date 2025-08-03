@@ -14,6 +14,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Commit Diff Viewer compares commits with split or inline layouts, navigation between changes, merge conflict controls, and a commit metadata header (2025-08-02 04:41 UTC)
 - Ideas and Passwords dashboard modules let users capture brainstorms and login info (2025-08-03 14:46 UTC)
 - Scripture modal automatically fetches Bible verse text for typed references (2025-08-03 14:46 UTC)
+- Read Verse module lets users browse Bible or Book of Mormon passages with next/previous navigation, saving verses and favorites (2025-08-03 15:29 UTC)
+- Verse Library lists scrollable Bible or Book of Mormon passages with click-to-open navigation (2025-08-03 15:50 UTC)
 ### Changed
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
@@ -79,6 +81,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Verse Library lists scrollable Bible or Book of Mormon passages with click-to-open navigation (2025-08-03 15:50 UTC)
 - Added missing Supabase tables for ideas and passwords to resolve relation errors (2025-08-03 14:58 UTC)
 - Recorded prayer start times so Supabase inserts no longer fail on null `started_at` values (2025-08-03 05:59 UTC)
 - Routed prayer recordings through Supabase Edge Functions so audio and meal photos save without Unknown upload errors (2025-08-03 05:38 UTC)
