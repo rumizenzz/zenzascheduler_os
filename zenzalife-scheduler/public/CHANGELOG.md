@@ -29,6 +29,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Routed prayer recordings through Supabase Edge Functions so audio and meal photos save without Unknown upload errors (2025-08-03 05:38 UTC)
+- Recorded prayer start times so Supabase inserts no longer fail on null `started_at` values (2025-08-03 05:59 UTC)
 - Prevented prayer recording crash when upload errors lacked a message, choosing a supported audio format and releasing microphone tracks (2025-08-02 12:00 UTC)
 - Resolved TypeScript errors in CommitDiffViewer by typing the diff navigator wrapper so Netlify builds succeed (2025-08-02 11:22 UTC)
 - Prayer recordings now save with browser-compatible formats so morning, night, and grace prayers replay reliably (2025-08-02 05:40 UTC)

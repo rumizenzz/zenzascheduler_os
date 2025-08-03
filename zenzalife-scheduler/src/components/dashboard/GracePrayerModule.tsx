@@ -12,6 +12,7 @@ export function GracePrayerModule() {
   const [mealTime, setMealTime] = useState<MealTime>('morning')
   const [recording, setRecording] = useState(false)
   const [startTime, setStartTime] = useState<Date | null>(null)
+  const startTimeRef = useRef<Date | null>(null)
   const [elapsed, setElapsed] = useState(0)
   const [lastDuration, setLastDuration] = useState<number | null>(null)
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'))
@@ -20,6 +21,14 @@ export function GracePrayerModule() {
   const mediaRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const blobToDataUrl = (blob: Blob) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result as string)
+      reader.onerror = () => reject(reader.error)
+      reader.readAsDataURL(blob)
+    })
 
   const fetchPrayers = async () => {
     if (!user) return
@@ -57,6 +66,7 @@ export function GracePrayerModule() {
       recorder.start()
       const start = new Date()
       setStartTime(start)
+      startTimeRef.current = start
       setElapsed(0)
       timerRef.current = setInterval(() => {
         setElapsed(Date.now() - start.getTime())
@@ -74,45 +84,43 @@ export function GracePrayerModule() {
     try {
       const extension = mimeType.split(';')[0].split('/')[1]
       const fileName = `grace-${mealTime}-${Date.now()}.${extension}`
-      const audioPath = `prayers/grace/${user!.id}/${fileName}`
-      const { error: audioError } = await supabase.storage
-        .from('zenzalife-assets')
-        .upload(audioPath, audioBlob, { contentType: mimeType, upsert: true })
-      if (audioError) throw audioError
-      const {
-        data: { publicUrl: audioUrl }
-      } = supabase.storage.from('zenzalife-assets').getPublicUrl(audioPath)
+      const audioData = await blobToDataUrl(audioBlob)
+      const { data: audioResp, error: audioError } = await supabase.functions.invoke('audio-upload', {
+        body: { audioData, fileName, userId: user!.id }
+      })
+      if (audioError || !audioResp?.data?.publicUrl) {
+        throw audioError || new Error('No audio URL returned')
+      }
+      const audioUrl = audioResp.data.publicUrl as string
 
       let photoUrl: string | null = null
       if (photoFile) {
-        const photoPath = `prayers/grace/photos/${user!.id}/${Date.now()}-${photoFile.name}`
-        const { error: photoError } = await supabase.storage
-          .from('zenzalife-assets')
-          .upload(photoPath, photoFile, {
-            contentType: photoFile.type,
-            upsert: true
-          })
-        if (photoError) throw photoError
-        const {
-          data: { publicUrl: imageUrl }
-        } = supabase.storage.from('zenzalife-assets').getPublicUrl(photoPath)
-        photoUrl = imageUrl
+        const imageData = await blobToDataUrl(photoFile)
+        const { data: imageResp, error: photoError } = await supabase.functions.invoke('image-upload', {
+          body: { imageData, fileName: photoFile.name, userId: user!.id }
+        })
+        if (photoError || !imageResp?.data?.publicUrl) {
+          throw photoError || new Error('No image URL returned')
+        }
+        photoUrl = imageResp.data.publicUrl as string
       }
-      const durationMs = startTime ? Date.now() - startTime.getTime() : 0
+      const start = startTimeRef.current
+      const durationMs = start ? Date.now() - start.getTime() : 0
       const durationSeconds = Math.floor(durationMs / 1000)
-      await supabase.from('grace_prayers').insert({
+      const { error: insertError } = await supabase.from('grace_prayers').insert({
         user_id: user!.id,
         meal_time: mealTime,
         audio_url: audioUrl,
         photo_url: photoUrl,
-        started_at: startTime?.toISOString(),
+        started_at: start?.toISOString(),
         duration_seconds: durationSeconds
       })
+      if (insertError) throw insertError
       setLastDuration(durationMs)
       toast.success('Grace prayer saved')
       fetchPrayers()
     } catch (err: any) {
-      const message = err instanceof Error ? err.message : 'Unknown error'
+      const message = err && typeof err === 'object' && 'message' in err ? (err as any).message : 'Unknown error'
       toast.error('Upload failed: ' + message)
     } finally {
       mediaRef.current?.stream.getTracks().forEach(t => t.stop())
@@ -122,6 +130,7 @@ export function GracePrayerModule() {
       setElapsed(0)
       setRecording(false)
       setStartTime(null)
+      startTimeRef.current = null
       setPhotoFile(null)
     }
   }
