@@ -12,6 +12,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Tools menu now opens both a code editor and a diff viewer for side-by-side comparisons (2025-08-02 04:20 UTC)
 - Diff Viewer can open inside the IDE as a compact panel reminiscent of VS Code (2025-08-02 04:40 UTC)
 - Commit Diff Viewer compares commits with split or inline layouts, navigation between changes, merge conflict controls, and a commit metadata header (2025-08-02 04:41 UTC)
+- Ideas and Passwords dashboard modules let users capture brainstorms and login info (2025-08-03 14:46 UTC)
+- Scripture modal automatically fetches Bible verse text for typed references (2025-08-03 14:46 UTC)
 ### Changed
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)

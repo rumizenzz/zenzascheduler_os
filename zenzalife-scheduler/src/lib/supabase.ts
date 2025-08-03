@@ -155,6 +155,23 @@ export type DiscipleshipNote = {
   updated_at?: string
 }
 
+export type Idea = {
+  id: string
+  user_id: string
+  content: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type PasswordEntry = {
+  id: string
+  user_id: string
+  title: string
+  password: string
+  created_at?: string
+  updated_at?: string
+}
+
 export type JournalEntry = {
   id: string
   user_id: string
