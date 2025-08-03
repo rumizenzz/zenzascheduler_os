@@ -218,7 +218,7 @@ export function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100 overflow-x-hidden">
       <FastingPrayerReminder />
       {/* Mobile menu button */}
       {sidebarCollapsed && (
@@ -343,8 +343,10 @@ export function Dashboard() {
       {/* Main Content */}
       <div
         key={activeTab}
-        className={`transition-all duration-300 ml-0 ${
-          sidebarCollapsed ? "md:ml-16" : "md:ml-64"
+        className={`transition-all duration-300 ${
+          sidebarCollapsed
+            ? "md:ml-16 md:w-[calc(100%-4rem)]"
+            : "md:ml-64 md:w-[calc(100%-16rem)]"
         }`}
       >
         <div className="p-6">{renderContent()}</div>
