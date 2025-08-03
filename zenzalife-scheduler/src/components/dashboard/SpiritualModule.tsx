@@ -1211,6 +1211,34 @@ interface HymnModalProps {
 function HymnModal({ isOpen, onClose, onSave, existing }: HymnModalProps) {
   const [hymn, setHymn] = useState(existing?.hymn || '')
   const [feeling, setFeeling] = useState(existing?.feeling || '')
+  const [hymnKey, setHymnKey] = useState('')
+  const [lyrics, setLyrics] = useState<string[]>([])
+  const [hymns, setHymns] = useState<Record<string, { label: string; lyrics: string[] }> | null>(null)
+  const [loadingHymns, setLoadingHymns] = useState(true)
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch(
+          'https://raw.githubusercontent.com/ldsdevs/hymns-with-lyrics/main/json/hymns-es.json'
+        )
+        const data = await res.json()
+        setHymns(data)
+        if (existing?.hymn) {
+          const found = Object.entries(data).find(([, v]) => v.label === existing.hymn)
+          if (found) {
+            setHymnKey(found[0])
+            setLyrics(found[1].lyrics || [])
+          }
+        }
+      } catch {
+        setHymns(null)
+      } finally {
+        setLoadingHymns(false)
+      }
+    }
+    load()
+  }, [existing])
 
   if (!isOpen) return null
 
@@ -1221,6 +1249,14 @@ function HymnModal({ isOpen, onClose, onSave, existing }: HymnModalProps) {
       return
     }
     onSave(hymn, feeling)
+  }
+
+  const handleSelect = (key: string) => {
+    if (!hymns) return
+    const entry = hymns[key]
+    setHymnKey(key)
+    setHymn(entry.label)
+    setLyrics(entry.lyrics || [])
   }
 
   return (
@@ -1239,14 +1275,38 @@ function HymnModal({ isOpen, onClose, onSave, existing }: HymnModalProps) {
             <label htmlFor="hymnTitle" className="text-sm font-medium text-gray-700">
               Hymn
             </label>
-            <input
-              id="hymnTitle"
-              value={hymn}
-              onChange={e => setHymn(e.target.value)}
-              className="input-dreamy w-full"
-              required
-            />
+            {loadingHymns ? (
+              <p>Loading hymns...</p>
+            ) : hymns ? (
+              <select
+                id="hymnTitle"
+                value={hymnKey}
+                onChange={e => handleSelect(e.target.value)}
+                className="input-dreamy w-full"
+                required
+              >
+                <option value="">Select hymn</option>
+                {Object.entries(hymns).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value.label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                id="hymnTitle"
+                value={hymn}
+                onChange={e => setHymn(e.target.value)}
+                className="input-dreamy w-full"
+                required
+              />
+            )}
           </div>
+          {lyrics.length > 0 && (
+            <div className="p-3 bg-gray-50 rounded-xl max-h-60 overflow-y-auto whitespace-pre-line text-sm">
+              {lyrics.join('\n')}
+            </div>
+          )}
           <div className="space-y-2">
             <label htmlFor="hymnFeeling" className="text-sm font-medium text-gray-700">
               How did it make you feel?
