@@ -21,6 +21,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 ### Fixed
+- Blocked saving verses that don't match the selected book by validating reference format (2025-08-03 15:13 UTC)
 - Added missing Supabase tables for ideas and passwords to resolve relation errors (2025-08-03 14:58 UTC)
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - Raised Workbox precache limit to 6 MB so large bundles like index-DCXdUHmw.js are cached and Netlify builds succeed (2025-08-02 01:29 UTC)

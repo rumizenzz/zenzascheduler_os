@@ -14,6 +14,115 @@ import dayjs from 'dayjs'
 import { BookOpen, Video, Music, Heart, Sparkles, Star } from 'lucide-react'
 import { bookOfMormonScriptures } from '@/data/bookOfMormon'
 
+const bibleBooks = [
+  'Genesis',
+  'Exodus',
+  'Leviticus',
+  'Numbers',
+  'Deuteronomy',
+  'Joshua',
+  'Judges',
+  'Ruth',
+  '1 Samuel',
+  '2 Samuel',
+  '1 Kings',
+  '2 Kings',
+  '1 Chronicles',
+  '2 Chronicles',
+  'Ezra',
+  'Nehemiah',
+  'Esther',
+  'Job',
+  'Psalms',
+  'Proverbs',
+  'Ecclesiastes',
+  'Song of Solomon',
+  'Isaiah',
+  'Jeremiah',
+  'Lamentations',
+  'Ezekiel',
+  'Daniel',
+  'Hosea',
+  'Joel',
+  'Amos',
+  'Obadiah',
+  'Jonah',
+  'Micah',
+  'Nahum',
+  'Habakkuk',
+  'Zephaniah',
+  'Haggai',
+  'Zechariah',
+  'Malachi',
+  'Matthew',
+  'Mark',
+  'Luke',
+  'John',
+  'Acts',
+  'Romans',
+  '1 Corinthians',
+  '2 Corinthians',
+  'Galatians',
+  'Ephesians',
+  'Philippians',
+  'Colossians',
+  '1 Thessalonians',
+  '2 Thessalonians',
+  '1 Timothy',
+  '2 Timothy',
+  'Titus',
+  'Philemon',
+  'Hebrews',
+  'James',
+  '1 Peter',
+  '2 Peter',
+  '1 John',
+  '2 John',
+  '3 John',
+  'Jude',
+  'Revelation'
+]
+
+const bookOfMormonBooks = [
+  '1 Nephi',
+  '2 Nephi',
+  'Jacob',
+  'Enos',
+  'Jarom',
+  'Omni',
+  'Words of Mormon',
+  'Mosiah',
+  'Alma',
+  'Helaman',
+  '3 Nephi',
+  '4 Nephi',
+  'Mormon',
+  'Ether',
+  'Moroni'
+]
+
+function validateReference(ref: string, book: string): string | null {
+  const match = ref.trim().match(/^(.+?)\s+\d+:\d+/)
+  if (!match) {
+    return 'Enter verse as Book Chapter:Verse (e.g. John 3:16)'
+  }
+  const bookName = match[1].trim().toLowerCase()
+  if (book === 'The Bible') {
+    if (!bibleBooks.some(b => b.toLowerCase() === bookName)) {
+      return 'This reference is not in the Bible. Try something like "John 3:16".'
+    }
+  } else if (book === 'Book of Mormon') {
+    if (!bookOfMormonBooks.some(b => b.toLowerCase() === bookName)) {
+      return 'This reference is not in the Book of Mormon. Try "1 Nephi 3:7".'
+    }
+  } else if (book === 'Doctrine and Covenants') {
+    if (bookName !== 'd&c' && bookName !== 'doctrine and covenants') {
+      return 'Use a Doctrine and Covenants format like "D&C 1:6".'
+    }
+  }
+  return null
+}
+
 interface FamilySelectModalProps {
   isOpen: boolean
   onClose: () => void
@@ -787,7 +896,7 @@ function ScriptureModal({
   const [useCustomRef, setUseCustomRef] = useState(book !== 'Book of Mormon')
 
   const fetchBibleVerse = async (ref: string, ver: string) => {
-    if (!ref.trim()) return
+    if (!ref.trim() || validateReference(ref, 'The Bible')) return
     try {
       const url = `https://bible-api.com/${encodeURIComponent(ref)}?translation=${
         ver || 'kjv'
@@ -806,13 +915,13 @@ function ScriptureModal({
     if (book !== 'The Bible') {
       setVersion('')
     }
-    if (book === 'The Bible' && scripture) {
+    if (book === 'The Bible' && scripture && !validateReference(scripture, 'The Bible')) {
       void fetchBibleVerse(scripture, version)
     }
   }, [book])
 
   useEffect(() => {
-    if (book === 'The Bible' && scripture) {
+    if (book === 'The Bible' && scripture && !validateReference(scripture, 'The Bible')) {
       void fetchBibleVerse(scripture, version)
     }
   }, [version])
@@ -837,6 +946,13 @@ function ScriptureModal({
     if (book === 'Other' && !customBook.trim()) {
       toast.error('Enter book name')
       return
+    }
+    if (book !== 'Other') {
+      const err = validateReference(scripture, book)
+      if (err) {
+        toast.error(err)
+        return
+      }
     }
     onSave(
       scripture,
@@ -947,7 +1063,9 @@ function ScriptureModal({
                   const val = e.target.value
                   setScripture(val)
                   if (book === 'The Bible') {
-                    void fetchBibleVerse(val, version)
+                    if (!validateReference(val, 'The Bible')) {
+                      void fetchBibleVerse(val, version)
+                    }
                   } else if (book === 'Book of Mormon') {
                     const match = bookOfMormonScriptures.find(s => s.reference === val)
                     if (match) setFullText(match.text)
