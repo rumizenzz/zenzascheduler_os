@@ -14,6 +14,7 @@ import { SpiritualModule } from "./SpiritualModule";
 import { ClockModule } from "./ClockModule";
 import { PrayerModule } from "./PrayerModule";
 import { VerseOfTheDay } from "./VerseOfTheDay";
+import { ReadVerse } from "./ReadVerse";
 import { MathNotebookModule } from "./MathNotebookModule";
 import { JournalModule } from "./JournalModule";
 import { LucidDreamJournalModule } from "./LucidDreamJournalModule";
@@ -34,6 +35,7 @@ import {
   TreePine,
   Menu,
   BookOpen,
+  Library,
   Mic,
   Pencil,
   NotebookPen,
@@ -65,6 +67,7 @@ type DashboardTab =
   | "logistics"
   | "garbage"
   | "verse"
+  | "readverse"
   | "spiritual"
   | "prayers"
   | "math"
@@ -85,6 +88,7 @@ const navigationItems = [
   { id: "logistics", label: "Life Logistics", icon: MapPin, color: "text-orange-500" },
   { id: "garbage", label: "Garbage/Recycling", icon: Trash2, color: "text-gray-500" },
   { id: "verse", label: "Verse of the Day", icon: Sparkles, color: "text-indigo-500" },
+  { id: "readverse", label: "Read Verse", icon: Library, color: "text-indigo-600" },
   { id: "spiritual", label: "Spiritual Study", icon: BookOpen, color: "text-purple-500" },
   { id: "prayers", label: "Prayers", icon: Mic, color: "text-purple-500" },
   { id: "math", label: "Math Notebook", icon: Pencil, color: "text-blue-600" },
@@ -206,6 +210,8 @@ export function Dashboard() {
         return <GarbageModule />;
       case "verse":
         return <VerseOfTheDay />;
+      case "readverse":
+        return <ReadVerse />;
       case "spiritual":
         return <SpiritualModule />;
       case "prayers":
