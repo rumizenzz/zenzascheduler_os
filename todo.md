@@ -11,6 +11,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - IDE diff editor tabs can be renamed inline to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
 - Ideas and Passwords dashboard modules let users capture brainstorms and login info (2025-08-03 14:46 UTC)
 - Scripture modal automatically fetches Bible verse text for typed references (2025-08-03 14:46 UTC)
+- Read Verse module lets users browse Bible or Book of Mormon passages with next/previous navigation, saving verses and favorites (2025-08-03 15:29 UTC)
 ### Changed
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
