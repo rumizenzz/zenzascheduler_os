@@ -18,6 +18,8 @@ import { MathNotebookModule } from "./MathNotebookModule";
 import { JournalModule } from "./JournalModule";
 import { LucidDreamJournalModule } from "./LucidDreamJournalModule";
 import { GEDMathStudyModule } from "./GEDMathStudyModule";
+import { IdeasModule } from "./IdeasModule";
+import { PasswordsModule } from "./PasswordsModule";
 import {
   Calendar,
   TrendingUp,
@@ -37,6 +39,8 @@ import {
   NotebookPen,
   MoonStar,
   Calculator,
+  Lightbulb,
+  Key,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -66,6 +70,8 @@ type DashboardTab =
   | "math"
   | "journal"
   | "dreams"
+  | "ideas"
+  | "passwords"
   | "gedstudy"
   | "settings";
 
@@ -85,6 +91,8 @@ const navigationItems = [
   { id: "gedstudy", label: "GED Math Study", icon: Calculator, color: "text-blue-700" },
   { id: "journal", label: "Journal", icon: NotebookPen, color: "text-purple-600" },
   { id: "dreams", label: "Dream Journal", icon: MoonStar, color: "text-indigo-600" },
+  { id: "ideas", label: "Ideas", icon: Lightbulb, color: "text-yellow-500" },
+  { id: "passwords", label: "Passwords", icon: Key, color: "text-gray-500" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
 
@@ -210,6 +218,10 @@ export function Dashboard() {
         return <JournalModule />;
       case "dreams":
         return <LucidDreamJournalModule />;
+      case "ideas":
+        return <IdeasModule />;
+      case "passwords":
+        return <PasswordsModule />;
       case "settings":
         return <SettingsModule onUnsavedChange={setHasUnsavedSettings} />;
       default:
