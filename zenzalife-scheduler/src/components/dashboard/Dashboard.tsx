@@ -113,8 +113,20 @@ export function Dashboard() {
 
   usePullToRefresh(pullRefreshEnabled);
 
+  const resetTopSpacing = () => {
+    const elements = [document.body, document.getElementById("root")];
+    elements.forEach((el) => {
+      if (el) {
+        el.style.marginTop = "0";
+        el.style.paddingTop = "0";
+        (el as HTMLElement).style.transform = "none";
+      }
+    });
+  };
+
   const scrollToTop = () => {
     requestAnimationFrame(() => {
+      resetTopSpacing();
       window.scrollTo({ top: 0, left: 0 });
       const scroller = document.scrollingElement || document.documentElement;
       scroller.scrollTop = 0;
