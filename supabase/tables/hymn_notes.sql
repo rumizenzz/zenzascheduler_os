@@ -4,6 +4,7 @@ CREATE TABLE hymn_notes (
     date DATE NOT NULL,
     hymn VARCHAR(255) NOT NULL,
     feeling TEXT,
+    is_favorite BOOLEAN DEFAULT false,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

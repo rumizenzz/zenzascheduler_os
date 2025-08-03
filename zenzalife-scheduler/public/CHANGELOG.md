@@ -14,6 +14,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Commit Diff Viewer component compares commits with split or inline layouts, change navigation, merge conflict controls, and a commit metadata header (2025-08-02 04:41 UTC)
 - Ideas and Passwords dashboard modules let users capture brainstorms and login info (2025-08-03 14:46 UTC)
 - Scripture modal automatically fetches Bible verse text for typed references (2025-08-03 14:46 UTC)
+- Hymn modal pulls full lyrics from the LDS hymn library with a dropdown of all hymns (2025-08-03 15:23:49 UTC)
+- Sing Hymn section loads hymn books with verse navigation and favorites (2025-08-03 15:40 UTC)
 ### Changed
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
@@ -31,6 +33,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Typed hymn library JSON responses to eliminate unknown property errors so Netlify builds succeed (2025-08-03 15:46:23 UTC)
 - Added missing Supabase tables for ideas and passwords to resolve relation errors (2025-08-03 14:58 UTC)
 - Routed prayer recordings through Supabase Edge Functions so audio and meal photos save without Unknown upload errors (2025-08-03 05:38 UTC)
 - Recorded prayer start times so Supabase inserts no longer fail on null `started_at` values (2025-08-03 05:59 UTC)
