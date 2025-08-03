@@ -25,6 +25,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Constrained dashboard content width and hid horizontal overflow so modules no longer shift below the app or leave right-side whitespace (2025-08-03 00:19 UTC)
 - Resolved TypeScript errors in CommitDiffViewer by typing the diff navigator wrapper so Netlify builds succeed (2025-08-02 11:22 UTC)
 - Prayer recordings now save with browser-compatible formats so morning, night, and grace prayers replay reliably (2025-08-02 05:40 UTC)
 - Prayer audio and dish images now upload to Supabase storage buckets for reliable playback (2025-08-02 10:50 UTC)
@@ -72,6 +73,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Constrained dashboard content width and hid horizontal overflow so modules no longer shift below the app or leave right-side whitespace (2025-08-03 00:19 UTC)
 - Resolved TypeScript errors in CommitDiffViewer by typing the diff navigator wrapper so Netlify builds succeed (2025-08-02 11:22 UTC)
 - Prayer recordings now save with browser-compatible formats so morning, night, and grace prayers replay reliably (2025-08-02 05:40 UTC)
 - Prayer audio and dish images now upload to Supabase storage buckets for reliable playback (2025-08-02 10:50 UTC)
