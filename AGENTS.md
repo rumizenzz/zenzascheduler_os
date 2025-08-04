@@ -463,6 +463,13 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Constrained all-day task start dates to date-only values to remove browser format warnings.
 - Verified the repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-04 22:47 UTC)
+- Moved dashboard main content to a top-level p-6 div so modules render first.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-04 23:06 UTC)
+- Corrected Lucid Dream Journal history portal syntax to resolve TypeScript build errors.
+- Confirmed repository lint passes with `pnpm run lint`.
 ### Codex Agent Reflection (2025-08-04 22:46 UTC)
 - Expanded Passwords module with usernames, URLs, notes, copy-to-clipboard, and a password generator saved in Supabase.
 - Verified repository lint passes with `pnpm run lint`.
