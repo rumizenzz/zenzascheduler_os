@@ -190,6 +190,22 @@ export type DreamJournalEntry = {
   updated_at?: string
 }
 
+export type JournalEntryHistory = {
+  id: string
+  entry_id: string
+  user_id: string
+  content: string
+  edited_at: string
+}
+
+export type DreamJournalEntryHistory = {
+  id: string
+  entry_id: string
+  user_id: string
+  description: string
+  edited_at: string
+}
+
 export type GracePrayer = {
   id: string
   user_id: string

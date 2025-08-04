@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { supabase, JournalEntry } from '@/lib/supabase'
+import {
+  supabase,
+  JournalEntry,
+  JournalEntryHistory,
+} from '@/lib/supabase'
 import dayjs from 'dayjs'
 import { Plus, NotebookPen, Pencil, Trash2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
@@ -13,6 +17,8 @@ export function JournalModule() {
   const [content, setContent] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editContent, setEditContent] = useState('')
+  const [histories, setHistories] = useState<Record<string, JournalEntryHistory[]>>({})
+  const [historyViewId, setHistoryViewId] = useState<string | null>(null)
 
   useEffect(() => {
     if (user) {
@@ -61,6 +67,15 @@ export function JournalModule() {
 
   const updateEntry = async () => {
     if (!editingId || !user || !editContent.trim()) return
+    const existing = entries.find((e) => e.id === editingId)
+    if (existing) {
+      await supabase.from('journal_entry_history').insert({
+        entry_id: existing.id,
+        user_id: user.id,
+        content: existing.content,
+        edited_at: new Date().toISOString(),
+      })
+    }
     const { error } = await supabase
       .from('journal_entries')
       .update({ content: editContent.trim(), updated_at: new Date().toISOString() })
@@ -73,6 +88,20 @@ export function JournalModule() {
       setEditContent('')
       await loadEntries()
       toast.success('Journal entry updated')
+    }
+  }
+
+  const loadHistory = async (id: string) => {
+    if (histories[id]) return
+    const { data, error } = await supabase
+      .from('journal_entry_history')
+      .select('*')
+      .eq('entry_id', id)
+      .order('edited_at', { ascending: false })
+    if (error) {
+      toast.error('Failed to load history: ' + error.message)
+    } else {
+      setHistories((prev) => ({ ...prev, [id]: data || [] }))
     }
   }
 
@@ -176,7 +205,26 @@ export function JournalModule() {
                         <div className="text-xs opacity-80">
                           {dayjs(entry.created_at).format('YYYY-MM-DD HH:mm:ss')}
                         </div>
-                        <div>{entry.content}</div>
+                        <div>
+                          {entry.content}
+                          {entry.updated_at && entry.updated_at !== entry.created_at && (
+                            <span
+                              className="ml-2 text-xs opacity-70 cursor-pointer underline"
+                              onMouseEnter={() => void loadHistory(entry.id)}
+                              onClick={() => {
+                                void loadHistory(entry.id)
+                                setHistoryViewId(entry.id)
+                              }}
+                              title={
+                                histories[entry.id]?.[0]?.content
+                                  ? histories[entry.id][0].content.slice(0, 100)
+                                  : ''
+                              }
+                            >
+                              (edited)
+                            </span>
+                          )}
+                        </div>
                         <div className="flex gap-2 justify-end text-sm">
                           <button
                             className="flex items-center gap-1 hover:text-purple-200"
@@ -198,6 +246,27 @@ export function JournalModule() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {historyViewId && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
+          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-4 w-full max-w-md max-h-[80vh] overflow-y-auto text-purple-100 space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg">Edit History</h2>
+              <button className="btn-secondary" onClick={() => setHistoryViewId(null)}>
+                Close
+              </button>
+            </div>
+            {histories[historyViewId]?.map((h) => (
+              <div key={h.id} className="space-y-1">
+                <div className="text-xs opacity-70">
+                  {dayjs(h.edited_at).format('YYYY-MM-DD HH:mm:ss')}
+                </div>
+                <div className="whitespace-pre-wrap">{h.content}</div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
