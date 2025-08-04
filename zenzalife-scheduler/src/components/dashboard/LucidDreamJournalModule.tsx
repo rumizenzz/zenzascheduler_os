@@ -15,8 +15,10 @@ export function LucidDreamJournalModule() {
   const [entries, setEntries] = useState<DreamJournalEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
+  const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [editTitle, setEditTitle] = useState('')
   const [editDescription, setEditDescription] = useState('')
   const [histories, setHistories] = useState<
     Record<string, DreamJournalEntryHistory[]>
@@ -46,9 +48,10 @@ export function LucidDreamJournalModule() {
   }
 
   const saveEntry = async () => {
-    if (!user || !description.trim()) return
+    if (!user || !title.trim() || !description.trim()) return
     const { error } = await supabase.from('dream_journal_entries').insert({
       user_id: user.id,
+      title: title.trim(),
       description: description.trim(),
       achieved_lucidity: false,
       created_at: new Date().toISOString(),
@@ -57,6 +60,7 @@ export function LucidDreamJournalModule() {
     if (error) {
       toast.error('Failed to save dream journal entry: ' + error.message)
     } else {
+      setTitle('')
       setDescription('')
       setShowAdd(false)
       await loadEntries()
@@ -66,29 +70,36 @@ export function LucidDreamJournalModule() {
 
   const startEdit = (entry: DreamJournalEntry) => {
     setEditingId(entry.id)
+    setEditTitle(entry.title)
     setEditDescription(entry.description)
   }
 
   const updateEntry = async () => {
-    if (!editingId || !user || !editDescription.trim()) return
+    if (!editingId || !user || !editTitle.trim() || !editDescription.trim()) return
     const existing = entries.find((e) => e.id === editingId)
     if (existing) {
       await supabase.from('dream_journal_entry_history').insert({
         entry_id: existing.id,
         user_id: user.id,
+        title: existing.title,
         description: existing.description,
         edited_at: new Date().toISOString(),
       })
     }
     const { error } = await supabase
       .from('dream_journal_entries')
-      .update({ description: editDescription.trim(), updated_at: new Date().toISOString() })
+      .update({
+        title: editTitle.trim(),
+        description: editDescription.trim(),
+        updated_at: new Date().toISOString(),
+      })
       .eq('id', editingId)
       .eq('user_id', user.id)
     if (error) {
       toast.error('Failed to update dream journal entry: ' + error.message)
     } else {
       setEditingId(null)
+      setEditTitle('')
       setEditDescription('')
       await loadEntries()
       toast.success('Dream journal entry updated')
@@ -149,6 +160,12 @@ export function LucidDreamJournalModule() {
 
       {showAdd && (
         <div className="card-floating bg-purple-900/80 text-white p-4 space-y-4">
+          <input
+            className="input-dreamy w-full"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Name of the Dream (so you can remember it better)"
+          />
           <textarea
             className="textarea-dreamy w-full"
             rows={5}
@@ -189,6 +206,12 @@ export function LucidDreamJournalModule() {
                         <div className="text-xs opacity-80">
                           {dayjs(entry.created_at).format('YYYY-MM-DD hh:mm:ss A')}
                         </div>
+                        <input
+                          className="input-dreamy w-full"
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value)}
+                          placeholder="Name of the Dream"
+                        />
                         <textarea
                           className="textarea-dreamy w-full"
                           rows={5}
@@ -209,6 +232,7 @@ export function LucidDreamJournalModule() {
                         <div className="text-xs opacity-80">
                           {dayjs(entry.created_at).format('YYYY-MM-DD hh:mm:ss A')}
                         </div>
+                        <div className="font-semibold">{entry.title}</div>
                         <div>
                           {entry.description}
                           {entry.updated_at && entry.updated_at !== entry.created_at && (
@@ -253,15 +277,22 @@ export function LucidDreamJournalModule() {
         </div>
       )}
 
-      {historyViewId &&
-        createPortal(
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
-            <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-4 w-full max-w-md max-h-[80vh] overflow-y-auto text-purple-100 space-y-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-lg">Edit History</h2>
-                <button className="btn-secondary" onClick={() => setHistoryViewId(null)}>
-                  Close
-                </button>
+      {historyViewId && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
+          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-4 w-full max-w-md max-h-[80vh] overflow-y-auto text-purple-100 space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg">Edit History</h2>
+              <button className="btn-secondary" onClick={() => setHistoryViewId(null)}>
+                Close
+              </button>
+            </div>
+            {histories[historyViewId]?.map((h) => (
+              <div key={h.id} className="space-y-1">
+                <div className="text-xs opacity-70">
+                  {dayjs(h.edited_at).format('YYYY-MM-DD HH:mm:ss')}
+                </div>
+                <div className="font-semibold">{h.title}</div>
+                <div className="whitespace-pre-wrap">{h.description}</div>
               </div>
               {histories[historyViewId]?.map((h) => (
                 <div key={h.id} className="space-y-1">
