@@ -167,7 +167,10 @@ export type PasswordEntry = {
   id: string
   user_id: string
   title: string
+  username?: string | null
+  url?: string | null
   password: string
+  notes?: string | null
   created_at?: string
   updated_at?: string
 }
