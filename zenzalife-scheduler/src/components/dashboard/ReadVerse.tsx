@@ -6,7 +6,6 @@ import {
   Star,
   BookMarked
 } from 'lucide-react'
-import { bookOfMormonScriptures } from '@/data/bookOfMormon'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
@@ -79,6 +78,24 @@ const bibleBooks = [
   'Jude',
   'Revelation'
 ]
+
+const bookOfMormonSlugMap: Record<string, string> = {
+  '1 Nephi': '1nephi',
+  '2 Nephi': '2nephi',
+  Jacob: 'jacob',
+  Enos: 'enos',
+  Jarom: 'jarom',
+  Omni: 'omni',
+  'Words of Mormon': 'wordsofmormon',
+  Mosiah: 'mosiah',
+  Alma: 'alma',
+  Helaman: 'helaman',
+  '3 Nephi': '3nephi',
+  '4 Nephi': '4nephi',
+  Mormon: 'mormon',
+  Ether: 'ether',
+  Moroni: 'moroni'
+}
 
 const bibleChapterCounts: Record<string, number> = {
   Genesis: 50,
@@ -170,8 +187,8 @@ const bookOfMormonChapterCounts: Record<string, number> = {
 export function ReadVerse() {
   const [source, setSource] = useState<'bom' | 'bible'>('bom')
   const [view, setView] = useState<'read' | 'library'>('read')
-  const [bomIndex, setBomIndex] = useState(0)
   const [bibleBook, setBibleBook] = useState('John')
+  const [bomBook, setBomBook] = useState('1 Nephi')
   const [chapter, setChapter] = useState(1)
   const [verseNumber, setVerseNumber] = useState(1)
   const [libStage, setLibStage] = useState<'books' | 'chapters' | 'verses'>('books')
@@ -183,18 +200,22 @@ export function ReadVerse() {
   const [savedId, setSavedId] = useState<string | null>(null)
   const [isFavorite, setIsFavorite] = useState(false)
   const [notes, setNotes] = useState('')
-  const [bibleChapterVerses, setBibleChapterVerses] = useState<any[]>([])
+  const [chapterVerses, setChapterVerses] = useState<any[]>([])
   const { user } = useAuth()
 
   useEffect(() => {
     if (view === 'read') {
       fetchVerse()
     }
-  }, [view, source, bomIndex, bibleBook, chapter, verseNumber])
+  }, [view, source, bomBook, bibleBook, chapter, verseNumber])
 
   useEffect(() => {
-    if (view === 'library' && source === 'bible' && libStage === 'verses') {
-      fetchBibleChapter(selectedBook, selectedChapter)
+    if (view === 'library' && libStage === 'verses') {
+      if (source === 'bible') {
+        fetchBibleChapter(selectedBook, selectedChapter)
+      } else {
+        fetchBomChapter(selectedBook, selectedChapter)
+      }
     }
   }, [view, source, selectedBook, selectedChapter, libStage])
 
@@ -205,12 +226,22 @@ export function ReadVerse() {
     setNotes('')
     try {
       if (source === 'bom') {
-        const v = bookOfMormonScriptures[bomIndex]
-        if (v) {
-          setReference(v.reference)
-          setText(v.text)
+        const slug = bookOfMormonSlugMap[bomBook]
+        const ref = `${bomBook} ${chapter}:${verseNumber}`
+        const url = `https://book-of-mormon-api.vercel.app/${slug}/${chapter}/${verseNumber}`
+        const res = await fetch(url)
+        const data = await res.json()
+        if (data.text) {
+          setReference(data.reference)
+          setText(data.text.trim())
         } else {
-          setReference('')
+          const chapCount = bookOfMormonChapterCounts[bomBook] || 0
+          if (verseNumber > 1 && chapter < chapCount) {
+            setChapter(chapter + 1)
+            setVerseNumber(1)
+            return
+          }
+          setReference(ref)
           setText('No verse found')
         }
       } else {
@@ -243,33 +274,43 @@ export function ReadVerse() {
       )
       const data = await res.json()
       if (data.verses) {
-        setBibleChapterVerses(data.verses)
+        setChapterVerses(data.verses)
       } else {
-        setBibleChapterVerses([])
+        setChapterVerses([])
       }
     } catch {
-      setBibleChapterVerses([])
+      setChapterVerses([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchBomChapter = async (book = bomBook, chap = chapter) => {
+    setLoading(true)
+    try {
+      const slug = bookOfMormonSlugMap[book]
+      const verses: any[] = []
+      for (let i = 1; i <= 200; i++) {
+        const url = `https://book-of-mormon-api.vercel.app/${slug}/${chap}/${i}`
+        const res = await fetch(url)
+        const data = await res.json()
+        if (!data.text) break
+        verses.push({ reference: data.reference, text: data.text.trim() })
+      }
+      setChapterVerses(verses)
+    } catch {
+      setChapterVerses([])
     } finally {
       setLoading(false)
     }
   }
 
   const nextVerse = () => {
-    if (source === 'bom') {
-      setBomIndex((i) => (i + 1) % bookOfMormonScriptures.length)
-    } else {
-      setVerseNumber((v) => v + 1)
-    }
+    setVerseNumber((v) => v + 1)
   }
 
   const prevVerse = () => {
-    if (source === 'bom') {
-      setBomIndex(
-        (i) => (i - 1 + bookOfMormonScriptures.length) % bookOfMormonScriptures.length
-      )
-    } else {
-      setVerseNumber((v) => Math.max(1, v - 1))
-    }
+    setVerseNumber((v) => Math.max(1, v - 1))
   }
 
   const saveVerse = async () => {
@@ -334,15 +375,8 @@ export function ReadVerse() {
           )
     const verses =
       source === 'bom'
-        ? bookOfMormonScriptures
-            .filter((v) => {
-              const m = v.reference.match(/(.+) (\d+):(\d+)/)
-              return (
-                m && m[1] === selectedBook && parseInt(m[2]) === selectedChapter
-              )
-            })
-            .map((v) => ({ reference: v.reference, text: v.text }))
-        : bibleChapterVerses.map((v) => ({
+        ? chapterVerses
+        : chapterVerses.map((v) => ({
             reference: `${selectedBook} ${selectedChapter}:${v.verse}`,
             text: v.text
           }))
@@ -401,6 +435,7 @@ export function ReadVerse() {
                 onClick={() => {
                   setSelectedBook(b)
                   if (source === 'bible') setBibleBook(b)
+                  else setBomBook(b)
                   setSelectedChapter(1)
                   setChapter(1)
                   setLibStage('chapters')
@@ -430,7 +465,7 @@ export function ReadVerse() {
         )}
         {libStage === 'verses' && (
           <div className="card-floating p-2 h-96 overflow-y-auto space-y-2">
-            {loading && source === 'bible'
+            {loading
               ? 'Loading...'
               : verses.map((v) => (
                   <div
@@ -439,14 +474,15 @@ export function ReadVerse() {
                     onClick={() => {
                       setView('read')
                       if (source === 'bom') {
-                        const idx = bookOfMormonScriptures.findIndex(
-                          (s) => s.reference === v.reference
-                        )
-                        if (idx !== -1) setBomIndex(idx)
+                        setBomBook(selectedBook)
+                        setChapter(selectedChapter)
+                        const m = v.reference.match(/:(\d+)$/)
+                        const vn = m ? parseInt(m[1]) : 1
+                        setVerseNumber(vn)
                         setReference(v.reference)
                         setText(v.text)
                       } else {
-                        const verse = bibleChapterVerses.find(
+                        const verse = chapterVerses.find(
                           (s) =>
                             `${selectedBook} ${selectedChapter}:${s.verse}` ===
                             v.reference
@@ -479,12 +515,17 @@ export function ReadVerse() {
         <select
           className="input-dreamy"
           value={source}
-          onChange={(e) => setSource(e.target.value as 'bom' | 'bible')}
+          onChange={(e) => {
+            const s = e.target.value as 'bom' | 'bible'
+            setSource(s)
+            setChapter(1)
+            setVerseNumber(1)
+          }}
         >
           <option value="bom">Book of Mormon</option>
           <option value="bible">Bible</option>
         </select>
-        {source === 'bible' && (
+        {source === 'bible' ? (
           <>
             <select
               className="input-dreamy"
@@ -496,6 +537,41 @@ export function ReadVerse() {
               }}
             >
               {bibleBooks.map((b) => (
+                <option key={b} value={b}>
+                  {b}
+                </option>
+              ))}
+            </select>
+            <input
+              type="number"
+              min={1}
+              className="input-dreamy w-20"
+              value={chapter}
+              onChange={(e) => {
+                setChapter(parseInt(e.target.value) || 1)
+                setVerseNumber(1)
+              }}
+            />
+            <input
+              type="number"
+              min={1}
+              className="input-dreamy w-20"
+              value={verseNumber}
+              onChange={(e) => setVerseNumber(parseInt(e.target.value) || 1)}
+            />
+          </>
+        ) : (
+          <>
+            <select
+              className="input-dreamy"
+              value={bomBook}
+              onChange={(e) => {
+                setBomBook(e.target.value)
+                setChapter(1)
+                setVerseNumber(1)
+              }}
+            >
+              {Object.keys(bookOfMormonChapterCounts).map((b) => (
                 <option key={b} value={b}>
                   {b}
                 </option>

@@ -34,6 +34,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Book of Mormon verses now load from an API so Read Verse shows every passage (2025-08-03 16:51 UTC)
 - Blocked saving verses that don't match the selected book by validating reference format (2025-08-03 15:13 UTC)
 - Added missing Supabase tables for ideas and passwords to resolve relation errors (2025-08-03 14:58 UTC)
 - Routed prayer recordings through Supabase Edge Functions so audio and meal photos save without Unknown upload errors (2025-08-03 05:38 UTC)
