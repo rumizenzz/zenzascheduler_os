@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase, PasswordEntry } from '@/lib/supabase'
-import { Plus, Key, Trash2, Eye, EyeOff } from 'lucide-react'
+import { Plus, Key, Trash2, Eye, EyeOff, Copy, Wand2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
 export function PasswordsModule() {
@@ -10,7 +10,10 @@ export function PasswordsModule() {
   const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
   const [title, setTitle] = useState('')
+  const [username, setUsername] = useState('')
+  const [url, setUrl] = useState('')
   const [password, setPassword] = useState('')
+  const [notes, setNotes] = useState('')
   const [visible, setVisible] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
@@ -40,7 +43,10 @@ export function PasswordsModule() {
     const { error } = await supabase.from('passwords').insert({
       user_id: user.id,
       title: title.trim(),
+      username: username.trim() || null,
+      url: url.trim() || null,
       password: password.trim(),
+      notes: notes.trim() || null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     })
@@ -48,7 +54,10 @@ export function PasswordsModule() {
       toast.error('Failed to save password: ' + error.message)
     } else {
       setTitle('')
+      setUsername('')
+      setUrl('')
       setPassword('')
+      setNotes('')
       setShowAdd(false)
       await loadEntries()
       toast.success('Password saved')
@@ -72,6 +81,26 @@ export function PasswordsModule() {
 
   const toggleVisible = (id: string) => {
     setVisible(v => ({ ...v, [id]: !v[id] }))
+  }
+
+  const generatePassword = () => {
+    const length = 16
+    const charset =
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:,.<>?'
+    let result = ''
+    for (let i = 0; i < length; i++) {
+      result += charset.charAt(Math.floor(Math.random() * charset.length))
+    }
+    setPassword(result)
+  }
+
+  const copyPassword = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      toast.success('Password copied')
+    } catch {
+      toast.error('Failed to copy password')
+    }
   }
 
   return (
@@ -100,9 +129,32 @@ export function PasswordsModule() {
           />
           <input
             className="input-dreamy w-full"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            placeholder="Password"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            placeholder="Username"
+          />
+          <input
+            className="input-dreamy w-full"
+            value={url}
+            onChange={e => setUrl(e.target.value)}
+            placeholder="URL"
+          />
+          <div className="flex gap-2">
+            <input
+              className="input-dreamy w-full"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="Password"
+            />
+            <button className="btn-secondary whitespace-nowrap" onClick={generatePassword}>
+              <Wand2 className="w-4 h-4" /> Generate
+            </button>
+          </div>
+          <textarea
+            className="input-dreamy w-full h-24"
+            value={notes}
+            onChange={e => setNotes(e.target.value)}
+            placeholder="Notes"
           />
           <div className="flex gap-2 justify-end">
             <button className="btn-secondary" onClick={() => setShowAdd(false)}>
@@ -132,10 +184,25 @@ export function PasswordsModule() {
                   <Trash2 className="w-4 h-4" /> Delete
                 </button>
               </div>
+              {e.username && <div className="text-sm text-purple-200 mb-1">{e.username}</div>}
+              {e.url && (
+                <a
+                  href={e.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm underline text-purple-200 mb-1 block"
+                >
+                  {e.url}
+                </a>
+              )}
+              {e.notes && <div className="text-sm mb-2">{e.notes}</div>}
               <div className="flex items-center gap-2">
                 <span>{visible[e.id] ? e.password : '••••••'}</span>
                 <button onClick={() => toggleVisible(e.id)} className="hover:text-purple-200">
                   {visible[e.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+                <button onClick={() => copyPassword(e.password)} className="hover:text-purple-200">
+                  <Copy className="w-4 h-4" />
                 </button>
               </div>
             </div>
