@@ -14,6 +14,11 @@ import dayjs from 'dayjs'
 import { BookOpen, Video, Music, Heart, Sparkles, Star } from 'lucide-react'
 import { bookOfMormonScriptures } from '@/data/bookOfMormon'
 
+interface HymnEntry {
+  label: string
+  lyrics: string[]
+}
+
 interface FamilySelectModalProps {
   isOpen: boolean
   onClose: () => void
@@ -327,9 +332,9 @@ export function SpiritualModule() {
     }
   }
 
-  const saveDiscipleship = async (content: string) => {
-    if (!user || !isOwnNotes) return
-    const today = dayjs().format('YYYY-MM-DD')
+    const saveDiscipleship = async (content: string) => {
+      if (!user || !isOwnNotes) return
+      const today = dayjs().format('YYYY-MM-DD')
     const payload = {
       user_id: user.id,
       date: today,
@@ -355,12 +360,171 @@ export function SpiritualModule() {
       setShowDiscipleshipModal(false)
     } catch (e: any) {
       toast.error('Failed to save reflection: ' + e.message)
+      }
     }
-  }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-96">
+    const SingHymnSection = () => {
+      const [book, setBook] = useState('es')
+      const [hymns, setHymns] = useState<Record<string, HymnEntry> | null>(null)
+      const [loadingHymns, setLoadingHymns] = useState(true)
+      const [hymnKey, setHymnKey] = useState('')
+      const [savedId, setSavedId] = useState<string | null>(null)
+      const [isFavorite, setIsFavorite] = useState(false)
+
+      useEffect(() => {
+        const load = async () => {
+          setLoadingHymns(true)
+          setHymns(null)
+          setHymnKey('')
+          setSavedId(null)
+          setIsFavorite(false)
+          try {
+            const res = await fetch(
+              `https://hymns.churchofjesuschrist.org/api/v1/hymns?lang=${book}`
+            )
+            const apiData: { id: string; title: string; verses: string[] }[] =
+              await res.json()
+            const data: Record<string, HymnEntry> = {}
+            apiData.forEach(h => {
+              data[h.id] = { label: h.title, lyrics: h.verses }
+            })
+            setHymns(data)
+          } catch {
+            setHymns(null)
+          } finally {
+            setLoadingHymns(false)
+          }
+        }
+        void load()
+      }, [book])
+
+      const handleSelect = (key: string) => {
+        if (!hymns) return
+        const entry = hymns[key]
+        setHymnKey(key)
+        setSavedId(null)
+        setIsFavorite(false)
+        setHymns({ ...hymns, [key]: entry })
+      }
+
+      const lyrics = hymnKey && hymns ? hymns[hymnKey]?.lyrics || [] : []
+
+      const saveToStudy = async () => {
+        if (!user || !hymns || !hymnKey) return
+        const title = hymns[hymnKey].label
+        const today = dayjs().format('YYYY-MM-DD')
+        const payload = {
+          user_id: user.id,
+          date: today,
+          hymn: title,
+          feeling: null,
+          is_favorite: isFavorite,
+          updated_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
+        }
+        try {
+          const { data, error } = await supabase
+            .from('hymn_notes')
+            .insert(payload)
+            .select('id')
+            .maybeSingle()
+          if (error) throw error
+          if (data) setSavedId(data.id)
+          toast.success('Hymn saved to Spiritual Study')
+        } catch (e: any) {
+          toast.error('Failed to save hymn: ' + e.message)
+        }
+      }
+
+      const toggleFavorite = async () => {
+        if (!user || !savedId) return
+        const newFav = !isFavorite
+        try {
+          const { error } = await supabase
+            .from('hymn_notes')
+            .update({
+              is_favorite: newFav,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', savedId)
+          if (error) throw error
+          setIsFavorite(newFav)
+          toast.success(newFav ? 'Marked favorite' : 'Removed favorite')
+        } catch (e: any) {
+          toast.error('Failed to update favorite: ' + e.message)
+        }
+      }
+
+      return (
+        <div className="space-y-6">
+          <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
+            <Music className="w-8 h-8 text-green-500" />
+            Sing a Hymn
+          </h1>
+          <div className="flex flex-wrap gap-3 items-end">
+            <select
+              value={book}
+              onChange={e => setBook(e.target.value)}
+              className="input-dreamy"
+            >
+              <option value="es">Spanish</option>
+              <option value="en">English</option>
+            </select>
+            {loadingHymns ? (
+              <p>Loading hymns...</p>
+            ) : hymns ? (
+              <select
+                value={hymnKey}
+                onChange={e => {
+                  void handleSelect(e.target.value)
+                }}
+                className="input-dreamy flex-1"
+              >
+                <option value="">Select hymn</option>
+                {Object.entries(hymns).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value.label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <p>No hymns found</p>
+            )}
+            {hymnKey && !savedId && (
+              <button onClick={saveToStudy} className="btn-dreamy">
+                Add to Study
+              </button>
+            )}
+            {savedId && (
+              <button
+                onClick={toggleFavorite}
+                className={`p-2 rounded-full transition-colors ${
+                  isFavorite
+                    ? 'text-yellow-500 hover:text-yellow-600'
+                    : 'text-gray-400 hover:text-yellow-500'
+                }`}
+              >
+                <Star className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+              </button>
+            )}
+          </div>
+          {lyrics.length > 0 && (
+            <div className="card-floating p-4 space-y-4">
+              <div className="font-medium text-gray-800">
+                {hymns![hymnKey].label}
+              </div>
+              <div className="min-h-[4rem] whitespace-pre-line text-gray-700">
+                {lyrics.join('\n\n')}
+              </div>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center h-96">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400"></div>
       </div>
     )
@@ -574,6 +738,8 @@ export function SpiritualModule() {
           </div>
         )}
       </div>
+
+      <SingHymnSection />
 
       <div className="space-y-6">
         <div className="flex justify-between items-center">
@@ -1093,6 +1259,44 @@ interface HymnModalProps {
 function HymnModal({ isOpen, onClose, onSave, existing }: HymnModalProps) {
   const [hymn, setHymn] = useState(existing?.hymn || '')
   const [feeling, setFeeling] = useState(existing?.feeling || '')
+  const [book, setBook] = useState('es')
+  const [hymnKey, setHymnKey] = useState('')
+  const [lyrics, setLyrics] = useState<string[]>([])
+  const [hymns, setHymns] = useState<Record<string, HymnEntry> | null>(null)
+  const [loadingHymns, setLoadingHymns] = useState(true)
+
+  useEffect(() => {
+    const load = async () => {
+      setLoadingHymns(true)
+      try {
+        const res = await fetch(
+          `https://hymns.churchofjesuschrist.org/api/v1/hymns?lang=${book}`
+        )
+        const apiData: { id: string; title: string; verses: string[] }[] =
+          await res.json()
+        const data: Record<string, HymnEntry> = {}
+        apiData.forEach(h => {
+          data[h.id] = { label: h.title, lyrics: h.verses }
+        })
+        setHymns(data)
+        if (existing?.hymn) {
+          const found = Object.entries(data).find(
+            ([, v]) => v.label === existing.hymn
+          )
+          if (found) {
+            const [fKey, fVal] = found
+            setHymnKey(fKey)
+            setLyrics(fVal.lyrics || [])
+          }
+        }
+      } catch {
+        setHymns(null)
+      } finally {
+        setLoadingHymns(false)
+      }
+    }
+    void load()
+  }, [book, existing])
 
   if (!isOpen) return null
 
@@ -1103,6 +1307,21 @@ function HymnModal({ isOpen, onClose, onSave, existing }: HymnModalProps) {
       return
     }
     onSave(hymn, feeling)
+  }
+
+  const handleBookChange = (b: string) => {
+    setBook(b)
+    setHymnKey('')
+    setHymn('')
+    setLyrics([])
+  }
+
+  const handleSelect = (key: string) => {
+    if (!hymns) return
+    const entry = hymns[key]
+    setHymnKey(key)
+    setHymn(entry.label)
+    setLyrics(entry.lyrics || [])
   }
 
   return (
@@ -1116,19 +1335,59 @@ function HymnModal({ isOpen, onClose, onSave, existing }: HymnModalProps) {
             ×
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <label htmlFor="hymnTitle" className="text-sm font-medium text-gray-700">
-              Hymn
-            </label>
-            <input
-              id="hymnTitle"
-              value={hymn}
-              onChange={e => setHymn(e.target.value)}
-              className="input-dreamy w-full"
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="hymnBook" className="text-sm font-medium text-gray-700">
+                Hymn Book
+              </label>
+              <select
+                id="hymnBook"
+                value={book}
+                onChange={e => handleBookChange(e.target.value)}
+                className="input-dreamy w-full"
+              >
+                <option value="es">Spanish</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="hymnTitle" className="text-sm font-medium text-gray-700">
+                Hymn
+              </label>
+              {loadingHymns ? (
+                <p>Loading hymns...</p>
+              ) : hymns ? (
+                <select
+                  id="hymnTitle"
+                  value={hymnKey}
+                  onChange={e => {
+                    void handleSelect(e.target.value)
+                  }}
+                  className="input-dreamy w-full"
+                  required
+                >
+                  <option value="">Select hymn</option>
+                  {Object.entries(hymns).map(([key, value]) => (
+                    <option key={key} value={key}>
+                      {value.label}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  id="hymnTitle"
+                  value={hymn}
+                  onChange={e => setHymn(e.target.value)}
+                  className="input-dreamy w-full"
+                  required
+                />
+              )}
+            </div>
+          {lyrics.length > 0 && (
+            <div className="p-3 bg-gray-50 rounded-xl max-h-60 overflow-y-auto whitespace-pre-line text-sm">
+              {lyrics.join('\n')}
+            </div>
+          )}
           <div className="space-y-2">
             <label htmlFor="hymnFeeling" className="text-sm font-medium text-gray-700">
               How did it make you feel?

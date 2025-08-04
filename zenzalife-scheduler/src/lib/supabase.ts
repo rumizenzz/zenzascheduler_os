@@ -133,6 +133,7 @@ export type HymnNote = {
   date: string
   hymn: string
   feeling?: string
+  is_favorite?: boolean
   created_at?: string
   updated_at?: string
 }
