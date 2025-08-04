@@ -463,6 +463,10 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Constrained all-day task start dates to date-only values to remove browser format warnings.
 - Verified the repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-03 16:51 UTC)
+- Fetched Book of Mormon verses from an API so Read Verse displays every passage.
+- Verified the repository passes lint with `pnpm run lint`.
+
 ### Codex Agent Reflection (2025-08-02 04:09 UTC)
 - Added quick Current Time buttons so tasks can start now or end after 5, 10, 30, or 60 minutes.
 - Verified the repository passes lint with `pnpm run lint`.
@@ -928,4 +932,8 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 
 ### Codex Agent Reflection (2025-08-01 20:55 UTC)
 - Constrained all-day task start dates to date-only values to remove browser format warnings.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-04 11:33 UTC)
+- Batched Book of Mormon chapter requests so Verse Library loads every verse.
 - Verified the repository passes lint with `pnpm run lint`.
