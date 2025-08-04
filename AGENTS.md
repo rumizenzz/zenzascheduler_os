@@ -463,6 +463,18 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Constrained all-day task start dates to date-only values to remove browser format warnings.
 - Verified the repository passes lint with `pnpm run lint`.
 
+### Codex Agent Reflection (2025-08-04 22:47 UTC)
+- Moved dashboard main content to a top-level p-6 div so modules render first.
+- Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-04 23:06 UTC)
+- Corrected Lucid Dream Journal history portal syntax to resolve TypeScript build errors.
+- Confirmed repository lint passes with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-04 23:19 UTC)
+- Reordered dashboard layout so the sidebar renders before the p-6 main container, keeping navigation above modules.
+- Verified lint and build succeed with `pnpm run lint` and `pnpm run build`.
+
 ### Codex Agent Reflection (2025-08-02 04:09 UTC)
 - Added quick Current Time buttons so tasks can start now or end after 5, 10, 30, or 60 minutes.
 - Verified the repository passes lint with `pnpm run lint`.
