@@ -17,6 +17,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Read Verse module lets users browse Bible or Book of Mormon passages with next/previous navigation, saving verses and favorites (2025-08-03 15:29 UTC)
 - Verse Library lists scrollable Bible or Book of Mormon passages with click-to-open navigation (2025-08-03 15:50 UTC)
 - Verse Library organizes every Bible and Book of Mormon book with chapter and verse navigation (2025-08-03 16:02 UTC)
+- Journal and Dream Journal entries keep edit history with "(edited)" tags, hover previews, and Harold and the Purple Crayon & Vanilla Sky history windows (2025-08-04 11:26 UTC)
 ### Changed
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
