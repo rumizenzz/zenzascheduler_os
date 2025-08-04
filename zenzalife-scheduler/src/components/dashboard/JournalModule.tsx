@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import {
   supabase,
@@ -249,26 +250,28 @@ export function JournalModule() {
         </div>
       )}
 
-      {historyViewId && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
-          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-4 w-full max-w-md max-h-[80vh] overflow-y-auto text-purple-100 space-y-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg">Edit History</h2>
-              <button className="btn-secondary" onClick={() => setHistoryViewId(null)}>
-                Close
-              </button>
-            </div>
-            {histories[historyViewId]?.map((h) => (
-              <div key={h.id} className="space-y-1">
-                <div className="text-xs opacity-70">
-                  {dayjs(h.edited_at).format('YYYY-MM-DD HH:mm:ss')}
-                </div>
-                <div className="whitespace-pre-wrap">{h.content}</div>
+      {historyViewId &&
+        createPortal(
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
+            <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-4 w-full max-w-md max-h-[80vh] overflow-y-auto text-purple-100 space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg">Edit History</h2>
+                <button className="btn-secondary" onClick={() => setHistoryViewId(null)}>
+                  Close
+                </button>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+              {histories[historyViewId]?.map((h) => (
+                <div key={h.id} className="space-y-1">
+                  <div className="text-xs opacity-70">
+                    {dayjs(h.edited_at).format('YYYY-MM-DD HH:mm:ss')}
+                  </div>
+                  <div className="whitespace-pre-wrap">{h.content}</div>
+                </div>
+              ))}
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import {
   supabase,
@@ -293,10 +294,18 @@ export function LucidDreamJournalModule() {
                 <div className="font-semibold">{h.title}</div>
                 <div className="whitespace-pre-wrap">{h.description}</div>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+              {histories[historyViewId]?.map((h) => (
+                <div key={h.id} className="space-y-1">
+                  <div className="text-xs opacity-70">
+                    {dayjs(h.edited_at).format('YYYY-MM-DD HH:mm:ss')}
+                  </div>
+                  <div className="whitespace-pre-wrap">{h.description}</div>
+                </div>
+              ))}
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   )
 }
