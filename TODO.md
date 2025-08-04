@@ -88,6 +88,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Documented fix for missing `photo_url` column in `grace_prayers` causing schema cache upload errors (2025-08-04 22:49 UTC)
 - Double-clicking the Math Notebook plus button duplicates the current tab name with sequential numbering (2025-08-04 21:55:15 UTC)
 - Dream Journal entries now include a "Name of the Dream" field for easier recall (2025-08-04 11:40 UTC)
  - Verse Library lists scrollable Bible or Book of Mormon passages with click-to-open navigation (2025-08-03 15:50 UTC)
@@ -347,6 +348,8 @@ This file tracks project progress and upcoming tasks.
 - Added missing `type` column to the `addresses` table so Logistics entries save.
 - Documented fix for "Could not find the 'type' column of 'addresses' in the schema cache" error.
 - Added README in `supabase/` explaining how to add the missing `type` column.
+- Documented fix for "Could not find the 'photo_url' column of 'grace_prayers' in the schema cache" error.
+- Added README instructions for adding the missing `photo_url` column to `grace_prayers`.
 - Fixed date field save errors by converting blank strings to null during Life Logistics saves.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.

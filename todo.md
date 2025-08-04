@@ -293,6 +293,8 @@ This file tracks project progress and upcoming tasks.
 - Added missing `type` column to the `addresses` table so Logistics entries save.
 - Documented fix for "Could not find the 'type' column of 'addresses' in the schema cache" error.
 - Added README in `supabase/` explaining how to add the missing `type` column.
+- Documented fix for "Could not find the 'photo_url' column of 'grace_prayers' in the schema cache" error.
+- Added README instructions for adding the missing `photo_url` column to `grace_prayers`.
 - Fixed date field save errors by converting blank strings to null during Life Logistics saves.
 - Added custom confirmation email edge function using IONOS and confirmation
   page for verified users.
