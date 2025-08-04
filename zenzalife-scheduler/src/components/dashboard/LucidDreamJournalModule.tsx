@@ -266,7 +266,7 @@ export function LucidDreamJournalModule() {
               {histories[historyViewId]?.map((h) => (
                 <div key={h.id} className="space-y-1">
                   <div className="text-xs opacity-70">
-                    {dayjs(h.edited_at).format('YYYY-MM-DD HH:mm:ss')}
+                    {dayjs(h.edited_at).format('YYYY-MM-DD hh:mm:ss A')}
                   </div>
                   <div className="whitespace-pre-wrap">{h.description}</div>
                 </div>

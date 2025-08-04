@@ -18,6 +18,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse Library lists scrollable Bible or Book of Mormon passages with click-to-open navigation (2025-08-03 15:50 UTC)
 - Verse Library organizes every Bible and Book of Mormon book with chapter and verse navigation (2025-08-03 16:02 UTC)
 - Journal and Dream Journal entries keep edit history with "(edited)" tags, hover previews, and Harold and the Purple Crayon & Vanilla Sky history windows (2025-08-04 11:26 UTC)
+- Ideas entries can be edited directly from the dashboard (2025-08-04 17:15 UTC)
 ### Changed
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
@@ -25,7 +26,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - World Clock timezone selector now uses a Harold and the Purple Crayon & Vanilla Sky dropdown that stays clear of other buttons (2025-08-01 23:14 UTC)
 - World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59 UTC)
 - World Clock time zones now save to Supabase so preferences sync across devices (2025-08-01 22:59 UTC)
-- Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22 UTC)
+- Ideas, Journal, and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-04 17:15 UTC)
 - Journal and Dream Journal entries now show full timestamps down to the second (2025-08-01 22:48 UTC)
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)

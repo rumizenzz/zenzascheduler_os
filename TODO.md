@@ -18,6 +18,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse Library lists scrollable Bible or Book of Mormon passages with click-to-open navigation (2025-08-03 15:50 UTC)
 - Verse Library organizes every Bible and Book of Mormon book with chapter and verse navigation (2025-08-03 16:02 UTC)
 - Journal and Dream Journal entries keep edit history with "(edited)" tags, hover previews, and Harold and the Purple Crayon & Vanilla Sky history windows (2025-08-04 11:26 UTC)
+- Ideas entries can be edited directly from the dashboard (2025-08-04 17:15 UTC)
 ### Changed
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
@@ -25,7 +26,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
 - Sidebar navigation now scrolls with a Harold and the Purple Crayon & Vanilla Sky gradient so all sections and Sign Out remain within reach (2025-08-01 16:57:38 UTC)
 - Entrance animation and sound preferences now save to Supabase instead of local storage (2025-08-01 16:26:53 UTC)
-- Journal and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-01 23:22 UTC)
+- Ideas, Journal, and Dream Journal entries now display timestamps in 12-hour format with AM/PM (2025-08-04 17:15 UTC)
 - GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05 UTC)
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
