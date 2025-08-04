@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
@@ -50,6 +50,7 @@ export function MathNotebookModule() {
     { value: 'project', label: 'Project Plan' }
   ]
   const [search, setSearch] = useState('')
+  const clickTimeout = useRef<NodeJS.Timeout | null>(null)
 
   const isMathExpression = (text: string) => /^[0-9+\-*/xX().^\s]+$/.test(text)
 
@@ -232,6 +233,40 @@ export function MathNotebookModule() {
 
   const quickAddTab = async () => {
     await addTab(`Notes ${tabs.length + 1}`, 'notes')
+  }
+
+  const duplicateTab = async () => {
+    const activeTab = tabs.find((t) => t.id === activeTabId)
+    if (!activeTab) return
+    const baseName = activeTab.name.replace(/\s\d+$/, '')
+    let max = 1
+    tabs.forEach((t) => {
+      if (t.name === baseName) {
+        max = Math.max(max, 1)
+      } else if (t.name.startsWith(baseName + ' ')) {
+        const n = parseInt(t.name.substring(baseName.length + 1), 10)
+        if (!isNaN(n)) max = Math.max(max, n)
+      }
+    })
+    const newName = `${baseName} ${max + 1}`
+    const template = (activeTab.data.appState as any)?.template || 'notes'
+    await addTab(newName, template)
+  }
+
+  const handlePlusClick = () => {
+    if (clickTimeout.current) return
+    clickTimeout.current = setTimeout(() => {
+      quickAddTab()
+      clickTimeout.current = null
+    }, 250)
+  }
+
+  const handlePlusDoubleClick = () => {
+    if (clickTimeout.current) {
+      clearTimeout(clickTimeout.current)
+      clickTimeout.current = null
+    }
+    duplicateTab()
   }
 
   const handleCreateNotebook = async () => {
@@ -646,7 +681,8 @@ export function MathNotebookModule() {
             </div>
           ))}
           <button
-            onClick={quickAddTab}
+            onClick={handlePlusClick}
+            onDoubleClick={handlePlusDoubleClick}
             className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
             title="New Tab"
           >

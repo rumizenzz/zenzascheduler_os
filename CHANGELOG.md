@@ -20,6 +20,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Journal and Dream Journal entries keep edit history with "(edited)" tags, hover previews, and Harold and the Purple Crayon & Vanilla Sky history windows (2025-08-04 11:26 UTC)
 - Ideas entries can be edited directly from the dashboard (2025-08-04 17:15 UTC)
 - Dream Journal entries now include a "Name of the Dream" field for easier recall (2025-08-04 11:40 UTC)
+- Double-clicking the Math Notebook plus button duplicates the current tab name with sequential numbering (2025-08-04 21:55:15 UTC)
 ### Changed
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
