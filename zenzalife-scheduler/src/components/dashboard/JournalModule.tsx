@@ -184,7 +184,7 @@ export function JournalModule() {
                     {editingId === entry.id ? (
                       <>
                         <div className="text-xs opacity-80">
-                          {dayjs(entry.created_at).format('YYYY-MM-DD HH:mm:ss')}
+                          {dayjs(entry.created_at).format('YYYY-MM-DD hh:mm:ss A')}
                         </div>
                         <textarea
                           className="textarea-dreamy w-full"
@@ -204,7 +204,7 @@ export function JournalModule() {
                     ) : (
                       <>
                         <div className="text-xs opacity-80">
-                          {dayjs(entry.created_at).format('YYYY-MM-DD HH:mm:ss')}
+                          {dayjs(entry.created_at).format('YYYY-MM-DD hh:mm:ss A')}
                         </div>
                         <div>
                           {entry.content}
@@ -263,7 +263,7 @@ export function JournalModule() {
               {histories[historyViewId]?.map((h) => (
                 <div key={h.id} className="space-y-1">
                   <div className="text-xs opacity-70">
-                    {dayjs(h.edited_at).format('YYYY-MM-DD HH:mm:ss')}
+                    {dayjs(h.edited_at).format('YYYY-MM-DD hh:mm:ss A')}
                   </div>
                   <div className="whitespace-pre-wrap">{h.content}</div>
                 </div>
