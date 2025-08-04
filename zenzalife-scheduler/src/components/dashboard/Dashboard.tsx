@@ -126,14 +126,12 @@ export function Dashboard() {
   usePullToRefresh(pullRefreshEnabled);
 
   const scrollToTop = () => {
-    requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, left: 0 });
-      const scroller = document.scrollingElement || document.documentElement;
-      scroller.scrollTop = 0;
-      scroller.scrollLeft = 0;
-      document.body.scrollTop = 0;
-      document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
-    });
+    window.scrollTo({ top: 0, left: 0 });
+    const scroller = document.scrollingElement || document.documentElement;
+    scroller.scrollTop = 0;
+    scroller.scrollLeft = 0;
+    document.body.scrollTop = 0;
+    document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
   };
 
   useLayoutEffect(() => {
