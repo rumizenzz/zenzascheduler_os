@@ -184,6 +184,7 @@ export type DreamJournalEntry = {
   id: string
   user_id: string
   created_at: string
+  title: string
   description: string
   achieved_lucidity: boolean
   lucidity_level?: number
@@ -202,6 +203,7 @@ export type DreamJournalEntryHistory = {
   id: string
   entry_id: string
   user_id: string
+  title: string
   description: string
   edited_at: string
 }
