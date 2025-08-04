@@ -22,6 +22,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Dream Journal entries now include a "Name of the Dream" field for easier recall (2025-08-04 11:40 UTC)
 - Double-clicking the Math Notebook plus button duplicates the current tab name with sequential numbering (2025-08-04 21:55:15 UTC)
 ### Changed
+- Dashboard main content now renders first with a top-level p-6 div so modules start at the top (2025-08-04 22:47 UTC)
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
@@ -88,6 +89,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Dashboard main container renders first with a top-level p-6 div so modules load above reminders (2025-08-04 22:47 UTC)
 - Double-clicking the Math Notebook plus button duplicates the current tab name with sequential numbering (2025-08-04 21:55:15 UTC)
 - Dream Journal entries now include a "Name of the Dream" field for easier recall (2025-08-04 11:40 UTC)
  - Verse Library lists scrollable Bible or Book of Mormon passages with click-to-open navigation (2025-08-03 15:50 UTC)
