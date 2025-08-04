@@ -11,6 +11,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - IDE diff editor tabs can be renamed inline to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
 - Ideas and Passwords dashboard modules let users capture brainstorms and login info (2025-08-03 14:46 UTC)
 - Scripture modal automatically fetches Bible verse text for typed references (2025-08-03 14:46 UTC)
+- Hymn modal pulls full lyrics from the LDS hymn library with a dropdown of all hymns (2025-08-03 15:23:49 UTC)
+- Sing Hymn section loads hymn books with verse navigation and favorites (2025-08-03 15:40 UTC)
+- English hymn library option lets users browse and save English hymns (2025-08-03 15:57 UTC)
 ### Changed
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)
@@ -20,7 +23,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05 UTC)
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
+- Hymn library now fetches titles and verses from the official LDS hymn API instead of GitHub (2025-08-03 16:39:05 UTC)
 ### Fixed
+- Typed hymn library JSON responses to eliminate unknown property errors so Netlify builds succeed (2025-08-03 15:46:23 UTC)
 - Added missing Supabase tables for ideas and passwords to resolve relation errors (2025-08-03 14:58 UTC)
 - Starting Morning/Night Prayer now stops alarm sound (2025-08-02 04:19 UTC)
 - Raised Workbox precache limit to 6 MB so large bundles like index-DCXdUHmw.js are cached and Netlify builds succeed (2025-08-02 01:29 UTC)
