@@ -31,6 +31,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Book of Mormon verses now load from an API so Read Verse shows every passage (2025-08-03 16:51 UTC)
 - Blocked saving verses that don't match the selected book by validating reference format (2025-08-03 15:13 UTC)
 - Added missing Supabase tables for ideas and passwords to resolve relation errors (2025-08-03 14:58 UTC)
 - Routed prayer recordings through Supabase Edge Functions so audio and meal photos save without Unknown upload errors (2025-08-03 05:38 UTC)
@@ -83,6 +84,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Book of Mormon verses now load from an API so Read Verse shows every passage (2025-08-03 16:51 UTC)
  - Verse Library lists scrollable Bible or Book of Mormon passages with click-to-open navigation (2025-08-03 15:50 UTC)
  - Verse Library organizes every Bible and Book of Mormon book with chapter and verse navigation (2025-08-03 16:02 UTC)
 - Journal and Dream Journal entries keep edit history with "(edited)" tags, hover previews, and Harold and the Purple Crayon & Vanilla Sky history windows (2025-08-04 11:26 UTC)
