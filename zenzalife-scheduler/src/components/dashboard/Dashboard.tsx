@@ -253,9 +253,10 @@ export function Dashboard() {
           onClick={() => setSidebarCollapsed(true)}
         ></div>
       )}
+
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-full harold-sky bg-gradient-to-b from-indigo-950 via-purple-950 to-blue-900/90 backdrop-blur-lg border-r border-white/20 z-40 transform transition-transform duration-300 ${
+        className={`fixed left-0 top-0 h-full harold-sky bg-gradient-to-b from-indigo-950 via-purple-950 to-blue-900/90 backdrop-blur-lg border-r border-white/20 z-50 transform transition-transform duration-300 ${
           sidebarCollapsed
             ? "-translate-x-full md:translate-x-0 md:w-16 w-64"
             : "translate-x-0 w-64"
@@ -355,15 +356,14 @@ export function Dashboard() {
           </span>
         </button>
       </div>
-
       {/* Main Content */}
       <div
         key={activeTab}
-        className={`transition-all duration-300 ml-0 ${
+        className={`p-6 transition-all duration-300 ml-0 ${
           sidebarCollapsed ? "md:ml-16" : "md:ml-64"
         }`}
       >
-        <div className="p-6">{renderContent()}</div>
+        {renderContent()}
       </div>
       <OnboardingModal />
       <MailingListPrompt />
