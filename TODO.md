@@ -22,6 +22,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Dream Journal entries now include a "Name of the Dream" field for easier recall (2025-08-04 11:40 UTC)
 - Double-clicking the Math Notebook plus button duplicates the current tab name with sequential numbering (2025-08-04 21:55:15 UTC)
 ### Changed
+- Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
@@ -34,6 +35,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Sidebar no longer hides beneath dashboard content; rendering the sidebar before the p-6 main container keeps navigation visible (2025-08-05 00:10 UTC)
+- Corrected Lucid Dream Journal history portal syntax so Netlify builds pass TypeScript checks (2025-08-04 23:05 UTC)
 - Dashboard tab content no longer renders beneath the app; resetting window, document, body, and root scroll positions keeps modules visible (2025-08-04 19:39 UTC)
 - Journal and Dream Journal edit history windows render via a portal above entries instead of beneath them (2025-08-04 11:40 UTC)
 - Blocked saving verses that don't match the selected book by validating reference format (2025-08-03 15:13 UTC)
@@ -88,6 +91,9 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Sidebar no longer hides beneath dashboard content; rendering the sidebar before the p-6 main container keeps navigation visible (2025-08-05 00:10 UTC)
+- Fixed Lucid Dream Journal history portal so TypeScript builds succeed (2025-08-04 23:05 UTC)
+- Dashboard main container renders first with a top-level p-6 div so modules load above reminders (2025-08-04 22:47 UTC)
 - Double-clicking the Math Notebook plus button duplicates the current tab name with sequential numbering (2025-08-04 21:55:15 UTC)
 - Dream Journal entries now include a "Name of the Dream" field for easier recall (2025-08-04 11:40 UTC)
  - Verse Library lists scrollable Bible or Book of Mormon passages with click-to-open navigation (2025-08-03 15:50 UTC)
