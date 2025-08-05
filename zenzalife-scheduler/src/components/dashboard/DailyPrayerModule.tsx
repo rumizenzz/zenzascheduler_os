@@ -23,6 +23,12 @@ export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
   const chunksRef = useRef<Blob[]>([])
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
+  const getAudioType = (url: string) => {
+    if (url.endsWith('.mp4')) return 'audio/mp4'
+    if (url.endsWith('.webm')) return 'audio/webm'
+    return 'audio/mpeg'
+  }
+
   const blobToDataUrl = (blob: Blob) =>
     new Promise<string>((resolve, reject) => {
       const reader = new FileReader()
@@ -202,7 +208,10 @@ export function DailyPrayerModule({ autoStartType }: DailyPrayerModuleProps) {
                 formatDuration(p.duration_seconds * 1000)
               })
             </p>
-            <audio controls src={p.audio_url} className="w-full" />
+            <audio controls className="w-full">
+              <source src={p.audio_url} type={getAudioType(p.audio_url)} />
+              Your browser does not support the audio element.
+            </audio>
           </div>
         ))}
         {prayersForDate.length === 0 && (

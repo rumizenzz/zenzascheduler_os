@@ -210,19 +210,19 @@ export function JournalModule() {
                           {entry.content}
                           {entry.updated_at && entry.updated_at !== entry.created_at && (
                             <span
-                              className="ml-2 text-xs opacity-70 cursor-pointer underline"
+                              className="relative ml-2 text-xs opacity-70 cursor-pointer underline group"
                               onMouseEnter={() => void loadHistory(entry.id)}
                               onClick={() => {
                                 void loadHistory(entry.id)
                                 setHistoryViewId(entry.id)
                               }}
-                              title={
-                                histories[entry.id]?.[0]?.content
-                                  ? histories[entry.id][0].content.slice(0, 100)
-                                  : ''
-                              }
                             >
                               (edited)
+                              {histories[entry.id]?.[0]?.content && (
+                                <div className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 z-20 hidden w-72 whitespace-pre-line rounded bg-purple-800 px-3 py-2 text-sm text-purple-50 shadow-lg group-hover:block">
+                                  {histories[entry.id][0].content.slice(0, 100)}
+                                </div>
+                              )}
                             </span>
                           )}
                         </div>

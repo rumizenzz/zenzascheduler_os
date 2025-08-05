@@ -478,6 +478,9 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-04 23:55 UTC)
 - Moved the sidebar after the p-6 main container and relied on a fixed z-index so navigation stays visible while content renders first.
 - Confirmed lint and build pass with `pnpm run lint` and `pnpm run build`.
+### Codex Agent Reflection (2025-08-04 22:46 UTC)
+- Expanded Passwords module with usernames, URLs, notes, copy-to-clipboard, and a password generator saved in Supabase.
+- Verified repository lint passes with `pnpm run lint`.
 
 ### Codex Agent Reflection (2025-08-02 04:09 UTC)
 - Added quick Current Time buttons so tasks can start now or end after 5, 10, 30, or 60 minutes.
@@ -945,6 +948,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-01 20:55 UTC)
 - Constrained all-day task start dates to date-only values to remove browser format warnings.
 - Verified the repository passes lint with `pnpm run lint`.
+
 ### Codex Agent Reflection (2025-08-05 00:10 UTC)
 - Reordered dashboard so the sidebar renders before the p-6 main container, keeping navigation visible while modules mount.
 - Confirmed the project passes lint and build with `pnpm run lint` and `pnpm run build`.
@@ -956,3 +960,11 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-05 00:45 UTC)
 - Switched to an injectManifest service worker so cached responses avoid null-body `Response` errors.
 - Confirmed the project passes lint and build with `pnpm run lint` and `pnpm run build`.
+
+### Codex Agent Reflection (2025-08-05 00:38 UTC)
+- Styled '(edited)' hover with custom Harold and the Purple Crayon & Vanilla Sky tooltips for Journal and Dream Journal entries.
+- Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-05 00:45 UTC)
+- Wrapped Lucid Dream Journal edit history overlay in a `createPortal` to fix Netlify TypeScript errors.
+- Confirmed the project passes lint with `pnpm run lint`.
