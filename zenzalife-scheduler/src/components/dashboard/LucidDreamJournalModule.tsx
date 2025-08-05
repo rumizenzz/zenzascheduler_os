@@ -246,7 +246,7 @@ export function LucidDreamJournalModule() {
                             >
                               (edited)
                               {histories[entry.id]?.[0]?.description && (
-                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-10 hidden w-64 whitespace-pre-line rounded bg-purple-900 px-2 py-1 text-xs text-purple-200 shadow-lg group-hover:block">
+                                <div className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 z-20 hidden w-72 whitespace-pre-line rounded bg-purple-800 px-3 py-2 text-sm text-purple-50 shadow-lg group-hover:block">
                                   {histories[entry.id][0].description.slice(0, 100)}
                                 </div>
                               )}
