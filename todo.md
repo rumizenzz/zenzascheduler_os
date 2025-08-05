@@ -15,6 +15,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Verse Library lists scrollable Bible or Book of Mormon passages with click-to-open navigation (2025-08-03 15:50 UTC)
 - Verse Library organizes every Bible and Book of Mormon book with chapter and verse navigation (2025-08-03 16:02 UTC)
 - Passwords module now stores usernames, URLs, notes, and includes a password generator with Supabase persistence (2025-08-04 22:46 UTC)
+- Ideas entries can be marked complete with green checkboxes for finished thoughts (2025-08-05 14:04:10 UTC)
+- To-Do List and Grocery List modules track tasks, groceries, and checked-off or missing items (2025-08-05 14:04:10 UTC)
 ### Changed
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
 - Clock module colors darkened so timers and presets remain legible (2025-08-01 18:09 UTC)

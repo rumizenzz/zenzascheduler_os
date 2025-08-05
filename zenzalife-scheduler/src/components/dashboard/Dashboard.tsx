@@ -21,6 +21,8 @@ import { LucidDreamJournalModule } from "./LucidDreamJournalModule";
 import { GEDMathStudyModule } from "./GEDMathStudyModule";
 import { IdeasModule } from "./IdeasModule";
 import { PasswordsModule } from "./PasswordsModule";
+import { TodoListModule } from "./TodoListModule";
+import { GroceryListModule } from "./GroceryListModule";
 import {
   Calendar,
   TrendingUp,
@@ -43,6 +45,8 @@ import {
   Calculator,
   Lightbulb,
   Key,
+  CheckSquare,
+  ShoppingCart,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -74,6 +78,8 @@ type DashboardTab =
   | "journal"
   | "dreams"
   | "ideas"
+  | "todos"
+  | "groceries"
   | "passwords"
   | "gedstudy"
   | "settings";
@@ -96,6 +102,8 @@ const navigationItems = [
   { id: "journal", label: "Journal", icon: NotebookPen, color: "text-purple-600" },
   { id: "dreams", label: "Dream Journal", icon: MoonStar, color: "text-indigo-600" },
   { id: "ideas", label: "Ideas", icon: Lightbulb, color: "text-yellow-500" },
+  { id: "todos", label: "To-Do List", icon: CheckSquare, color: "text-green-600" },
+  { id: "groceries", label: "Groceries", icon: ShoppingCart, color: "text-orange-600" },
   { id: "passwords", label: "Passwords", icon: Key, color: "text-gray-500" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
@@ -224,6 +232,10 @@ export function Dashboard() {
         return <LucidDreamJournalModule />;
       case "ideas":
         return <IdeasModule />;
+      case "todos":
+        return <TodoListModule />;
+      case "groceries":
+        return <GroceryListModule />;
       case "passwords":
         return <PasswordsModule />;
       case "settings":

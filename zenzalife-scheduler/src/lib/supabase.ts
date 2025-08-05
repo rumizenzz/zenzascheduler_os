@@ -159,6 +159,18 @@ export type Idea = {
   id: string
   user_id: string
   content: string
+  completed?: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+export type TodoItem = {
+  id: string
+  user_id: string
+  content: string
+  category: string
+  completed?: boolean
+  missing?: boolean
   created_at?: string
   updated_at?: string
 }

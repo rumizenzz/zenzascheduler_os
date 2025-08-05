@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { supabase, Idea } from '@/lib/supabase'
+import { supabase, TodoItem } from '@/lib/supabase'
 import dayjs from 'dayjs'
-import { Plus, Lightbulb, Trash2, Pencil, Check } from 'lucide-react'
+import { Plus, ShoppingCart, Trash2, Pencil, Check, X } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
-export function IdeasModule() {
+export function GroceryListModule() {
   const { user } = useAuth()
-  const [ideas, setIdeas] = useState<Idea[]>([])
+  const [items, setItems] = useState<TodoItem[]>([])
   const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
   const [content, setContent] = useState('')
@@ -16,92 +16,108 @@ export function IdeasModule() {
 
   useEffect(() => {
     if (user) {
-      void loadIdeas()
+      void loadItems()
     }
   }, [user])
 
-  const loadIdeas = async () => {
+  const loadItems = async () => {
     if (!user) return
     setLoading(true)
     const { data, error } = await supabase
-      .from('ideas')
+      .from('todo_items')
       .select('*')
       .eq('user_id', user.id)
+      .eq('category', 'grocery')
       .order('created_at', { ascending: false })
     if (error) {
-      toast.error('Failed to load ideas: ' + error.message)
+      toast.error('Failed to load items: ' + error.message)
     } else {
-      setIdeas(data || [])
+      setItems(data || [])
     }
     setLoading(false)
   }
 
-  const saveIdea = async () => {
+  const saveItem = async () => {
     if (!user || !content.trim()) return
-    const { error } = await supabase.from('ideas').insert({
+    const { error } = await supabase.from('todo_items').insert({
       user_id: user.id,
       content: content.trim(),
+      category: 'grocery',
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     })
     if (error) {
-      toast.error('Failed to save idea: ' + error.message)
+      toast.error('Failed to save item: ' + error.message)
     } else {
       setContent('')
       setShowAdd(false)
-      await loadIdeas()
-      toast.success('Idea saved')
+      await loadItems()
+      toast.success('Item added')
     }
   }
 
-  const startEdit = (idea: Idea) => {
-    setEditingId(idea.id)
-    setEditContent(idea.content)
+  const startEdit = (item: TodoItem) => {
+    setEditingId(item.id)
+    setEditContent(item.content)
   }
 
-  const updateIdea = async () => {
+  const updateItem = async () => {
     if (!user || !editingId || !editContent.trim()) return
     const { error } = await supabase
-      .from('ideas')
+      .from('todo_items')
       .update({ content: editContent.trim(), updated_at: new Date().toISOString() })
       .eq('id', editingId)
       .eq('user_id', user.id)
     if (error) {
-      toast.error('Failed to update idea: ' + error.message)
+      toast.error('Failed to update item: ' + error.message)
     } else {
       setEditingId(null)
       setEditContent('')
-      await loadIdeas()
-      toast.success('Idea updated')
+      await loadItems()
+      toast.success('Item updated')
     }
   }
 
-  const deleteIdea = async (id: string) => {
+  const deleteItem = async (id: string) => {
     if (!user) return
     const { error } = await supabase
-      .from('ideas')
+      .from('todo_items')
       .delete()
       .eq('id', id)
       .eq('user_id', user.id)
     if (error) {
-      toast.error('Failed to delete idea: ' + error.message)
+      toast.error('Failed to delete item: ' + error.message)
     } else {
-      await loadIdeas()
-      toast.success('Idea deleted')
+      await loadItems()
+      toast.success('Item deleted')
     }
   }
 
-  const toggleCompleted = async (idea: Idea) => {
+  const markBought = async (item: TodoItem) => {
     if (!user) return
     const { error } = await supabase
-      .from('ideas')
-      .update({ completed: !idea.completed, updated_at: new Date().toISOString() })
-      .eq('id', idea.id)
+      .from('todo_items')
+      .update({ completed: !item.completed, missing: item.completed ? item.missing : false, updated_at: new Date().toISOString() })
+      .eq('id', item.id)
       .eq('user_id', user.id)
     if (error) {
-      toast.error('Failed to update idea: ' + error.message)
+      toast.error('Failed to update item: ' + error.message)
     } else {
-      await loadIdeas()
+      await loadItems()
+    }
+  }
+
+  const markMissing = async (item: TodoItem) => {
+    if (!user) return
+    const { error } = await supabase
+      .from('todo_items')
+      .update({ missing: !item.missing, completed: item.missing ? item.completed : false, updated_at: new Date().toISOString() })
+      .eq('id', item.id)
+      .eq('user_id', user.id)
+    if (error) {
+      toast.error('Failed to update item: ' + error.message)
+    } else {
+      await loadItems()
     }
   }
 
@@ -109,15 +125,15 @@ export function IdeasModule() {
     <div className="space-y-6 pb-24">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-light text-purple-200 flex items-center gap-3">
-          <Lightbulb className="w-8 h-8" />
-          Ideas
+          <ShoppingCart className="w-8 h-8" />
+          Grocery List
         </h1>
         <button
           onClick={() => setShowAdd(true)}
           className="btn-dreamy-primary flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
-          Add Idea
+          Add Item
         </button>
       </div>
 
@@ -125,16 +141,16 @@ export function IdeasModule() {
         <div className="card-floating bg-purple-900/80 text-white p-4 space-y-4">
           <textarea
             className="textarea-dreamy w-full"
-            rows={5}
+            rows={3}
             value={content}
             onChange={e => setContent(e.target.value)}
-            placeholder="What's your idea?"
+            placeholder="What do you need to buy?"
           />
           <div className="flex gap-2 justify-end">
             <button className="btn-secondary" onClick={() => setShowAdd(false)}>
               Cancel
             </button>
-            <button className="btn-dreamy-primary" onClick={saveIdea}>
+            <button className="btn-dreamy-primary" onClick={saveItem}>
               Save
             </button>
           </div>
@@ -145,9 +161,9 @@ export function IdeasModule() {
         <div className="flex justify-center items-center h-40">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400"></div>
         </div>
-      ) : ideas.length > 0 ? (
+      ) : items.length > 0 ? (
         <div className="space-y-4">
-          {ideas.map(i => (
+          {items.map(i => (
             <div key={i.id} className="bg-gradient-to-br from-purple-800 via-purple-700 to-pink-600 p-4 rounded-lg text-white">
               {editingId === i.id ? (
                 <>
@@ -158,7 +174,7 @@ export function IdeasModule() {
                   </div>
                   <textarea
                     className="textarea-dreamy w-full mb-2"
-                    rows={5}
+                    rows={3}
                     value={editContent}
                     onChange={e => setEditContent(e.target.value)}
                   />
@@ -166,7 +182,7 @@ export function IdeasModule() {
                     <button className="btn-secondary" onClick={() => setEditingId(null)}>
                       Cancel
                     </button>
-                    <button className="btn-dreamy-primary" onClick={updateIdea}>
+                    <button className="btn-dreamy-primary" onClick={updateItem}>
                       Save
                     </button>
                   </div>
@@ -180,9 +196,15 @@ export function IdeasModule() {
                     <div className="flex items-center gap-2 text-sm">
                       <button
                         className={`flex items-center gap-1 ${i.completed ? 'text-green-400' : 'hover:text-green-200'}`}
-                        onClick={() => toggleCompleted(i)}
+                        onClick={() => markBought(i)}
                       >
                         <Check className="w-4 h-4" />
+                      </button>
+                      <button
+                        className={`flex items-center gap-1 ${i.missing ? 'text-red-400' : 'hover:text-red-200'}`}
+                        onClick={() => markMissing(i)}
+                      >
+                        <X className="w-4 h-4" />
                       </button>
                       <button
                         className="flex items-center gap-1 hover:text-purple-200"
@@ -192,20 +214,20 @@ export function IdeasModule() {
                       </button>
                       <button
                         className="flex items-center gap-1 hover:text-purple-200"
-                        onClick={() => deleteIdea(i.id)}
+                        onClick={() => deleteItem(i.id)}
                       >
                         <Trash2 className="w-4 h-4" /> Delete
                       </button>
                     </div>
                   </div>
-                  <div className={`whitespace-pre-wrap ${i.completed ? 'line-through opacity-70' : ''}`}>{i.content}</div>
+                  <div className={`whitespace-pre-wrap ${i.completed ? 'line-through opacity-70' : ''} ${i.missing ? 'text-red-300 opacity-70 line-through' : ''}`}>{i.content}</div>
                 </>
               )}
             </div>
           ))}
         </div>
       ) : (
-        <div className="text-center text-gray-600">No ideas yet</div>
+        <div className="text-center text-gray-600">No items yet</div>
       )}
     </div>
   )
