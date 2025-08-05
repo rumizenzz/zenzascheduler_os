@@ -42,6 +42,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Journal and Dream Journal edit history windows now float above all content by boosting their z-index (2025-08-05 01:22 UTC)
 - Replaced Workbox-generated service worker with an injectManifest build so cached responses no longer throw "Response with null body status cannot have body" errors (2025-08-05 00:45 UTC)
 - Dashboard modules render before reminders and overlay buttons so content never hides beneath the app (2025-08-05 00:27 UTC)
 - Sidebar no longer hides beneath dashboard content; rendering the sidebar before the p-6 main container keeps navigation visible (2025-08-05 00:10 UTC)
