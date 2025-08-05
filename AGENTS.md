@@ -937,3 +937,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-05 00:38 UTC)
 - Styled '(edited)' hover with custom Harold and the Purple Crayon & Vanilla Sky tooltips for Journal and Dream Journal entries.
 - Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-05 00:45 UTC)
+- Wrapped Lucid Dream Journal edit history overlay in a `createPortal` to fix Netlify TypeScript errors.
+- Confirmed the project passes lint with `pnpm run lint`.

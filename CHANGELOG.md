@@ -40,6 +40,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Wrapped Lucid Dream Journal edit history overlay in a `createPortal` so Netlify builds no longer fail (2025-08-05 00:45 UTC)
 - Prayer audio playback defines source types so recordings play with sound across browsers (2025-08-04 22:56 UTC)
 - Dashboard tab content no longer renders beneath the app; resetting window, document, body, and root scroll positions keeps modules visible (2025-08-04 19:39 UTC)
 - Journal and Dream Journal edit history windows now render via a portal above entries instead of beneath them (2025-08-04 11:40 UTC)
