@@ -237,19 +237,19 @@ export function LucidDreamJournalModule() {
                           {entry.description}
                           {entry.updated_at && entry.updated_at !== entry.created_at && (
                             <span
-                              className="ml-2 text-xs opacity-70 cursor-pointer underline"
+                              className="relative ml-2 text-xs opacity-70 cursor-pointer underline group"
                               onMouseEnter={() => void loadHistory(entry.id)}
                               onClick={() => {
                                 void loadHistory(entry.id)
                                 setHistoryViewId(entry.id)
                               }}
-                              title={
-                                histories[entry.id]?.[0]?.description
-                                  ? histories[entry.id][0].description.slice(0, 100)
-                                  : ''
-                              }
                             >
                               (edited)
+                              {histories[entry.id]?.[0]?.description && (
+                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-10 hidden w-64 whitespace-pre-line rounded bg-purple-900 px-2 py-1 text-xs text-purple-200 shadow-lg group-hover:block">
+                                  {histories[entry.id][0].description.slice(0, 100)}
+                                </div>
+                              )}
                             </span>
                           )}
                         </div>
@@ -277,28 +277,29 @@ export function LucidDreamJournalModule() {
         </div>
       )}
 
-      {historyViewId && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
-          <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-4 w-full max-w-md max-h-[80vh] overflow-y-auto text-purple-100 space-y-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg">Edit History</h2>
-              <button className="btn-secondary" onClick={() => setHistoryViewId(null)}>
-                Close
-              </button>
-            </div>
-            {histories[historyViewId]?.map((h) => (
-              <div key={h.id} className="space-y-1">
-                <div className="text-xs opacity-70">
-                  {dayjs(h.edited_at).format('YYYY-MM-DD hh:mm:ss A')}
-                </div>
-                {h.title && <div className="font-semibold">{h.title}</div>}
-                <div className="whitespace-pre-wrap">{h.description}</div>
+      {historyViewId &&
+        createPortal(
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 harold-sky">
+            <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-4 w-full max-w-md max-h-[80vh] overflow-y-auto text-purple-100 space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg">Edit History</h2>
+                <button className="btn-secondary" onClick={() => setHistoryViewId(null)}>
+                  Close
+                </button>
               </div>
-            ))}
-          </div>
-        </div>,
-        document.body
-      )}
+              {histories[historyViewId]?.map((h) => (
+                <div key={h.id} className="space-y-1">
+                  <div className="text-xs opacity-70">
+                    {dayjs(h.edited_at).format('YYYY-MM-DD hh:mm:ss A')}
+                  </div>
+                  {h.title && <div className="font-semibold">{h.title}</div>}
+                  <div className="whitespace-pre-wrap">{h.description}</div>
+                </div>
+              ))}
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   )
 }

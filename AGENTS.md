@@ -933,3 +933,11 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-01 20:55 UTC)
 - Constrained all-day task start dates to date-only values to remove browser format warnings.
 - Verified the repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-05 00:38 UTC)
+- Styled '(edited)' hover with custom Harold and the Purple Crayon & Vanilla Sky tooltips for Journal and Dream Journal entries.
+- Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-05 00:45 UTC)
+- Wrapped Lucid Dream Journal edit history overlay in a `createPortal` to fix Netlify TypeScript errors.
+- Confirmed the project passes lint with `pnpm run lint`.

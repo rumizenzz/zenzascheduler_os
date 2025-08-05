@@ -23,6 +23,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Double-clicking the Math Notebook plus button duplicates the current tab name with sequential numbering (2025-08-04 21:55:15 UTC)
 - Passwords module now stores usernames, URLs, notes, and includes a password generator with Supabase persistence (2025-08-04 22:46 UTC)
 ### Changed
+- '(edited)' tags now show custom Harold and the Purple Crayon & Vanilla Sky tooltip previews like Messenger and Discord (2025-08-05 00:38 UTC)
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
 - Monthsary and Anniversary tasks now glow with a magical gradient even when not hovered (2025-08-01 21:38 UTC)
@@ -35,6 +36,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Removed duplicate root-level copy of official GED Math PDFs; public directory now holds the single source (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Wrapped Lucid Dream Journal edit history overlay in a `createPortal` so Netlify builds no longer fail (2025-08-05 00:45 UTC)
 - Prayer modules define audio source types so recordings play with sound across browsers (2025-08-04 22:56 UTC)
 - Dashboard tab content no longer renders beneath the app; resetting window, document, body, and root scroll positions keeps modules visible (2025-08-04 19:39 UTC)
 - Journal and Dream Journal edit history windows render via a portal above entries instead of beneath them (2025-08-04 11:40 UTC)
@@ -90,6 +92,7 @@ This file tracks project progress and upcoming tasks.
 (None at the moment)
 
 ## Latest Updates
+- Wrapped Lucid Dream Journal edit history overlay in a `createPortal` so Netlify builds no longer fail (2025-08-05 00:45 UTC)
 - Passwords module now stores usernames, URLs, notes, and includes a password generator with Supabase persistence (2025-08-04 22:46 UTC)
 - Double-clicking the Math Notebook plus button duplicates the current tab name with sequential numbering (2025-08-04 21:55:15 UTC)
 - Dream Journal entries now include a "Name of the Dream" field for easier recall (2025-08-04 11:40 UTC)
