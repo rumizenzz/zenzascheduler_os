@@ -9,12 +9,13 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
+      strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'sw.ts',
       devOptions: {
         enabled: true
       },
-      workbox: {
+      injectManifest: {
         // Allow precaching large bundles like index-DCXdUHmw.js (~5.7 MB)
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
       },
