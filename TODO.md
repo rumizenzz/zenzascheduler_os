@@ -22,6 +22,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Dream Journal entries now include a "Name of the Dream" field for easier recall (2025-08-04 11:40 UTC)
 - Double-clicking the Math Notebook plus button duplicates the current tab name with sequential numbering (2025-08-04 21:55:15 UTC)
 - Passwords module now stores usernames, URLs, notes, and includes a password generator with Supabase persistence (2025-08-04 22:46 UTC)
+- Ideas entries can be marked complete with green checkboxes for finished thoughts (2025-08-05 14:04:10 UTC)
+- To-Do List and Grocery List modules track tasks, groceries, and checked-off or missing items (2025-08-05 14:04:10 UTC)
 ### Changed
 - Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
 - '(edited)' tags now show custom Harold and the Purple Crayon & Vanilla Sky tooltip previews like Messenger and Discord (2025-08-05 00:38 UTC)
