@@ -23,6 +23,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Double-clicking the Math Notebook plus button duplicates the current tab name with sequential numbering (2025-08-04 21:55:15 UTC)
 - Passwords module now stores usernames, URLs, notes, and offers a built-in password generator with Supabase persistence (2025-08-04 22:46 UTC)
 ### Changed
+- Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
 - '(edited)' tags now show custom Harold and the Purple Crayon & Vanilla Sky tooltip previews like Messenger and Discord (2025-08-05 00:38 UTC)
 - '(edited)' hover previews are larger with higher contrast for easier reading (2025-08-05 00:54 UTC)
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
@@ -41,6 +42,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Replaced Workbox-generated service worker with an injectManifest build so cached responses no longer throw "Response with null body status cannot have body" errors (2025-08-05 00:45 UTC)
+- Dashboard modules render before reminders and overlay buttons so content never hides beneath the app (2025-08-05 00:27 UTC)
+- Sidebar no longer hides beneath dashboard content; rendering the sidebar before the p-6 main container keeps navigation visible (2025-08-05 00:10 UTC)
+- Corrected Lucid Dream Journal history portal syntax so Netlify builds pass TypeScript checks (2025-08-04 23:05 UTC)
 - Wrapped Lucid Dream Journal edit history overlay in a `createPortal` so Netlify builds no longer fail (2025-08-05 00:45 UTC)
 - '(edited)' tooltips no longer block clicks, so edit history opens even while previewing (2025-08-05 00:54 UTC)
 - Prayer audio playback defines source types so recordings play with sound across browsers (2025-08-04 22:56 UTC)
