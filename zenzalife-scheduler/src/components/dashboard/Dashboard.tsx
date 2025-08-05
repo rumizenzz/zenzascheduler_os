@@ -235,27 +235,18 @@ export function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
-      <FastingPrayerReminder />
-      {/* Mobile menu button */}
-      {sidebarCollapsed && (
-        <button
-          onClick={() => setSidebarCollapsed(false)}
-          className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-full shadow"
-        >
-          <Menu className="w-5 h-5 text-gray-700" />
-        </button>
-      )}
-
-      {/* Mobile overlay */}
-      {!sidebarCollapsed && (
-        <div
-          className="md:hidden fixed inset-0 z-30 bg-black/20"
-          onClick={() => setSidebarCollapsed(true)}
-        ></div>
-      )}
+      {/* Main Content */}
+      <div
+        key={activeTab}
+        className={`p-6 transition-all duration-300 ml-0 ${
+          sidebarCollapsed ? "md:ml-16" : "md:ml-64"
+        }`}
+      >
+        {renderContent()}
+      </div>
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-full harold-sky bg-gradient-to-b from-indigo-950 via-purple-950 to-blue-900/90 backdrop-blur-lg border-r border-white/20 z-40 transform transition-transform duration-300 ${
+        className={`fixed left-0 top-0 h-full harold-sky bg-gradient-to-b from-indigo-950 via-purple-950 to-blue-900/90 backdrop-blur-lg border-r border-white/20 z-50 transform transition-transform duration-300 ${
           sidebarCollapsed
             ? "-translate-x-full md:translate-x-0 md:w-16 w-64"
             : "translate-x-0 w-64"
@@ -355,16 +346,24 @@ export function Dashboard() {
           </span>
         </button>
       </div>
+      <FastingPrayerReminder />
+      {/* Mobile menu button */}
+      {sidebarCollapsed && (
+        <button
+          onClick={() => setSidebarCollapsed(false)}
+          className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-full shadow"
+        >
+          <Menu className="w-5 h-5 text-gray-700" />
+        </button>
+      )}
 
-      {/* Main Content */}
-      <div
-        key={activeTab}
-        className={`transition-all duration-300 ml-0 ${
-          sidebarCollapsed ? "md:ml-16" : "md:ml-64"
-        }`}
-      >
-        <div className="p-6">{renderContent()}</div>
-      </div>
+      {/* Mobile overlay */}
+      {!sidebarCollapsed && (
+        <div
+          className="md:hidden fixed inset-0 z-30 bg-black/20"
+          onClick={() => setSidebarCollapsed(true)}
+        ></div>
+      )}
       <OnboardingModal />
       <MailingListPrompt />
       <RemindersButton />
