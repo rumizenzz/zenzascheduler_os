@@ -169,8 +169,18 @@ export type TodoItem = {
   user_id: string
   content: string
   category: string
+  list_id?: string
   completed?: boolean
   missing?: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+export type GroceryList = {
+  id: string
+  user_id: string
+  title: string
+  list_date?: string
   created_at?: string
   updated_at?: string
 }
