@@ -26,6 +26,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - To-Do List and Grocery List modules track tasks, groceries, and checked-off or missing items (2025-08-05 14:04:10 UTC)
 - Grocery lists can be organized into multiple dated lists with individually checkable items (2025-08-06 13:18:42 UTC)
 - Grocery module auto-creates required Supabase tables and columns on first run (2025-08-06 13:27:09 UTC)
+- Multiplication table overlay opens above the Math Notebook for quick reference (2025-08-06 22:01:55 UTC)
 ### Changed
 - AGENTS guidelines now require Supabase features to auto-create database schema via code (2025-08-06 13:48 UTC)
 - Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
