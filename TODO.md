@@ -24,7 +24,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Passwords module now stores usernames, URLs, notes, and includes a password generator with Supabase persistence (2025-08-04 22:46 UTC)
 - Ideas entries can be marked complete with green checkboxes for finished thoughts (2025-08-05 14:04:10 UTC)
 - To-Do List and Grocery List modules track tasks, groceries, and checked-off or missing items (2025-08-05 14:04:10 UTC)
+- Grocery lists can be organized into multiple dated lists with individually checkable items (2025-08-06 13:18:42 UTC)
+- Grocery module auto-creates required Supabase tables and columns on first run (2025-08-06 13:27:09 UTC)
 ### Changed
+- AGENTS guidelines now require Supabase features to auto-create database schema via code (2025-08-06 13:48 UTC)
 - Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
 - '(edited)' tags now show custom Harold and the Purple Crayon & Vanilla Sky tooltip previews like Messenger and Discord (2025-08-05 00:38 UTC)
 - '(edited)' hover previews are larger with higher contrast for easier reading (2025-08-05 00:54 UTC)

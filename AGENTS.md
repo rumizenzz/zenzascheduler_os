@@ -14,6 +14,7 @@ These guidelines apply to the entire repository.
   **Upcoming Releases** section within the `Unreleased` portion of the changelog.
   Each entry should note the release version and exact timestamp.
 - Run `pnpm run lint` inside `zenzalife-scheduler` before committing changes.
+- Supabase features must programmatically create any required tables, columns, or other schema without manual SQL.
 - Commit with clear messages.
 
 ## Development tips
@@ -37,6 +38,7 @@ These guidelines apply to the entire repository.
   **Upcoming Releases** section within the `Unreleased` portion of the changelog.
   Each entry should note the release version and exact timestamp.
 - Run `pnpm run lint` inside `zenzalife-scheduler` before committing changes.
+- Supabase features must programmatically create any required tables, columns, or other schema without manual SQL.
 - Commit with clear messages.
 
 ## Development tips
@@ -251,6 +253,7 @@ These guidelines apply to the entire repository.
   **Upcoming Releases** section within the `Unreleased` portion of the changelog.
   Each entry should note the release version and exact timestamp.
 - Run `pnpm run lint` inside `zenzalife-scheduler` before committing changes.
+- Supabase features must programmatically create any required tables, columns, or other schema without manual SQL.
 - Commit with clear messages.
 
 ## Development tips
@@ -508,6 +511,7 @@ These guidelines apply to the entire repository.
   **Upcoming Releases** section within the `Unreleased` portion of the changelog.
   Each entry should note the release version and exact timestamp.
 - Run `pnpm run lint` inside `zenzalife-scheduler` before committing changes.
+- Supabase features must programmatically create any required tables, columns, or other schema without manual SQL.
 - Commit with clear messages.
 
 ## Development tips
@@ -968,3 +972,14 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-05 00:45 UTC)
 - Wrapped Lucid Dream Journal edit history overlay in a `createPortal` to fix Netlify TypeScript errors.
 - Confirmed the project passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-06 13:18 UTC)
+- Added multi-list grocery organizer so users can create dated grocery lists and check items individually.
+- Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-06 13:27 UTC)
+- Ensured grocery module auto-creates required Supabase tables and list links via an edge function.
+- Confirmed repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-06 13:48 UTC)
+- Documented Supabase requirement to auto-create database schema.
