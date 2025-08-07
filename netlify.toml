@@ -1,7 +1,7 @@
 [build]
   base = "zenzalife-scheduler"
   # Install root dependencies so functions have their node modules
-  command = "pnpm --dir .. install && pnpm run build"
+  command = "pnpm --dir .. install --no-frozen-lockfile && pnpm run build"
   publish = "dist"
 
 [build.environment]
