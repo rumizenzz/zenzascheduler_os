@@ -94,6 +94,18 @@
   }
 }
 
+/* Subtle bobbing for the constellation family group */
+.animate-bob-slow { animation: bob-slow 6s ease-in-out infinite; }
+@keyframes bob-slow { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-6px); } }
+
+/* Slow walk-away scale + translate to create depth */
+.animate-walk-away { animation: walk-away 12s ease-in-out forwards; }
+@keyframes walk-away {
+  0%   { transform: translateY(0) scale(1); opacity: 1; }
+  50%  { transform: translateY(-30px) scale(0.98); opacity: 0.95; }
+  100% { transform: translateY(-80px) scale(0.94); opacity: 0.9; }
+}
+
 @keyframes float-slower {
   0%,
   100% {
@@ -463,6 +475,60 @@
 /* Hide Excalidraw UI in note previews */
 .excalidraw-preview .layer-ui__wrapper {
   display: none !important;
+}
+
+/* Magical entrance enhancements */
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0.3; transform: scale(0.9); }
+}
+
+@keyframes rise-stars {
+  0% { transform: translateY(0); opacity: 0.8; }
+  100% { transform: translateY(-120px); opacity: 1; }
+}
+
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes shooting-star {
+  0% { transform: translate3d(-10%, -10%, 0) rotate(15deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translate3d(110%, 110%, 0) rotate(15deg); opacity: 0; }
+}
+
+.twinkle {
+  animation: twinkle 2.4s ease-in-out infinite;
+}
+
+.animate-rise-stars {
+  animation: rise-stars 8s ease-in-out forwards;
+}
+
+.constellation-line {
+  stroke: rgba(253, 244, 215, 0.85);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 4px rgba(253, 244, 215, 0.45));
+  stroke-dasharray: 480;
+  stroke-dashoffset: 480;
+  animation: draw-line 3.5s ease forwards;
+}
+
+.shooting-star::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0));
+  box-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 20px rgba(168, 199, 255, 0.6);
+  transform-origin: left center;
+  animation: shooting-star 3.8s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
 }
 
 /* Safe-area handling to prevent content from being hidden under OS/app UI */
