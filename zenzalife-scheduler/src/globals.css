@@ -509,6 +509,14 @@
   animation: twinkle 2.4s ease-in-out infinite;
 }
 
+.step-a { animation: step-phase 2.4s ease-in-out infinite; }
+.step-b { animation: step-phase 2.4s ease-in-out infinite; animation-delay: 1.2s; }
+@keyframes step-phase {
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0.18; }
+  100% { opacity: 1; }
+}
+
 .animate-rise-stars {
   animation: rise-stars 8s ease-in-out forwards;
 }

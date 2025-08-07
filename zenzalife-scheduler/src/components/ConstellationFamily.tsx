@@ -90,7 +90,7 @@ export function ConstellationFamily() {
         cy={p.y}
         r={p.r}
         fill="rgba(255,255,210,0.95)"
-        className="twinkle"
+        className={i % 2 === 0 ? 'twinkle step-a' : 'twinkle step-b'}
         style={{ animationDelay: `${baseDelay + i * 120}ms` }}
       />
     ))
