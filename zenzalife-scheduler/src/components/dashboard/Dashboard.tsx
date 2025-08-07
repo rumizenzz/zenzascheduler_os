@@ -172,9 +172,7 @@ export function Dashboard() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setSidebarCollapsed(true);
-      }
+      setSidebarCollapsed(window.innerWidth < 768);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
