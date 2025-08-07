@@ -112,6 +112,28 @@
   50%      { opacity: 0.4; }
 }
 
+/* Honor reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow,
+  .animate-float-medium,
+  .animate-float-slower,
+  .animate-float-particle,
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-fade-in-delayed,
+  .animate-fade-in-delayed-2,
+  .animate-fade-in-delayed-3,
+  .animate-slow-swirl,
+  .animate-bob-slow,
+  .animate-walk-away,
+  .twinkle,
+  .step-a,
+  .step-b,
+  .silhouette-pulse {
+    animation: none !important;
+  }
+}
+
 @keyframes float-slower {
   0%,
   100% {
@@ -549,6 +571,10 @@
 :root {
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  /* z-index tokens */
+  --z-overlay: 50;
+  --z-header: 40;
+  --z-backdrop: 30;
 }
 
 html, body {
