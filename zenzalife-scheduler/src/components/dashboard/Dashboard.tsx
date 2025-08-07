@@ -353,7 +353,7 @@ export function Dashboard() {
       {/* Main Content */}
       <div
         key={activeTab}
-        className={`p-6 transition-all duration-300 ml-0 ${
+        className={`p-6 transition-all duration-300 ml-0 relative z-[1] ${
           sidebarCollapsed ? "md:ml-16" : "md:ml-64"
         }`}
       >

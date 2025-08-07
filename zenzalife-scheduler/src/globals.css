@@ -301,7 +301,7 @@
 }
 /* Calendar toolbar improvements */
 .fc-header-toolbar {
-  @apply sticky top-0 z-20 bg-white/70 backdrop-blur-md p-2 rounded-b-xl shadow flex flex-wrap items-center gap-2;
+  @apply sticky top-0 z-60 bg-white/70 backdrop-blur-md p-2 rounded-b-xl shadow flex flex-wrap items-center gap-2;
 }
 .fc-header-toolbar .fc-button {
   @apply px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-primary to-secondary text-white hover:from-primary/80 hover:to-secondary/80 active:scale-95 transition-all m-1;
@@ -463,3 +463,17 @@
 .excalidraw-preview .layer-ui__wrapper {
   display: none !important;
 }
+
+/* Safe-area handling to prevent content from being hidden under OS/app UI */
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html, body {
+  padding-top: var(--safe-area-inset-top);
+  padding-bottom: var(--safe-area-inset-bottom);
+}
+
+/* Ensure sticky toolbars respect safe area */
+.fc-header-toolbar { top: var(--safe-area-inset-top); }
