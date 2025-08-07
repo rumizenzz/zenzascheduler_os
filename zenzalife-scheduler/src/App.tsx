@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext'
 import { DreamlikeEntrance } from '@/components/DreamlikeEntrance'
 import { AuthForm } from '@/components/auth/AuthForm'
 import { Dashboard } from '@/components/dashboard/Dashboard'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import './globals.css'
 
 // Create a client
@@ -66,7 +67,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AppContent />
+        <ErrorBoundary>
+          <AppContent />
+        </ErrorBoundary>
         <Toaster
           position="top-right"
           toastOptions={{
