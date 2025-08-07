@@ -3,6 +3,7 @@ import { useAudio } from '@/hooks/useAudio'
 import { useAuth } from '@/contexts/AuthContext'
 import { Cloud, Sparkles, X } from 'lucide-react'
 import { ConstellationFamily } from './ConstellationFamily'
+import { StarWalkLottie } from './StarWalkLottie'
 
 interface DreamlikeEntranceProps {
   onComplete: () => void
@@ -104,7 +105,8 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
         </div>
       </div>
 
-      {/* Constellation Family */}
+      {/* Premium animation if asset present; otherwise, graceful constellation fallback */}
+      <StarWalkLottie className="absolute inset-0" />
       <ConstellationFamily />
 
       {/* Floating Particles */}
