@@ -3,7 +3,8 @@ import { useAudio } from '@/hooks/useAudio'
 import { useAuth } from '@/contexts/AuthContext'
 import { Cloud, Sparkles, X } from 'lucide-react'
 import { ConstellationFamily } from './ConstellationFamily'
-import { StarWalkLottie } from './StarWalkLottie'
+// Optional cinematic animation. Commented out to avoid build-time missing dep
+// import { StarWalkLottie } from './StarWalkLottie'
 
 interface DreamlikeEntranceProps {
   onComplete: () => void
@@ -105,8 +106,8 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
         </div>
       </div>
 
-      {/* Premium animation if asset present; otherwise, graceful constellation fallback */}
-      <StarWalkLottie className="absolute inset-0" />
+      {/* Premium animation if asset present; enable when lottie-web is available */}
+      {/* <StarWalkLottie className="absolute inset-0" /> */}
       <ConstellationFamily />
 
       {/* Floating Particles */}

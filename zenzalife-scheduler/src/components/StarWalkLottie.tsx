@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-// Lazy import so build doesn't choke if tree-shaken
-let lottiePromise: Promise<typeof import('lottie-web')> | null = null
-const loadLottie = () => {
-  if (!lottiePromise) lottiePromise = import('lottie-web')
-  return lottiePromise
+// Lazy import without type dependency to avoid TS module resolution at build
+let lottiePromise: Promise<any> | null = null
+const loadLottie = async (): Promise<any | null> => {
+  try {
+    if (!lottiePromise) lottiePromise = import('lottie-web') as unknown as Promise<any>
+    const mod: any = await lottiePromise
+    return mod?.default ?? mod
+  } catch {
+    return null
+  }
 }
 
 interface StarWalkLottieProps {
@@ -31,9 +36,9 @@ export function StarWalkLottie({ className, path = '/entrance/star-walk.json' }:
         setAvailable(true)
 
         const lottie = await loadLottie()
-        if (!containerRef.current) return
+        if (!lottie || !containerRef.current) return
 
-        const anim = lottie.default.loadAnimation({
+        const anim = lottie.loadAnimation({
           container: containerRef.current,
           renderer: 'svg',
           loop: false,
