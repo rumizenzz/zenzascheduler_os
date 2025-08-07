@@ -114,7 +114,10 @@ export function Dashboard() {
   const [activeTab, setActiveTab] = useState<DashboardTab>(
     urlTab || (profile?.last_dashboard_tab as DashboardTab) || "calendar"
   );
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth < 768;
+  });
   const [hasUnsavedSettings, setHasUnsavedSettings] = useState(false);
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
   const isMobile = useIsMobile();
