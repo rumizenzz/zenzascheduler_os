@@ -109,6 +109,36 @@ export function ConstellationFamily() {
     <div className="absolute inset-0 pointer-events-none">
       {/* Starry family walking out into the heavens */}
       <svg viewBox="0 0 1000 1100" className="absolute inset-0 w-full h-full">
+        <defs>
+          <radialGradient id="silhouetteGlow" cx="50%" cy="45%" r="60%">
+            <stop offset="0%" stopColor="rgba(255,255,255,0.35)" />
+            <stop offset="50%" stopColor="rgba(180,200,255,0.20)" />
+            <stop offset="100%" stopColor="rgba(120,140,220,0.05)" />
+          </radialGradient>
+          <filter id="soft-blur">
+            <feGaussianBlur stdDeviation="24" />
+          </filter>
+        </defs>
+
+        {/* Soft silhouettes behind the constellations */}
+        <g filter="url(#soft-blur)" opacity="0.35" className="silhouette-pulse">
+          {/* Dad silhouette */}
+          <ellipse cx="380" cy="760" rx="65" ry="120" fill="url(#silhouetteGlow)" />
+          <ellipse cx="380" cy="640" rx="26" ry="26" fill="url(#silhouetteGlow)" />
+          <ellipse cx="340" cy="900" rx="30" ry="70" fill="url(#silhouetteGlow)" />
+          <ellipse cx="420" cy="900" rx="30" ry="70" fill="url(#silhouetteGlow)" />
+
+          {/* Kid silhouette */}
+          <ellipse cx="500" cy="860" rx="50" ry="95" fill="url(#silhouetteGlow)" />
+          <ellipse cx="500" cy="740" rx="22" ry="22" fill="url(#silhouetteGlow)" />
+
+          {/* Mom silhouette */}
+          <ellipse cx="620" cy="820" rx="60" ry="110" fill="url(#silhouetteGlow)" />
+          <ellipse cx="620" cy="660" rx="24" ry="24" fill="url(#silhouetteGlow)" />
+          <ellipse cx="580" cy="940" rx="28" ry="68" fill="url(#silhouetteGlow)" />
+          <ellipse cx="660" cy="940" rx="28" ry="68" fill="url(#silhouetteGlow)" />
+        </g>
+
         <g
           className="animate-walk-away animate-bob-slow"
           style={{ transformOrigin: '50% 80%' }}

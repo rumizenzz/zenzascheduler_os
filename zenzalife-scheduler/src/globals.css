@@ -106,6 +106,12 @@
   100% { transform: translateY(-80px) scale(0.94); opacity: 0.9; }
 }
 
+.silhouette-pulse { animation: silhouette-pulse 6s ease-in-out infinite; }
+@keyframes silhouette-pulse {
+  0%, 100% { opacity: 0.28; }
+  50%      { opacity: 0.4; }
+}
+
 @keyframes float-slower {
   0%,
   100% {
