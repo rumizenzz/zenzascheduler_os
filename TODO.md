@@ -2,6 +2,7 @@ ZenzaScheduler OS — TODO
 
 - Track and triage UI regressions (e.g., content under headers/sidebar)
 - Synced scheduler pnpm lockfile with lottie-web dependency to fix Netlify install errors
+- Prayer modules skip audio player when recordings are missing to avoid playback errors
 - Build pipeline: ensure pnpm availability on Windows; document dev setup
 - Calendar: verify sticky header layering across all tabs/modals
 - Safe-area: confirm padding on iOS PWA and Android Chrome
