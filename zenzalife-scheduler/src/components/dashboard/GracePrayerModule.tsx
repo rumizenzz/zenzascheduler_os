@@ -220,10 +220,14 @@ export function GracePrayerModule() {
                 formatDuration(p.duration_seconds * 1000)
               })
             </p>
-            <audio controls className="w-full">
-              <source src={p.audio_url} type={getAudioType(p.audio_url)} />
-              Your browser does not support the audio element.
-            </audio>
+            {p.audio_url ? (
+              <audio controls className="w-full">
+                <source src={p.audio_url} type={getAudioType(p.audio_url)} />
+                Your browser does not support the audio element.
+              </audio>
+            ) : (
+              <p className="text-sm text-gray-500">No audio available.</p>
+            )}
             {p.photo_url && (
               <button
                 onClick={() => window.open(p.photo_url!, '_blank')}
