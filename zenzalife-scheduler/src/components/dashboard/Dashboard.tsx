@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
@@ -125,6 +125,7 @@ export function Dashboard() {
   const [pullRefreshEnabled, setPullRefreshEnabled] = useState(
     () => localStorage.getItem(storageKey) === "true"
   );
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setPullRefreshEnabled(localStorage.getItem(storageKey) === "true");
@@ -137,12 +138,16 @@ export function Dashboard() {
   usePullToRefresh(pullRefreshEnabled);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, left: 0 });
-    const scroller = document.scrollingElement || document.documentElement;
-    scroller.scrollTop = 0;
-    scroller.scrollLeft = 0;
-    document.body.scrollTop = 0;
-    document.getElementById("root")?.scrollTo({ top: 0, left: 0 });
+    // Defer to next frame so dashboard content mounts before forcing scroll
+    requestAnimationFrame(() => {
+      contentRef.current?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      const scroller = document.scrollingElement || document.documentElement;
+      scroller.scrollTop = 0;
+      scroller.scrollLeft = 0;
+      document.body.scrollTop = 0;
+      document.getElementById("root")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    });
   };
 
   useLayoutEffect(() => {
@@ -352,6 +357,7 @@ export function Dashboard() {
       </div>
       {/* Main Content */}
       <div
+        ref={contentRef}
         key={activeTab}
         className={`p-6 transition-all duration-300 ml-0 ${
           sidebarCollapsed ? "md:ml-16" : "md:ml-64"
