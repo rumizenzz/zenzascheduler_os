@@ -1,6 +1,7 @@
 ZenzaScheduler OS — TODO
 
 - Track and triage UI regressions (e.g., content under headers/sidebar)
+- Dashboard scroll now resets via requestAnimationFrame so modules no longer render beneath the app
 - Synced scheduler pnpm lockfile with lottie-web dependency to fix Netlify install errors
 - Prayer modules skip audio player when recordings are missing to avoid playback errors
 - ErrorBoundary deduplicated to resolve TypeScript build errors
