@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BlockMath } from 'react-katex'
 import 'katex/dist/katex.min.css'
 import { supabase, getCurrentUser } from '@/lib/supabase'
+import Tesseract from 'tesseract.js'
 
 interface MathSolverProps {
   expression?: string | null
+  onNewExpression?: (expr: string) => void
 }
 
-export function MathSolver({ expression }: MathSolverProps) {
+export function MathSolver({ expression, onNewExpression }: MathSolverProps) {
   const [input, setInput] = useState('')
   const [result, setResult] = useState<string | null>(null)
   interface HistoryEntry {
@@ -18,6 +20,27 @@ export function MathSolver({ expression }: MathSolverProps) {
 
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [showHistory, setShowHistory] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      const {
+        data: { text }
+      } = await Tesseract.recognize(file, 'eng')
+      const expr = text
+        .replace(/\s+/g, '')
+        .replace(/[^0-9+\-*/xX().^]/g, '')
+      setInput(expr)
+      setResult(null)
+      onNewExpression?.(expr)
+    } catch {
+      // ignore OCR errors
+    }
+  }
 
   const isDesktop =
     typeof navigator !== 'undefined' && !/Mobi|Android/i.test(navigator.userAgent)
@@ -120,6 +143,22 @@ export function MathSolver({ expression }: MathSolverProps) {
         placeholder="Type a math expression"
         className="w-full p-2 border rounded"
       />
+      <div>
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="px-3 py-1 bg-green-500 text-white rounded"
+        >
+          From Photo
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="hidden"
+          onChange={handleImageUpload}
+        />
+      </div>
       {isMath && input && (
         <div className="space-y-2">
           <BlockMath math={input.replace(/[xX*]/g, '\\times')} />

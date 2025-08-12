@@ -11,6 +11,8 @@ ZenzaScheduler OS — TODO
 - Sidebar: confirm collapse/expand restores correct margins at md+ widths
 - Tests: add basic UI smoke tests for header overlap and z-order
 - Docs: add CONTRIBUTING with local run/build instructions
+- Photo math solver parses equations from images with Tesseract OCR
+- Recognized photo equations appear on the Math Notebook canvas for further work
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
