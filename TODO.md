@@ -12,6 +12,8 @@ ZenzaScheduler OS — TODO
 - Tests: add basic UI smoke tests for header overlap and z-order
 - Docs: add CONTRIBUTING with local run/build instructions
 
+- Math Notebook can scan photographed math problems to auto-fill the solver
+
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
 - Accessibility pass for floating buttons and modals

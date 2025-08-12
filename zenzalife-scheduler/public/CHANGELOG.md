@@ -28,6 +28,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Grocery module auto-creates required Supabase tables and list links on first run (2025-08-06 13:27:09 UTC)
 - AGENTS guidelines now require Supabase features to auto-create database schema via code (2025-08-06 13:48 UTC)
 - Multiplication table overlay opens above the Math Notebook for quick reference (2025-08-06 22:01:55 UTC)
+- Math Notebook scans photos of problems and auto-fills the solver with OCR (2025-08-12 18:34:45 UTC)
 ### Changed
 - Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
 - '(edited)' tags now show custom Harold and the Purple Crayon & Vanilla Sky tooltip previews like Messenger and Discord (2025-08-05 00:38 UTC)

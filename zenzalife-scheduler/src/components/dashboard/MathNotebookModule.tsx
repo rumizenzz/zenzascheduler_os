@@ -2,7 +2,16 @@ import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
-import { PlusCircle, History, X, Home, Search, Calculator, Table } from 'lucide-react'
+import {
+  PlusCircle,
+  History,
+  X,
+  Home,
+  Search,
+  Calculator,
+  Table,
+  Camera,
+} from 'lucide-react'
 import { MathSolver } from './MathSolver'
 import { GEDCalculator } from './GEDCalculator'
 import { MultiplicationTable } from './MultiplicationTable'
@@ -53,6 +62,32 @@ export function MathNotebookModule() {
   ]
   const [search, setSearch] = useState('')
   const clickTimeout = useRef<NodeJS.Timeout | null>(null)
+  const photoInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      const { default: Tesseract } = await import('tesseract.js')
+      const {
+        data: { text },
+      } = await Tesseract.recognize(file, 'eng')
+      const cleaned = text.replace(/\s+/g, '')
+      if (isMathExpression(cleaned)) {
+        setMathExpression(cleaned)
+        toast.success('Math problem detected')
+      } else {
+        toast.error('No math problem found')
+      }
+    } catch (err) {
+      console.error('Failed to scan image:', err)
+      toast.error('Failed to scan image')
+    } finally {
+      e.target.value = ''
+    }
+  }
 
   const isMathExpression = (text: string) => /^[0-9+\-*/xX().^\s]+$/.test(text)
 
@@ -741,6 +776,13 @@ export function MathNotebookModule() {
           <History className="w-5 h-5 text-gray-200" />
         </button>
         <button
+          onClick={() => photoInputRef.current?.click()}
+          className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
+          title="Scan Photo"
+        >
+          <Camera className="w-5 h-5 text-gray-200" />
+        </button>
+        <button
           onClick={() => setShowCalculator(true)}
           className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
           title="GED Calculator"
@@ -778,6 +820,14 @@ export function MathNotebookModule() {
         )}
       {renameModal}
       {closeModal}
+      <input
+        ref={photoInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        onChange={handleImageUpload}
+        className="hidden"
+      />
       {showNewModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-center text-purple-100">
