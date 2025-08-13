@@ -995,3 +995,6 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-08 04:09 UTC)
 - Removed duplicate ErrorBoundary declarations to fix TypeScript build errors.
 - Verified repository passes lint, tests, and build with `pnpm run lint`, `pnpm test`, and `pnpm run build`.
+### Codex Agent Reflection (2025-08-13 20:37 UTC)
+- Filtered expired garbage reminders using local dates to stop negative countdowns.
+- Verified repository passes lint with `pnpm run lint`.

@@ -73,7 +73,7 @@ export function RemindersButton() {
       }
     })
 
-    const todayIso = new Date().toISOString().slice(0, 10)
+    const todayIso = dayjs().format('YYYY-MM-DD')
     const { data: garbageData } = await supabase
       .from('garbage_schedule')
       .select('id,waste_type,next_collection')
@@ -97,7 +97,6 @@ export function RemindersButton() {
     })
 
     const list = Array.from(map.values())
-
     const now = dayjs()
     const startOfMonth = now.startOf('month')
     const firstSunday = startOfMonth.add((7 - startOfMonth.day()) % 7, 'day')
@@ -129,13 +128,14 @@ export function RemindersButton() {
       })
     }
 
-    list.sort(
+    const future = list.filter(r => dayjs(r.remind_at).isAfter(now))
+    future.sort(
       (a, b) => new Date(a.remind_at).getTime() - new Date(b.remind_at).getTime()
     )
 
-    setReminders(list)
+    setReminders(future)
     const today = new Date()
-    const special = list.some(r => {
+    const special = future.some(r => {
       const remind = new Date(r.remind_at)
       return (
         remind.toDateString() === today.toDateString() &&
@@ -173,7 +173,7 @@ export function RemindersButton() {
   }
 
   const formatCountdown = (date: string) => {
-    const diff = new Date(date).getTime() - Date.now()
+    const diff = Math.max(new Date(date).getTime() - Date.now(), 0)
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
     const minutes = Math.floor((diff / (1000 * 60)) % 60)
