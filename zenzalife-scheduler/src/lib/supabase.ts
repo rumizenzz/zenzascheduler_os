@@ -185,6 +185,24 @@ export type GroceryList = {
   updated_at?: string
 }
 
+export type Curriculum = {
+  id: string
+  user_id: string
+  title: string
+  created_at?: string
+  updated_at?: string
+}
+
+export type CurriculumObjective = {
+  id: string
+  user_id: string
+  curriculum_id: string
+  content: string
+  completed?: boolean
+  created_at?: string
+  updated_at?: string
+}
+
 export type PasswordEntry = {
   id: string
   user_id: string

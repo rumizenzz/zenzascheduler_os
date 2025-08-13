@@ -16,6 +16,8 @@ ZenzaScheduler OS — TODO
 - Factor tree tool builds interactive prime factor trees with connecting branches for any number
 - Corrected Math Notebook buttons and portal syntax so Netlify builds pass
 
+- Curriculum Objectives module lets users track goals for each course
+
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
 - Accessibility pass for floating buttons and modals
