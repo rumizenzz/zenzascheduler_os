@@ -11,6 +11,7 @@ ZenzaScheduler OS — TODO
 - Sidebar: confirm collapse/expand restores correct margins at md+ widths
 - Tests: add basic UI smoke tests for header overlap and z-order
 - Docs: add CONTRIBUTING with local run/build instructions
+- Factor tree tool builds interactive prime factor trees with connecting branches for any number
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
