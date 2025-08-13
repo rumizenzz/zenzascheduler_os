@@ -764,6 +764,8 @@ export function MathNotebookModule() {
           title="Factor Tree"
         >
           <ListTree className="w-5 h-5 text-gray-200" />
+        </button>
+        <button
           onClick={() => setShowNumberTool(true)}
           className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
           title="Prime & LCM Tool"
@@ -795,6 +797,8 @@ export function MathNotebookModule() {
       {showFactorTree &&
         createPortal(
           <FactorTree onClose={() => setShowFactorTree(false)} />,
+          document.body
+        )}
       {showNumberTool &&
         createPortal(
           <NumberTheoryTool onClose={() => setShowNumberTool(false)} />,

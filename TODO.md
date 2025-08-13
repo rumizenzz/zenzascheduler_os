@@ -13,6 +13,7 @@ ZenzaScheduler OS — TODO
 - Tests: add basic UI smoke tests for header overlap and z-order
 - Docs: add CONTRIBUTING with local run/build instructions
 - Factor tree tool builds interactive prime factor trees with connecting branches for any number
+- Corrected Math Notebook buttons and portal syntax so Netlify builds pass
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
