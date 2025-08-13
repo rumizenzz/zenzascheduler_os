@@ -2,10 +2,11 @@ import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import '@excalidraw/excalidraw/index.css'
-import { PlusCircle, History, X, Home, Search, Calculator, Table } from 'lucide-react'
+import { PlusCircle, History, X, Home, Search, Calculator, Table, Hash } from 'lucide-react'
 import { MathSolver } from './MathSolver'
 import { GEDCalculator } from './GEDCalculator'
 import { MultiplicationTable } from './MultiplicationTable'
+import { NumberTheoryTool } from './NumberTheoryTool'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
@@ -42,6 +43,7 @@ export function MathNotebookModule() {
   const [newNotebookTemplate, setNewNotebookTemplate] = useState('math')
   const [showCalculator, setShowCalculator] = useState(false)
   const [showTable, setShowTable] = useState(false)
+  const [showNumberTool, setShowNumberTool] = useState(false)
 
   const templates = [
     { value: 'math', label: 'Math' },
@@ -754,6 +756,13 @@ export function MathNotebookModule() {
         >
           <Table className="w-5 h-5 text-gray-200" />
         </button>
+        <button
+          onClick={() => setShowNumberTool(true)}
+          className="p-1 rounded-full border border-gray-600 hover:bg-gray-700 flex-shrink-0"
+          title="Prime & LCM Tool"
+        >
+          <Hash className="w-5 h-5 text-gray-200" />
+        </button>
       </div>
       <div className="border border-purple-700 rounded-lg bg-gray-900 h-[70vh] sm:h-[600px]">
         {activeTab && (
@@ -774,6 +783,11 @@ export function MathNotebookModule() {
       {showTable &&
         createPortal(
           <MultiplicationTable onClose={() => setShowTable(false)} />,
+          document.body
+        )}
+      {showNumberTool &&
+        createPortal(
+          <NumberTheoryTool onClose={() => setShowNumberTool(false)} />,
           document.body
         )}
       {renameModal}
