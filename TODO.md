@@ -1,6 +1,7 @@
 ZenzaScheduler OS — TODO
 
 - Track and triage UI regressions (e.g., content under headers/sidebar)
+- Factor tree overlay for prime factorization in Math Notebook
 - Synced scheduler pnpm lockfile with lottie-web dependency to fix Netlify install errors
 - Prayer modules skip audio player when recordings are missing to avoid playback errors
 - ErrorBoundary deduplicated to resolve TypeScript build errors
