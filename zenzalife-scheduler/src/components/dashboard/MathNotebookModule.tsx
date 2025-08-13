@@ -55,6 +55,7 @@ export function MathNotebookModule() {
   ]
   const [search, setSearch] = useState('')
   const clickTimeout = useRef<NodeJS.Timeout | null>(null)
+  const excalidrawRef = useRef<any>(null)
 
   const isMathExpression = (text: string) => /^[0-9+\-*/xX().^\s]+$/.test(text)
 
@@ -419,6 +420,49 @@ export function MathNotebookModule() {
       [activeTabId],
     )
 
+  const addExpressionToCanvas = (text: string) => {
+    const tab = tabs.find((t) => t.id === activeTabId)
+    if (!tab || !excalidrawRef.current) return
+    const newElement: any = {
+      id: Math.random().toString(36).slice(2),
+      type: 'text',
+      x: 100,
+      y: 100,
+      width: text.length * 10,
+      height: 24,
+      angle: 0,
+      strokeColor: '#ffffff',
+      backgroundColor: 'transparent',
+      fillStyle: 'hachure',
+      strokeWidth: 1,
+      strokeStyle: 'solid',
+      roughness: 1,
+      opacity: 100,
+      groupIds: [],
+      roundness: null,
+      seed: Math.floor(Math.random() * 100000),
+      version: 1,
+      versionNonce: 0,
+      isDeleted: false,
+      boundElements: null,
+      updated: Date.now(),
+      link: null,
+      locked: false,
+      fontSize: 20,
+      fontFamily: 1,
+      text,
+      textAlign: 'left',
+      verticalAlign: 'top',
+      baseline: 18,
+      containerId: null,
+      originalText: text,
+      lineHeight: 1.25,
+    }
+    const updatedElements = [...tab.data.elements, newElement]
+    excalidrawRef.current.updateScene({ elements: updatedElements })
+    void updateTabData(updatedElements, tab.data.appState as AppState)
+  }
+
   const saveVersion = async () => {
     const tab = tabs.find((t) => t.id === activeTabId)
     if (!tab) return
@@ -767,6 +811,7 @@ export function MathNotebookModule() {
       <div className="border border-purple-700 rounded-lg bg-gray-900 h-[70vh] sm:h-[600px]">
         {activeTab && (
           <Excalidraw
+            ref={excalidrawRef}
             key={activeTab.id}
             initialData={activeTab.data}
             onChange={updateTabData}
@@ -774,7 +819,10 @@ export function MathNotebookModule() {
           />
         )}
       </div>
-      <MathSolver expression={mathExpression} />
+      <MathSolver
+        expression={mathExpression}
+        onNewExpression={addExpressionToCanvas}
+      />
       {showCalculator &&
         createPortal(
           <GEDCalculator onClose={() => setShowCalculator(false)} />,

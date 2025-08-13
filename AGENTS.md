@@ -995,3 +995,11 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-08 04:09 UTC)
 - Removed duplicate ErrorBoundary declarations to fix TypeScript build errors.
 - Verified repository passes lint, tests, and build with `pnpm run lint`, `pnpm test`, and `pnpm run build`.
+
+### Codex Agent Reflection (2025-08-12 18:33 UTC)
+- Enabled solving math problems from photos using Tesseract OCR.
+- Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-12 18:44 UTC)
+- Placed recognized math equations from photos directly onto the Math Notebook canvas.
+- Verified repository passes lint with `pnpm run lint`.
