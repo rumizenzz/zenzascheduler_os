@@ -367,6 +367,27 @@ export type Stopwatch = {
   updated_at?: string
 }
 
+export type OSWindow = {
+  id: string
+  user_id: string
+  title: string
+  content?: string
+  app: string
+  x: number
+  y: number
+  width: number
+  height: number
+  z_index: number
+  minimized: boolean
+  maximized: boolean
+  restore_x?: number | null
+  restore_y?: number | null
+  restore_width?: number | null
+  restore_height?: number | null
+  created_at?: string
+  updated_at?: string
+}
+
 export type WorldClockZone = {
   id: string
   user_id: string

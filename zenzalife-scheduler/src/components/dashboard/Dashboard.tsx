@@ -23,6 +23,7 @@ import { IdeasModule } from "./IdeasModule";
 import { PasswordsModule } from "./PasswordsModule";
 import { TodoListModule } from "./TodoListModule";
 import { GroceryListModule } from "./GroceryListModule";
+import { BrowserOSModule } from "./BrowserOSModule";
 import {
   Calendar,
   TrendingUp,
@@ -47,6 +48,7 @@ import {
   Key,
   CheckSquare,
   ShoppingCart,
+  Monitor,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -81,6 +83,7 @@ type DashboardTab =
   | "todos"
   | "groceries"
   | "passwords"
+  | "browseros"
   | "gedstudy"
   | "settings";
 
@@ -105,6 +108,7 @@ const navigationItems = [
   { id: "todos", label: "To-Do List", icon: CheckSquare, color: "text-green-600" },
   { id: "groceries", label: "Groceries", icon: ShoppingCart, color: "text-orange-600" },
   { id: "passwords", label: "Passwords", icon: Key, color: "text-gray-500" },
+  { id: "browseros", label: "Browser OS", icon: Monitor, color: "text-blue-700" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
 
@@ -239,6 +243,8 @@ export function Dashboard() {
         return <GroceryListModule />;
       case "passwords":
         return <PasswordsModule />;
+      case "browseros":
+        return <BrowserOSModule />;
       case "settings":
         return <SettingsModule onUnsavedChange={setHasUnsavedSettings} />;
       default:
