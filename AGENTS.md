@@ -998,3 +998,11 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-13 20:37 UTC)
 - Filtered expired garbage reminders using local dates to stop negative countdowns.
 - Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-14 15:13 UTC)
+- Ensured in-progress to-do items mark completed when checked instead of reverting to pending.
+- Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-14 18:05 UTC)
+- Displayed a "Completed" label on finished to-do items.
+- Verified repository passes lint with `pnpm run lint`.

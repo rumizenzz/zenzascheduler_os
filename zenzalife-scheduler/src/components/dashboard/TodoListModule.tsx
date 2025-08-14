@@ -105,12 +105,12 @@ export function TodoListModule() {
 
   const toggleCompleted = async (item: TodoItem) => {
     if (!user) return
-    const newStatus = item.completed ? 'pending' : 'completed'
+    const isCompleted = item.status === 'completed'
     const { error } = await supabase
       .from('todo_items')
       .update({
-        completed: !item.completed,
-        status: newStatus,
+        completed: !isCompleted,
+        status: isCompleted ? 'pending' : 'completed',
         updated_at: new Date().toISOString(),
       })
       .eq('id', item.id)
@@ -124,10 +124,17 @@ export function TodoListModule() {
 
   const toggleInProgress = async (item: TodoItem) => {
     if (!user) return
-    const newStatus = item.status === 'in_progress' ? 'pending' : 'in_progress'
+    const isInProgress = item.status === 'in_progress'
+    const updates: Partial<TodoItem> = {
+      status: isInProgress ? 'pending' : 'in_progress',
+      updated_at: new Date().toISOString(),
+    }
+    if (!isInProgress) {
+      updates.completed = false
+    }
     const { error } = await supabase
       .from('todo_items')
-      .update({ status: newStatus, updated_at: new Date().toISOString() })
+      .update(updates)
       .eq('id', item.id)
       .eq('user_id', user.id)
     if (error) {
@@ -211,7 +218,13 @@ export function TodoListModule() {
                     </span>
                     <div className="flex items-center gap-2 text-sm">
                       <button
-                        className={`flex items-center gap-1 ${i.status === 'in_progress' ? 'text-blue-200' : 'hover:text-blue-200'}`}
+                        className={`flex items-center gap-1 ${
+                          i.status === 'in_progress'
+                            ? 'text-blue-200'
+                            : i.status === 'completed'
+                              ? 'text-green-400'
+                              : 'hover:text-blue-200'
+                        }`}
                         onClick={() => toggleInProgress(i)}
                       >
                         {i.status === 'in_progress' ? (
@@ -223,6 +236,8 @@ export function TodoListModule() {
                               <span className="dot"></span>
                             </span>
                           </>
+                        ) : i.status === 'completed' ? (
+                          'Completed'
                         ) : (
                           'Start'
                         )}
