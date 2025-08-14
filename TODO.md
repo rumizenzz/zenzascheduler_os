@@ -9,6 +9,10 @@ ZenzaScheduler OS — TODO
 - Prayer modules skip audio player when recordings are missing to avoid playback errors
 - ErrorBoundary deduplicated to resolve TypeScript build errors
 - Number Theory tool factors numbers and finds LCM/GCD for GED prep
+- Math Notebook accepts pasted screenshots, highlights regions, and OCRs text into selectable math
+- Screenshot OCR parses mixed-number problems from pasted images into solver-ready expressions
+- OCR-inserted math expressions auto-solve in the Math Solver after selection
+- Disabled native image dragging so screenshot selections work while highlighting OCR regions
 - Build pipeline: ensure pnpm availability on Windows; document dev setup
 - Calendar: verify sticky header layering across all tabs/modals
 - Safe-area: confirm padding on iOS PWA and Android Chrome

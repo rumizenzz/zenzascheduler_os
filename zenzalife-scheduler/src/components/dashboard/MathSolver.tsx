@@ -40,30 +40,22 @@ export function MathSolver({ expression }: MathSolverProps) {
     loadFromSupabase()
   }, [])
 
-  useEffect(() => {
-    if (expression) {
-      setInput(expression)
-      setResult(null)
-    }
-  }, [expression])
-
-  const isMath = /^[0-9+\-*/xX().^\s]+$/.test(input)
-
-  const handleSolve = async () => {
+  const handleSolve = async (expr?: string) => {
     try {
-      const prepared = input.replace(/\^/g, '**').replace(/[xX]/g, '*')
+      const target = expr ?? input
+      const prepared = target.replace(/\^/g, '**').replace(/[xX]/g, '*')
       // eslint-disable-next-line no-new-func
       const value = Function(`return (${prepared})`)()
       const stringValue = String(value)
       setResult(stringValue)
       const user = await getCurrentUser()
-      const entry: HistoryEntry = { expression: input, result: stringValue }
+      const entry: HistoryEntry = { expression: target, result: stringValue }
       if (user) {
         const { data } = await supabase
           .from('math_solver_history')
           .insert({
             user_id: user.id,
-            expression: input,
+            expression: target,
             result: stringValue
           })
           .select('id')
@@ -76,6 +68,16 @@ export function MathSolver({ expression }: MathSolverProps) {
       setResult('Error')
     }
   }
+
+  useEffect(() => {
+    if (expression && /^[0-9+\-*/xX().^\s]+$/.test(expression)) {
+      setInput(expression)
+      setResult(null)
+      void handleSolve(expression)
+    }
+  }, [expression])
+
+  const isMath = /^[0-9+\-*/xX().^\s]+$/.test(input)
 
   const handleDelete = async (index: number, id?: number) => {
     const user = await getCurrentUser()
