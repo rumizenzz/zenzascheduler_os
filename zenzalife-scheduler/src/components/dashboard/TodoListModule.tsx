@@ -16,9 +16,18 @@ export function TodoListModule() {
 
   useEffect(() => {
     if (user) {
-      void loadItems()
+      void initialize()
     }
   }, [user])
+
+  const initialize = async () => {
+    try {
+      await supabase.functions.invoke('ensure-todo-status')
+    } catch (err) {
+      console.error('Failed to ensure todo status', err)
+    }
+    await loadItems()
+  }
 
   const loadItems = async () => {
     if (!user) return
@@ -43,6 +52,7 @@ export function TodoListModule() {
       user_id: user.id,
       content: content.trim(),
       category: 'todo',
+      status: 'pending',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })
@@ -95,9 +105,29 @@ export function TodoListModule() {
 
   const toggleCompleted = async (item: TodoItem) => {
     if (!user) return
+    const newStatus = item.completed ? 'pending' : 'completed'
     const { error } = await supabase
       .from('todo_items')
-      .update({ completed: !item.completed, updated_at: new Date().toISOString() })
+      .update({
+        completed: !item.completed,
+        status: newStatus,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', item.id)
+      .eq('user_id', user.id)
+    if (error) {
+      toast.error('Failed to update item: ' + error.message)
+    } else {
+      await loadItems()
+    }
+  }
+
+  const toggleInProgress = async (item: TodoItem) => {
+    if (!user) return
+    const newStatus = item.status === 'in_progress' ? 'pending' : 'in_progress'
+    const { error } = await supabase
+      .from('todo_items')
+      .update({ status: newStatus, updated_at: new Date().toISOString() })
       .eq('id', item.id)
       .eq('user_id', user.id)
     if (error) {
@@ -180,6 +210,23 @@ export function TodoListModule() {
                       {dayjs(i.created_at).format('YYYY-MM-DD hh:mm:ss A')}
                     </span>
                     <div className="flex items-center gap-2 text-sm">
+                      <button
+                        className={`flex items-center gap-1 ${i.status === 'in_progress' ? 'text-blue-200' : 'hover:text-blue-200'}`}
+                        onClick={() => toggleInProgress(i)}
+                      >
+                        {i.status === 'in_progress' ? (
+                          <>
+                            In Progress
+                            <span className="typing-dots ml-1">
+                              <span className="dot"></span>
+                              <span className="dot"></span>
+                              <span className="dot"></span>
+                            </span>
+                          </>
+                        ) : (
+                          'Start'
+                        )}
+                      </button>
                       <button
                         className={`flex items-center gap-1 ${i.completed ? 'text-green-400' : 'hover:text-green-200'}`}
                         onClick={() => toggleCompleted(i)}

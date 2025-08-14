@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- To-Do List items show an "In Progress..." status with an animated iMessage-style ellipsis (2025-08-14 14:07:04 UTC)
 - Sleep and Wake Up task categories trigger morning and night prayers via the alarm Start Prayer button (2025-08-02 04:14:20 UTC)
 - Task modal includes quick "Current Time" buttons to set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
 - IDE tabs support inline renaming and extension changes with Harold and the Purple Crayon & Vanilla Sky file type badges (2025-08-02 00:30 UTC)
@@ -51,6 +52,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Supabase schema reloads after adding the todo_items status column so updates don't error on missing fields (2025-08-14 14:16:29 UTC)
 - Garbage reminders no longer display negative countdowns for past collection dates by filtering expired entries using local time (2025-08-13 20:37:27 UTC)
 - Malformed Math Notebook buttons and portal calls caused TypeScript build errors on Netlify (2025-08-13 20:10 UTC)
 - Removed duplicate ErrorBoundary definitions that caused TypeScript duplicate identifier errors during builds (2025-08-08 04:09 UTC)
