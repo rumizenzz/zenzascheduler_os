@@ -52,6 +52,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Marking a to-do item complete while in progress now sets status to completed instead of pending (2025-08-14 15:13:07 UTC)
 - Supabase schema reloads after adding the todo_items status column so updates don't error on missing fields (2025-08-14 14:16:29 UTC)
 - Garbage reminders no longer display negative countdowns for past collection dates by filtering expired entries using local time (2025-08-13 20:37:27 UTC)
 - Malformed Math Notebook buttons and portal calls caused TypeScript build errors on Netlify (2025-08-13 20:10 UTC)
