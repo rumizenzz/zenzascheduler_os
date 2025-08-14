@@ -31,6 +31,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Multiplication table overlay opens above the Math Notebook for quick reference (2025-08-06 22:01:55 UTC)
 - Factor tree overlay builds prime factorization trees for any number (2025-08-13 19:25:51 UTC)
 - Number Theory overlay calculates prime factors, LCM, and GCD for GED prep (2025-08-13 19:49:17 UTC)
+- Screenshot paste tool converts pasted images into selectable text and formatted math via OCR (2025-08-14 18:04:22 UTC)
 ### Changed
 - Factor tree overlay renders nodes with connecting lines and collapsible branches for an interactive tree (2025-08-13 19:50:24 UTC)
 - Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
@@ -58,6 +59,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Malformed Math Notebook buttons and portal calls caused TypeScript build errors on Netlify (2025-08-13 20:10 UTC)
 - Removed duplicate ErrorBoundary definitions that caused TypeScript duplicate identifier errors during builds (2025-08-08 04:09 UTC)
 - Prayer modules skip audio player when recordings are missing to prevent playback errors (2025-08-08 02:21 UTC)
+- Screenshot paste OCR now recognizes mixed-number fractions and strips surrounding text (2025-08-14 18:24:36 UTC)
 - Synced zenzalife-scheduler pnpm lockfile with lottie-web dependency and removed invalid @types package so Netlify dependency install succeeds (2025-08-07 20:35 UTC)
 - Journal and Dream Journal edit history windows now float above all content by boosting their z-index (2025-08-05 01:22 UTC)
 - Replaced Workbox-generated service worker with an injectManifest build so cached responses no longer throw "Response with null body status cannot have body" errors (2025-08-05 00:45 UTC)
