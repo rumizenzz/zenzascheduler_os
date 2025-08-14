@@ -1,6 +1,7 @@
 ZenzaScheduler OS — TODO
 
 - Track and triage UI regressions (e.g., content under headers/sidebar)
+- To-Do List items can be marked "In Progress..." with an animated ellipsis
 - Filtered past garbage collection reminders using local dates so countdowns never show negative time
 - Synced scheduler pnpm lockfile with lottie-web dependency to fix Netlify install errors
 - Prayer modules skip audio player when recordings are missing to avoid playback errors

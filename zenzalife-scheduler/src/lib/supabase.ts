@@ -172,6 +172,7 @@ export type TodoItem = {
   list_id?: string
   completed?: boolean
   missing?: boolean
+  status?: string
   created_at?: string
   updated_at?: string
 }
