@@ -19,6 +19,7 @@ ZenzaScheduler OS — TODO
 - Docs: add CONTRIBUTING with local run/build instructions
 - Factor tree tool builds interactive prime factor trees with connecting branches for any number
 - Corrected Math Notebook buttons and portal syntax so Netlify builds pass
+- Browser OS module offers draggable windows stored in Supabase
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
