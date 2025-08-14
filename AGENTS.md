@@ -998,3 +998,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-13 20:37 UTC)
 - Filtered expired garbage reminders using local dates to stop negative countdowns.
 - Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-14 00:00 UTC)
+- Handled missing curriculum tables by invoking an edge function when relation errors occur.
+- Verified repository passes lint and tests with `pnpm run lint` and `pnpm test`.

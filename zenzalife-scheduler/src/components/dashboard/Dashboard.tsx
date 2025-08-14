@@ -23,6 +23,7 @@ import { IdeasModule } from "./IdeasModule";
 import { PasswordsModule } from "./PasswordsModule";
 import { TodoListModule } from "./TodoListModule";
 import { GroceryListModule } from "./GroceryListModule";
+import { CurriculumObjectivesModule } from "./CurriculumObjectivesModule";
 import {
   Calendar,
   TrendingUp,
@@ -47,6 +48,7 @@ import {
   Key,
   CheckSquare,
   ShoppingCart,
+  Target,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -81,6 +83,7 @@ type DashboardTab =
   | "todos"
   | "groceries"
   | "passwords"
+  | "objectives"
   | "gedstudy"
   | "settings";
 
@@ -104,6 +107,7 @@ const navigationItems = [
   { id: "ideas", label: "Ideas", icon: Lightbulb, color: "text-yellow-500" },
   { id: "todos", label: "To-Do List", icon: CheckSquare, color: "text-green-600" },
   { id: "groceries", label: "Groceries", icon: ShoppingCart, color: "text-orange-600" },
+  { id: "objectives", label: "Objectives", icon: Target, color: "text-red-500" },
   { id: "passwords", label: "Passwords", icon: Key, color: "text-gray-500" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
@@ -237,6 +241,8 @@ export function Dashboard() {
         return <TodoListModule />;
       case "groceries":
         return <GroceryListModule />;
+      case "objectives":
+        return <CurriculumObjectivesModule />;
       case "passwords":
         return <PasswordsModule />;
       case "settings":
