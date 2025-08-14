@@ -32,6 +32,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Factor tree overlay builds prime factorization trees for any number (2025-08-13 19:25:51 UTC)
 - Number Theory overlay calculates prime factors, LCM, and GCD for GED prep (2025-08-13 19:49:17 UTC)
 - Screenshot paste tool converts pasted images into selectable text and formatted math via OCR (2025-08-14 18:04:22 UTC)
+- Browser OS module offers draggable windows stored in Supabase (2025-08-14 18:14:03 UTC)
 ### Changed
 - Factor tree overlay renders nodes with connecting lines and collapsible branches for an interactive tree (2025-08-13 19:50:24 UTC)
 - Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
