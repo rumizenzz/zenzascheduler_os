@@ -2,6 +2,7 @@ ZenzaScheduler OS — TODO
 
 - Track and triage UI regressions (e.g., content under headers/sidebar)
 - To-Do List items can be marked "In Progress..." with an animated ellipsis
+- Checking an in-progress to-do item now marks it completed instead of reverting to pending
 - Supabase schema reloads after adding todo status column to prevent missing-field errors
 - Filtered past garbage collection reminders using local dates so countdowns never show negative time
 - Synced scheduler pnpm lockfile with lottie-web dependency to fix Netlify install errors
