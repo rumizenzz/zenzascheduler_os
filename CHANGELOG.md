@@ -8,6 +8,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Sleep and Wake Up task categories trigger morning and night prayers via the alarm Start Prayer button (2025-08-02 04:14:20 UTC)
 - Task modal includes quick "Current Time" buttons to set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
 - IDE tabs support inline renaming and extension changes with Harold and the Purple Crayon & Vanilla Sky file type badges (2025-08-02 00:30 UTC)
+- Dedicated Wedding Vows module with Rumi's vow and placeholder for Khen's vow (2025-08-18 01:24:34 UTC)
 - IDE diff editor tabs can be renamed to change file extensions and update syntax highlighting (2025-08-02 00:17 UTC)
 - GED Math Study module offers staged self-study using official GED PDFs with Supabase session tracking (2025-08-02 04:00 UTC)
 - Tools menu now offers a Diff Viewer for side-by-side code comparisons within the IDE overlay (2025-08-02 04:20 UTC)
