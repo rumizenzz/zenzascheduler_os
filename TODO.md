@@ -19,6 +19,12 @@ ZenzaScheduler OS — TODO
 - Docs: add CONTRIBUTING with local run/build instructions
 - Factor tree tool builds interactive prime factor trees with connecting branches for any number
 - Corrected Math Notebook buttons and portal syntax so Netlify builds pass
+- Browser OS module offers draggable windows stored in Supabase
+- Browser OS windows can be minimized and maximized with a taskbar, persisting state in Supabase
+- Browser OS adds core apps like a File Explorer, Terminal, and Settings window with Supabase persistence
+- Browser OS adds a basic Browser app for visiting websites with state saved in Supabase
+- Browser OS desktop supports draggable folders stored in Supabase
+- File Explorer allows creating folders in addition to files
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions

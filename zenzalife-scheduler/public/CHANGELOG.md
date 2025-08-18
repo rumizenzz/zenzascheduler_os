@@ -32,6 +32,12 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Factor tree overlay builds prime factorization trees for any number (2025-08-13 19:25:51 UTC)
 - Number Theory overlay calculates prime factors, LCM, and GCD for GED prep (2025-08-13 19:49:17 UTC)
 - Screenshot paste tool converts pasted images into selectable text and formatted math via OCR (2025-08-14 18:04:22 UTC)
+- Browser OS module offers draggable windows stored in Supabase (2025-08-14 18:14:03 UTC)
+- Browser OS windows support minimizing, maximizing, and a taskbar with state saved to Supabase (2025-08-14 18:24:57 UTC)
+- Browser OS ships core File Explorer, Terminal, and Settings apps with state saved in Supabase (2025-08-14 18:35:00 UTC)
+- Browser OS includes a basic web Browser app with Supabase-persisted URLs (2025-08-14 18:43:00 UTC)
+- Browser OS features a desktop with draggable folders saved to Supabase (2025-08-14 19:00:00 UTC)
+- File Explorer now supports creating folders alongside files (2025-08-14 19:00:00 UTC)
 ### Changed
 - Factor tree overlay renders nodes with connecting lines and collapsible branches for an interactive tree (2025-08-13 19:50:24 UTC)
 - Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
