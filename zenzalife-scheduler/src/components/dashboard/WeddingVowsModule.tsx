@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Flower2 } from 'lucide-react'
 
 export function WeddingVowsModule() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 })
+    const scroller = document.scrollingElement || document.documentElement
+    scroller.scrollTop = 0
+    scroller.scrollLeft = 0
+    document.body.scrollTop = 0
+    document.getElementById('root')?.scrollTo({ top: 0, left: 0 })
+  }, [])
+
   const rumiVow = `My love, my everything,
 
 From the moment you came into my life, everything changed. You made me a better man—more patient, more faithful, more alive. Without you, I wouldn’t be the man I am today. You are the most beautiful woman—the most beautiful person—I have ever known; loyal, loving, caring, and deeply affectionate. You are my angel, my best friend, my greatest blessing from God.
