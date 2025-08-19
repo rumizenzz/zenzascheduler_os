@@ -24,6 +24,7 @@ import { PasswordsModule } from "./PasswordsModule";
 import { TodoListModule } from "./TodoListModule";
 import { GroceryListModule } from "./GroceryListModule";
 import { WeddingVowsModule } from "./WeddingVowsModule";
+import { SoundboardModule } from "./SoundboardModule";
 import {
   Calendar,
   TrendingUp,
@@ -49,6 +50,7 @@ import {
   CheckSquare,
   ShoppingCart,
   Gem,
+  Music,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -85,6 +87,7 @@ type DashboardTab =
   | "groceries"
   | "passwords"
   | "gedstudy"
+  | "soundboard"
   | "settings";
 
 const navigationItems = [
@@ -109,6 +112,7 @@ const navigationItems = [
   { id: "todos", label: "To-Do List", icon: CheckSquare, color: "text-green-600" },
   { id: "groceries", label: "Groceries", icon: ShoppingCart, color: "text-orange-600" },
   { id: "passwords", label: "Passwords", icon: Key, color: "text-gray-500" },
+  { id: "soundboard", label: "Soundboard", icon: Music, color: "text-blue-500" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
 
@@ -241,12 +245,14 @@ export function Dashboard() {
         return <WeddingVowsModule />;
       case "todos":
         return <TodoListModule />;
-      case "groceries":
-        return <GroceryListModule />;
-      case "passwords":
-        return <PasswordsModule />;
-      case "settings":
-        return <SettingsModule onUnsavedChange={setHasUnsavedSettings} />;
+  case "groceries":
+    return <GroceryListModule />;
+  case "passwords":
+    return <PasswordsModule />;
+  case "soundboard":
+    return <SoundboardModule />;
+  case "settings":
+    return <SettingsModule onUnsavedChange={setHasUnsavedSettings} />;
       default:
         return <ZenzaCalendar />;
     }
