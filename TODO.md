@@ -1,5 +1,6 @@
 ZenzaScheduler OS — TODO
 
+- Dashboard renders above app content again so modules show at the top
 - Track and triage UI regressions (e.g., content under headers/sidebar)
 - To-Do List items can be marked "In Progress..." with an animated ellipsis
 - Checking an in-progress to-do item now marks it completed instead of reverting to pending
