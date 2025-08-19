@@ -21,6 +21,8 @@ ZenzaScheduler OS — TODO
 - Factor tree tool builds interactive prime factor trees with connecting branches for any number
 - Corrected Math Notebook buttons and portal syntax so Netlify builds pass
 - Added Our Wedding Vows module with Rumi's vow and placeholder for Khen's vow
+- Added Soundboard module for playing custom audio clips
+- Soundboard default beep and chime download from the web instead of shipping audio files
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
