@@ -38,6 +38,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Factor tree overlay renders nodes with connecting lines and collapsible branches for an interactive tree (2025-08-13 19:50:24 UTC)
 - Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
 - '(edited)' tags now show custom Harold and the Purple Crayon & Vanilla Sky tooltip previews like Messenger and Discord (2025-08-05 00:38 UTC)
+
+### Fixed
+- Dashboard modules no longer render beneath the app; sections load at the top as originally intended (2025-08-19 01:15:23 UTC)
 - '(edited)' hover previews are larger with higher contrast for easier reading (2025-08-05 00:54 UTC)
 - IDE commit Diff Viewer accepts any GitHub repository via owner and repo inputs (2025-08-02 10:15:41 UTC)
 - Commit Diff Viewer parses GitHub commit URLs or SHA values so any repository commit can be diffed (2025-08-02 10:32:50 UTC)
