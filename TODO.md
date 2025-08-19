@@ -1,6 +1,7 @@
 ZenzaScheduler OS — TODO
 
 - Track and triage UI regressions (e.g., content under headers/sidebar)
+- Restored dashboard z-index layering so modules appear above overlays
 - To-Do List items can be marked "In Progress..." with an animated ellipsis
 - Checking an in-progress to-do item now marks it completed instead of reverting to pending
 - Supabase schema reloads after adding todo status column to prevent missing-field errors

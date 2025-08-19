@@ -762,7 +762,7 @@ export function ZenzaCalendar() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4">
+      <div className="sticky top-0 z-[60] bg-white/80 backdrop-blur-md shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4">
         <div>
           <h1 className="text-3xl font-light text-gray-800 flex items-center gap-3">
             <CalendarIcon className="w-8 h-8 text-blue-400" />
