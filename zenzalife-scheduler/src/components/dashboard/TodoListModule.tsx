@@ -21,11 +21,6 @@ export function TodoListModule() {
   }, [user])
 
   const initialize = async () => {
-    try {
-      await supabase.functions.invoke('ensure-todo-status')
-    } catch (err) {
-      console.error('Failed to ensure todo status', err)
-    }
     await loadItems()
   }
 
