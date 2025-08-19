@@ -10,6 +10,7 @@ ZenzaScheduler OS — TODO
 - ErrorBoundary deduplicated to resolve TypeScript build errors
 - Number Theory tool factors numbers and finds LCM/GCD for GED prep
 - Math Notebook accepts pasted screenshots, highlights regions, and OCRs text into selectable math
+- Multiplication table hides products until hovered so answers reveal on mouseover
 - Build pipeline: ensure pnpm availability on Windows; document dev setup
 - Calendar: verify sticky header layering across all tabs/modals
 - Safe-area: confirm padding on iOS PWA and Android Chrome
