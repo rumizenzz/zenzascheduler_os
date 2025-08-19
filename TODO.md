@@ -24,6 +24,7 @@ ZenzaScheduler OS — TODO
 - Added Soundboard module for playing custom audio clips
 - Soundboard default beep and chime download from the web instead of shipping audio files
 - Soundboard expanded to a 12-pad grid with keyboard shortcuts and removable custom clips
+- Removed missing ensure-todo-status Supabase function call to prevent CORS errors on to-do list load
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions

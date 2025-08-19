@@ -1017,3 +1017,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-19 04:50 UTC)
 - Expanded Soundboard into a 12-pad grid with keyboard shortcuts and removable custom clips.
 - Verified repository passes lint and tests with `pnpm run lint` and `pnpm test`.
+
+### Codex Agent Reflection (2025-08-19 05:40 UTC)
+- Removed call to missing `ensure-todo-status` Supabase edge function to stop CORS errors on to-do list load.
+- Verified repository passes lint with `pnpm run lint`.
