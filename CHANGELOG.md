@@ -34,6 +34,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Number Theory overlay calculates prime factors, LCM, and GCD for GED prep (2025-08-13 19:49:17 UTC)
 - Screenshot paste tool converts pasted images into selectable text and formatted math via OCR (2025-08-14 18:04:22 UTC)
 - Multiplication table hides products until hovered so answers reveal on mouseover (2025-08-19 00:47:10 UTC)
+- Soundboard module provides customizable audio pads for quick playback (2025-08-19 03:16:28 UTC)
 ### Changed
 - Factor tree overlay renders nodes with connecting lines and collapsible branches for an interactive tree (2025-08-13 19:50:24 UTC)
 - Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)

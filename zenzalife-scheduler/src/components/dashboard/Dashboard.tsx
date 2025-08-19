@@ -24,6 +24,7 @@ import { PasswordsModule } from "./PasswordsModule";
 import { TodoListModule } from "./TodoListModule";
 import { GroceryListModule } from "./GroceryListModule";
 import { WeddingVowsModule } from "./WeddingVowsModule";
+import { SoundboardModule } from "./SoundboardModule";
 import {
   Calendar,
   TrendingUp,
@@ -48,6 +49,7 @@ import {
   Key,
   CheckSquare,
   ShoppingCart,
+  Music,
   Gem,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
@@ -80,6 +82,7 @@ type DashboardTab =
   | "journal"
   | "dreams"
   | "ideas"
+  | "soundboard"
   | "wedding"
   | "todos"
   | "groceries"
@@ -105,6 +108,7 @@ const navigationItems = [
   { id: "journal", label: "Journal", icon: NotebookPen, color: "text-purple-600" },
   { id: "dreams", label: "Dream Journal", icon: MoonStar, color: "text-indigo-600" },
   { id: "ideas", label: "Ideas", icon: Lightbulb, color: "text-yellow-500" },
+  { id: "soundboard", label: "Soundboard", icon: Music, color: "text-red-500" },
   { id: "wedding", label: "Our Wedding Vows", icon: Gem, color: "text-rose-400" },
   { id: "todos", label: "To-Do List", icon: CheckSquare, color: "text-green-600" },
   { id: "groceries", label: "Groceries", icon: ShoppingCart, color: "text-orange-600" },
@@ -237,6 +241,8 @@ export function Dashboard() {
         return <LucidDreamJournalModule />;
       case "ideas":
         return <IdeasModule />;
+      case "soundboard":
+        return <SoundboardModule />;
       case "wedding":
         return <WeddingVowsModule />;
       case "todos":
