@@ -38,6 +38,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Changed
 - Soundboard default sounds now download from remote URLs instead of bundling audio files (2025-08-19 03:38:51 UTC)
 - Soundboard upgraded to a 12-pad grid with keyboard shortcuts and removable custom clips (2025-08-19 04:50:00 UTC)
+### Fixed
+- Dashboard tabs reset scroll position so modules always open at the top (2025-08-19 05:00 UTC)
 - Factor tree overlay renders nodes with connecting lines and collapsible branches for an interactive tree (2025-08-13 19:50:24 UTC)
 - Dashboard modules render inside a top-level p-6 div after the sidebar so layout stays consistent (2025-08-05 00:10 UTC)
 - '(edited)' tags now show custom Harold and the Purple Crayon & Vanilla Sky tooltip previews like Messenger and Discord (2025-08-05 00:38 UTC)
