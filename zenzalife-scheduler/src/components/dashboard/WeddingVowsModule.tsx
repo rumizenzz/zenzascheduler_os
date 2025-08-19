@@ -2,6 +2,7 @@ import React from 'react'
 import { Flower2 } from 'lucide-react'
 
 export function WeddingVowsModule() {
+
   const rumiVow = `My love, my everything,
 
 From the moment you came into my life, everything changed. You made me a better man—more patient, more faithful, more alive. Without you, I wouldn’t be the man I am today. You are the most beautiful woman—the most beautiful person—I have ever known; loyal, loving, caring, and deeply affectionate. You are my angel, my best friend, my greatest blessing from God.
