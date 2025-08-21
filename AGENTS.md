@@ -1021,3 +1021,6 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-19 05:40 UTC)
 - Removed call to missing `ensure-todo-status` Supabase edge function to stop CORS errors on to-do list load.
 - Verified repository passes lint with `pnpm run lint`.
+### Codex Agent Reflection (2025-08-21 20:09 UTC)
+- Added Bisaya/English translation toggle for Wedding Vows module.
+- Verified repository passes lint with `pnpm run lint`.
