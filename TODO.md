@@ -28,7 +28,6 @@ ZenzaScheduler OS — TODO
 - Added English/Bisaya translation toggle for Wedding Vows module
 - Added Learning Notes module for capturing study notes
 - Fixed Learning Notes card backgrounds so note text remains visible without highlighting
-- Review links can be deleted, duration updated, and display time until expiration
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
