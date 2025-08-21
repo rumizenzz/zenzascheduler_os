@@ -20,6 +20,7 @@ import { JournalModule } from "./JournalModule";
 import { LucidDreamJournalModule } from "./LucidDreamJournalModule";
 import { GEDMathStudyModule } from "./GEDMathStudyModule";
 import { IdeasModule } from "./IdeasModule";
+import { LearningNotesModule } from "./LearningNotesModule";
 import { PasswordsModule } from "./PasswordsModule";
 import { TodoListModule } from "./TodoListModule";
 import { GroceryListModule } from "./GroceryListModule";
@@ -43,6 +44,7 @@ import {
   Mic,
   Pencil,
   NotebookPen,
+  NotebookText,
   MoonStar,
   Calculator,
   Lightbulb,
@@ -82,6 +84,7 @@ type DashboardTab =
   | "journal"
   | "dreams"
   | "ideas"
+  | "notes"
   | "wedding"
   | "todos"
   | "groceries"
@@ -108,6 +111,7 @@ const navigationItems = [
   { id: "journal", label: "Journal", icon: NotebookPen, color: "text-purple-600" },
   { id: "dreams", label: "Dream Journal", icon: MoonStar, color: "text-indigo-600" },
   { id: "ideas", label: "Ideas", icon: Lightbulb, color: "text-yellow-500" },
+  { id: "notes", label: "Learning Notes", icon: NotebookText, color: "text-blue-700" },
   { id: "wedding", label: "Our Wedding Vows", icon: Gem, color: "text-rose-400" },
   { id: "todos", label: "To-Do List", icon: CheckSquare, color: "text-green-600" },
   { id: "groceries", label: "Groceries", icon: ShoppingCart, color: "text-orange-600" },
@@ -241,6 +245,8 @@ export function Dashboard() {
         return <LucidDreamJournalModule />;
       case "ideas":
         return <IdeasModule />;
+      case "notes":
+        return <LearningNotesModule />;
       case "wedding":
         return <WeddingVowsModule />;
       case "todos":

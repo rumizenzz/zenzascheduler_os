@@ -234,6 +234,15 @@ export type DreamJournalEntryHistory = {
   edited_at: string
 }
 
+export type LearningNote = {
+  id: string
+  user_id: string
+  title: string
+  content: string
+  created_at: string
+  updated_at?: string
+}
+
 export type GracePrayer = {
   id: string
   user_id: string
