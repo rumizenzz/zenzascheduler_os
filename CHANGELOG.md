@@ -35,6 +35,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Screenshot paste tool converts pasted images into selectable text and formatted math via OCR (2025-08-14 18:04:22 UTC)
 - Multiplication table hides products until hovered so answers reveal on mouseover (2025-08-19 00:47:10 UTC)
 - Soundboard module lets users play built-in chime and beep sounds or upload custom clips (2025-08-19 03:15:32 UTC)
+- Wedding Vows module offers Bisaya/English translation toggle (2025-08-21 20:09:36 UTC)
 ### Changed
 - Soundboard default sounds now download from remote URLs instead of bundling audio files (2025-08-19 03:38:51 UTC)
 - Soundboard upgraded to a 12-pad grid with keyboard shortcuts and removable custom clips (2025-08-19 04:50:00 UTC)
