@@ -26,6 +26,7 @@ ZenzaScheduler OS — TODO
 - Soundboard expanded to a 12-pad grid with keyboard shortcuts and removable custom clips
 - Removed missing ensure-todo-status Supabase function call to prevent CORS errors on to-do list load
 - Added English/Bisaya translation toggle for Wedding Vows module
+- Added Learning Notes module for capturing study notes
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
