@@ -4,6 +4,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 
 ## [Unreleased]
 ### Added
+- TI-30XS calculator emulator component for multi-line scientific calculations (2025-08-21 00:52:33 UTC)
 - To-Do List items show an "In Progress..." status with an animated iMessage-style ellipsis (2025-08-14 14:07:04 UTC)
 - Sleep and Wake Up task categories trigger morning and night prayers via the alarm Start Prayer button (2025-08-02 04:14:20 UTC)
 - Task modal includes quick "Current Time" buttons to set start and end times for now or +5/+10/+30/+60 minutes (2025-08-02 04:09 UTC)
