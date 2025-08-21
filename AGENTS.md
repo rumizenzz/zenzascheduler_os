@@ -1028,3 +1028,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-21 20:35 UTC)
 - Introduced Learning Notes module so users can record study notes across subjects.
 - Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-21 21:34 UTC)
+- Moved `card-floating` and related styles into the Tailwind components layer so custom backgrounds keep Learning Notes text readable.
+- Verified repository passes lint and tests with `pnpm run lint` and `pnpm test`.

@@ -60,6 +60,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 ### Fixed
+- Learning Notes cards no longer render white text on white backgrounds by moving custom classes into the Tailwind components layer (2025-08-21 21:34:43 UTC)
 - Removed call to missing `ensure-todo-status` Supabase function to avoid CORS errors during to-do list initialization (2025-08-19 05:40:18 UTC)
 - Marking a to-do item complete while in progress now sets status to completed instead of pending (2025-08-14 15:13:07 UTC)
 - Supabase schema reloads after adding the todo_items status column so updates don't error on missing fields (2025-08-14 14:16:29 UTC)
