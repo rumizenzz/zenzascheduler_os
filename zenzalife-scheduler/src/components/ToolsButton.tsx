@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Wrench, Code2, GitCompare, X } from 'lucide-react'
+import { Wrench, Code2, GitCompare, X, Calculator } from 'lucide-react'
 import MagicIDE from './MagicIDE'
+import { GEDCalculator } from './dashboard/GEDCalculator'
 
 export function ToolsButton() {
   const [open, setOpen] = useState(false)
   const [showIDE, setShowIDE] = useState(false)
   const [startDiff, setStartDiff] = useState(false)
+  const [showCalculator, setShowCalculator] = useState(false)
 
   return (
     <>
@@ -44,6 +46,16 @@ export function ToolsButton() {
               <GitCompare className="w-4 h-4" />
               <span>Diff Viewer</span>
             </button>
+            <button
+              onClick={() => {
+                setShowCalculator(true)
+                setOpen(false)
+              }}
+              className="flex items-center gap-2 w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+            >
+              <Calculator className="w-4 h-4" />
+              <span>Calculator</span>
+            </button>
           </div>
         </>
       )}
@@ -64,6 +76,11 @@ export function ToolsButton() {
               <MagicIDE startDiff={startDiff} />
             </div>
           </div>,
+          document.body,
+        )}
+      {showCalculator &&
+        createPortal(
+          <GEDCalculator onClose={() => setShowCalculator(false)} />,
           document.body,
         )}
     </>
