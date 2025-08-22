@@ -35,6 +35,9 @@ ZenzaScheduler OS — TODO
 - Tools menu now offers a GED Calculator accessible from any dashboard tab
 - World Clock widgets display on every dashboard screen, even above overlays
 
+- Learning Notes selection shows sum and mean for highlighted numbers
+- GED Calculator accepts keyboard input for numbers and symbols
+
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
 - Accessibility pass for floating buttons and modals
