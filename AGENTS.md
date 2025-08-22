@@ -1050,4 +1050,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-22 00:55 UTC)
 - Made GED Calculator accessible through the global Tools menu so it's available from any dashboard tab.
 - Verified repository passes lint with `pnpm run lint` and tests with `pnpm test`.
-- 
+
+### Codex Agent Reflection (2025-08-22 01:28 UTC)
+- Wired up Settings help links with modals for Getting Started, keyboard shortcuts, and contacting support.
+- Verified repository passes lint with `pnpm run lint` and tests with `pnpm test`.

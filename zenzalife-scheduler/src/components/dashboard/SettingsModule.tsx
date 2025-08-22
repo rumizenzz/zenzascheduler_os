@@ -83,6 +83,9 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
   const [bugAccess, setBugAccess] = useState(false)
   const [bugListOpen, setBugListOpen] = useState(false)
   const [bugReports, setBugReports] = useState<{ id: number; description: string; created_at: string }[]>([])
+  const [showGuide, setShowGuide] = useState(false)
+  const [showShortcuts, setShowShortcuts] = useState(false)
+  const [showContact, setShowContact] = useState(false)
   const { postMessage } = useAlarmChannel(msg => {
     if (msg.type === 'dismiss') {
       setShowTestAlarm(false)
@@ -701,17 +704,26 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
               </div>
               
               <div className="grid gap-3">
-                <button className="p-3 bg-white/50 rounded-lg text-left hover:bg-white/70 transition-colors">
+                <button
+                  onClick={() => setShowGuide(true)}
+                  className="p-3 bg-white/50 rounded-lg text-left hover:bg-white/70 transition-colors"
+                >
                   <h4 className="font-medium text-gray-800">Getting Started Guide</h4>
                   <p className="text-sm text-gray-600">Learn how to set up your schedule and family</p>
                 </button>
-                
-                <button className="p-3 bg-white/50 rounded-lg text-left hover:bg-white/70 transition-colors">
+
+                <button
+                  onClick={() => setShowShortcuts(true)}
+                  className="p-3 bg-white/50 rounded-lg text-left hover:bg-white/70 transition-colors"
+                >
                   <h4 className="font-medium text-gray-800">Keyboard Shortcuts</h4>
                   <p className="text-sm text-gray-600">Speed up your workflow with shortcuts</p>
                 </button>
-                
-                <button className="p-3 bg-white/50 rounded-lg text-left hover:bg-white/70 transition-colors">
+
+                <button
+                  onClick={() => setShowContact(true)}
+                  className="p-3 bg-white/50 rounded-lg text-left hover:bg-white/70 transition-colors"
+                >
                   <h4 className="font-medium text-gray-800">Contact Support</h4>
                   <p className="text-sm text-gray-600">Get help with any issues or questions</p>
                 </button>
@@ -880,6 +892,71 @@ export function SettingsModule({ onUnsavedChange }: SettingsModuleProps) {
             </ul>
             <div className="text-center">
               <button className="btn-dreamy-primary px-4" onClick={() => setBugListOpen(false)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showGuide && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 space-y-4 max-w-md w-full">
+            <h2 className="text-xl font-light text-center">Getting Started</h2>
+            <ol className="list-decimal list-inside text-sm space-y-1 text-left">
+              <li>Create your profile and invite family members.</li>
+              <li>Add tasks, reminders, and prayer times to your schedule.</li>
+              <li>Explore tools like the Math Notebook and Learning Notes.</li>
+            </ol>
+            <div className="text-center">
+              <button className="btn-dreamy-primary px-4" onClick={() => setShowGuide(false)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showShortcuts && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 space-y-4 max-w-md w-full">
+            <h2 className="text-xl font-light text-center">Keyboard Shortcuts</h2>
+            <ul className="text-sm space-y-2 text-left">
+              <li>
+                <span className="font-mono bg-gray-100 px-1 rounded">Ctrl</span>
+                <span> + </span>
+                <span className="font-mono bg-gray-100 px-1 rounded">K</span>
+                : Open command palette
+              </li>
+              <li>
+                <span className="font-mono bg-gray-100 px-1 rounded">Shift</span>
+                <span> + </span>
+                <span className="font-mono bg-gray-100 px-1 rounded">?</span>
+                : Show help
+              </li>
+              <li>
+                <span className="font-mono bg-gray-100 px-1 rounded">Esc</span>
+                : Close dialogs
+              </li>
+            </ul>
+            <div className="text-center">
+              <button className="btn-dreamy-primary px-4" onClick={() => setShowShortcuts(false)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showContact && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 space-y-4 max-w-md w-full text-center">
+            <h2 className="text-xl font-light">Contact Support</h2>
+            <p className="text-sm">
+              Email us at{' '}
+              <a href="mailto:support@zenzalife.com" className="text-blue-600 underline">
+                support@zenzalife.com
+              </a>
+            </p>
+            <div className="text-center">
+              <button className="btn-dreamy-primary px-4" onClick={() => setShowContact(false)}>
                 Close
               </button>
             </div>
