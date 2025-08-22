@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
+import { createPortal } from "react-dom";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
@@ -379,8 +380,6 @@ export function Dashboard() {
         {renderContent()}
       </div>
 
-      <FastingPrayerReminder />
-      <WorldClockOverlay />
       {/* Mobile menu button */}
       {sidebarCollapsed && (
         <button
@@ -400,18 +399,25 @@ export function Dashboard() {
       )}
       <OnboardingModal />
       <MailingListPrompt />
-      <RemindersButton />
-      <ToolsButton />
-      <RefreshButton />
-      <PullToRefreshToggleButton
-        enabled={pullRefreshEnabled}
-        toggle={() => setPullRefreshEnabled(!pullRefreshEnabled)}
-      />
-      <ReportBugButton
-        sidebarCollapsed={sidebarCollapsed}
-        isMobile={isMobile}
-      />
-      <ChangeLogButton />
+      {createPortal(
+        <>
+          <FastingPrayerReminder />
+          <RemindersButton />
+          <ToolsButton />
+          <RefreshButton />
+          <PullToRefreshToggleButton
+            enabled={pullRefreshEnabled}
+            toggle={() => setPullRefreshEnabled(!pullRefreshEnabled)}
+          />
+          <ReportBugButton
+            sidebarCollapsed={sidebarCollapsed}
+            isMobile={isMobile}
+          />
+          <ChangeLogButton />
+        </>,
+        document.body
+      )}
+      <WorldClockOverlay />
       <Footer />
       {showUnsavedModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
