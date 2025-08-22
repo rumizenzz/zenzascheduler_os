@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import { supabase, getCurrentUser } from '@/lib/supabase'
 
@@ -39,7 +39,7 @@ export function GEDCalculator({ onClose }: GEDCalculatorProps) {
     }
   }
 
-  const handleSolve = async () => {
+  const handleSolve = useCallback(async () => {
     try {
       const prepared = input
         .replace(/√/g, 'Math.sqrt')
@@ -65,7 +65,33 @@ export function GEDCalculator({ onClose }: GEDCalculatorProps) {
     } catch {
       setResult('Error')
     }
-  }
+  }, [history, input])
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (/^[0-9]$/.test(e.key)) {
+        setInput((prev) => prev + e.key)
+        setResult(null)
+      } else if (['+', '-', '(', ')', '^', '.'].includes(e.key)) {
+        setInput((prev) => prev + e.key)
+        setResult(null)
+      } else if (e.key === '*') {
+        setInput((prev) => prev + '×')
+        setResult(null)
+      } else if (e.key === '/') {
+        setInput((prev) => prev + '÷')
+        setResult(null)
+      } else if (e.key === 'Backspace') {
+        setInput((prev) => prev.slice(0, -1))
+        setResult(null)
+      } else if (e.key === 'Enter') {
+        e.preventDefault()
+        void handleSolve()
+      }
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [handleSolve])
 
   const rows = [
     ['7', '8', '9', '÷'],
