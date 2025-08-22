@@ -113,7 +113,7 @@ export function LearningNotesModule() {
   return (
     <div className="space-y-6 pb-24">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-light text-purple-200 flex items-center gap-3">
+        <h1 className="text-3xl font-medium text-purple-800 flex items-center gap-3">
           <NotebookText className="w-8 h-8" />
           Learning Notes
         </h1>
@@ -127,7 +127,7 @@ export function LearningNotesModule() {
       </div>
 
       {showAdd && (
-        <div className="card-floating bg-purple-900/80 text-white p-4 space-y-4">
+        <div className="card-floating bg-purple-900/90 hover:bg-purple-900/80 text-white p-4 space-y-4">
           <input
             type="text"
             className="input-dreamy w-full"
@@ -158,9 +158,12 @@ export function LearningNotesModule() {
       ) : (
         <div className="space-y-4">
           {notes.map((note) => (
-            <div key={note.id} className="card-floating bg-purple-900/60 text-white p-4 space-y-2">
+            <div
+              key={note.id}
+              className="card-floating bg-purple-900/80 hover:bg-purple-900/70 text-white p-4 space-y-2"
+            >
               <div className="flex justify-between items-center">
-                <h2 className="text-xl font-light">{note.title}</h2>
+                <h2 className="text-xl font-medium">{note.title}</h2>
                 <div className="flex gap-2">
                   <button className="btn-secondary px-2 py-1" onClick={() => startEdit(note)}>
                     <Pencil className="w-4 h-4" />
@@ -181,7 +184,7 @@ export function LearningNotesModule() {
       )}
 
       {editingId && (
-        <div className="card-floating bg-purple-900/80 text-white p-4 space-y-4">
+        <div className="card-floating bg-purple-900/90 hover:bg-purple-900/80 text-white p-4 space-y-4">
           <input
             type="text"
             className="input-dreamy w-full"
