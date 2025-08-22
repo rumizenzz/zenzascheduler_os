@@ -35,8 +35,14 @@ export function MultiplicationTable({ onClose }: MultiplicationTableProps) {
                     {row}
                   </th>
                   {numbers.map((col) => (
-                    <td key={col} className="p-1 border border-purple-700 text-center">
-                      {row * col}
+                    <td
+                      key={col}
+                      title={`${row} × ${col} = ${row * col}`}
+                      className="group p-1 border border-purple-700 text-center hover:bg-purple-900"
+                    >
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity">
+                        {row * col}
+                      </span>
                     </td>
                   ))}
                 </tr>

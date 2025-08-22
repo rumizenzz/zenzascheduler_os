@@ -20,9 +20,12 @@ import { JournalModule } from "./JournalModule";
 import { LucidDreamJournalModule } from "./LucidDreamJournalModule";
 import { GEDMathStudyModule } from "./GEDMathStudyModule";
 import { IdeasModule } from "./IdeasModule";
+import { LearningNotesModule } from "./LearningNotesModule";
 import { PasswordsModule } from "./PasswordsModule";
 import { TodoListModule } from "./TodoListModule";
 import { GroceryListModule } from "./GroceryListModule";
+import { WeddingVowsModule } from "./WeddingVowsModule";
+import { SoundboardModule } from "./SoundboardModule";
 import {
   Calendar,
   TrendingUp,
@@ -41,17 +44,21 @@ import {
   Mic,
   Pencil,
   NotebookPen,
+  NotebookText,
   MoonStar,
   Calculator,
   Lightbulb,
   Key,
   CheckSquare,
   ShoppingCart,
+  Gem,
+  Music,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
 import { OnboardingModal } from "../onboarding/OnboardingModal";
 import { Footer } from "../Footer";
+import { WorldClockOverlay } from "@/components/WorldClockOverlay";
 import { ChangeLogButton } from "../ChangeLogButton";
 import { RefreshButton } from "../RefreshButton";
 import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
@@ -78,10 +85,13 @@ type DashboardTab =
   | "journal"
   | "dreams"
   | "ideas"
+  | "notes"
+  | "wedding"
   | "todos"
   | "groceries"
   | "passwords"
   | "gedstudy"
+  | "soundboard"
   | "settings";
 
 const navigationItems = [
@@ -102,9 +112,12 @@ const navigationItems = [
   { id: "journal", label: "Journal", icon: NotebookPen, color: "text-purple-600" },
   { id: "dreams", label: "Dream Journal", icon: MoonStar, color: "text-indigo-600" },
   { id: "ideas", label: "Ideas", icon: Lightbulb, color: "text-yellow-500" },
+  { id: "notes", label: "Learning Notes", icon: NotebookText, color: "text-blue-700" },
+  { id: "wedding", label: "Our Wedding Vows", icon: Gem, color: "text-rose-400" },
   { id: "todos", label: "To-Do List", icon: CheckSquare, color: "text-green-600" },
   { id: "groceries", label: "Groceries", icon: ShoppingCart, color: "text-orange-600" },
   { id: "passwords", label: "Passwords", icon: Key, color: "text-gray-500" },
+  { id: "soundboard", label: "Soundboard", icon: Music, color: "text-blue-500" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
 
@@ -233,14 +246,20 @@ export function Dashboard() {
         return <LucidDreamJournalModule />;
       case "ideas":
         return <IdeasModule />;
+      case "notes":
+        return <LearningNotesModule />;
+      case "wedding":
+        return <WeddingVowsModule />;
       case "todos":
         return <TodoListModule />;
-      case "groceries":
-        return <GroceryListModule />;
-      case "passwords":
-        return <PasswordsModule />;
-      case "settings":
-        return <SettingsModule onUnsavedChange={setHasUnsavedSettings} />;
+  case "groceries":
+    return <GroceryListModule />;
+  case "passwords":
+    return <PasswordsModule />;
+  case "soundboard":
+    return <SoundboardModule />;
+  case "settings":
+    return <SettingsModule onUnsavedChange={setHasUnsavedSettings} />;
       default:
         return <ZenzaCalendar />;
     }
@@ -361,6 +380,7 @@ export function Dashboard() {
       </div>
 
       <FastingPrayerReminder />
+      <WorldClockOverlay />
       {/* Mobile menu button */}
       {sidebarCollapsed && (
         <button

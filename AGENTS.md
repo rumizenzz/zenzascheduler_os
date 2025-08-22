@@ -987,3 +987,71 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-06 22:02 UTC)
 - Added multiplication table overlay to the Math Notebook via a portal for quick, mobile-friendly reference.
 - Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-08 02:21 UTC)
+- Guarded prayer modules against missing audio so playback errors no longer occur.
+- Verified repository passes lint and tests with `pnpm run lint` and `pnpm test`.
+
+### Codex Agent Reflection (2025-08-08 04:09 UTC)
+- Removed duplicate ErrorBoundary declarations to fix TypeScript build errors.
+- Verified repository passes lint, tests, and build with `pnpm run lint`, `pnpm test`, and `pnpm run build`.
+### Codex Agent Reflection (2025-08-13 20:37 UTC)
+- Filtered expired garbage reminders using local dates to stop negative countdowns.
+- Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-14 15:13 UTC)
+- Ensured in-progress to-do items mark completed when checked instead of reverting to pending.
+- Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-18 01:24 UTC)
+- Created a Wedding Vows module featuring Rumi's vow and a hidden placeholder for Khen's vow.
+- Confirmed repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-19 03:15 UTC)
+- Introduced a Soundboard module with default chime and beep pads plus custom uploads.
+- Verified repository passes lint with `pnpm run lint`.
+### Codex Agent Reflection (2025-08-19 03:38 UTC)
+- Switched Soundboard default beep and chime to remote URLs so no binary audio ships with the repo.
+- Verified repository passes lint and tests with `pnpm run lint` and `pnpm test`.
+
+### Codex Agent Reflection (2025-08-19 04:50 UTC)
+- Expanded Soundboard into a 12-pad grid with keyboard shortcuts and removable custom clips.
+- Verified repository passes lint and tests with `pnpm run lint` and `pnpm test`.
+
+### Codex Agent Reflection (2025-08-19 05:40 UTC)
+- Removed call to missing `ensure-todo-status` Supabase edge function to stop CORS errors on to-do list load.
+- Verified repository passes lint with `pnpm run lint`.
+### Codex Agent Reflection (2025-08-21 20:09 UTC)
+- Added Bisaya/English translation toggle for Wedding Vows module.
+- Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-21 20:22 UTC)
+- Displayed wedding vow writing date in Wedding Vows module.
+- Verified repository passes lint with `pnpm run lint` and tests with `pnpm test`.
+### Codex Agent Reflection (2025-08-21 20:35 UTC)
+- Showed Rumi's vow writing date and kept Khen's to be revealed.
+- Verified repository passes lint and tests with `pnpm run lint` and `pnpm test`.
+
+### Codex Agent Reflection (2025-08-21 20:35 UTC)
+- Introduced Learning Notes module so users can record study notes across subjects.
+- Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-21 21:34 UTC)
+- Moved `card-floating` and related styles into the Tailwind components layer so custom backgrounds keep Learning Notes text readable.
+- Verified repository passes lint and tests with `pnpm run lint` and `pnpm test`.
+
+### Codex Agent Reflection (2025-08-21 21:45 UTC)
+- Implemented review link utilities supporting deletion, duration changes, and expiration messages.
+- Verified repository passes lint with `pnpm run lint` and tests with `pnpm test`.
+### Codex Agent Reflection (2025-08-21 22:11 UTC)
+- Darkened Learning Notes heading and cards for better readability.
+- Verified repository passes lint with `pnpm run lint` and tests with `pnpm test`.
+
+### Codex Agent Reflection (2025-08-22 00:55 UTC)
+- Made GED Calculator accessible through the global Tools menu so it's available from any dashboard tab.
+- Verified repository passes lint with `pnpm run lint` and tests with `pnpm test`.
+
+### Codex Agent Reflection (2025-08-22 01:21 UTC)
+- Moved World Clock widgets into a global overlay so selected zones display across the dashboard.
+- Confirmed lint and tests pass with `pnpm run lint` and `pnpm test`.
+- 

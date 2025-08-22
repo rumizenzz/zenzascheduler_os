@@ -172,6 +172,7 @@ export type TodoItem = {
   list_id?: string
   completed?: boolean
   missing?: boolean
+  status?: string
   created_at?: string
   updated_at?: string
 }
@@ -231,6 +232,15 @@ export type DreamJournalEntryHistory = {
   title: string
   description: string
   edited_at: string
+}
+
+export type LearningNote = {
+  id: string
+  user_id: string
+  title: string
+  content: string
+  created_at: string
+  updated_at?: string
 }
 
 export type GracePrayer = {
