@@ -139,7 +139,7 @@ export function WorldClockOverlay() {
           createPortal(
             <div
               key={zone.id}
-              className="fixed z-[1000] cursor-move rounded-full border border-cyan-400/50 bg-gradient-to-br from-transparent via-cyan-500/20 to-purple-500/20 backdrop-blur-md text-cyan-100 font-mono text-xs px-3 py-2 shadow-[0_0_10px_rgba(0,255,255,0.7)]"
+              className="fixed z-[1000] cursor-move rounded-lg px-3 py-2 text-xs font-mono tracking-wider text-cyan-100 bg-gradient-to-br from-sky-900/80 via-indigo-900/80 to-purple-900/80 border border-cyan-400/30 shadow-lg backdrop-blur-sm"
               style={{ top: zone.pos_y, left: zone.pos_x }}
               onMouseDown={e => startDrag(e, zone.id)}
               onContextMenu={e => handleContextMenu(e, zone.id)}
@@ -152,7 +152,7 @@ export function WorldClockOverlay() {
       {contextMenu.visible &&
         createPortal(
           <div
-            className="fixed z-[1000] p-4 rounded-xl border border-cyan-500/30 bg-gradient-to-br from-gray-900/80 via-indigo-900/80 to-purple-900/80 backdrop-blur-xl text-cyan-100 shadow-[0_0_15px_rgba(0,255,255,0.4)]"
+            className="fixed z-[1000] p-4 rounded-xl border border-cyan-400/40 bg-gradient-to-br from-sky-900/95 via-indigo-950/95 to-purple-950/95 text-cyan-100 shadow-lg backdrop-blur-sm font-mono tracking-wider"
             style={{ top: contextMenu.y, left: contextMenu.x }}
             onClick={e => e.stopPropagation()}
           >
