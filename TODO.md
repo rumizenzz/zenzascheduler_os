@@ -34,6 +34,7 @@ ZenzaScheduler OS — TODO
 - Darkened Learning Notes heading and cards for better readability
 - Tools menu now offers a GED Calculator accessible from any dashboard tab
 - World Clock widgets display on every dashboard screen, even above overlays
+- World Clock overlay glows with a neon gradient for a futuristic feel
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
