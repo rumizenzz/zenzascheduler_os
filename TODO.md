@@ -37,6 +37,9 @@ ZenzaScheduler OS — TODO
 - World Clock overlay now glows with neon glass styling for a futuristic feel
 - Softened World Clock overlay glow so neon accents stay futuristic without overwhelming brightness
 
+- Learning Notes selection shows sum and mean for highlighted numbers
+- GED Calculator accepts keyboard input for numbers and symbols
+
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
 - Accessibility pass for floating buttons and modals
