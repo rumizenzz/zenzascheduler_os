@@ -43,6 +43,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - World Clock widgets display across all dashboard screens and overlays (2025-08-22 01:21:14 UTC)
 ### Changed
 - World Clock overlay glows with neon glass styling for a futuristic feel (2025-08-22 14:34:06 UTC)
+- Toned down World Clock overlay glow so neon accents stay futuristic without overwhelming brightness (2025-08-22 15:00:00 UTC)
 - Wedding Vows module shows Rumi's writing date while Khen's remains to be revealed (2025-08-21 20:35:00 UTC)
 - Soundboard default sounds now download from remote URLs instead of bundling audio files (2025-08-19 03:38:51 UTC)
 - Soundboard upgraded to a 12-pad grid with keyboard shortcuts and removable custom clips (2025-08-19 04:50:00 UTC)
