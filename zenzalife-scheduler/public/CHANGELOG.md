@@ -38,6 +38,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Wedding Vows module offers Bisaya/English translation toggle (2025-08-21 20:09:36 UTC)
 - Wedding Vows module displays writing date (2025-08-21 20:22:29 UTC)
 - Learning Notes module lets users jot down study notes for any subject (2025-08-21 20:35:27 UTC)
+- World Clock widgets display across all dashboard screens and overlays (2025-08-22 01:21:14 UTC)
 ### Changed
 - Wedding Vows module shows Rumi's writing date while Khen's remains to be revealed (2025-08-21 20:35:00 UTC)
 - Soundboard default sounds now download from remote URLs instead of bundling audio files (2025-08-19 03:38:51 UTC)
