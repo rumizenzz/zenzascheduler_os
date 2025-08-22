@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 interface MeanState {
   sum: number
@@ -34,21 +35,27 @@ export function SelectionMeanOverlay() {
       const rect = sel.getRangeAt(0).getBoundingClientRect()
       setState({ sum, mean, count, rect })
     }
+    const handleScroll = () => setState(null)
     document.addEventListener('mouseup', handleMouseUp)
-    return () => document.removeEventListener('mouseup', handleMouseUp)
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      document.removeEventListener('mouseup', handleMouseUp)
+      window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
   if (!state) return null
 
   const style = {
+    position: 'absolute' as const,
     top: state.rect.bottom + window.scrollY + 8,
     left: state.rect.left + window.scrollX
   }
 
-  return (
+  return createPortal(
     <div
       style={style}
-      className="fixed z-50 harold-sky bg-purple-950 border-2 border-purple-400 rounded p-2 text-sm text-white space-y-1"
+      className="z-50 harold-sky bg-purple-950 border-2 border-purple-400 rounded p-2 text-sm text-white space-y-1"
     >
       <div>Sum: {state.sum}</div>
       <div>
@@ -60,7 +67,8 @@ export function SelectionMeanOverlay() {
       >
         Close
       </button>
-    </div>
+    </div>,
+    document.body
   )
 }
 

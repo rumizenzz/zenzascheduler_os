@@ -40,6 +40,10 @@ ZenzaScheduler OS — TODO
 - Learning Notes selection shows sum and mean for highlighted numbers
 - GED Calculator accepts keyboard input for numbers and symbols
 
+- Learning Notes selection shows sum and mean for highlighted numbers
+- GED Calculator accepts keyboard input for numbers and symbols
+- Mean overlay positions near selected numbers and disappears when scrolling
+
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
 - Accessibility pass for floating buttons and modals
