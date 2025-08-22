@@ -1059,3 +1059,20 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 - Styled the World Clock overlay with a neon gradient, blur, and monospace glow for a futuristic aesthetic.
 - Verified repository passes lint with `pnpm run lint` and tests with `pnpm test`.
 - 
+
+### Codex Agent Reflection (2025-08-22 14:28 UTC)
+- Showed sum and mean for selected numbers in Learning Notes with a context overlay.
+- Allowed GED Calculator to accept keyboard input for numbers and symbols.
+
+### Codex Agent Reflection (2025-08-22 16:20 UTC)
+- Corrected Learning Notes mean overlay positioning and hid it on scroll so it no longer floats far from the selection.
+- Verified repository passes lint and tests with `pnpm run lint` and `pnpm test`.
+
+### Codex Agent Reflection (2025-08-22 14:34 UTC)
+- Styled World Clock overlay with neon-glass effects for a futuristic feel.
+- Verified repository passes lint and tests with `pnpm run lint` and `pnpm test`.
+
+### Codex Agent Reflection (2025-08-22 14:28 UTC)
+- Showed sum and mean for selected numbers in Learning Notes with a context overlay.
+- Allowed GED Calculator to accept keyboard input for numbers and symbols.
+- 
