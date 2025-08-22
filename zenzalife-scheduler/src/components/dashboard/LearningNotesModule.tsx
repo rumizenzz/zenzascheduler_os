@@ -4,6 +4,7 @@ import { supabase, LearningNote } from '@/lib/supabase'
 import dayjs from 'dayjs'
 import { Plus, NotebookText, Pencil, Trash2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import { SelectionMeanOverlay } from './SelectionMeanOverlay'
 
 export function LearningNotesModule() {
   const { user } = useAuth()
@@ -209,6 +210,7 @@ export function LearningNotesModule() {
           </div>
         </div>
       )}
+      <SelectionMeanOverlay />
     </div>
   )
 }
