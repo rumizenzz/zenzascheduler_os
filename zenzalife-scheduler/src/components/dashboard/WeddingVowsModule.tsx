@@ -52,6 +52,10 @@ Gihigugma tika pag-ayo, hangtod sa walay katapusan, baby—karon, kanunay, ug ha
 
   const khenPlaceholderEnglish = 'To be revealed on our wedding day…'
   const khenPlaceholderBisaya = 'Ipadayag sa among adlaw sa kasal…'
+  const rumiDateEnglish = 'Written on August 18, 2025'
+  const rumiDateBisaya = 'Gisulat niadtong Agosto 18, 2025'
+  const khenDateEnglish = 'Writing date to be revealed…'
+  const khenDateBisaya = 'Ipadayag pa ang petsa sa pagsulat…'
 
   return (
     <div className="max-w-3xl mx-auto bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 p-8 rounded-2xl shadow-lg border border-rose-200 text-gray-800 font-serif space-y-12">
@@ -72,6 +76,9 @@ Gihigugma tika pag-ayo, hangtod sa walay katapusan, baby—karon, kanunay, ug ha
         <h2 className="text-2xl text-rose-700 font-semibold">
           {isBisaya ? 'Panumpa ni Rumi' : "Rumi's Vow"}
         </h2>
+        <p className="text-sm text-rose-500">
+          {isBisaya ? rumiDateBisaya : rumiDateEnglish}
+        </p>
         <p className="whitespace-pre-line leading-relaxed">
           {isBisaya ? rumiVowBisaya : rumiVowEnglish}
         </p>
@@ -80,6 +87,9 @@ Gihigugma tika pag-ayo, hangtod sa walay katapusan, baby—karon, kanunay, ug ha
         <h2 className="text-2xl text-rose-700 font-semibold">
           {isBisaya ? 'Panumpa ni Khen' : "Khen's Vow"}
         </h2>
+        <p className="text-sm text-rose-500">
+          {isBisaya ? khenDateBisaya : khenDateEnglish}
+        </p>
         <p className="italic text-rose-600">
           {isBisaya ? khenPlaceholderBisaya : khenPlaceholderEnglish}
         </p>

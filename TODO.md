@@ -26,6 +26,8 @@ ZenzaScheduler OS — TODO
 - Soundboard expanded to a 12-pad grid with keyboard shortcuts and removable custom clips
 - Removed missing ensure-todo-status Supabase function call to prevent CORS errors on to-do list load
 - Added English/Bisaya translation toggle for Wedding Vows module
+- Displayed wedding vow writing date in Wedding Vows module
+- Showed Rumi's vow writing date and kept Khen's to be revealed
 - Added Learning Notes module for capturing study notes
 - Fixed Learning Notes card backgrounds so note text remains visible without highlighting
 - Review links can be deleted, duration updated, and display time until expiration
