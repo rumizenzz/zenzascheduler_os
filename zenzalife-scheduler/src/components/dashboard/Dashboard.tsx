@@ -247,7 +247,7 @@ export function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
+    <div className="relative min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100">
       {/* Sidebar */}
       <div
         className={`fixed left-0 top-0 h-full harold-sky bg-gradient-to-b from-indigo-950 via-purple-950 to-blue-900/90 backdrop-blur-lg border-r border-white/20 z-50 transform transition-transform duration-300 ${
@@ -353,7 +353,7 @@ export function Dashboard() {
       {/* Main Content */}
       <div
         key={activeTab}
-        className={`p-6 transition-all duration-300 ml-0 ${
+        className={`relative z-10 p-6 transition-all duration-300 ml-0 ${
           sidebarCollapsed ? "md:ml-16" : "md:ml-64"
         }`}
       >

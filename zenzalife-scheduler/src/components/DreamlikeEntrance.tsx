@@ -58,7 +58,7 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
     setIsVisible(false)
     setTimeout(() => {
       onComplete()
-    }, 800) // Allow fade out animation to complete
+    }, 1000) // Allow fade out animation to complete with buffer
   }
 
   if (!started) {
@@ -77,7 +77,7 @@ export function DreamlikeEntrance({ onComplete, children }: DreamlikeEntrancePro
 
   if (!isVisible) {
     return (
-      <div className="transition-opacity duration-800 opacity-100">
+      <div className="relative z-auto">
         {children}
       </div>
     )
