@@ -139,7 +139,7 @@ export function WorldClockOverlay() {
           createPortal(
             <div
               key={zone.id}
-              className="fixed z-[100] cursor-move bg-black/50 text-white text-xs px-2 py-1 rounded pointer-events-auto"
+              className="fixed z-[1000] cursor-move bg-black/50 text-white text-xs px-2 py-1 rounded"
               style={{ top: zone.pos_y, left: zone.pos_x }}
               onMouseDown={e => startDrag(e, zone.id)}
               onContextMenu={e => handleContextMenu(e, zone.id)}
@@ -152,7 +152,7 @@ export function WorldClockOverlay() {
       {contextMenu.visible &&
         createPortal(
           <div
-            className="fixed z-[100] p-4 rounded-xl harold-sky bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100 shadow-lg pointer-events-auto"
+            className="fixed z-[1000] p-4 rounded-xl harold-sky bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-900 text-purple-100 shadow-lg"
             style={{ top: contextMenu.y, left: contextMenu.x }}
             onClick={e => e.stopPropagation()}
           >

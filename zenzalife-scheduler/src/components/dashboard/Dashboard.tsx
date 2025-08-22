@@ -380,7 +380,7 @@ export function Dashboard() {
       </div>
 
       <FastingPrayerReminder />
-      {/* <WorldClockOverlay /> */}
+      <WorldClockOverlay />
       {/* Mobile menu button */}
       {sidebarCollapsed && (
         <button
