@@ -252,14 +252,14 @@ export function Dashboard() {
         return <WeddingVowsModule />;
       case "todos":
         return <TodoListModule />;
-  case "groceries":
-    return <GroceryListModule />;
-  case "passwords":
-    return <PasswordsModule />;
-  case "soundboard":
-    return <SoundboardModule />;
-  case "settings":
-    return <SettingsModule onUnsavedChange={setHasUnsavedSettings} />;
+      case "groceries":
+        return <GroceryListModule />;
+      case "passwords":
+        return <PasswordsModule />;
+      case "soundboard":
+        return <SoundboardModule />;
+      case "settings":
+        return <SettingsModule onUnsavedChange={setHasUnsavedSettings} />;
       default:
         return <ZenzaCalendar />;
     }
