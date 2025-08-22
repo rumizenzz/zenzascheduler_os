@@ -34,6 +34,7 @@ ZenzaScheduler OS — TODO
 - Darkened Learning Notes heading and cards for better readability
 - Tools menu now offers a GED Calculator accessible from any dashboard tab
 - World Clock widgets display on every dashboard screen, even above overlays
+- World Clock overlay now glows with neon glass styling for a futuristic feel
 
 - Learning Notes selection shows sum and mean for highlighted numbers
 - GED Calculator accepts keyboard input for numbers and symbols
