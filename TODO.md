@@ -33,6 +33,7 @@ ZenzaScheduler OS — TODO
 - Review links can be deleted, duration updated, and display time until expiration
 - Darkened Learning Notes heading and cards for better readability
 - Tools menu now offers a GED Calculator accessible from any dashboard tab
+- World Clock widgets display on every dashboard screen, even above overlays
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions

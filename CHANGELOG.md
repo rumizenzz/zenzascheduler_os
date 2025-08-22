@@ -40,6 +40,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Learning Notes module lets users jot down study notes for any subject (2025-08-21 20:35:27 UTC)
 - Review link utilities support deletion, duration changes, and expiration messages (2025-08-21 21:45:53 UTC)
 - Tools menu now offers a GED Calculator accessible from any dashboard tab (2025-08-22 00:55 UTC)
+- World Clock widgets display across all dashboard screens and overlays (2025-08-22 01:21:14 UTC)
 ### Changed
 - Wedding Vows module shows Rumi's writing date while Khen's remains to be revealed (2025-08-21 20:35:00 UTC)
 - Soundboard default sounds now download from remote URLs instead of bundling audio files (2025-08-19 03:38:51 UTC)

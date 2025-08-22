@@ -58,6 +58,7 @@ import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
 import { OnboardingModal } from "../onboarding/OnboardingModal";
 import { Footer } from "../Footer";
+import { WorldClockOverlay } from "@/components/WorldClockOverlay";
 import { ChangeLogButton } from "../ChangeLogButton";
 import { RefreshButton } from "../RefreshButton";
 import { PullToRefreshToggleButton } from "../PullToRefreshToggleButton";
@@ -379,6 +380,7 @@ export function Dashboard() {
       </div>
 
       <FastingPrayerReminder />
+      <WorldClockOverlay />
       {/* Mobile menu button */}
       {sidebarCollapsed && (
         <button
