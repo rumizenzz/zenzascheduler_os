@@ -37,6 +37,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Soundboard module lets users play built-in chime and beep sounds or upload custom clips (2025-08-19 03:15:32 UTC)
 - Wedding Vows module offers Bisaya/English translation toggle (2025-08-21 20:09:36 UTC)
 - Wedding Vows module displays writing date (2025-08-21 20:22:29 UTC)
+- Learning Notes module lets users jot down study notes for any subject (2025-08-21 20:35:27 UTC)
+- Review link utilities support deletion, duration changes, and expiration messages (2025-08-21 21:45:53 UTC)
 ### Changed
 - Wedding Vows module shows Rumi's writing date while Khen's remains to be revealed (2025-08-21 20:35:00 UTC)
 - Soundboard default sounds now download from remote URLs instead of bundling audio files (2025-08-19 03:38:51 UTC)
@@ -60,7 +62,9 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05 UTC)
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
+- Learning Notes heading and cards darkened for higher contrast and easier reading (2025-08-21 22:11 UTC)
 ### Fixed
+- Learning Notes cards no longer render white text on white backgrounds by moving custom classes into the Tailwind components layer (2025-08-21 21:34:43 UTC)
 - Removed call to missing `ensure-todo-status` Supabase function to avoid CORS errors during to-do list initialization (2025-08-19 05:40:18 UTC)
 - Marking a to-do item complete while in progress now sets status to completed instead of pending (2025-08-14 15:13:07 UTC)
 - Supabase schema reloads after adding the todo_items status column so updates don't error on missing fields (2025-08-14 14:16:29 UTC)

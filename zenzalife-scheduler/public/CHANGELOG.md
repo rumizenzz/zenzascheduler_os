@@ -37,6 +37,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Soundboard module lets users play built-in chime and beep sounds or upload custom clips (2025-08-19 03:15:32 UTC)
 - Wedding Vows module offers Bisaya/English translation toggle (2025-08-21 20:09:36 UTC)
 - Wedding Vows module displays writing date (2025-08-21 20:22:29 UTC)
+- Learning Notes module lets users jot down study notes for any subject (2025-08-21 20:35:27 UTC)
 ### Changed
 - Wedding Vows module shows Rumi's writing date while Khen's remains to be revealed (2025-08-21 20:35:00 UTC)
 - Soundboard default sounds now download from remote URLs instead of bundling audio files (2025-08-19 03:38:51 UTC)
