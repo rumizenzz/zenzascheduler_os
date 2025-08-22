@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
+import { createPortal } from "react-dom";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
@@ -379,53 +380,58 @@ export function Dashboard() {
         {renderContent()}
       </div>
 
-      <FastingPrayerReminder />
-      <WorldClockOverlay />
-      {/* Mobile menu button */}
-      {sidebarCollapsed && (
-        <button
-          onClick={() => setSidebarCollapsed(false)}
-          className="md:hidden fixed top-4 left-4 z-40 p-2 bg-white rounded-full shadow"
-        >
-          <Menu className="w-5 h-5 text-gray-700" />
-        </button>
-      )}
-
-      {/* Mobile overlay */}
-      {!sidebarCollapsed && (
-        <div
-          className="md:hidden fixed inset-0 z-30 bg-black/20"
-          onClick={() => setSidebarCollapsed(true)}
-        ></div>
-      )}
-      <OnboardingModal />
-      <MailingListPrompt />
-      <RemindersButton />
-      <ToolsButton />
-      <RefreshButton />
-      <PullToRefreshToggleButton
-        enabled={pullRefreshEnabled}
-        toggle={() => setPullRefreshEnabled(!pullRefreshEnabled)}
-      />
-      <ReportBugButton
-        sidebarCollapsed={sidebarCollapsed}
-        isMobile={isMobile}
-      />
-      <ChangeLogButton />
-      <Footer />
-      {showUnsavedModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="harold-sky bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-purple-100">
-            <p className="text-center">Please save your changes before leaving Settings.</p>
+      {createPortal(
+        <>
+          <FastingPrayerReminder />
+          <WorldClockOverlay />
+          {/* Mobile menu button */}
+          {sidebarCollapsed && (
             <button
-              className="btn-dreamy-primary w-full text-sm"
-              onClick={() => setShowUnsavedModal(false)}
+              onClick={() => setSidebarCollapsed(false)}
+              className="md:hidden fixed top-4 left-4 z-40 p-2 bg-white rounded-full shadow"
             >
-              Close
+              <Menu className="w-5 h-5 text-gray-700" />
             </button>
-          </div>
-        </div>
+          )}
+
+          {/* Mobile overlay */}
+          {!sidebarCollapsed && (
+            <div
+              className="md:hidden fixed inset-0 z-30 bg-black/20"
+              onClick={() => setSidebarCollapsed(true)}
+            ></div>
+          )}
+          <OnboardingModal />
+          <MailingListPrompt />
+          <RemindersButton />
+          <ToolsButton />
+          <RefreshButton />
+          <PullToRefreshToggleButton
+            enabled={pullRefreshEnabled}
+            toggle={() => setPullRefreshEnabled(!pullRefreshEnabled)}
+          />
+          <ReportBugButton
+            sidebarCollapsed={sidebarCollapsed}
+            isMobile={isMobile}
+          />
+          <ChangeLogButton />
+          {showUnsavedModal && (
+            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+              <div className="harold-sky bg-purple-950 border-2 border-purple-400 rounded-lg p-6 max-w-sm w-full space-y-4 text-purple-100">
+                <p className="text-center">Please save your changes before leaving Settings.</p>
+                <button
+                  className="btn-dreamy-primary w-full text-sm"
+                  onClick={() => setShowUnsavedModal(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+        </>,
+        document.body
       )}
+      <Footer />
     </div>
   );
 }
