@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Wrench, Code2, GitCompare, X, Calculator } from 'lucide-react'
+import { Wrench, Code2, GitCompare, X, Calculator, Upload } from 'lucide-react'
 import MagicIDE from './MagicIDE'
 import { GEDCalculator } from './dashboard/GEDCalculator'
+import { ZenTransfer } from './ZenTransfer'
 
 export function ToolsButton() {
   const [open, setOpen] = useState(false)
   const [showIDE, setShowIDE] = useState(false)
   const [startDiff, setStartDiff] = useState(false)
   const [showCalculator, setShowCalculator] = useState(false)
+  const [showTransfer, setShowTransfer] = useState(false)
 
   return (
     <>
@@ -56,6 +58,16 @@ export function ToolsButton() {
               <Calculator className="w-4 h-4" />
               <span>Calculator</span>
             </button>
+            <button
+              onClick={() => {
+                setShowTransfer(true)
+                setOpen(false)
+              }}
+              className="flex items-center gap-2 w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+            >
+              <Upload className="w-4 h-4" />
+              <span>ZenTransfer</span>
+            </button>
           </div>
         </>
       )}
@@ -83,6 +95,7 @@ export function ToolsButton() {
           <GEDCalculator onClose={() => setShowCalculator(false)} />,
           document.body,
         )}
+      {showTransfer && <ZenTransfer onClose={() => setShowTransfer(false)} />}
     </>
   )
 }
