@@ -38,6 +38,8 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Wedding Vows module offers Bisaya/English translation toggle (2025-08-21 20:09:36 UTC)
 - Wedding Vows module displays writing date (2025-08-21 20:22:29 UTC)
 - Learning Notes module lets users jot down study notes for any subject (2025-08-21 20:35:27 UTC)
+- Review link utilities support deletion, duration changes, and expiration messages (2025-08-21 21:45:53 UTC)
+- Tools menu now offers a GED Calculator accessible from any dashboard tab (2025-08-22 00:55 UTC)
 - World Clock widgets display across all dashboard screens and overlays (2025-08-22 01:21:14 UTC)
 ### Changed
 - World Clock overlay now glows with a neon gradient for a futuristic feel (2025-08-22 14:34 UTC)
@@ -64,7 +66,10 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study module now loads PDFs from the Official GED Math PDFs directory (2025-08-02 04:05 UTC)
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
+- Learning Notes heading and cards darkened for higher contrast and easier reading (2025-08-21 22:11 UTC)
 ### Fixed
+- Removed call to failing `ensure-learning-notes-schema` Supabase function to avoid CORS errors during Learning Notes load (2025-08-22 15:52 UTC)
+- Learning Notes cards no longer render white text on white backgrounds by moving custom classes into the Tailwind components layer (2025-08-21 21:34:43 UTC)
 - Removed call to missing `ensure-todo-status` Supabase function to avoid CORS errors during to-do list initialization (2025-08-19 05:40:18 UTC)
 - Marking a to-do item complete while in progress now sets status to completed instead of pending (2025-08-14 15:13:07 UTC)
 - Supabase schema reloads after adding the todo_items status column so updates don't error on missing fields (2025-08-14 14:16:29 UTC)

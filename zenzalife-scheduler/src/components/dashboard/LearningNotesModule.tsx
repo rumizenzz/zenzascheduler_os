@@ -19,18 +19,9 @@ export function LearningNotesModule() {
 
   useEffect(() => {
     if (user) {
-      void initialize()
+      void loadNotes()
     }
   }, [user])
-
-  const initialize = async () => {
-    try {
-      await supabase.functions.invoke('ensure-learning-notes-schema')
-    } catch (err) {
-      console.error('Failed to ensure learning notes schema', err)
-    }
-    await loadNotes()
-  }
 
   const loadNotes = async () => {
     if (!user) return

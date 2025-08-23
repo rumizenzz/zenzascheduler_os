@@ -32,6 +32,7 @@ ZenzaScheduler OS — TODO
 - Fixed Learning Notes card backgrounds so note text remains visible without highlighting
 - Review links can be deleted, duration updated, and display time until expiration
 - Darkened Learning Notes heading and cards for better readability
+- Removed ensure-learning-notes-schema edge function call to avoid CORS errors on module load
 - Tools menu now offers a GED Calculator accessible from any dashboard tab
 - World Clock widgets display on every dashboard screen, even above overlays
 - World Clock overlay glows with a neon gradient for a futuristic feel
