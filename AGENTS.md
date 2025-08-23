@@ -1079,3 +1079,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-22 15:52 UTC)
 - Removed failing ensure-learning-notes-schema edge function call so Learning Notes no longer triggers CORS errors.
 - Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-23 03:20 UTC)
+- Embedded the official TI-30XS MultiView GED calculator via Desmos iframe.
+- Verified repository passes lint with `pnpm run lint`.
