@@ -45,6 +45,8 @@ ZenzaScheduler OS — TODO
 - GED Calculator accepts keyboard input for numbers and symbols
 - Mean overlay positions near selected numbers and disappears when scrolling
 
+- Added Zen Transfer module for encrypted file sharing via Supabase
+
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
 - Accessibility pass for floating buttons and modals
