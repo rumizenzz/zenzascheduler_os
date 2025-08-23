@@ -44,6 +44,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 ### Changed
 - World Clock overlay now glows with a neon gradient for a futuristic feel (2025-08-22 14:34 UTC)
 - World Clock overlay glows with neon glass styling for a futuristic feel (2025-08-22 14:34:06 UTC)
+- GED Calculator now embeds the official TI-30XS MultiView for authentic test prep (2025-08-23 03:20 UTC)
 - Wedding Vows module shows Rumi's writing date while Khen's remains to be revealed (2025-08-21 20:35:00 UTC)
 - Soundboard default sounds now download from remote URLs instead of bundling audio files (2025-08-19 03:38:51 UTC)
 - Soundboard upgraded to a 12-pad grid with keyboard shortcuts and removable custom clips (2025-08-19 04:50:00 UTC)
