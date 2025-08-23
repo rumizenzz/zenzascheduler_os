@@ -44,6 +44,7 @@ ZenzaScheduler OS — TODO
 - Learning Notes selection shows sum and mean for highlighted numbers
 - GED Calculator accepts keyboard input for numbers and symbols
 - Mean overlay positions near selected numbers and disappears when scrolling
+- Introduced ZenTransfer module for encrypted Supabase file sharing with compression
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
