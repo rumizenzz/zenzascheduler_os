@@ -26,6 +26,7 @@ import { TodoListModule } from "./TodoListModule";
 import { GroceryListModule } from "./GroceryListModule";
 import { WeddingVowsModule } from "./WeddingVowsModule";
 import { SoundboardModule } from "./SoundboardModule";
+import { ZenTransferModule } from "./ZenTransferModule";
 import {
   Calendar,
   TrendingUp,
@@ -53,6 +54,7 @@ import {
   ShoppingCart,
   Gem,
   Music,
+  UploadCloud,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -92,6 +94,7 @@ type DashboardTab =
   | "passwords"
   | "gedstudy"
   | "soundboard"
+  | "zentransfer"
   | "settings";
 
 const navigationItems = [
@@ -118,6 +121,7 @@ const navigationItems = [
   { id: "groceries", label: "Groceries", icon: ShoppingCart, color: "text-orange-600" },
   { id: "passwords", label: "Passwords", icon: Key, color: "text-gray-500" },
   { id: "soundboard", label: "Soundboard", icon: Music, color: "text-blue-500" },
+  { id: "zentransfer", label: "Zen Transfer", icon: UploadCloud, color: "text-cyan-500" },
   { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600" },
 ] as const;
 
@@ -258,6 +262,8 @@ export function Dashboard() {
         return <PasswordsModule />;
       case "soundboard":
         return <SoundboardModule />;
+      case "zentransfer":
+        return <ZenTransferModule />;
       case "settings":
         return <SettingsModule onUnsavedChange={setHasUnsavedSettings} />;
       default:
