@@ -67,6 +67,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - GED Math Study resources open in a new tab with `noopener` security and allow restarting sessions (2025-08-02 04:10 UTC)
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 - Learning Notes heading and cards darkened for higher contrast and easier reading (2025-08-21 22:11 UTC)
+- GED Calculator now embeds the official TI-30XS MultiView for authentic GED practice (2025-08-23 03:19 UTC)
 ### Fixed
 - Removed call to failing `ensure-learning-notes-schema` Supabase function to avoid CORS errors during Learning Notes load (2025-08-22 15:52 UTC)
 - Learning Notes cards no longer render white text on white backgrounds by moving custom classes into the Tailwind components layer (2025-08-21 21:34:43 UTC)
