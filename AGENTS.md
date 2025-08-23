@@ -1075,4 +1075,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-22 14:28 UTC)
 - Showed sum and mean for selected numbers in Learning Notes with a context overlay.
 - Allowed GED Calculator to accept keyboard input for numbers and symbols.
-- 
+
+### Codex Agent Reflection (2025-08-22 15:52 UTC)
+- Removed failing ensure-learning-notes-schema edge function call so Learning Notes no longer triggers CORS errors.
+- Verified repository passes lint with `pnpm run lint`.
