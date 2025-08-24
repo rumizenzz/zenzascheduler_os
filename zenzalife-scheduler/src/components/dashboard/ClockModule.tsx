@@ -832,7 +832,7 @@ export function ClockModule() {
                 className="input-dreamy w-full"
               />
               {showZoneList && zoneInput && (
-                <ul className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto card-floating bg-gradient-to-br from-purple-900/90 via-indigo-900/90 to-blue-900/90 text-purple-100 text-left">
+                <ul className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto z-[2000] card-floating bg-gradient-to-br from-purple-900/90 via-indigo-900/90 to-blue-900/90 text-purple-100 text-left">
                   {filteredZones.map(tz => (
                     <li
                       key={tz}

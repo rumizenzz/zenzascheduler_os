@@ -37,6 +37,7 @@ ZenzaScheduler OS — TODO
 - World Clock widgets display on every dashboard screen, even above overlays
 - World Clock overlay glows with a neon gradient for a futuristic feel
 - World Clock overlay now glows with neon glass styling for a futuristic feel
+- Timezone dropdown renders above World Clock widgets so search results stay visible
 
 - Learning Notes selection shows sum and mean for highlighted numbers
 - GED Calculator accepts keyboard input for numbers and symbols
