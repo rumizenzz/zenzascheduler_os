@@ -1079,3 +1079,7 @@ After completing a task, agents self-evaluate in `AGENTS.md` and append reflecti
 ### Codex Agent Reflection (2025-08-22 15:52 UTC)
 - Removed failing ensure-learning-notes-schema edge function call so Learning Notes no longer triggers CORS errors.
 - Verified repository passes lint with `pnpm run lint`.
+
+### Codex Agent Reflection (2025-08-22 17:10 UTC)
+- Raised World Clock timezone search dropdown z-index so options display above overlay widgets.
+- Verified repository passes lint with `pnpm run lint`.
