@@ -26,6 +26,7 @@ import { TodoListModule } from "./TodoListModule";
 import { GroceryListModule } from "./GroceryListModule";
 import { WeddingVowsModule } from "./WeddingVowsModule";
 import { SoundboardModule } from "./SoundboardModule";
+import { TenYearSelfLetterModule } from "./TenYearSelfLetterModule";
 import {
   Calendar,
   TrendingUp,
@@ -53,6 +54,7 @@ import {
   ShoppingCart,
   Gem,
   Music,
+  ScrollText,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { MailingListPrompt } from "../auth/MailingListPrompt";
@@ -86,6 +88,7 @@ type DashboardTab =
   | "dreams"
   | "ideas"
   | "notes"
+  | "selfletter"
   | "wedding"
   | "todos"
   | "groceries"
@@ -113,6 +116,7 @@ const navigationItems = [
   { id: "dreams", label: "Dream Journal", icon: MoonStar, color: "text-indigo-600" },
   { id: "ideas", label: "Ideas", icon: Lightbulb, color: "text-yellow-500" },
   { id: "notes", label: "Learning Notes", icon: NotebookText, color: "text-blue-700" },
+  { id: "selfletter", label: "10-Year Self Letter", icon: ScrollText, color: "text-amber-600" },
   { id: "wedding", label: "Our Wedding Vows", icon: Gem, color: "text-rose-400" },
   { id: "todos", label: "To-Do List", icon: CheckSquare, color: "text-green-600" },
   { id: "groceries", label: "Groceries", icon: ShoppingCart, color: "text-orange-600" },
@@ -248,6 +252,8 @@ export function Dashboard() {
         return <IdeasModule />;
       case "notes":
         return <LearningNotesModule />;
+      case "selfletter":
+        return <TenYearSelfLetterModule />;
       case "wedding":
         return <WeddingVowsModule />;
       case "todos":
