@@ -31,7 +31,8 @@ Deno.serve(async (req) => {
   content text NOT NULL,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
-);`,
+);
+CREATE UNIQUE INDEX IF NOT EXISTS self_letters_user_id_key ON public.self_letters(user_id);`,
       }),
     })
 

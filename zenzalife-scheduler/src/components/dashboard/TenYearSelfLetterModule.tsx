@@ -55,13 +55,13 @@ Your Past Self`
         {
           user_id: user.id,
           content: draft,
-          created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
         { onConflict: 'user_id' }
       )
     if (error) {
-      toast.error('Failed to save letter: ' + error.message)
+      console.error('Failed to save letter', error)
+      toast.error('Failed to save letter: ' + (error.message ?? 'Unknown error'))
     } else {
       setLetter(draft)
       setEditing(false)

@@ -49,6 +49,7 @@ ZenzaScheduler OS — TODO
 
 - Added 10-Year Self Letter module for writing a letter to your future self
 - 10-Year Self Letter can be edited and saved for future reflection
+- Saving the 10-Year Self Letter no longer fails with an undefined error by adding a unique user constraint
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
