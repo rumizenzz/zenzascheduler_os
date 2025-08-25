@@ -1,5 +1,14 @@
 import React from 'react'
-import { Flower2 } from 'lucide-react'
+import {
+  Flower2,
+  Share2,
+  Facebook,
+  Twitter,
+  Linkedin,
+  MessageCircle,
+  Send,
+  Link as LinkIcon,
+} from 'lucide-react'
 
 export function WeddingVowsModule() {
   const [isBisaya, setIsBisaya] = React.useState(false)
@@ -57,6 +66,126 @@ Gihigugma tika pag-ayo, hangtod sa walay katapusan, baby—karon, kanunay, ug ha
   const khenDateEnglish = 'Writing date to be revealed…'
   const khenDateBisaya = 'Ipadayag pa ang petsa sa pagsulat…'
 
+  function ShareButtons({ text }: { text: string }) {
+    const url = typeof window !== 'undefined' ? window.location.href : ''
+    const encodedUrl = encodeURIComponent(url)
+    const encodedText = encodeURIComponent(text)
+
+    const open = (shareUrl: string) => {
+      window.open(shareUrl, '_blank', 'width=600,height=400')
+    }
+
+    const handleNativeShare = async () => {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        try {
+          await navigator.share({ title: 'Our Wedding Vows', text, url })
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    const handleCopy = async () => {
+      if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(`${text}\n\n${url}`)
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    return (
+      <div className="flex gap-4 text-rose-600">
+        <button aria-label="Share" onClick={handleNativeShare}>
+          <Share2 className="w-5 h-5" />
+        </button>
+        <button
+          aria-label="Share on Facebook"
+          onClick={() =>
+            open(
+              `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`,
+            )
+          }
+        >
+          <Facebook className="w-5 h-5" />
+        </button>
+        <button
+          aria-label="Share on X"
+          onClick={() =>
+            open(
+              `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
+            )
+          }
+        >
+          <Twitter className="w-5 h-5" />
+        </button>
+        <button
+          aria-label="Share on LinkedIn"
+          onClick={() =>
+            open(
+              `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedText}`,
+            )
+          }
+        >
+          <Linkedin className="w-5 h-5" />
+        </button>
+        <button
+          aria-label="Share on WhatsApp"
+          onClick={() =>
+            open(
+              `https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`,
+            )
+          }
+        >
+          <MessageCircle className="w-5 h-5" />
+        </button>
+        <button
+          aria-label="Share on Telegram"
+          onClick={() =>
+            open(`https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`)
+          }
+        >
+          <Send className="w-5 h-5" />
+        </button>
+        <button aria-label="Copy link" onClick={handleCopy}>
+          <LinkIcon className="w-5 h-5" />
+        </button>
+      </div>
+    )
+  }
+
+  function VowCard({
+    title,
+    date,
+    content,
+    shareText,
+    isPlaceholder,
+  }: {
+    title: string
+    date: string
+    content: string
+    shareText: string
+    isPlaceholder?: boolean
+  }) {
+    return (
+      <div className="bg-white/80 p-6 rounded-xl shadow-md space-y-4">
+        <h2 className="text-2xl text-rose-700 font-semibold">{title}</h2>
+        <p className="text-sm text-rose-500">{date}</p>
+        <p
+          className={
+            isPlaceholder
+              ? 'italic text-rose-600'
+              : 'whitespace-pre-line leading-relaxed'
+          }
+        >
+          {content}
+        </p>
+        <ShareButtons text={shareText} />
+      </div>
+    )
+  }
+
   return (
     <div className="max-w-3xl mx-auto bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 p-8 rounded-2xl shadow-lg border border-rose-200 text-gray-800 font-serif space-y-12">
       <div className="text-center space-y-2">
@@ -72,28 +201,21 @@ Gihigugma tika pag-ayo, hangtod sa walay katapusan, baby—karon, kanunay, ug ha
           {isBisaya ? 'Translate to English' : 'Translate to Bisaya'}
         </button>
       </div>
-      <div className="space-y-4">
-        <h2 className="text-2xl text-rose-700 font-semibold">
-          {isBisaya ? 'Panumpa ni Rumi' : "Rumi's Vow"}
-        </h2>
-        <p className="text-sm text-rose-500">
-          {isBisaya ? rumiDateBisaya : rumiDateEnglish}
-        </p>
-        <p className="whitespace-pre-line leading-relaxed">
-          {isBisaya ? rumiVowBisaya : rumiVowEnglish}
-        </p>
-      </div>
-      <div className="space-y-4">
-        <h2 className="text-2xl text-rose-700 font-semibold">
-          {isBisaya ? 'Panumpa ni Khen' : "Khen's Vow"}
-        </h2>
-        <p className="text-sm text-rose-500">
-          {isBisaya ? khenDateBisaya : khenDateEnglish}
-        </p>
-        <p className="italic text-rose-600">
-          {isBisaya ? khenPlaceholderBisaya : khenPlaceholderEnglish}
-        </p>
-      </div>
+      <VowCard
+        title={isBisaya ? 'Panumpa ni Rumi' : "Rumi's Vow"}
+        date={isBisaya ? rumiDateBisaya : rumiDateEnglish}
+        content={isBisaya ? rumiVowBisaya : rumiVowEnglish}
+        shareText={isBisaya ? rumiVowBisaya : rumiVowEnglish}
+      />
+      <VowCard
+        title={isBisaya ? 'Panumpa ni Khen' : "Khen's Vow"}
+        date={isBisaya ? khenDateBisaya : khenDateEnglish}
+        content={isBisaya ? khenPlaceholderBisaya : khenPlaceholderEnglish}
+        shareText={
+          isBisaya ? khenPlaceholderBisaya : khenPlaceholderEnglish
+        }
+        isPlaceholder
+      />
     </div>
   )
 }
