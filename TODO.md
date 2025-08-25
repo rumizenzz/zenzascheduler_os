@@ -48,6 +48,7 @@ ZenzaScheduler OS — TODO
 
 - Added 10-Year Self Letter module for writing a letter to your future self
 - 10-Year Self Letter can be edited and saved for future reflection
+- Completed to-do items appear in a startup overlay highlighting any tasks containing "GED"
 
 Backlog
 - Add E2E test harness (Playwright) for layout assertions
