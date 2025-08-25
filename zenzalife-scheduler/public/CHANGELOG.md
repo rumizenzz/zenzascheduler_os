@@ -40,6 +40,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Learning Notes module lets users jot down study notes for any subject (2025-08-21 20:35:27 UTC)
 - 10-Year Self Letter module shares a reflective note to your future self (2025-08-24 22:36:51 UTC)
 - 10-Year Self Letter module allows editing and saves updates with Supabase (2025-08-24 23:04:25 UTC)
+- Wedding Vows module adds social share buttons for popular networks (2025-08-25 19:45:44 UTC)
 - Review link utilities support deletion, duration changes, and expiration messages (2025-08-21 21:45:53 UTC)
 - Tools menu now offers a GED Calculator accessible from any dashboard tab (2025-08-22 00:55 UTC)
 - World Clock widgets display across all dashboard screens and overlays (2025-08-22 01:21:14 UTC)

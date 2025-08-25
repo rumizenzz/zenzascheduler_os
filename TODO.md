@@ -28,6 +28,7 @@ ZenzaScheduler OS — TODO
 - Added English/Bisaya translation toggle for Wedding Vows module
 - Displayed wedding vow writing date in Wedding Vows module
 - Showed Rumi's vow writing date and kept Khen's to be revealed
+- Wedding Vows can be shared across social networks with dedicated share buttons
 - Added Learning Notes module for capturing study notes
 - Fixed Learning Notes card backgrounds so note text remains visible without highlighting
 - Review links can be deleted, duration updated, and display time until expiration
