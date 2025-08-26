@@ -31,7 +31,7 @@ export function GroceryListModule() {
     }
   }, [user, selectedList])
 
-  const loadLists = async () => {
+  const loadLists = async (retry = true) => {
     if (!user) return
     const { data, error } = await supabase
       .from('grocery_lists')
@@ -40,6 +40,19 @@ export function GroceryListModule() {
       .order('list_date', { ascending: false })
       .order('created_at', { ascending: false })
     if (error) {
+      if (error.code === '42P01' && retry) {
+        try {
+          const { error: ensureError } = await supabase.functions.invoke(
+            'ensure-grocery-schema'
+          )
+          if (!ensureError) {
+            return await loadLists(false)
+          }
+          console.error('Failed to ensure grocery schema', ensureError)
+        } catch (err) {
+          console.error('Failed to ensure grocery schema', err)
+        }
+      }
       toast.error('Failed to load lists: ' + error.message)
     } else {
       setLists(data || [])
@@ -66,7 +79,10 @@ export function GroceryListModule() {
 
   const initialize = async () => {
     try {
-      await supabase.functions.invoke('ensure-grocery-schema')
+      const { error } = await supabase.functions.invoke('ensure-grocery-schema')
+      if (error) {
+        console.error('Failed to ensure grocery schema', error)
+      }
     } catch (err) {
       console.error('Failed to ensure grocery schema', err)
     }
