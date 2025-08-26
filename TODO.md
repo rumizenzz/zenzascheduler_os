@@ -25,6 +25,7 @@ ZenzaScheduler OS — TODO
 - Soundboard default beep and chime download from the web instead of shipping audio files
 - Soundboard expanded to a 12-pad grid with keyboard shortcuts and removable custom clips
 - Removed missing ensure-todo-status Supabase function call to prevent CORS errors on to-do list load
+- Grocery lists retry schema creation when the table is missing so relation errors no longer appear
 - Added English/Bisaya translation toggle for Wedding Vows module
 - Displayed wedding vow writing date in Wedding Vows module
 - Showed Rumi's vow writing date and kept Khen's to be revealed
