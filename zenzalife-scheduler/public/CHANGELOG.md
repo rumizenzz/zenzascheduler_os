@@ -44,6 +44,7 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - Review link utilities support deletion, duration changes, and expiration messages (2025-08-21 21:45:53 UTC)
 - Tools menu now offers a GED Calculator accessible from any dashboard tab (2025-08-22 00:55 UTC)
 - World Clock widgets display across all dashboard screens and overlays (2025-08-22 01:21:14 UTC)
+- Startup overlay flashes completed to-do items and highlights tasks containing "GED" (2025-08-25 19:52:40 UTC)
 ### Changed
 - World Clock overlay now glows with a neon gradient for a futuristic feel (2025-08-22 14:34 UTC)
 - World Clock overlay glows with neon glass styling for a futuristic feel (2025-08-22 14:34:06 UTC)

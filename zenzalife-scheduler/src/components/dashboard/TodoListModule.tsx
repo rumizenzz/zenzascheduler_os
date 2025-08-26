@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase, TodoItem } from '@/lib/supabase'
 import dayjs from 'dayjs'
@@ -13,6 +14,17 @@ export function TodoListModule() {
   const [content, setContent] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editContent, setEditContent] = useState('')
+  const [showCompletedOverlay, setShowCompletedOverlay] = useState(false)
+  const [overlayShown, setOverlayShown] = useState(false)
+
+  const completedItems = items.filter(i => i.status === 'completed')
+
+  useEffect(() => {
+    if (!loading && !overlayShown && completedItems.length > 0) {
+      setShowCompletedOverlay(true)
+      setOverlayShown(true)
+    }
+  }, [loading, overlayShown, completedItems.length])
 
   useEffect(() => {
     if (user) {
@@ -140,7 +152,46 @@ export function TodoListModule() {
   }
 
   return (
-    <div className="space-y-6 pb-24">
+    <>
+      {showCompletedOverlay &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[1000] bg-black/70 flex items-center justify-center"
+            onClick={() => setShowCompletedOverlay(false)}
+          >
+            <div
+              className="bg-gradient-to-br from-purple-800 via-purple-700 to-pink-600 p-6 rounded-lg text-white max-w-md w-11/12"
+              onClick={e => e.stopPropagation()}
+            >
+              <h2 className="text-xl font-light mb-4">Completed To-Dos</h2>
+              <ul className="space-y-2 max-h-80 overflow-y-auto">
+                {completedItems.map(i => (
+                  <li
+                    key={i.id}
+                    className={
+                      i.content.toLowerCase().includes('ged')
+                        ? 'bg-yellow-300 text-purple-900 px-2 py-1 rounded'
+                        : ''
+                    }
+                  >
+                    {i.content}
+                  </li>
+                ))}
+              </ul>
+              <div className="text-right mt-4">
+                <button
+                  className="btn-dreamy-primary"
+                  onClick={() => setShowCompletedOverlay(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      <div className="space-y-6 pb-24">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-light text-purple-200 flex items-center gap-3">
           <CheckSquare className="w-8 h-8" />
@@ -258,6 +309,7 @@ export function TodoListModule() {
       ) : (
         <div className="text-center text-gray-600">No items yet</div>
       )}
-    </div>
+      </div>
+    </>
   )
 }
