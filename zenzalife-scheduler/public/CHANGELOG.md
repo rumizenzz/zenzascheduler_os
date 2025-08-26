@@ -71,7 +71,6 @@ All notable changes to **ZenzaScheduler OS Life Scheduler** are documented in th
 - IDE plus button opens a Harold and the Purple Crayon & Vanilla Sky filename window, and double-click renaming uses the same modal instead of a browser prompt (2025-08-02 02:49 UTC)
 - Learning Notes heading and cards darkened for higher contrast and easier reading (2025-08-21 22:11 UTC)
 ### Fixed
-- Grocery list module retries schema creation when the table is missing so lists load without relation errors (2025-08-26 19:00:51 UTC)
 - World Clock timezone search dropdown now appears above widgets so options aren't hidden when adding new zones (2025-08-22 17:10 UTC)
 - Removed call to failing `ensure-learning-notes-schema` Supabase function to avoid CORS errors during Learning Notes load (2025-08-22 15:52 UTC)
 - Learning Notes cards no longer render white text on white backgrounds by moving custom classes into the Tailwind components layer (2025-08-21 21:34:43 UTC)
